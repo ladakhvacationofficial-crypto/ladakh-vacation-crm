@@ -52,7 +52,7 @@ export default function PackagesIndex() {
         title="Every package, honestly priced."
         lede="Day-by-day plans, real inclusions, and exclusions written plainly rather than buried. Each one is a starting point — tell us your dates and we reshape it around you."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Packages' }]}
-        background="linear-gradient(180deg, rgba(6,14,10,0.42) 0%, rgba(6,14,10,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #2f6b52 0%, #143528 46%, #060f0b 100%)"
+        background="linear-gradient(180deg, rgba(7,15,31,0.42) 0%, rgba(7,15,31,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #1e4fa8 0%, #101f3d 46%, #070f1f 100%)"
       />
 
       {/* jump links — client-free filtering by anchor keeps this fully static */}

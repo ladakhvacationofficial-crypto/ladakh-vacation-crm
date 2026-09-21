@@ -46,7 +46,7 @@ export default function DestinationsIndex() {
         title="Four regions we know by heart."
         lede="We do not sell every destination in India. We sell four, because those are the four we can stand behind — the roads, the hotels, the drivers and the weather."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Destinations' }]}
-        background="linear-gradient(180deg, rgba(6,12,16,0.40) 0%, rgba(6,12,16,0.90) 100%), radial-gradient(140% 120% at 24% 8%, #3b7183 0%, #17384a 46%, #060e14 100%)"
+        background="linear-gradient(180deg, rgba(7,15,31,0.40) 0%, rgba(7,15,31,0.90) 100%), radial-gradient(140% 120% at 24% 8%, #3670d8 0%, #16294f 46%, #070f1f 100%)"
       />
 
       <section className="mesh-warm section">

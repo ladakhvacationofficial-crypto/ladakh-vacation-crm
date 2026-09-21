@@ -69,7 +69,7 @@ export default function ContactPage() {
         title="Talk to someone who's actually in Kashmir."
         lede={`Our office is in Hawal, Srinagar. We are on WhatsApp ${SITE.hours} and the person who replies is the person who will run your trip.`}
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
-        background="linear-gradient(180deg, rgba(6,12,16,0.40) 0%, rgba(6,12,16,0.92) 100%), radial-gradient(140% 120% at 26% 8%, #3b7183 0%, #17384a 46%, #060e14 100%)"
+        background="linear-gradient(180deg, rgba(7,15,31,0.40) 0%, rgba(7,15,31,0.92) 100%), radial-gradient(140% 120% at 26% 8%, #3670d8 0%, #16294f 46%, #070f1f 100%)"
       />
 
       <section className="mesh-warm section-sm">

@@ -85,7 +85,7 @@ export default function FaqPage() {
         title="Booking, payments and the fine print."
         lede="The questions that come up before every trip, answered plainly. Destination-specific questions live on each destination page."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]}
-        background="linear-gradient(180deg, rgba(6,14,10,0.42) 0%, rgba(6,14,10,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #2f6b52 0%, #143528 46%, #060f0b 100%)"
+        background="linear-gradient(180deg, rgba(7,15,31,0.42) 0%, rgba(7,15,31,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #1e4fa8 0%, #101f3d 46%, #070f1f 100%)"
       />
 
       <section className="mesh-warm section-sm">

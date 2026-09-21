@@ -82,7 +82,7 @@ export class AuthService {
                 <p>Hello ${user.name},</p>
                 <p>A password reset was requested for your Ladakh Vacation CRM account. Click the button below to reset your password. This link expires in 15 minutes.</p>
                 <p style="margin: 24px 0;">
-                  <a href="${resetUrl}" style="background: #0f5147; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
+                  <a href="${resetUrl}" style="background: #1e4fa8; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
                 </p>
                 <p style="font-size: 12px; color: #64748b;">If you did not request this, you can safely ignore this email.</p>
               </div>

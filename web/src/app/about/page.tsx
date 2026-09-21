@@ -53,7 +53,7 @@ export default function AboutPage() {
         title="Locals who fell in love with hosting."
         lede="We started because we were tired of watching agencies a thousand miles away mis-sell our own valley to people who deserved better."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
-        background="linear-gradient(180deg, rgba(6,12,16,0.40) 0%, rgba(6,12,16,0.92) 100%), radial-gradient(140% 120% at 26% 8%, #3b7183 0%, #17384a 46%, #060e14 100%)"
+        background="linear-gradient(180deg, rgba(7,15,31,0.40) 0%, rgba(7,15,31,0.92) 100%), radial-gradient(140% 120% at 26% 8%, #3670d8 0%, #16294f 46%, #070f1f 100%)"
       />
 
       <section className="section-sm mesh-warm">

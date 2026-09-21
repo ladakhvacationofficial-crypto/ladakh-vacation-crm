@@ -48,7 +48,7 @@ export class StorageController {
     if (!file) throw new BadRequestException('File is required');
     if (!this.storage.isConfigured) {
       throw new BadRequestException(
-        'File storage is not configured. Ask your admin to set SUPABASE_STORAGE_URL.',
+        'File storage is not configured. Ask your admin to set the Neon storage keys (AWS_ENDPOINT_URL_S3).',
       );
     }
 

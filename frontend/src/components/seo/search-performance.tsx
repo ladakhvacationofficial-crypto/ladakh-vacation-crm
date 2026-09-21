@@ -214,8 +214,8 @@ export function SearchPerformance({
         data: report.series.map((p) => p.clicks),
         smooth: true,
         showSymbol: false,
-        lineStyle: { width: 2, color: '#0f5147' },
-        itemStyle: { color: '#0f5147' },
+        lineStyle: { width: 2, color: '#1e4fa8' },
+        itemStyle: { color: '#1e4fa8' },
         areaStyle: { color: 'rgba(15, 81, 71, 0.08)' },
       },
       {
@@ -225,8 +225,8 @@ export function SearchPerformance({
         data: report.series.map((p) => p.impressions),
         smooth: true,
         showSymbol: false,
-        lineStyle: { width: 1.5, color: '#c08a2b' },
-        itemStyle: { color: '#c08a2b' },
+        lineStyle: { width: 1.5, color: '#a8842f' },
+        itemStyle: { color: '#a8842f' },
       },
     ];
     if (report.hasPrevious) {
@@ -236,14 +236,14 @@ export function SearchPerformance({
         data: report.series.map((p) => p.prevClicks ?? 0),
         smooth: true,
         showSymbol: false,
-        lineStyle: { width: 1.5, type: 'dashed', color: '#9aa19f' },
-        itemStyle: { color: '#9aa19f' },
+        lineStyle: { width: 1.5, type: 'dashed', color: '#8792a6' },
+        itemStyle: { color: '#8792a6' },
       });
     }
     return {
       ...chartBase,
       tooltip: { ...(chartBase.tooltip as object), trigger: 'axis' },
-      legend: { top: 0, right: 0, itemWidth: 14, textStyle: { color: '#6d6a5c', fontSize: 11 } },
+      legend: { top: 0, right: 0, itemWidth: 14, textStyle: { color: '#5b6880', fontSize: 11 } },
       grid: { left: 8, right: 12, top: 34, bottom: 4, containLabel: true },
       xAxis: { type: 'category', boundaryGap: false, data: report.series.map((p) => fmtDay(p.date)), ...axisStyle },
       yAxis: [

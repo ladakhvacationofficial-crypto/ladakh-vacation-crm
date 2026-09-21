@@ -5,20 +5,25 @@ import { randomUUID } from 'crypto';
 import * as path from 'path';
 
 /**
- * Supabase Storage is S3-compatible. This service wraps @aws-sdk/client-s3
- * configured against the Supabase Storage endpoint so uploads go to a
+ * Neon Object Storage is S3-compatible. This service wraps @aws-sdk/client-s3
+ * configured against the Neon branch's storage endpoint, so uploads go to a
  * durable bucket rather than Render's ephemeral disk.
  *
- * Required env vars (see .env.example):
- *   SUPABASE_STORAGE_URL      – e.g. https://<project-ref>.supabase.co/storage/v1/s3
- *   SUPABASE_STORAGE_KEY      – service_role key (not anon)
- *   SUPABASE_STORAGE_BUCKET   – bucket name, e.g. "attachments"
- *   SUPABASE_STORAGE_REGION   – usually "us-east-1" (Supabase default)
- *   SUPABASE_PUBLIC_URL       – e.g. https://<project-ref>.supabase.co/storage/v1/object/public
+ * Same behaviour as the Glitz original (which pointed at Supabase): every
+ * upload returns a permanent PUBLIC link. That needs the bucket's access mode
+ * to be `public_read` in the Neon console; a public_read object is read
+ * anonymously at `${AWS_ENDPOINT_URL_S3}/<bucket>/<key>` (Neon docs).
  *
- * When SUPABASE_STORAGE_URL is unset the service logs a warning but does
- * NOT crash the app — other modules continue to work. Uploads will throw
- * at call time instead.
+ * Env vars. The AWS_* names are exactly what `neon link` / the Neon console
+ * give you, and what the AWS SDK reads by convention:
+ *   AWS_ENDPOINT_URL_S3     – the branch's storage endpoint (https://...neon.tech)
+ *   AWS_ACCESS_KEY_ID       – branch storage credential id (nak_live_...)
+ *   AWS_SECRET_ACCESS_KEY   – branch storage credential secret
+ *   AWS_REGION              – e.g. "ap-southeast-1"
+ *   STORAGE_BUCKET          – bucket name, default "uploads"
+ *
+ * When the endpoint or keys are unset the service logs a warning but does NOT
+ * crash the app: other modules continue to work and uploads throw at call time.
  */
 @Injectable()
 export class StorageService {
@@ -28,19 +33,20 @@ export class StorageService {
   private readonly publicBaseUrl: string;
 
   constructor(private readonly config: ConfigService) {
-    const endpoint = config.get<string>('SUPABASE_STORAGE_URL');
-    const accessKey = config.get<string>('SUPABASE_STORAGE_KEY');
-    const bucket = config.get<string>('SUPABASE_STORAGE_BUCKET') ?? 'attachments';
-    const region = config.get<string>('SUPABASE_STORAGE_REGION') ?? 'us-east-1';
-    const publicUrl = config.get<string>('SUPABASE_PUBLIC_URL') ?? '';
+    const endpoint = (config.get<string>('AWS_ENDPOINT_URL_S3') ?? '').replace(/\/+$/, '');
+    const accessKeyId = config.get<string>('AWS_ACCESS_KEY_ID');
+    const secretAccessKey = config.get<string>('AWS_SECRET_ACCESS_KEY');
+    const bucket = config.get<string>('STORAGE_BUCKET') ?? 'uploads';
+    const region = config.get<string>('AWS_REGION') ?? 'ap-southeast-1';
 
     this.bucket = bucket;
-    this.publicBaseUrl = publicUrl;
+    // Neon serves public_read objects at <endpoint>/<bucket>/<key>.
+    this.publicBaseUrl = endpoint;
 
-    if (!endpoint || !accessKey) {
+    if (!endpoint || !accessKeyId || !secretAccessKey) {
       this.logger.warn(
-        'SUPABASE_STORAGE_URL or SUPABASE_STORAGE_KEY not set — file uploads disabled. ' +
-        'Set them in .env to enable durable file storage.',
+        'AWS_ENDPOINT_URL_S3 / AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY not set: file uploads disabled. ' +
+        'Copy them from the Neon project (Storage) into the environment to enable durable file storage.',
       );
       this.client = null;
       return;
@@ -49,11 +55,8 @@ export class StorageService {
     this.client = new S3Client({
       endpoint,
       region,
-      credentials: {
-        accessKeyId: accessKey,
-        secretAccessKey: accessKey, // Supabase uses the same key for both
-      },
-      forcePathStyle: true,
+      credentials: { accessKeyId, secretAccessKey },
+      forcePathStyle: true, // required: Neon uses path-style addressing
     });
 
     this.logger.log(`Storage configured → bucket "${bucket}" at ${endpoint}`);
@@ -79,7 +82,7 @@ export class StorageService {
   ): Promise<string> {
     if (!this.client) {
       throw new Error(
-        'Storage is not configured. Set SUPABASE_STORAGE_URL and SUPABASE_STORAGE_KEY in .env.',
+        'Storage is not configured. Set AWS_ENDPOINT_URL_S3, AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.',
       );
     }
 
@@ -95,11 +98,8 @@ export class StorageService {
       }),
     );
 
-    // Supabase public URL pattern:
-    // https://<ref>.supabase.co/storage/v1/object/public/<bucket>/<key>
-    const publicUrl = this.publicBaseUrl
-      ? `${this.publicBaseUrl}/${this.bucket}/${key}`
-      : key; // fallback: just the key, caller can construct URL
+    // Neon public_read URL pattern: <endpoint>/<bucket>/<key>
+    const publicUrl = `${this.publicBaseUrl}/${this.bucket}/${key}`;
 
     this.logger.log(`Uploaded ${key} (${buffer.length} bytes)`);
     return publicUrl;

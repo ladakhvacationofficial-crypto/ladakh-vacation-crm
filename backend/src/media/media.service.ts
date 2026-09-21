@@ -38,7 +38,7 @@ export class MediaService {
     if (!file) throw new BadRequestException('File is required');
     if (!this.storage.isConfigured) {
       throw new BadRequestException(
-        'File storage is not configured. Set SUPABASE_STORAGE_URL in .env.',
+        'File storage is not configured. Set AWS_ENDPOINT_URL_S3 and the storage keys in the environment.',
       );
     }
 

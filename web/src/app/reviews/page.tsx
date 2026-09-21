@@ -34,7 +34,7 @@ export default function ReviewsPage() {
         title="The reviews are the itinerary."
         lede="We do not publish curated highlights. These are the trips, the months and the things guests actually mentioned — including the times we talked someone out of a booking."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Reviews' }]}
-        background="linear-gradient(180deg, rgba(10,8,4,0.42) 0%, rgba(10,8,4,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #a8801f 0%, #5c4310 46%, #120d04 100%)"
+        background="linear-gradient(180deg, rgba(10,8,4,0.42) 0%, rgba(10,8,4,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #a8842f 0%, #634d22 46%, #120d04 100%)"
       >
         <div className="flex items-center gap-3">
           <div className="flex gap-1">

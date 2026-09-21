@@ -1,0 +1,58 @@
+# Render Blueprint for the Ladakh Vacation backend.
+# In Render: New + -> Blueprint -> pick this repo -> Deploy Blueprint.
+# The file sits at the REPO ROOT, where Render looks by default, so the
+# Blueprint Path field stays empty.
+#
+# Same service as Glitz's glitz-backend, with four corrections that a fresh
+# deploy needs:
+#   rootDir: backend       builds the backend folder, not the repo root
+#   region: singapore      next to the Neon database (AWS ap-southeast-1);
+#                          Render cannot change a region after creation
+#   dist/src/main.js       where `nest build` actually writes the entry
+#                          (Glitz's file said dist/main.js, which does not exist)
+#   migrations in build    preDeployCommand is paid-only on Render, and
+#                          startCommand re-runs on every wake from idle
+services:
+  - type: web
+    name: ladakh-vacation-backend
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npm run build && npx prisma migrate deploy
+    startCommand: node dist/src/main.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false        # Neon POOLED connection string (host has "-pooler")
+      - key: DIRECT_URL
+        sync: false        # Neon DIRECT connection string (no "-pooler");
+                           # migrations cannot run through the pooler
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: "7d"
+      - key: CORS_ORIGIN
+        value: "*"         # as on Glitz: any site may call the API. Logins use
+                           # a bearer token, not cookies, so this does not let
+                           # other sites act as a signed-in user.
+      - key: CRM_BASE_URL
+        value: "https://ladakh-vacation-crm.vercel.app"
+
+      # ---- Neon object storage (public_read bucket "uploads") ----
+      - key: STORAGE_BUCKET
+        value: "uploads"
+      - key: AWS_ENDPOINT_URL_S3
+        sync: false
+      - key: AWS_REGION
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+
+# Optional keys (PAGESPEED_API_KEY, BREVO_API_KEY, BREVO_SENDER_*) are not
+# listed on purpose: add them in the Render dashboard when needed. Keys that
+# ARE listed here get overwritten by the Blueprint on every push.
