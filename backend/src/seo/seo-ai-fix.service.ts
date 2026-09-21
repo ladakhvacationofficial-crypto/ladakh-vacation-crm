@@ -130,7 +130,7 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
 <div className="relative h-96 w-full overflow-hidden rounded-2xl shadow-lg">
   <Image
     src="/images/packages/${destSlug}-tour.jpg"
-    alt="${destination} tour package featuring snow-capped Himalayan peaks, local pine valleys, and private travel arrangements by Glitz Holidays"
+    alt="${destination} tour package featuring snow-capped Himalayan peaks, local pine valleys, and private travel arrangements by Ladakh Vacation"
     fill
     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
     priority
@@ -151,7 +151,7 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
       case 'meta-description': {
         const desc1 = `Explore handcrafted ${destination} tour packages with 4-star stays, private cab transfers & 24/7 local support. Get instant custom quotes & best seasonal deals!`;
         const desc2 = `Book verified ${destination} holiday packages from ₹9,500. Includes hotel stays, sightseeing itineraries & Shikara/Gondola assistance. Inquire via WhatsApp.`;
-        const desc3 = `Plan your dream trip to ${destination}. Transparent pricing, customizable itineraries & verified local Kashmir tour guides with Glitz Holidays. Call now!`;
+        const desc3 = `Plan your dream trip to ${destination}. Transparent pricing, customizable itineraries & verified local Kashmir tour guides with Ladakh Vacation. Call now!`;
 
         return {
           checkId,
@@ -179,8 +179,8 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
       case 'title':
       case 'title-unique':
       case 'query-coverage': {
-        const title1 = `${destination} Tour Packages 2026: Itineraries, Best Deals & Stays | Glitz`;
-        const title2 = `Best ${destination} Holiday Packages from ₹9,500 | Glitz Holidays`;
+        const title1 = `${destination} Tour Packages 2026: Itineraries, Best Deals & Stays | Ladakh Vacation`;
+        const title2 = `Best ${destination} Holiday Packages from ₹9,500 | Ladakh Vacation`;
         const title3 = `${keyword.replace(/\b\w/g, (c) => c.toUpperCase())} — Custom Itineraries & Local Guides`;
 
         return {
@@ -271,7 +271,7 @@ Every itinerary is 100% customizable to your family's pace, fitness levels, and 
       Curated by <a href="https://shahid.co.in" target="_blank" rel="noopener noreferrer" className="text-emerald-700 underline font-bold">Shahid</a> · 15+ Years in Travel & Travel Tech
     </p>
     <p className="text-[11px] text-slate-500">
-      Founder, Glitz Holidays · Verified Destination & Travel-Tech Specialist (shahid.co.in). Last verified: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+      Founder, Ladakh Vacation · Verified Destination & Travel-Tech Specialist (shahid.co.in). Last verified: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
     </p>
   </div>
 </div>
@@ -460,7 +460,7 @@ Every itinerary is 100% customizable to your family's pace, fitness levels, and 
   }
 
   private buildAiPrompt(dto: GenerateSeoFixDto, pageTitle: string, keyword: string): string {
-    return `You are a world-class Technical SEO & Helpful Content specialist for Glitz Holidays, a premium travel agency specializing in Kashmir, Ladakh, and Jammu tours.
+    return `You are a world-class Technical SEO & Helpful Content specialist for Ladakh Vacation, a premium travel agency specializing in Kashmir, Ladakh, and Jammu tours.
 
 A page audit flagged an SEO issue that needs an immediate, actionable fix:
 - Check ID: "${dto.checkId}" (${dto.label || ''})

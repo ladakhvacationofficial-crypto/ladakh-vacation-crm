@@ -53,9 +53,9 @@ export function QuotationDocument({ q }: { q: QuotationInput }) {
   return (
     <Document
       title={`Quotation ${q.quoteNumber}`}
-      author="Glitz Holidays"
+      author="Ladakh Vacation"
       subject={q.title ?? 'Travel quotation'}
-      creator="Glitz CRM"
+      creator="Ladakh Vacation CRM"
     >
       <Page size="A4" style={pdfStyles.page}>
         <BrandHeader
@@ -88,11 +88,11 @@ export function QuotationDocument({ q }: { q: QuotationInput }) {
           <View style={pdfStyles.partyBox}>
             <Text style={pdfStyles.sectionLabel}>Prepared by</Text>
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
-              Glitz Holidays
+              Ladakh Vacation
             </Text>
             <Text style={pdfStyles.small}>Srinagar, Kashmir</Text>
-            <Text style={pdfStyles.small}>hello@glitzholidays.in</Text>
-            <Text style={pdfStyles.small}>www.glitz-holidays.in</Text>
+            <Text style={pdfStyles.small}>ladakhvacation@gmail.com</Text>
+            <Text style={pdfStyles.small}>www.ladakhvacation.in</Text>
           </View>
         </View>
 

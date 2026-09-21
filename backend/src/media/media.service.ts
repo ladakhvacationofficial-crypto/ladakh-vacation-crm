@@ -168,7 +168,6 @@ export class MediaService {
       path.resolve(process.cwd(), '../seo/page-manifest.json'),
       path.resolve(process.cwd(), 'seo/page-manifest.json'),
       path.resolve(__dirname, '../../../../seo/page-manifest.json'),
-      'c:\\Users\\user\\Desktop\\glitz\\seo\\page-manifest.json',
     ];
 
     for (const p of possiblePaths) {
@@ -192,7 +191,7 @@ export class MediaService {
 
     // Default fallback pages if file read fails
     return [
-      { url: '/', title: 'Homepage | Glitz Holidays' },
+      { url: '/', title: 'Homepage | Ladakh Vacation' },
       { url: '/packages/kashmir-luxury-tour', title: 'Kashmir Luxury Tour Package' },
       { url: '/packages/kashmir-honeymoon-package', title: 'Kashmir Honeymoon Package' },
       { url: '/destinations/gulmarg', title: 'Gulmarg Destination Guide' },

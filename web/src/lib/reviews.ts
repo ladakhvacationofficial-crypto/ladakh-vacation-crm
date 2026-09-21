@@ -73,7 +73,7 @@ export const REVIEWS: Review[] = [
   },
   {
     quote:
-      'Third trip with Glitz. Turtuk was the surprise of the Ladakh itinerary — nobody else even offered it. The village guide they arranged made the whole detour worth it.',
+      'Third trip with Ladakh Vacation. Turtuk was the surprise of the Ladakh itinerary — nobody else even offered it. The village guide they arranged made the whole detour worth it.',
     author: 'Sanjana Kulkarni',
     from: 'Mumbai',
     trip: 'Complete Ladakh · 8 nights',

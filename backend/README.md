@@ -1,4 +1,4 @@
-# Glitz Holidays CRM — Backend
+# Ladakh Vacation CRM — Backend
 
 NestJS + Prisma + PostgreSQL. No Docker. DB on Supabase, deploy on Render.
 

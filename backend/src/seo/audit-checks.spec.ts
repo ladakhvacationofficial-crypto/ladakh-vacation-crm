@@ -12,14 +12,14 @@ import { CheckResult } from './audit-types';
 import { summariseLastmod } from './audit-sitemap';
 import { pickVitals } from './audit-vitals';
 
-const URL_ = 'https://glitz-holidays.in/packages/from/delhi';
+const URL_ = 'https://ladakhvacation.in/packages/from/delhi';
 const AT = '2026-09-14T10:00:00.000Z';
 
 const doc = (head: string, main: string, lang = 'en') =>
   `<html lang="${lang}"><head>${head}</head><body><nav><a href="/">Home</a></nav><main>${main}</main></body></html>`;
 
 const HEAD = [
-  '<title>Kashmir Tour Packages from Delhi | Glitz</title>',
+  '<title>Kashmir Tour Packages from Delhi | Ladakh Vacation</title>',
   '<meta name="description" content="Kashmir trips from Delhi.">',
   '<meta name="viewport" content="width=device-width">',
   `<link rel="canonical" href="${URL_}">`,
@@ -39,7 +39,7 @@ const analysis = (over: Partial<SitePageAnalysis> = {}): SitePageAnalysis => ({
   groupSize: 47,
   uniqueShare: 0.7,
   specificPhrases: 400,
-  nearest: { url: 'https://glitz-holidays.in/packages/from/agra', overlap: 0.3 },
+  nearest: { url: 'https://ladakhvacation.in/packages/from/agra', overlap: 0.3 },
   duplicateTitleOf: [],
   duplicateDescriptionOf: [],
   inboundPages: 12,
@@ -63,7 +63,7 @@ function ctx(over: Partial<PageContext> = {}, html = doc(HEAD, MAIN)): PageConte
     contentHash: 'aaa',
     dateModified: null,
     previous: null,
-    siteHost: 'glitz-holidays.in',
+    siteHost: 'ladakhvacation.in',
     ...over,
   };
 }
@@ -109,7 +109,7 @@ describe('page checks', () => {
     });
 
     it('fails a URL that redirects elsewhere', () => {
-      const fetch = { ...ctx().fetch, finalUrl: 'https://glitz-holidays.in/packages/delhi' };
+      const fetch = { ...ctx().fetch, finalUrl: 'https://ladakhvacation.in/packages/delhi' };
       expect(find(runPageChecks(ctx({ fetch })), 'http-status').detail).toContain('Redirects to');
     });
 
@@ -126,17 +126,17 @@ describe('page checks', () => {
   });
 
   it('flags a canonical pointing elsewhere, a missing one, and conflicting ones', () => {
-    const other = doc(HEAD.replace(URL_, 'https://glitz-holidays.in/packages'), MAIN);
+    const other = doc(HEAD.replace(URL_, 'https://ladakhvacation.in/packages'), MAIN);
     expect(find(runPageChecks(ctx({}, other)), 'canonical').severity).toBe('warn');
     const none = doc(HEAD.replace(/<link rel="canonical"[^>]*>/, ''), MAIN);
     expect(find(runPageChecks(ctx({}, none)), 'canonical').severity).toBe('warn');
-    const two = doc(`${HEAD}<link rel="canonical" href="https://glitz-holidays.in/other">`, MAIN);
+    const two = doc(`${HEAD}<link rel="canonical" href="https://ladakhvacation.in/other">`, MAIN);
     expect(find(runPageChecks(ctx({}, two)), 'canonical').severity).toBe('fail');
   });
 
   describe('content specific to the page', () => {
     it('fails a near-copy of its family', () => {
-      const c = find(runPageChecks(ctx({ site: analysis({ uniqueShare: 0.1, nearest: { url: 'https://glitz-holidays.in/packages/from/agra', overlap: 0.9 } }) })), 'unique-content');
+      const c = find(runPageChecks(ctx({ site: analysis({ uniqueShare: 0.1, nearest: { url: 'https://ladakhvacation.in/packages/from/agra', overlap: 0.9 } }) })), 'unique-content');
       expect(c.severity).toBe('fail');
       expect(c.detail).toContain('10% of its text');
       expect(c.detail).toContain('/packages/from/agra');
@@ -182,7 +182,7 @@ describe('page checks', () => {
     });
 
     it('warns when only the business is credited', () => {
-      expect(find(runPageChecks(guide(`${HEAD}<meta name="author" content="Glitz Holidays">`)), 'author').severity).toBe('warn');
+      expect(find(runPageChecks(guide(`${HEAD}<meta name="author" content="Ladakh Vacation">`)), 'author').severity).toBe('warn');
     });
   });
 
@@ -196,7 +196,7 @@ describe('page checks', () => {
   it('warns on a keyword-stuffed title and fails a duplicated one', () => {
     const stuffed = doc(HEAD.replace(/<title>.*<\/title>/, '<title>Kashmir Tours Kashmir Packages Kashmir Trip</title>'), MAIN);
     expect(find(runPageChecks(ctx({}, stuffed)), 'title').severity).toBe('warn');
-    const dup = ctx({ site: analysis({ duplicateTitleOf: ['https://glitz-holidays.in/packages/from/agra'] }) });
+    const dup = ctx({ site: analysis({ duplicateTitleOf: ['https://ladakhvacation.in/packages/from/agra'] }) });
     expect(find(runPageChecks(dup), 'title-unique')).toMatchObject({ severity: 'fail' });
   });
 
@@ -254,7 +254,7 @@ describe('check helpers', () => {
 
   it('classifies pages', () => {
     const article = parsePage(doc('<script type="application/ld+json">{"@type":"BlogPosting"}</script>', ''), URL_);
-    expect(classifyPage('https://glitz-holidays.in/', null, null)).toBe('home');
+    expect(classifyPage('https://ladakhvacation.in/', null, null)).toBe('home');
     expect(classifyPage(URL_, 'guide-hotels', null)).toBe('editorial');
     expect(classifyPage(URL_, null, article)).toBe('editorial');
     expect(classifyPage(URL_, 'packages-from-city', null)).toBe('commercial');

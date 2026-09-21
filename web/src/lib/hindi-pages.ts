@@ -1,6 +1,6 @@
 /**
  * Curated high-value Hindi informational travel guides and collections.
- * Auto-generated for Glitz Holidays 2026 programmatic SEO build (Tier 6).
+ * Auto-generated for Ladakh Vacation 2026 programmatic SEO build (Tier 6).
  */
 import type { GuideArticle } from './guides';
 

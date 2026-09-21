@@ -8,7 +8,7 @@ import { MONTH_HUBS } from '@/lib/month-hubs';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Himalayan Travel Guides & Local Advice — Glitz Holidays',
+  title: 'Himalayan Travel Guides & Local Advice — Ladakh Vacation',
   description:
     'Expert advice from Srinagar-based travel curators: Gulmarg Gondola booking rules, month-by-month weather guides, Ladakh acclimatization health tips, and houseboat insights.',
   alternates: { canonical: '/guides' },
@@ -18,7 +18,7 @@ export default function GuidesIndexPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Travel Guides — Glitz Holidays',
+    name: 'Travel Guides — Ladakh Vacation',
     description: 'Local expert travel guides for Kashmir and Ladakh journeys.',
     url: `${SITE.domain}/guides`,
   };

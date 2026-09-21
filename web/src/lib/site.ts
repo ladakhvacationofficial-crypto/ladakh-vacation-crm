@@ -4,11 +4,11 @@
  * sitemap, robots. Never hardcode any of these anywhere else.
  */
 export const SITE = {
-  name: 'Glitz Holidays',
-  legalName: 'Glitz Holidays',
-  tagline: 'Srinagar-based DMC · Handcrafted Himalayan journeys',
-  domain: 'https://glitz-holidays.in',
-  landerDomain: 'https://go.glitz-holidays.in',
+  name: 'Ladakh Vacation',
+  legalName: 'Ladakh Vacation',
+  tagline: 'Discover Ladakh · Experience Life',
+  domain: 'https://ladakhvacation.in',
+  landerDomain: 'https://go.ladakhvacation.in',
 
   /**
    * NAP (name / address / phone) below is taken from the live Google
@@ -16,56 +16,57 @@ export const SITE = {
    * the GBP listing character-for-character across every citation — if
    * the GBP is ever edited, edit here in the same sitting.
    */
-  founded: '2013',
+  founded: '2012',
 
   phone: {
-    display: '+91 78895 30413',
-    tel: '+917889530413',
-    wa: '917889530413',
+    display: '+91 96229 55386',
+    tel: '+919622955386',
+    wa: '919622955386',
   },
-  email: 'contact@glitzholidays.in',
+  email: 'ladakhvacation@gmail.com',
 
   address: {
-    street: 'Firdous Cinema Bus Stop, NH-1D, Hawal',
-    city: 'Srinagar',
-    region: 'Jammu & Kashmir',
-    postalCode: '190002',
+    street: 'Main Bazaar',
+    city: 'Leh',
+    region: 'Ladakh',
+    postalCode: '194101',
     country: 'IN',
   },
 
-  /** Approximate office coords (Hawal, Srinagar) — for LocalBusiness JSON-LD. */
-  geo: { lat: 34.1027, lng: 74.8156 },
+  /** Approximate office coords (Main Bazaar, Leh) — for LocalBusiness JSON-LD. */
+  geo: { lat: 34.1642, lng: 77.5848 },
 
-  hours: 'Mon–Sun, 10:00–21:00 IST',
+  hours: 'Mon–Sun, 09:00–20:00 IST',
 
   social: {
-    instagram: 'https://instagram.com/glitzholidays9',
-    facebook: 'https://facebook.com/glitzholidays',
+    instagram: 'https://instagram.com/ladakhvacation',
+    facebook: 'https://facebook.com/ladakhvacation',
   },
 
   /**
-   * Verified against the Google Business Profile knowledge panel on
-   * 30 Aug 2026 (4.8 ★ / 604 reviews) and the glitzholidays.in about copy
-   * (5,000+ travellers, 120+ partner hotels, est. 2013).
+   * Carried over from the live ladakhvacation.in site and landers (4.9 ★ /
+   * 3,300+ reviews, 2,400+ travellers, est. 2012).
    *
    * The rating and reviewCount feed AggregateRating JSON-LD. Publishing
    * numbers that do not match the GBP is a structured-data violation, so
    * re-check these whenever the GBP count moves materially.
    */
   stats: {
-    guests: '5,000+',
-    rating: '4.8',
-    reviewCount: 604,
-    years: String(Math.max(13, new Date().getFullYear() - 2013)),
-    hotels: '120+',
+    guests: '2,400+',
+    rating: '4.9',
+    reviewCount: 3300,
+    years: String(Math.max(13, new Date().getFullYear() - 2012)),
   },
 
-  gtmId: 'GTM-K2QMV9NM',
+  /** Google Tag Manager container. Empty until Ladakh Vacation has its own:
+   *  the layout only loads GTM when this is set. (Glitz's container ID must
+   *  never be reused here, it would send these visits into Glitz analytics.) */
+  gtmId: '',
 
   /** Backend endpoint that accepts public lead captures. */
   leadCaptureUrl:
     process.env.NEXT_PUBLIC_LEAD_CAPTURE_URL ??
-    'https://glitz-backend-ugy4.onrender.com/api/leads/capture',
+    'https://ladakh-vacation-backend.onrender.com/api/leads/capture',
 
   /**
    * Cheap health endpoint used to wake the Render free-tier backend.
@@ -74,7 +75,7 @@ export const SITE = {
    */
   wakePingUrl:
     process.env.NEXT_PUBLIC_WAKE_PING_URL ??
-    'https://glitz-backend-ugy4.onrender.com/api/health',
+    'https://ladakh-vacation-backend.onrender.com/api/health',
 } as const;
 
 /**
@@ -82,7 +83,7 @@ export const SITE = {
  * consistent and the sales team can tell which page the chat came from.
  */
 export function whatsAppLink(context: string): string {
-  const msg = `Hi Glitz Holidays, I'm enquiring about ${context}.`;
+  const msg = `Hi Ladakh Vacation, I'm enquiring about ${context}.`;
   return `https://wa.me/${SITE.phone.wa}?text=${encodeURIComponent(msg)}`;
 }
 

@@ -24,7 +24,7 @@ export function shortDate(value: Date | string | null | undefined): string {
 }
 
 /**
- * Every document header. GLITZ in serif gold, HOLIDAYS in caps teal.
+ * Every document header. LADAKH VACATION in serif gold, HOLIDAYS in caps teal.
  * Right side carries the document label + number + issue date.
  */
 export function BrandHeader({
@@ -42,7 +42,7 @@ export function BrandHeader({
     <View style={pdfStyles.header}>
       <View>
         <View style={pdfStyles.brandRow}>
-          <Text style={pdfStyles.brandGold}>Glitz</Text>
+          <Text style={pdfStyles.brandGold}>Ladakh Vacation</Text>
           <Text style={pdfStyles.brandTeal}>Holidays</Text>
         </View>
         <Text style={pdfStyles.brandTagline}>{tagline}</Text>
@@ -66,14 +66,14 @@ export function BrandFooter({
   return (
     <View style={pdfStyles.footer} fixed>
       <Text style={pdfStyles.footerText}>
-        Glitz Holidays  ·  Srinagar, Kashmir  ·  glitz-holidays.in
+        Ladakh Vacation  ·  Srinagar, Kashmir  ·  ladakhvacation.in
       </Text>
       {typeof page === 'number' && typeof totalPages === 'number' ? (
         <Text style={pdfStyles.footerText}>
           Page {page} of {totalPages}
         </Text>
       ) : (
-        <Text style={pdfStyles.footerText}>Thank you for choosing Glitz.</Text>
+        <Text style={pdfStyles.footerText}>Thank you for choosing Ladakh Vacation.</Text>
       )}
     </View>
   );

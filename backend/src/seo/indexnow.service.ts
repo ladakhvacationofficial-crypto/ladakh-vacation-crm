@@ -67,7 +67,7 @@ export class IndexNowService {
     const envKey = process.env.INDEXNOW_KEY || process.env.INDEXNOW_API_KEY;
     if (envKey) {
       return {
-        host: process.env.INDEXNOW_HOST || 'glitz-holidays.in',
+        host: process.env.INDEXNOW_HOST || 'ladakhvacation.in',
         apiKey: envKey.trim(),
         keyLocation: process.env.INDEXNOW_KEY_LOCATION,
       };

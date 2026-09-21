@@ -6,9 +6,9 @@ describe('AssignmentService (Lead Auto-Assignment & Routing Engine)', () => {
   let prismaMock: any;
 
   const mockUsers = [
-    { id: 'user-1', name: 'Alice Rep', email: 'alice@glitz.in', role: Role.SALES_EXEC, isActive: true },
-    { id: 'user-2', name: 'Bob Rep', email: 'bob@glitz.in', role: Role.SALES_EXEC, isActive: true },
-    { id: 'user-3', name: 'Charlie Rep', email: 'charlie@glitz.in', role: Role.SALES_EXEC, isActive: true },
+    { id: 'user-1', name: 'Alice Rep', email: 'alice@example.com', role: Role.SALES_EXEC, isActive: true },
+    { id: 'user-2', name: 'Bob Rep', email: 'bob@example.com', role: Role.SALES_EXEC, isActive: true },
+    { id: 'user-3', name: 'Charlie Rep', email: 'charlie@example.com', role: Role.SALES_EXEC, isActive: true },
   ];
 
   beforeEach(() => {

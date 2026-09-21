@@ -214,7 +214,7 @@ export default async function PackageDetail({ params }: { params: Params }) {
                     <span className="font-normal text-[11.5px] text-ink-500">· 15+ Years Travel & Tech Experience</span>
                   </p>
                   <p className="text-[11px] text-ink-500 mt-0.5">
-                    Founder, Glitz Holidays · Verified Destination & Travel-Tech Specialist (<a href="https://shahid.co.in" target="_blank" rel="noopener noreferrer" className="hover:text-gold-600">shahid.co.in</a>)
+                    Founder, Ladakh Vacation · Verified Destination & Travel-Tech Specialist (<a href="https://shahid.co.in" target="_blank" rel="noopener noreferrer" className="hover:text-gold-600">shahid.co.in</a>)
                   </p>
                 </div>
               </div>

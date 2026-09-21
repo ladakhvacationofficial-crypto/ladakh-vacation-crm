@@ -1,4 +1,4 @@
-# Glitz Holidays
+# Ladakh Vacation
 
 Multi-app project. One git repo, deployed as two independent services.
 

@@ -32,7 +32,7 @@ describe('Social Media Studio', () => {
       expect(result.variants[1].tone).toBe(ContentTone.PROMOTIONAL);
       expect(result.variants[2].tone).toBe(ContentTone.PUNCHY_REEL);
       expect(result.suggestedHashtags).toEqual(
-        expect.arrayContaining(['#KashmirTourism', '#GlitzHolidays']),
+        expect.arrayContaining(['#KashmirTourism', '#Ladakh VacationHolidays']),
       );
       expect(result.bestPostingTimes.length).toBeGreaterThan(0);
     });
@@ -50,7 +50,7 @@ describe('Social Media Studio', () => {
       });
 
       expect(result.suggestedHashtags).toEqual(
-        expect.arrayContaining(['#LadakhTourism', '#PangongTso', '#GlitzHolidays']),
+        expect.arrayContaining(['#LadakhTourism', '#PangongTso', '#Ladakh VacationHolidays']),
       );
     });
   });

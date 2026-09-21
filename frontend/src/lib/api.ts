@@ -3,15 +3,15 @@
  *
  * NOTE ON TOKEN STORAGE: the JWT lives in localStorage. That is readable by
  * any script running on the page, so it is only acceptable because this is an
- * internal tool on a domain you control. If Glitz ever becomes a product sold
+ * internal tool on a domain you control. If Ladakh Vacation ever becomes a product sold
  * to other DMCs, move to an httpOnly cookie set by the backend.
  */
 
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000/api';
 
-const TOKEN_KEY = 'glitz.token';
-const USER_KEY = 'glitz.user';
+const TOKEN_KEY = 'lv.token';
+const USER_KEY = 'lv.user';
 
 export interface SessionUser {
   id: string;

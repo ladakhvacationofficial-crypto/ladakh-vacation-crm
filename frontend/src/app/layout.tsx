@@ -1,23 +1,28 @@
 import type { Metadata } from 'next';
-import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
-import { Fraunces } from 'next/font/google';
+import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
 /**
- * Fraunces — a warm, hospitable serif. Used only on display headings
- * (dashboard greeting, hero numbers). Body copy stays on Geist so long tables
- * and forms remain neutral and instrumental.
+ * The Ladakh Vacation brand pairing. Cormorant Garamond only on display
+ * headings (dashboard greeting, hero numbers); Plus Jakarta Sans for body copy,
+ * tables and forms. Geist Mono stays for figures and codes.
  */
-const fraunces = Fraunces({
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-fraunces',
-  axes: ['SOFT', 'WONK', 'opsz'],
+  weight: ['500', '600', '700'],
+  variable: '--font-cormorant',
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jakarta',
 });
 
 export const metadata: Metadata = {
-  title: 'Glitz Holidays',
+  title: 'Ladakh Vacation',
   description: 'Lead, quotation and booking desk',
 };
 
@@ -27,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${GeistSans.variable} ${GeistMono.variable} ${fraunces.variable}`}
+        className={`${jakarta.variable} ${GeistMono.variable} ${cormorant.variable}`}
       >
         {children}
       </body>

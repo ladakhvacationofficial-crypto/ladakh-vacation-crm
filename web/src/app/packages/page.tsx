@@ -13,7 +13,7 @@ import { PageHero } from '@/components/page-hero';
 export const metadata: Metadata = {
   title: 'All Tour Packages — Kashmir, Ladakh, Himachal & Vaishno Devi',
   description:
-    'Every Glitz Holidays tour package in one place. Kashmir, Ladakh, Himachal and Vaishno Devi itineraries with day-by-day plans, clear inclusions and GST-inclusive pricing from ₹9,500 per person.',
+    'Every Ladakh Vacation tour package in one place. Kashmir, Ladakh, Himachal and Vaishno Devi itineraries with day-by-day plans, clear inclusions and GST-inclusive pricing from ₹9,500 per person.',
   alternates: { canonical: '/packages' },
 };
 
@@ -32,7 +32,7 @@ export default function PackagesIndex() {
     {
       '@context': 'https://schema.org',
       '@type': 'ItemList',
-      name: 'Tour packages by Glitz Holidays',
+      name: 'Tour packages by Ladakh Vacation',
       numberOfItems: PACKAGES.length,
       itemListElement: PACKAGES.map((p, i) => ({
         '@type': 'ListItem',

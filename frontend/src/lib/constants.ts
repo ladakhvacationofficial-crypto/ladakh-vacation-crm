@@ -1,5 +1,5 @@
 /**
- * Canonical public site. The business moved from glitzholidays.in (the legacy
+ * Canonical public site. The business moved from www.ladakhvacation.in (the legacy
  * PHP site, est. 2013) to the hyphenated domain — see migration/README.md.
  * The legacy host now 301s everything here, so any stored URL still pointing
  * at it produces a redirect hop and shows the old site in the SEO dashboard.
@@ -8,10 +8,10 @@
  * hardcoding a host, which is how the two domains drifted apart in the first
  * place.
  */
-export const SITE_DOMAIN = 'https://glitz-holidays.in';
+export const SITE_DOMAIN = 'https://ladakhvacation.in';
 
 /** Hosts that have been retired in favour of SITE_DOMAIN. */
-export const LEGACY_HOSTS = ['glitzholidays.in', 'www.glitzholidays.in'];
+export const LEGACY_HOSTS = ['www.ladakhvacation.in', 'www.ladakhvacation.in'];
 
 /**
  * Resolve a manifest path against a site URL, forcing the canonical host.

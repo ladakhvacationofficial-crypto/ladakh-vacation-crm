@@ -33,8 +33,8 @@ export function InterviewSheetDocument({ interview: i }: InterviewSheetInput) {
   return (
     <Document
       title={`Interview — ${i.candidateName} — ${i.role}`}
-      author="Glitz Holidays"
-      creator="Glitz CRM"
+      author="Ladakh Vacation"
+      creator="Ladakh Vacation CRM"
     >
       <Page size="A4" style={pdfStyles.page}>
         <BrandHeader docLabel="Interview sheet" docNumber={shortDate(i.scheduledAt)} />

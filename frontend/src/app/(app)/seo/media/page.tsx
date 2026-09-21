@@ -201,7 +201,7 @@ export default function SeoMediaPage() {
                   id="caption"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="e.g. Photographed by Tariq Ahmad, Glitz Holidays"
+                  placeholder="e.g. Photographed by Tariq Ahmad, Ladakh Vacation"
                 />
               </div>
 

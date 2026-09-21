@@ -31,6 +31,6 @@ async function bootstrap() {
   const port = parseInt(process.env.PORT ?? '3000', 10);
   await app.listen(port, '0.0.0.0');
   // eslint-disable-next-line no-console
-  console.log(`Glitz backend listening on :${port} (prefix /api)`);
+  console.log(`Ladakh Vacation backend listening on :${port} (prefix /api)`);
 }
 bootstrap();

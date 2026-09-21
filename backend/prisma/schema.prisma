@@ -1,4 +1,4 @@
-// Glitz Holidays CRM — Prisma schema
+// Ladakh Vacation CRM — Prisma schema
 // Phase 1: User + Role.  Phase 3: Lead + Activity.
 
 generator client {
@@ -433,7 +433,7 @@ model Interview {
 model SeoSite {
   id String @id @default(cuid())
 
-  /// Human name — "Glitz main site", "Kashmir landing pages".
+  /// Human name — "Ladakh Vacation main site", "Kashmir landing pages".
   name String
   /// Homepage URL — the crawler starts here.
   url  String @unique
@@ -1590,8 +1590,8 @@ enum ContentTone {
 model SocialAccount {
   id           String         @id @default(uuid())
   platform     SocialPlatform
-  accountName  String         // e.g. "Glitz Holidays Official"
-  handle       String         // e.g. "@glitzholidays"
+  accountName  String         // e.g. "Ladakh Vacation Official"
+  handle       String         // e.g. "@ladakhvacation"
   externalId   String         // Page ID or IG Business ID
   accessToken  String         // Encrypted AES-256-GCM
   expiresAt    DateTime?

@@ -14,7 +14,15 @@ import {
  * come from people who already know the business, so the dashboard shows them
  * separately from the non-brand searches that SEO work actually wins.
  */
-const BRAND_TERMS = ['glitz'];
+/**
+ * Queries containing any of these count as BRAND searches (people who already
+ * know the business) rather than organic discovery.
+ *
+ * Only the one-word form. "ladakh vacation" with a space is also a generic
+ * phrase ("ladakh vacation packages"), and counting those as brand searches
+ * would hide how much discovery traffic the site actually earns.
+ */
+const BRAND_TERMS = ['ladakhvacation'];
 
 /** Reports are recomputed from stored rows; this only saves repeat work on page load. */
 const CACHE_MS = 60_000;

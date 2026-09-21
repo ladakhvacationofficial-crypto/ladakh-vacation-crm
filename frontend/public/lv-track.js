@@ -1,17 +1,17 @@
 /**
- * Glitz landing-page beacon. Drop this file on any marketing page:
+ * Ladakh Vacation landing-page beacon. Drop this file on any marketing page:
  *
- *   <script src="https://<your-frontend>/glitz-track.js"
+ *   <script src="https://<your-frontend>/lv-track.js"
  *           data-api="https://<your-backend>/api"
- *           data-slug="kashmir-honeymoon-2026"></script>
+ *           data-slug="ladakh-honeymoon-packages"></script>
  *
  * On load it:
  *   1. Reads (or mints) a first-party visitorId — 1-year cookie.
  *   2. Reads (or mints) a sessionId — 30-min sliding cookie.
  *   3. Parses UTMs + gclid + fbclid off the current URL.
- *   4. POSTs to /api/visits and stashes the returned visitId on window.glitz.
+ *   4. POSTs to /api/visits and stashes the returned visitId on window.lvTrack.
  *
- * When your form submits, include window.glitz.visitId — the backend then
+ * When your form submits, include window.lvTrack.visitId — the backend then
  * ties the lead to the visit and copies the attribution over. Example:
  *
  *   fetch(API + '/leads/capture', {
@@ -20,12 +20,12 @@
  *     body: JSON.stringify({
  *       name: form.name.value,
  *       phone: form.phone.value,
- *       visitId: (window.glitz || {}).visitId,   // <- the important bit
+ *       visitId: (window.lvTrack || {}).visitId,   // <- the important bit
  *       source: 'LANDING_PAGE',
  *     }),
  *   });
  *
- * You can also call window.glitz.attach(formElement) and it will inject a
+ * You can also call window.lvTrack.attach(formElement) and it will inject a
  * hidden <input name="visitId"> for you.
  */
 (function () {
@@ -95,7 +95,7 @@
   });
 
   // ---- fire ------------------------------------------------------------
-  window.glitz = { visitorId: visitorId, sessionId: sessionId, visitId: null };
+  window.lvTrack = { visitorId: visitorId, sessionId: sessionId, visitId: null };
 
   fetch(API + '/visits', {
     method: 'POST',
@@ -107,22 +107,22 @@
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (data) {
       if (!data) return;
-      window.glitz.visitId = data.visitId;
+      window.lvTrack.visitId = data.visitId;
       // Late attach: if any form was marked before /visits responded, fill it.
       document
-        .querySelectorAll('form[data-glitz-attached] input[name=visitId]')
+        .querySelectorAll('form[data-lv-attached] input[name=visitId]')
         .forEach(function (el) { el.value = data.visitId; });
     })
     .catch(function () { /* silent — we never break the page for tracking */ });
 
   // ---- helper for the form ---------------------------------------------
-  window.glitz.attach = function (form) {
-    if (!form || form.dataset.glitzAttached) return;
+  window.lvTrack.attach = function (form) {
+    if (!form || form.dataset.lvAttached) return;
     var input = document.createElement('input');
     input.type = 'hidden';
     input.name = 'visitId';
-    input.value = window.glitz.visitId || '';
+    input.value = window.lvTrack.visitId || '';
     form.appendChild(input);
-    form.dataset.glitzAttached = '1';
+    form.dataset.lvAttached = '1';
   };
 })();

@@ -7,7 +7,7 @@ import { EnquiryForm } from '@/components/enquiry-form';
 
 export const metadata: Metadata = {
   title: 'Contact Us — Talk to a Kashmir Travel Specialist',
-  description: `Contact Glitz Holidays. WhatsApp or call ${SITE.phone.display}, email ${SITE.email}, or send an enquiry. Our Srinagar team replies within hours, ${SITE.hours}.`,
+  description: `Contact Ladakh Vacation. WhatsApp or call ${SITE.phone.display}, email ${SITE.email}, or send an enquiry. Our Srinagar team replies within hours, ${SITE.hours}.`,
   alternates: { canonical: '/contact' },
 };
 

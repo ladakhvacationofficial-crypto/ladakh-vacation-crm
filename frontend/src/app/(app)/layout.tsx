@@ -176,9 +176,9 @@ export default function AppLayout({
     <>
       <div className="border-b border-ink-800/60 px-5 py-4">
         <div className="flex items-baseline gap-1.5 font-semibold tracking-tight">
-          <span className="text-[17px] text-brand-500 display">Glitz</span>
+          <span className="text-[17px] text-brand-500 display">Ladakh</span>
           <span className="text-[13px] uppercase tracking-[0.14em] text-signal-600">
-            Holidays
+            Vacation
           </span>
         </div>
       </div>
@@ -274,9 +274,9 @@ export default function AppLayout({
           <Menu className="size-5" strokeWidth={1.75} />
         </button>
         <div className="flex items-baseline gap-1 font-semibold tracking-tight">
-          <span className="text-[15px] text-brand-500 display">Glitz</span>
+          <span className="text-[15px] text-brand-500 display">Ladakh</span>
           <span className="text-[11px] uppercase tracking-[0.14em] text-signal-600">
-            Holidays
+            Vacation
           </span>
         </div>
         <button

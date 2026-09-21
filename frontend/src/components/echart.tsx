@@ -50,21 +50,21 @@ export const chartBase: Pick<
   'grid' | 'textStyle' | 'tooltip'
 > = {
   grid: { left: 8, right: 12, top: 16, bottom: 4, containLabel: true },
-  textStyle: { fontFamily: 'var(--font-geist-sans), sans-serif', fontSize: 11 },
+  textStyle: { fontFamily: 'var(--font-jakarta), sans-serif', fontSize: 11 },
   tooltip: {
     backgroundColor: '#ffffff',
-    borderColor: '#ecdfc4',
+    borderColor: '#e2ddd1',
     borderWidth: 1,
-    textStyle: { color: '#2b2f3a', fontSize: 12 },
+    textStyle: { color: '#1c2a42', fontSize: 12 },
     padding: [8, 10],
     extraCssText:
-      'box-shadow: 0 8px 24px -8px rgba(28,30,40,0.18); border-radius: 8px;',
+      'box-shadow: 0 8px 24px -8px rgba(7,15,31,0.18); border-radius: 8px;',
   },
 };
 
 export const axisStyle = {
-  axisLine: { lineStyle: { color: '#ecdfc4' } },
+  axisLine: { lineStyle: { color: '#e2ddd1' } },
   axisTick: { show: false },
-  axisLabel: { color: '#6d6a5c', fontSize: 10 },
-  splitLine: { lineStyle: { color: '#f6efdf' } },
+  axisLabel: { color: '#5b6880', fontSize: 10 },
+  splitLine: { lineStyle: { color: '#efece4' } },
 };

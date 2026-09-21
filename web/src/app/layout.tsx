@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Fraunces, Inter } from 'next/font/google';
+import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
 import { SITE } from '@/lib/site';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
@@ -8,21 +8,23 @@ import { WhatsAppFloat } from '@/components/wa-float';
 import { RevealProvider, ScrollProgress } from '@/components/reveal';
 import './globals.css';
 
-const fraunces = Fraunces({
+/** The Ladakh Vacation brand pairing, as on the live landers. */
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-fraunces',
-  axes: ['SOFT', 'opsz'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-cormorant',
 });
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-jakarta',
 });
 
 export const viewport: Viewport = {
-  themeColor: '#0a2419',
+  themeColor: '#0a1428',
   width: 'device-width',
   initialScale: 1,
 };
@@ -30,7 +32,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.domain),
   title: {
-    default: 'Kashmir Tour Packages | Glitz Holidays — Srinagar DMC',
+    default: 'Kashmir Tour Packages | Ladakh Vacation — Srinagar DMC',
     template: `%s | ${SITE.name}`,
   },
   description:
@@ -57,13 +59,13 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: SITE.domain,
     siteName: SITE.name,
-    title: 'Kashmir Tour Packages | Glitz Holidays — Srinagar DMC',
+    title: 'Kashmir Tour Packages | Ladakh Vacation — Srinagar DMC',
     description:
       'Handcrafted Kashmir, Ladakh, Himachal and Vaishno Devi journeys from a Srinagar-based destination management company.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kashmir Tour Packages | Glitz Holidays',
+    title: 'Kashmir Tour Packages | Ladakh Vacation',
     description:
       'Handcrafted Himalayan journeys from a Srinagar-based DMC. Kashmir, Ladakh, Himachal, Vaishno Devi.',
   },
@@ -148,7 +150,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${fraunces.variable} ${inter.variable}`}
+      className={`${cormorant.variable} ${jakarta.variable}`}
       // The inline script below adds a `js` class to <html> before React
       // hydrates, so server and client className strings differ by design.
       // Scoped to this element — it silences nothing else in the tree.

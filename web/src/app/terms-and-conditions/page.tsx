@@ -4,9 +4,9 @@ import { JsonLd } from '@/components/cards';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions — Glitz Holidays',
+  title: 'Terms & Conditions — Ladakh Vacation',
   description:
-    'Review booking terms, payment schedules, permits, altitude advisories, and service guidelines for tour packages operated by Glitz Holidays.',
+    'Review booking terms, payment schedules, permits, altitude advisories, and service guidelines for tour packages operated by Ladakh Vacation.',
   alternates: { canonical: '/terms-and-conditions' },
 };
 
@@ -14,8 +14,8 @@ export default function TermsPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Terms and Conditions — Glitz Holidays',
-    description: 'Commercial booking terms and conditions for Glitz Holidays.',
+    name: 'Terms and Conditions — Ladakh Vacation',
+    description: 'Commercial booking terms and conditions for Ladakh Vacation.',
     url: `${SITE.domain}/terms-and-conditions`,
     publisher: { '@id': `${SITE.domain}/#org` },
   };
@@ -27,7 +27,7 @@ export default function TermsPage() {
       <PageHero
         kicker="Commercial Policies"
         title="Terms & Conditions"
-        lede="Clear, honest terms for booking your Kashmir, Ladakh, and Himalayan journey with Glitz Holidays."
+        lede="Clear, honest terms for booking your Kashmir, Ladakh, and Himalayan journey with Ladakh Vacation."
         crumbs={[
           { label: 'Home', href: '/' },
           { label: 'Terms & Conditions' },
@@ -52,7 +52,7 @@ export default function TermsPage() {
             <div className="border-t border-paper-300 pt-8">
               <h2 className="display d3 text-ink-950">2. Inclusions & Price Integrity</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                All rates quoted by Glitz Holidays include applicable GST (5% for tour packages) unless explicitly noted as an itemized corporate B2B tax invoice. What is written in your itinerary under <em>Inclusions</em> is 100% guaranteed without surprise hidden surcharges on arrival.
+                All rates quoted by Ladakh Vacation include applicable GST (5% for tour packages) unless explicitly noted as an itemized corporate B2B tax invoice. What is written in your itinerary under <em>Inclusions</em> is 100% guaranteed without surprise hidden surcharges on arrival.
               </p>
             </div>
 
@@ -70,7 +70,7 @@ export default function TermsPage() {
             <div className="border-t border-paper-300 pt-8">
               <h2 className="display d3 text-ink-950">4. Identification & Permits</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                All Indian guests must carry original government-issued photo IDs (Aadhaar / Voter ID / Passport / Driving License). For protected Ladakh border sectors (Pangong, Nubra, Tso Moriri), Glitz Holidays processes all required Inner Line Permits (ILP). Non-Indian passport holders must provide valid Indian visas / e-visas.
+                All Indian guests must carry original government-issued photo IDs (Aadhaar / Voter ID / Passport / Driving License). For protected Ladakh border sectors (Pangong, Nubra, Tso Moriri), Ladakh Vacation processes all required Inner Line Permits (ILP). Non-Indian passport holders must provide valid Indian visas / e-visas.
               </p>
             </div>
 

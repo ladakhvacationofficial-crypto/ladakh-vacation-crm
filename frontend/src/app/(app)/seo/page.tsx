@@ -91,7 +91,7 @@ export default function SeoPage() {
     const baseSite = sites.find((s) => s.id === selectedSiteId)?.url || SITE_DOMAIN;
     return (MANIFEST_DATA as any[]).map((m) => {
       // canonicalSiteUrl forces the live domain even when the stored SeoSite
-      // row still points at the retired glitzholidays.in host.
+      // row still points at the retired www.ladakhvacation.in host.
       const fullUrl = canonicalSiteUrl(m.url, baseSite);
       return {
         url: fullUrl,
@@ -205,13 +205,13 @@ export default function SeoPage() {
     setError(null);
     try {
       const res = await api.post<{ id: string }>('/seo/sites', {
-        name: 'Glitz Holidays Main Website',
+        name: 'Ladakh Vacation Main Website',
         url: SITE_DOMAIN,
         crawlPaths: ['/', '/packages', '/destinations/gulmarg', '/destinations/pahalgam', '/destinations/sonmarg'],
       });
       await loadSites();
       setSelectedSiteId(res.id);
-      notifySuccess('Glitz Holidays website registered successfully!');
+      notifySuccess('Ladakh Vacation website registered successfully!');
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Registration failed');
     } finally {
@@ -268,7 +268,7 @@ export default function SeoPage() {
 
   // Effective unified rankings list.
   // Audited rows carry whatever host was stored on SeoAudit at crawl time,
-  // which on older installs is the retired glitzholidays.in. Normalise here —
+  // which on older installs is the retired www.ladakhvacation.in. Normalise here —
   // the single point every link, dropdown and dialog reads from — so no view
   // can send the team to the legacy site.
   const effectiveRankings: SeoRankedPage[] = useMemo(() => {
@@ -363,7 +363,7 @@ export default function SeoPage() {
             <Globe className="size-5 text-signal-500 shrink-0" />
             <div>
               <p className="text-[13px] font-semibold text-ink-100">
-                Tracking Glitz Holidays (270 Programmatic Pages)
+                Tracking Ladakh Vacation (270 Programmatic Pages)
               </p>
               <p className="text-[11.5px] text-ink-400">
                 All 270 pages are loaded from the manifest below. Connect the domain to run live crawling and store off-page backlinks.
@@ -515,7 +515,7 @@ export default function SeoPage() {
         <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
           <div className="space-y-4">
             <SitePages
-              audit={audit || { site: sites[0] || ({ name: 'Glitz', url: SITE_DOMAIN } as any), pages: [] }}
+              audit={audit || { site: sites[0] || ({ name: 'Ladakh Vacation', url: SITE_DOMAIN } as any), pages: [] }}
               busy={busy === 'audit'}
               onAudit={runAudit}
             />
@@ -1132,7 +1132,7 @@ function MediaLibraryTab({
                   id="caption"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="e.g. Photographed by Tariq Ahmad, Glitz Holidays Srinagar"
+                  placeholder="e.g. Photographed by Tariq Ahmad, Ladakh Vacation Srinagar"
                 />
               </div>
 
@@ -1785,7 +1785,7 @@ function AddSiteDialog({ onCreated }: { onCreated: (id: string) => void }) {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Glitz Holidays Website"
+              placeholder="Ladakh Vacation Website"
             />
           </div>
           <div className="space-y-1">

@@ -8,10 +8,10 @@ describe('mapDimensionRows', () => {
 
   it('normalises page keys so slash variants share a key', () => {
     const [r] = mapDimensionRows(
-      [{ keys: ['2026-09-01', 'https://glitz-holidays.in/routes/a/?x=1'], clicks: 1, impressions: 10, ctr: 0.1, position: 5 }],
+      [{ keys: ['2026-09-01', 'https://ladakhvacation.in/routes/a/?x=1'], clicks: 1, impressions: 10, ctr: 0.1, position: 5 }],
       ['date', 'page'],
     );
-    expect(r.key).toBe('https://glitz-holidays.in/routes/a');
+    expect(r.key).toBe('https://ladakhvacation.in/routes/a');
   });
 
   it('keeps device and country keys as returned', () => {

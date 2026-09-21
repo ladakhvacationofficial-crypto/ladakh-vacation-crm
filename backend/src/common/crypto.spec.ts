@@ -30,7 +30,7 @@ describe('crypto: encryptSecret and decryptSecret', () => {
 
   it('falls back to JWT_SECRET when INTEGRATION_KEY is not set', () => {
     delete process.env.INTEGRATION_KEY;
-    process.env.JWT_SECRET = 'jwt-super-secret-key-for-glitz-crm';
+    process.env.JWT_SECRET = 'jwt-test-secret-for-specs';
     const plaintext = JSON.stringify({ apiKey: 'sk-123456789' });
     const encrypted = encryptSecret(plaintext);
     expect(decryptSecret(encrypted)).toBe(plaintext);

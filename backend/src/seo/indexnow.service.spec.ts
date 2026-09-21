@@ -1,4 +1,4 @@
-﻿import { BadRequestException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { IndexNowService } from './indexnow.service';
 import { encryptSecret } from '../common/crypto';
 
@@ -6,6 +6,20 @@ describe('IndexNowService', () => {
   let service: IndexNowService;
   let prismaMock: any;
   let originalFetch: any;
+  let originalIntegrationKey: string | undefined;
+
+  // encryptSecret needs a key. Glitz's own machine supplied one from a local
+  // .env that is not part of the repo, so on a fresh checkout these tests
+  // failed; the suite now brings its own throwaway key.
+  beforeAll(() => {
+    originalIntegrationKey = process.env.INTEGRATION_KEY;
+    process.env.INTEGRATION_KEY = 'test-integration-key-for-indexnow-spec';
+  });
+
+  afterAll(() => {
+    if (originalIntegrationKey === undefined) delete process.env.INTEGRATION_KEY;
+    else process.env.INTEGRATION_KEY = originalIntegrationKey;
+  });
 
   beforeEach(() => {
     originalFetch = global.fetch;
@@ -30,9 +44,9 @@ describe('IndexNowService', () => {
 
   it('resolves encrypted credentials from database', async () => {
     const creds = {
-      host: 'glitz-holidays.in',
+      host: 'ladakhvacation.in',
       apiKey: '7c3f84e09f874a9db4814c327fb2714f',
-      keyLocation: 'https://glitz-holidays.in/indexnow.txt',
+      keyLocation: 'https://ladakhvacation.in/indexnow.txt',
     };
     prismaMock.integration.findFirst.mockResolvedValue({
       provider: 'indexnow',
@@ -41,13 +55,13 @@ describe('IndexNowService', () => {
     });
 
     const resolved = await service.resolveCredentials();
-    expect(resolved.host).toBe('glitz-holidays.in');
+    expect(resolved.host).toBe('ladakhvacation.in');
     expect(resolved.apiKey).toBe('7c3f84e09f874a9db4814c327fb2714f');
   });
 
   it('submits URLs and handles HTTP 200 OK', async () => {
     const creds = {
-      host: 'glitz-holidays.in',
+      host: 'ladakhvacation.in',
       apiKey: '7c3f84e09f874a9db4814c327fb2714f',
     };
     prismaMock.integration.findFirst.mockResolvedValue({
@@ -69,7 +83,7 @@ describe('IndexNowService', () => {
 
   it('handles HTTP 202 Accepted response', async () => {
     const creds = {
-      host: 'glitz-holidays.in',
+      host: 'ladakhvacation.in',
       apiKey: '7c3f84e09f874a9db4814c327fb2714f',
     };
     prismaMock.integration.findFirst.mockResolvedValue({
@@ -83,14 +97,14 @@ describe('IndexNowService', () => {
       text: jest.fn().mockResolvedValue('Accepted'),
     });
 
-    const res = await service.submitUrls(['https://glitz-holidays.in/guides/places-to-visit-in-kashmir']);
+    const res = await service.submitUrls(['https://ladakhvacation.in/guides/places-to-visit-in-kashmir']);
     expect(res.ok).toBe(true);
     expect(res.statusCode).toBe(202);
   });
 
   it('throws error when IndexNow returns 403 Forbidden', async () => {
     const creds = {
-      host: 'glitz-holidays.in',
+      host: 'ladakhvacation.in',
       apiKey: 'invalid-key',
     };
     prismaMock.integration.findFirst.mockResolvedValue({

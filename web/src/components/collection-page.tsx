@@ -96,7 +96,7 @@ export function CollectionPage({ c }: { c: Collection }) {
         ]}
         background={TONE_HERO[c.tone]}
         heroImage={packages[0]?.image}
-        heroImageAlt={`${c.h1} — Glitz Holidays`}
+        heroImageAlt={`${c.h1} — Ladakh Vacation`}
       >
         <FactStrip
           facts={[

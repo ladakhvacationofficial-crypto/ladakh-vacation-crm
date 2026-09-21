@@ -10,7 +10,7 @@ const clsBuckets = [
 
 const psi = {
   loadingExperience: {
-    id: 'https://glitz-holidays.in/packages/from/delhi',
+    id: 'https://ladakhvacation.in/packages/from/delhi',
     origin_fallback: false,
     metrics: {
       LARGEST_CONTENTFUL_PAINT_MS: { percentile: 2400, category: 'FAST' },
@@ -18,7 +18,7 @@ const psi = {
     },
   },
   originLoadingExperience: {
-    id: 'https://glitz-holidays.in',
+    id: 'https://ladakhvacation.in',
     metrics: {
       LARGEST_CONTENTFUL_PAINT_MS: { percentile: 3000 },
       INTERACTION_TO_NEXT_PAINT: { percentile: 350 },

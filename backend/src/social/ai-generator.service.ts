@@ -98,16 +98,16 @@ export class AiGeneratorService {
 
     // ── Variant 1: Storytelling & Experiential ──────────────────────────────
     const storytellingCaption = isLadakh
-      ? `Where the earth meets the sky in shades of raw amber and sapphire. 🏔️✨\n\nThere is a stillness in Ladakh that resets your soul — driving across the Khardung La pass, watching prayer flags flutter against endless blue horizons, and watching the sunset cast golden reflections over Pangong Tso.\n\nCraft your story with Glitz Holidays — handpicked boutique stays, curated private transport, and local hospitality that feels like home.\n\n📍 ${pkg}\n📩 Send us a DM or tap the link in bio for customized itineraries.`
+      ? `Where the earth meets the sky in shades of raw amber and sapphire. 🏔️✨\n\nThere is a stillness in Ladakh that resets your soul — driving across the Khardung La pass, watching prayer flags flutter against endless blue horizons, and watching the sunset cast golden reflections over Pangong Tso.\n\nCraft your story with Ladakh Vacation — handpicked boutique stays, curated private transport, and local hospitality that feels like home.\n\n📍 ${pkg}\n📩 Send us a DM or tap the link in bio for customized itineraries.`
       : isGulmarg
-      ? `Imagine waking up to a world dipped in pure white powder and pine forests. ❄️🌲\n\nWhether you are riding the highest cable car at Apharwat Peak or warming up with piping hot saffron Kehwa beside a crackling fireplace, Gulmarg is pure magic.\n\nExperience winter luxury tailored to perfection with Glitz Holidays.\n\n📍 ${pkg}\n📩 Send us a direct message or link in bio to reserve your winter slot!`
-      : `Waking up to the gentle splash of oars on Dal Lake, golden Chinar leaves drifting through the autumn breeze, and the aroma of freshly brewed Kahwa in the crisp morning air. 🍁☕🛶\n\nKashmir isn’t just a destination — it’s a feeling that stays with you long after you return home.\n\nLet Glitz Holidays plan your seamless escape with luxury houseboats, private chauffeurs, and 24/7 on-ground assistance.\n\n📍 ${pkg}\n📩 DM us "KASHMIR" or click link in bio for customized quote.`;
+      ? `Imagine waking up to a world dipped in pure white powder and pine forests. ❄️🌲\n\nWhether you are riding the highest cable car at Apharwat Peak or warming up with piping hot saffron Kehwa beside a crackling fireplace, Gulmarg is pure magic.\n\nExperience winter luxury tailored to perfection with Ladakh Vacation.\n\n📍 ${pkg}\n📩 Send us a direct message or link in bio to reserve your winter slot!`
+      : `Waking up to the gentle splash of oars on Dal Lake, golden Chinar leaves drifting through the autumn breeze, and the aroma of freshly brewed Kahwa in the crisp morning air. 🍁☕🛶\n\nKashmir isn’t just a destination — it’s a feeling that stays with you long after you return home.\n\nLet Ladakh Vacation plan your seamless escape with luxury houseboats, private chauffeurs, and 24/7 on-ground assistance.\n\n📍 ${pkg}\n📩 DM us "KASHMIR" or click link in bio for customized quote.`;
 
     // ── Variant 2: Promotional & Urgency ────────────────────────────────────
-    const promoCaption = `🔥 LIMITED SEATS: ${pkg.toUpperCase()} | Special Season Offer! 🏔️✈️\n\nPlan your dream getaway to ${dest} with complete peace of mind and zero hassle!\n\n✨ What's Included in your Glitz Holidays Package:\n✔️ Handpicked 4★ / 5★ Luxury Stays & Houseboats\n✔️ Daily Buffet Breakfast & Chef-curated Dinners\n✔️ Private Sanitized Chauffeur-driven Transport\n✔️ Shikara Ride, Sightseeing & Local Guided Tours\n✔️ 24/7 Dedicated On-Ground Support\n\n💰 Special Group & Couple Discounts available for early bookings!\n\n👉 DM us right now or WhatsApp us at +91 99060 00000 for full day-by-day itinerary & transparent pricing.`;
+    const promoCaption = `🔥 LIMITED SEATS: ${pkg.toUpperCase()} | Special Season Offer! 🏔️✈️\n\nPlan your dream getaway to ${dest} with complete peace of mind and zero hassle!\n\n✨ What's Included in your Ladakh Vacation Package:\n✔️ Handpicked 4★ / 5★ Luxury Stays & Houseboats\n✔️ Daily Buffet Breakfast & Chef-curated Dinners\n✔️ Private Sanitized Chauffeur-driven Transport\n✔️ Shikara Ride, Sightseeing & Local Guided Tours\n✔️ 24/7 Dedicated On-Ground Support\n\n💰 Special Group & Couple Discounts available for early bookings!\n\n👉 DM us right now or WhatsApp us at +91 99060 00000 for full day-by-day itinerary & transparent pricing.`;
 
     // ── Variant 3: Punchy Reel Hook / Short Form ────────────────────────────
-    const reelCaption = `This is your sign to pack your bags and experience ${dest}! ✈️🏔️\n\n3 things you CANNOT miss:\n1️⃣ Sunrise Shikara ride on Dal Lake\n2️⃣ Gondola ride up to Apharwat snow slopes\n3️⃣ Traditional Kashmiri Wazwan dinner\n\nSave this for your next trip and share with your travel partner! 📲\n\nTag @glitzholidays on your adventures ✨`;
+    const reelCaption = `This is your sign to pack your bags and experience ${dest}! ✈️🏔️\n\n3 things you CANNOT miss:\n1️⃣ Sunrise Shikara ride on Dal Lake\n2️⃣ Gondola ride up to Apharwat snow slopes\n3️⃣ Traditional Kashmiri Wazwan dinner\n\nSave this for your next trip and share with your travel partner! 📲\n\nTag @ladakhvacation on your adventures ✨`;
 
     const hashtags = this.curateHashtags(dest);
 
@@ -141,7 +141,7 @@ export class AiGeneratorService {
 
   private curateHashtags(dest: string): string[] {
     const base = [
-      '#GlitzHolidays',
+      '#Ladakh VacationHolidays',
       '#TravelIndia',
       '#IncredibleIndia',
       '#TravelGram',
@@ -189,7 +189,7 @@ export class AiGeneratorService {
   }
 
   private async callOpenAi(apiKey: string, dest: string, pkg: string, season: string, custom?: string) {
-    const prompt = `You are an elite travel marketing copywriter for Glitz Holidays, a premier travel agency specializing in Kashmir and Ladakh.
+    const prompt = `You are an elite travel marketing copywriter for Ladakh Vacation, a premier travel agency specializing in Kashmir and Ladakh.
 Write 3 Instagram/Facebook captions for destination "${dest}", package "${pkg}", season "${season}".
 Tone 1: Evocative storytelling.
 Tone 2: High-converting promotional with package perks and clear CTA.
@@ -224,7 +224,7 @@ Return strictly a JSON array of 3 objects with keys: { "tone": "STORYTELLING"|"P
     season: string,
     custom?: string,
   ) {
-    const prompt = `You are an elite travel marketing copywriter for Glitz Holidays, a premier Kashmir & Ladakh travel agency in India.
+    const prompt = `You are an elite travel marketing copywriter for Ladakh Vacation, a premier Kashmir & Ladakh travel agency in India.
 
 Write exactly 3 social media captions for:
 - Destination: "${dest}"
@@ -286,7 +286,7 @@ Return ONLY a valid JSON array — no markdown, no code fences:
     season: string,
     custom?: string,
   ) {
-    const prompt = `You are an elite travel marketing copywriter for Glitz Holidays, a premier Kashmir & Ladakh travel agency in India.
+    const prompt = `You are an elite travel marketing copywriter for Ladakh Vacation, a premier Kashmir & Ladakh travel agency in India.
 
 Write exactly 3 social media captions for:
 - Destination: "${dest}"

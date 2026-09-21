@@ -4,7 +4,8 @@
  * everywhere.
  *
  * Font strategy:
- *   Prefer Fraunces + Inter to match the app UI. Fall back to the built-in
+ *   Prefer Cormorant Garamond + Plus Jakarta Sans (the Ladakh Vacation brand
+ *   pairing, as on the website and landers). Fall back to the built-in
  *   PDF-14 fonts (Times-Roman + Helvetica) when the .ttf files aren't
  *   present. See src/pdf/fonts/README.md for the two-minute upgrade.
  */
@@ -25,60 +26,62 @@ function resolveFonts(): FontResolution {
   const has = (name: string) => fs.existsSync(path.join(FONTS_DIR, name));
 
   const hasFraunces =
-    has('Fraunces-Regular.ttf') && has('Fraunces-Bold.ttf');
+    has('CormorantGaramond-Regular.ttf') && has('CormorantGaramond-Bold.ttf');
   const hasInter =
-    has('Inter-Regular.ttf') && has('Inter-Bold.ttf');
+    has('PlusJakartaSans-Regular.ttf') && has('PlusJakartaSans-Bold.ttf');
 
   if (hasFraunces) {
     Font.register({
-      family: 'Fraunces',
+      family: 'Cormorant Garamond',
       fonts: [
-        { src: path.join(FONTS_DIR, 'Fraunces-Regular.ttf'), fontWeight: 400 },
-        { src: path.join(FONTS_DIR, 'Fraunces-Bold.ttf'),    fontWeight: 700 },
+        { src: path.join(FONTS_DIR, 'CormorantGaramond-Regular.ttf'), fontWeight: 400 },
+        { src: path.join(FONTS_DIR, 'CormorantGaramond-Bold.ttf'),    fontWeight: 700 },
       ],
     });
   }
   if (hasInter) {
     Font.register({
-      family: 'Inter',
+      family: 'Plus Jakarta Sans',
       fonts: [
-        { src: path.join(FONTS_DIR, 'Inter-Regular.ttf'), fontWeight: 400 },
-        { src: path.join(FONTS_DIR, 'Inter-Bold.ttf'),    fontWeight: 700 },
+        { src: path.join(FONTS_DIR, 'PlusJakartaSans-Regular.ttf'), fontWeight: 400 },
+        { src: path.join(FONTS_DIR, 'PlusJakartaSans-Bold.ttf'),    fontWeight: 700 },
       ],
     });
   }
 
   // eslint-disable-next-line no-console
   console.log(
-    `[pdf] fonts: display=${hasFraunces ? 'Fraunces' : 'Times-Roman'}, ` +
-    `body=${hasInter ? 'Inter' : 'Helvetica'}`,
+    `[pdf] fonts: display=${hasFraunces ? 'Cormorant Garamond' : 'Times-Roman'}, ` +
+    `body=${hasInter ? 'Plus Jakarta Sans' : 'Helvetica'}`,
   );
 
   return {
-    display: hasFraunces ? 'Fraunces' : 'Times-Roman',
-    body:    hasInter    ? 'Inter'    : 'Helvetica',
+    display: hasFraunces ? 'Cormorant Garamond' : 'Times-Roman',
+    body:    hasInter    ? 'Plus Jakarta Sans' : 'Helvetica',
   };
 }
 
 const F = resolveFonts();
 
 /**
- * Palette pulled straight from the logo. Kept here (not imported from the
- * frontend's globals.css) because the two apps deploy independently.
+ * Palette pulled straight from the Ladakh Vacation logo. Kept here (not
+ * imported from the frontend's globals.css) because the two apps deploy
+ * independently. Key names are inherited from the Glitz templates: `teal*`
+ * is the brand blue, `gold*` the accent.
  */
 export const brand = {
-  gold:      '#EAB130',
-  goldDeep:  '#C88C1A',
-  teal:      '#0B4A5A',
-  tealMid:   '#0E5D71',
-  tealLight: '#4FA5B8',
-  cream:     '#FBF7EE',
-  parchment: '#F6EFDF',
-  border:    '#ECDFC4',
-  ink:       '#0F1420',
-  text:      '#2B2F3A',
-  muted:     '#6D6A5C',
-  soft:      '#4A4A45',
+  gold:      '#C9A961',
+  goldDeep:  '#A8842F',
+  teal:      '#16294F',
+  tealMid:   '#1E4FA8',
+  tealLight: '#6FA0F5',
+  cream:     '#F6F4EF',
+  parchment: '#EFECE4',
+  border:    '#E2DDD1',
+  ink:       '#070F1F',
+  text:      '#1C2A42',
+  muted:     '#5B6880',
+  soft:      '#43506A',
   healthy:   '#2E7D5B',
   warn:      '#B87116',
   loss:      '#B84A37',

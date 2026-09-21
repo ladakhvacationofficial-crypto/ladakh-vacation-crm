@@ -8,8 +8,8 @@ import { PageHero } from '@/components/page-hero';
 import { EnquiryForm } from '@/components/enquiry-form';
 
 export const metadata: Metadata = {
-  title: 'Guest Reviews — What Travellers Say About Glitz Holidays',
-  description: `Read ${SITE.stats.reviewCount} verified guest reviews of Glitz Holidays. ${SITE.stats.rating} out of 5 across Kashmir, Ladakh, Himachal and Vaishno Devi trips.`,
+  title: 'Guest Reviews — What Travellers Say About Ladakh Vacation',
+  description: `Read ${SITE.stats.reviewCount} verified guest reviews of Ladakh Vacation. ${SITE.stats.rating} out of 5 across Kashmir, Ladakh, Himachal and Vaishno Devi trips.`,
   alternates: { canonical: '/reviews' },
 };
 

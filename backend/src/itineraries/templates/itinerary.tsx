@@ -54,9 +54,9 @@ export function ItineraryDocument({ i }: { i: ItineraryInput }) {
   return (
     <Document
       title={`Itinerary ${i.code}`}
-      author="Glitz Holidays"
+      author="Ladakh Vacation"
       subject={i.title}
-      creator="Glitz CRM"
+      creator="Ladakh Vacation CRM"
     >
       {/* --- cover --- */}
       <Page size="A4" style={pdfStyles.page}>
@@ -101,11 +101,11 @@ export function ItineraryDocument({ i }: { i: ItineraryInput }) {
           <View style={pdfStyles.partyBox}>
             <Text style={pdfStyles.sectionLabel}>Your DMC</Text>
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
-              Glitz Holidays
+              Ladakh Vacation
             </Text>
             <Text style={pdfStyles.small}>Srinagar, Kashmir</Text>
-            <Text style={pdfStyles.small}>hello@glitzholidays.in</Text>
-            <Text style={pdfStyles.small}>www.glitz-holidays.in</Text>
+            <Text style={pdfStyles.small}>ladakhvacation@gmail.com</Text>
+            <Text style={pdfStyles.small}>www.ladakhvacation.in</Text>
           </View>
         </View>
 

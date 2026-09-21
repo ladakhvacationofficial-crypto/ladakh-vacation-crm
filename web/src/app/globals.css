@@ -1,54 +1,57 @@
 @import 'tailwindcss';
 
 /* ============================================================================
-   GLITZ HOLIDAYS — DESIGN SYSTEM
-   Premium editorial. Brand palette derived from the logo: chinar gold, pine
-   green, warm paper. Kashmir in three colours.
+   LADAKH VACATION — DESIGN SYSTEM
+   Premium editorial. Brand palette sampled from the Ladakh Vacation logo and
+   the live landers: royal blue banner, deep navy, muted gold border, paper.
+   Token NAMES are inherited from the Glitz system (pine = the primary dark
+   brand scale, gold = accent) so every component keeps working; the VALUES
+   are Ladakh's.
    ========================================================================= */
 
 @theme {
   /* --- Paper: warm off-white neutrals (never pure white, never pure grey) */
-  --color-paper-50:  #fdfbf7;
-  --color-paper-100: #faf6ee;
-  --color-paper-200: #f2ebdd;
-  --color-paper-300: #e5dac4;
-  --color-paper-400: #cbbb9e;
-  --color-paper-500: #a8967a;
+  --color-paper-50:  #fbfaf7;
+  --color-paper-100: #f6f4ef;
+  --color-paper-200: #efece4;
+  --color-paper-300: #e2ddd1;
+  --color-paper-400: #c9c1b0;
+  --color-paper-500: #a39a87;
 
   /* --- Ink: warm-black text ramp */
-  --color-ink-950: #0d0f0d;
-  --color-ink-900: #161a17;
-  --color-ink-800: #232925;
-  --color-ink-700: #333b35;
-  --color-ink-600: #4a534c;
-  --color-ink-500: #6b746d;
-  --color-ink-400: #939b95;
-  --color-ink-300: #bcc2bd;
-  --color-ink-200: #dbdfdc;
+  --color-ink-950: #070f1f;
+  --color-ink-900: #0d1b30;
+  --color-ink-800: #1c2a42;
+  --color-ink-700: #2c3a53;
+  --color-ink-600: #43506a;
+  --color-ink-500: #5b6880;
+  --color-ink-400: #8792a6;
+  --color-ink-300: #b4bccb;
+  --color-ink-200: #d9dee7;
 
   /* --- Pine: the logo's deep green. Primary dark surface. */
-  --color-pine-50:  #eef6f1;
-  --color-pine-100: #d3e9dc;
-  --color-pine-200: #a5d1ba;
-  --color-pine-300: #6bb28f;
-  --color-pine-400: #3d8f68;
-  --color-pine-500: #1f6f4c;
-  --color-pine-600: #17573c;
-  --color-pine-700: #124430;
-  --color-pine-800: #0e3324;
-  --color-pine-900: #0a2419;
-  --color-pine-950: #061710;
+  --color-pine-50:  #eef3fd;
+  --color-pine-100: #d9e5fb;
+  --color-pine-200: #b3cbf6;
+  --color-pine-300: #6fa0f5;
+  --color-pine-400: #3670d8;
+  --color-pine-500: #1e4fa8;
+  --color-pine-600: #193f8a;
+  --color-pine-700: #16294f;
+  --color-pine-800: #101f3d;
+  --color-pine-900: #0a1428;
+  --color-pine-950: #070f1f;
 
   /* --- Gold: the logo's sun. Accent + CTA only, never a background wash. */
-  --color-gold-50:  #fdf8e7;
-  --color-gold-100: #faeec0;
-  --color-gold-200: #f5dd85;
-  --color-gold-300: #efc94a;
-  --color-gold-400: #e8b923;
-  --color-gold-500: #c99a12;
-  --color-gold-600: #a17708;
-  --color-gold-700: #7c5b0a;
-  --color-gold-800: #5c4310;
+  --color-gold-50:  #fbf8ee;
+  --color-gold-100: #f6eed8;
+  --color-gold-200: #eedfb7;
+  --color-gold-300: #e8d5a0;
+  --color-gold-400: #d8bf80;
+  --color-gold-500: #c9a961;
+  --color-gold-600: #a8842f;
+  --color-gold-700: #86682a;
+  --color-gold-800: #634d22;
 
   /* --- Saffron: warm secondary for pilgrimage / autumn contexts */
   --color-saffron-400: #e08b32;
@@ -60,8 +63,8 @@
   --color-danger:  #b3261e;
 
   /* --- Type */
-  --font-display: var(--font-fraunces), 'Georgia', serif;
-  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-cormorant), 'Georgia', serif;
+  --font-body: var(--font-jakarta), system-ui, -apple-system, sans-serif;
 
   /* --- Motion tokens. One vocabulary so nothing feels off-tempo. */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -72,11 +75,11 @@
   --dur-slow: 620ms;
 
   /* --- Elevation. Warm-tinted shadows; grey shadows look dead on paper. */
-  --shadow-sm: 0 1px 2px rgba(13, 15, 13, 0.05);
-  --shadow-md: 0 4px 16px -4px rgba(13, 15, 13, 0.10), 0 2px 6px -2px rgba(13, 15, 13, 0.06);
-  --shadow-lg: 0 18px 44px -12px rgba(13, 15, 13, 0.18), 0 6px 16px -6px rgba(13, 15, 13, 0.08);
-  --shadow-xl: 0 32px 72px -20px rgba(13, 15, 13, 0.26), 0 12px 28px -12px rgba(13, 15, 13, 0.12);
-  --shadow-gold: 0 12px 32px -10px rgba(201, 154, 18, 0.45);
+  --shadow-sm: 0 1px 2px rgba(7, 15, 31, 0.05);
+  --shadow-md: 0 4px 16px -4px rgba(7, 15, 31, 0.10), 0 2px 6px -2px rgba(7, 15, 31, 0.06);
+  --shadow-lg: 0 18px 44px -12px rgba(7, 15, 31, 0.18), 0 6px 16px -6px rgba(7, 15, 31, 0.08);
+  --shadow-xl: 0 32px 72px -20px rgba(7, 15, 31, 0.26), 0 12px 28px -12px rgba(7, 15, 31, 0.12);
+  --shadow-gold: 0 12px 32px -10px rgba(201, 169, 97, 0.45);
 }
 
 /* ============================================================================
@@ -590,7 +593,7 @@ body {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border: 1px solid rgba(232, 185, 35, 0.22);
-  box-shadow: 0 8px 32px 0 rgba(13, 15, 13, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(7, 15, 31, 0.08);
 }
 
 .glass-dark {

@@ -12,7 +12,7 @@ import { SITE_DOMAIN } from '../common/site';
  * Insights. No database access, so a dry run can use it unchanged.
  */
 
-export const AUDIT_USER_AGENT = `GlitzSEOAudit/2.0 (+${SITE_DOMAIN})`;
+export const AUDIT_USER_AGENT = `Ladakh VacationSEOAudit/2.0 (+${SITE_DOMAIN})`;
 
 const MAX_HTML_CHARS = 3_000_000;
 const MAX_SITEMAP_FILES = 25;

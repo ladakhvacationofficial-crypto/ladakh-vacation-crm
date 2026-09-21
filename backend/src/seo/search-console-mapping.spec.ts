@@ -57,10 +57,10 @@ describe('search console mapping', () => {
   describe('mapRow', () => {
     it('reads keys positionally against the requested dimensions', () => {
       const r = mapRow(
-        apiRow('2026-09-01', 'https://glitz-holidays.in/packages/from/delhi', 'kashmir package from delhi', 12, 340, 0.0353, 8.4),
+        apiRow('2026-09-01', 'https://ladakhvacation.in/packages/from/delhi', 'kashmir package from delhi', 12, 340, 0.0353, 8.4),
       )!;
       expect(r.date).toBe('2026-09-01');
-      expect(r.page).toBe('https://glitz-holidays.in/packages/from/delhi');
+      expect(r.page).toBe('https://ladakhvacation.in/packages/from/delhi');
       expect(r.query).toBe('kashmir package from delhi');
       expect(r.clicks).toBe(12);
       expect(r.impressions).toBe(340);
@@ -83,7 +83,7 @@ describe('search console mapping', () => {
     });
 
     it('truncates a page URL so the natural-key index stays in bounds', () => {
-      const long = 'https://glitz-holidays.in/' + 'x'.repeat(900);
+      const long = 'https://ladakhvacation.in/' + 'x'.repeat(900);
       const r = mapRow(apiRow('2026-09-01', long, 'q', 0, 1, 0, 50))!;
       expect(r.page.length).toBe(MAX_PAGE_LEN);
     });
@@ -208,17 +208,17 @@ describe('search console mapping', () => {
   describe('normalisePropertyUrl', () => {
     it('keeps the trailing slash a URL-prefix property requires', () => {
       // Without the slash the API answers 403, not a useful error.
-      expect(normalisePropertyUrl('https://glitz-holidays.in')).toBe('https://glitz-holidays.in/');
-      expect(normalisePropertyUrl('https://glitz-holidays.in/')).toBe('https://glitz-holidays.in/');
+      expect(normalisePropertyUrl('https://ladakhvacation.in')).toBe('https://ladakhvacation.in/');
+      expect(normalisePropertyUrl('https://ladakhvacation.in/')).toBe('https://ladakhvacation.in/');
     });
 
     it('passes an explicit domain property through untouched', () => {
-      expect(normalisePropertyUrl('sc-domain:glitz-holidays.in')).toBe('sc-domain:glitz-holidays.in');
+      expect(normalisePropertyUrl('sc-domain:ladakhvacation.in')).toBe('sc-domain:ladakhvacation.in');
     });
 
     it('treats a bare hostname as a domain property', () => {
-      expect(normalisePropertyUrl('glitz-holidays.in')).toBe('sc-domain:glitz-holidays.in');
-      expect(normalisePropertyUrl('  glitz-holidays.in  ')).toBe('sc-domain:glitz-holidays.in');
+      expect(normalisePropertyUrl('ladakhvacation.in')).toBe('sc-domain:ladakhvacation.in');
+      expect(normalisePropertyUrl('  ladakhvacation.in  ')).toBe('sc-domain:ladakhvacation.in');
     });
 
     it('returns empty for empty input rather than a broken property string', () => {
@@ -229,20 +229,20 @@ describe('search console mapping', () => {
 
   describe('normalizePageUrl', () => {
     it('strips trailing slashes from non-root URLs', () => {
-      expect(normalizePageUrl('https://glitz-holidays.in/packages/from/delhi/')).toBe(
-        'https://glitz-holidays.in/packages/from/delhi',
+      expect(normalizePageUrl('https://ladakhvacation.in/packages/from/delhi/')).toBe(
+        'https://ladakhvacation.in/packages/from/delhi',
       );
       expect(normalizePageUrl('/packages/from/delhi/')).toBe('/packages/from/delhi');
     });
 
     it('preserves root slash', () => {
-      expect(normalizePageUrl('https://glitz-holidays.in/')).toBe('https://glitz-holidays.in/');
+      expect(normalizePageUrl('https://ladakhvacation.in/')).toBe('https://ladakhvacation.in/');
       expect(normalizePageUrl('/')).toBe('/');
     });
 
     it('strips query params and hash fragments', () => {
-      expect(normalizePageUrl('https://glitz-holidays.in/packages?utm_source=ads#faq')).toBe(
-        'https://glitz-holidays.in/packages',
+      expect(normalizePageUrl('https://ladakhvacation.in/packages?utm_source=ads#faq')).toBe(
+        'https://ladakhvacation.in/packages',
       );
     });
 
@@ -257,7 +257,7 @@ describe('search console mapping', () => {
       const rows = [
         {
           date: '2026-09-10',
-          page: 'https://glitz-holidays.in/packages/from/delhi/',
+          page: 'https://ladakhvacation.in/packages/from/delhi/',
           query: 'delhi to srinagar',
           clicks: 10,
           impressions: 100,
@@ -266,7 +266,7 @@ describe('search console mapping', () => {
         },
         {
           date: '2026-09-10',
-          page: 'https://glitz-holidays.in/packages/from/delhi',
+          page: 'https://ladakhvacation.in/packages/from/delhi',
           query: 'delhi to kashmir package',
           clicks: 5,
           impressions: 50,
@@ -276,7 +276,7 @@ describe('search console mapping', () => {
       ];
       const rollups = rollupByPage(rows);
       expect(rollups.length).toBe(1);
-      expect(rollups[0].page).toBe('https://glitz-holidays.in/packages/from/delhi');
+      expect(rollups[0].page).toBe('https://ladakhvacation.in/packages/from/delhi');
       expect(rollups[0].clicks).toBe(15);
       expect(rollups[0].impressions).toBe(150);
       expect(rollups[0].queryCount).toBe(2);

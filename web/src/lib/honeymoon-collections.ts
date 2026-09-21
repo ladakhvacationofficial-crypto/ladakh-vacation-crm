@@ -5,7 +5,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-mumbai",
     h1: "Kashmir Honeymoon Packages from Mumbai",
-    seoTitle: "Kashmir Honeymoon Packages from Mumbai | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Mumbai | Ladakh Vacation",
     metaDescription: "Romantic Kashmir honeymoon packages from Mumbai: direct 2h 45m flights, candlelit Dal Lake shikara rides, luxury Gulmarg heating, and snow suites. Updated 2026.",
     kicker: "Mumbai to Kashmir Honeymoon",
     lede: "From the Arabian Sea to snow-draped Pir Panjal peaks in under 3 hours. Handcrafted itineraries for Mumbai couples with premium heating and private mountain transfers.",
@@ -20,7 +20,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-bangalore",
     h1: "Kashmir Honeymoon Packages from Bangalore",
-    seoTitle: "Kashmir Honeymoon Packages from Bangalore | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Bangalore | Ladakh Vacation",
     metaDescription: "Kashmir honeymoon packages from Bangalore: direct flights from BLR, romantic Dal Lake houseboats, private snow cabs, and heated chalets. Updated 2026.",
     kicker: "Bangalore to Kashmir Honeymoon",
     lede: "Escape the Silicon Valley rush for misty Himalayan lakes and snow-covered pines. Handpicked luxury honeymoon tours for Bangalore couples.",
@@ -35,7 +35,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-chennai",
     h1: "Kashmir Honeymoon Packages from Chennai",
-    seoTitle: "Kashmir Honeymoon Packages from Chennai | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Chennai | Ladakh Vacation",
     metaDescription: "Romantic Kashmir honeymoon packages from Chennai: flight connectivity, luxury houseboats, snow suites in Gulmarg, and romantic dining. Updated 2026.",
     kicker: "Chennai to Kashmir Honeymoon",
     lede: "From the Coromandel coast to the snow-crowned Himalayas. Expertly curated romantic holidays with complete heating and private chauffeured cars.",
@@ -50,7 +50,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-pune",
     h1: "Kashmir Honeymoon Packages from Pune",
-    seoTitle: "Kashmir Honeymoon Packages from Pune | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Pune | Ladakh Vacation",
     metaDescription: "Kashmir honeymoon packages from Pune: flight connections, luxury heated houseboats, Gulmarg skiing, and romantic Pahalgam stays. Updated 2026.",
     kicker: "Pune to Kashmir Honeymoon",
     lede: "Leave the Sahyadris behind for the Great Himalayas. Romantic honeymoon packages designed for Pune couples seeking beauty, luxury, and tranquility.",
@@ -65,7 +65,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-ahmedabad",
     h1: "Kashmir Honeymoon Packages from Ahmedabad",
-    seoTitle: "Kashmir Honeymoon Packages from Ahmedabad | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Ahmedabad | Ladakh Vacation",
     metaDescription: "Romantic Kashmir honeymoon packages from Ahmedabad: direct flights, pure-vegetarian & Jain food, luxury houseboats, and snow chalets. Updated 2026.",
     kicker: "Ahmedabad to Kashmir Honeymoon",
     lede: "Direct 2h 15m flights from AMD to SXR. Handcrafted honeymoon packages for Gujarat couples with vetted pure-vegetarian and Jain meal arrangements.",
@@ -80,7 +80,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-kolkata",
     h1: "Kashmir Honeymoon Packages from Kolkata",
-    seoTitle: "Kashmir Honeymoon Packages from Kolkata | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Kolkata | Ladakh Vacation",
     metaDescription: "Kashmir honeymoon packages from Kolkata: direct 3h flights from CCU, heritage houseboats on Nigeen lake, and snow suites in Gulmarg. Updated 2026.",
     kicker: "Kolkata to Kashmir Honeymoon",
     lede: "Fly from the City of Joy to the paradise of Kashmir in 3 hours. Romantic houseboats, pine chalets, and private mountain drives for Kolkata couples.",
@@ -95,7 +95,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-chandigarh",
     h1: "Kashmir Honeymoon Packages from Chandigarh",
-    seoTitle: "Kashmir Honeymoon Packages from Chandigarh | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Chandigarh | Ladakh Vacation",
     metaDescription: "Quick 1-hour flight from IXC to Srinagar. Romantic Kashmir honeymoon packages from Chandigarh with luxury heated stays and snow suites. Updated 2026.",
     kicker: "Chandigarh to Kashmir Honeymoon",
     lede: "Just a 65-minute flight from Chandigarh to Srinagar. The fastest mountain getaway for Punjab and Tricity honeymooners.",
@@ -110,7 +110,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-jaipur",
     h1: "Kashmir Honeymoon Packages from Jaipur",
-    seoTitle: "Kashmir Honeymoon Packages from Jaipur | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Jaipur | Ladakh Vacation",
     metaDescription: "Kashmir honeymoon packages from Jaipur: direct flights from JAI, pure-veg dining, luxury houseboats, and romantic snow chalets. Updated 2026.",
     kicker: "Jaipur to Kashmir Honeymoon",
     lede: "From royal desert palaces to snow-crowned Himalayan valleys. Handcrafted honeymoon packages for Rajasthan couples with pure vegetarian catering.",
@@ -125,7 +125,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-lucknow",
     h1: "Kashmir Honeymoon Packages from Lucknow",
-    seoTitle: "Kashmir Honeymoon Packages from Lucknow | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Lucknow | Ladakh Vacation",
     metaDescription: "Romantic Kashmir honeymoon packages from Lucknow: flights from LKO, heated houseboats, Awadhi comfort, and Gulmarg snow suites. Updated 2026.",
     kicker: "Lucknow to Kashmir Honeymoon",
     lede: "Fly from the City of Nawabs to the crown of Kashmir. Luxurious honeymoon packages for UP couples featuring private transfers and heated stays.",
@@ -140,7 +140,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-nagpur",
     h1: "Kashmir Honeymoon Packages from Nagpur",
-    seoTitle: "Kashmir Honeymoon Packages from Nagpur | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Nagpur | Ladakh Vacation",
     metaDescription: "Kashmir honeymoon packages from Nagpur: flight connections, luxury heated houseboats, Gulmarg snow chalets, and private cabs. Updated 2026.",
     kicker: "Nagpur to Kashmir Honeymoon",
     lede: "Fly from the heart of India to the snow-draped valleys of Kashmir. Romantic couple escapes tailored for Vidarbha travellers.",
@@ -155,7 +155,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-dehradun",
     h1: "Kashmir Honeymoon Packages from Dehradun",
-    seoTitle: "Kashmir Honeymoon Packages from Dehradun | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Dehradun | Ladakh Vacation",
     metaDescription: "Romantic Kashmir honeymoon packages from Dehradun: flight connections from DED, Dal Lake houseboats, and Gulmarg snow chalets. Updated 2026.",
     kicker: "Dehradun to Kashmir Honeymoon",
     lede: "From the Garhwal foothills to the grand Kashmir Valley. Romantic bespoke packages with luxury heating and private mountain transfers.",
@@ -170,7 +170,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "from-vadodara",
     h1: "Kashmir Honeymoon Packages from Vadodara",
-    seoTitle: "Kashmir Honeymoon Packages from Vadodara | Glitz Holidays",
+    seoTitle: "Kashmir Honeymoon Packages from Vadodara | Ladakh Vacation",
     metaDescription: "Kashmir honeymoon packages from Vadodara: flight connections, pure-veg and Jain dining, luxury houseboats, and snow chalets. Updated 2026.",
     kicker: "Vadodara to Kashmir Honeymoon",
     lede: "Curated honeymoon packages for Vadodara couples with guaranteed pure vegetarian food, private mountain cars, and heated luxury rooms.",
@@ -215,7 +215,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "4-nights",
     h1: "4 Nights Kashmir Honeymoon Package",
-    seoTitle: "4 Nights Kashmir Honeymoon Package | Glitz Holidays",
+    seoTitle: "4 Nights Kashmir Honeymoon Package | Ladakh Vacation",
     metaDescription: "4 nights / 5 days Kashmir honeymoon itinerary: Srinagar luxury houseboat, Gulmarg snow gondola, and romantic Pahalgam valleys. From \u20b919,500/couple. Updated 2026.",
     kicker: "4 Nights / 5 Days Honeymoon",
     lede: "The perfect short romantic getaway. 4 nights covering Srinagar's iconic houseboats, Gulmarg's snow peaks, and Pahalgam's pine valleys without rushing.",
@@ -230,7 +230,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "5-nights",
     h1: "5 Nights Kashmir Honeymoon Package",
-    seoTitle: "5 Nights Kashmir Honeymoon Package | Glitz Holidays",
+    seoTitle: "5 Nights Kashmir Honeymoon Package | Ladakh Vacation",
     metaDescription: "5 nights / 6 days Kashmir honeymoon itinerary: 2N Srinagar houseboat, 1N Gulmarg chalet, 2N Pahalgam riverside resort. GST inclusive. Updated 2026.",
     kicker: "5 Nights / 6 Days Honeymoon",
     lede: "Our most popular couple itinerary. 5 nights balancing leisurely stays across Srinagar, the snow peaks of Gulmarg, and the pine forests of Pahalgam.",
@@ -245,7 +245,7 @@ export const HONEYMOON_COLLECTIONS: Collection[] = [
   {
     slug: "7-nights",
     h1: "7 Nights Kashmir Honeymoon Package",
-    seoTitle: "7 Nights Kashmir Honeymoon Package | Glitz Holidays",
+    seoTitle: "7 Nights Kashmir Honeymoon Package | Ladakh Vacation",
     metaDescription: "7 nights / 8 days grand Kashmir honeymoon: Srinagar, Gulmarg, Pahalgam, Sonmarg, and Doodhpathri. Luxury stays & private cars. Updated 2026.",
     kicker: "7 Nights / 8 Days Grand Honeymoon",
     lede: "The complete, unhurried Himalayan romantic journey. 7 nights covering all five valleys: Srinagar, Gulmarg, Pahalgam, Sonmarg, and Doodhpathri.",

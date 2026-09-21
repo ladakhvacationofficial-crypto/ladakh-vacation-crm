@@ -109,10 +109,10 @@ export default function LoginPage() {
           {/* Wordmark — same treatment as the sidebar */}
           <div className="flex items-baseline gap-1.5">
             <span className="display text-[22px] font-semibold text-brand-400">
-              Glitz
+              Ladakh
             </span>
             <span className="text-[13px] font-semibold uppercase tracking-[0.18em] text-ink-950/85">
-              Holidays
+              Vacation
             </span>
           </div>
 
@@ -170,10 +170,10 @@ export default function LoginPage() {
           {/* Compact wordmark for narrow viewports where the left panel is hidden. */}
           <div className="mb-8 flex items-baseline gap-1.5 lg:hidden">
             <span className="display text-[20px] font-semibold text-brand-600">
-              Glitz
+              Ladakh
             </span>
             <span className="text-[12px] font-semibold uppercase tracking-[0.18em] text-signal-600">
-              Holidays
+              Vacation
             </span>
           </div>
 
@@ -194,7 +194,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && signIn()}
-                placeholder="you@glitzholidays.in"
+                placeholder="you@ladakhvacation.in"
               />
             </div>
 
@@ -238,10 +238,10 @@ export default function LoginPage() {
 
             <p className="pt-4 text-center text-[11.5px] text-ink-500">
               <a
-                href="https://glitz-holidays.in"
+                href="https://ladakhvacation.in"
                 className="hover:text-brand-500 transition-colors"
               >
-                ← Back to glitz-holidays.in
+                ← Back to ladakhvacation.in
               </a>
             </p>
           </div>

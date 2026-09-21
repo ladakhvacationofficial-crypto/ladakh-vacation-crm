@@ -79,7 +79,7 @@ export class LeadsService {
     }
   }
 
-  /** Normalise a phone to digits so "+91 98184 34726" == "9818434726". */
+  /** Normalise a phone to digits so "+91 98765 43210" == "9876543210". */
   private normalisePhone(phone: string): string {
     const digits = phone.replace(/\D/g, '');
     return digits.length > 10 ? digits.slice(-10) : digits;
@@ -1122,11 +1122,14 @@ export class LeadsService {
     if (!lead) throw new NotFoundException('Lead not found');
     if (!lead.b2bPartner) throw new BadRequestException('Lead is not linked to a B2B Partner. Please register and select the agent first.');
     
-    // Simulate generation of a white-labeled quote
+    // White-labelled B2B quote PDFs are not built yet. The inherited stub
+    // returned a made-up S3 address (glitz-itineraries.s3.aws.com) that never
+    // existed; say so plainly instead of handing out a dead link. Nothing in
+    // the CRM calls this endpoint today.
     return {
-      message: 'B2B White-labeled Quote Generated Successfully',
+      message: 'White-labelled B2B quotes are not generated yet.',
       partner: lead.b2bPartner,
-      quoteUrl: `https://glitz-itineraries.s3.aws.com/b2b/${lead.id}.pdf`
+      quoteUrl: null,
     };
   }
 

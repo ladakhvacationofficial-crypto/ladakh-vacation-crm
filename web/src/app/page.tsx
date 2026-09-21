@@ -259,7 +259,7 @@ export default function HomePage() {
         <div className="wrap relative">
           <SectionHead
             light
-            kicker="Why Glitz"
+            kicker="Why Ladakh Vacation"
             title={
               <>
                 A DMC, not a <em className="text-gold-grad not-italic">reseller</em>.

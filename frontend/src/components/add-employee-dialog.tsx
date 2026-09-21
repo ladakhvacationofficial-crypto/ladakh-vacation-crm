@@ -112,7 +112,7 @@ export function AddEmployeeDialog({
                 id="ae-phone" type="tel" required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="+91 98184 34726"
+                placeholder="+91 98765 43210"
               />
             </div>
             <div className="space-y-1">

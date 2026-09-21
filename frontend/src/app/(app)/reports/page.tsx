@@ -113,8 +113,8 @@ export default function ReportsPage() {
           symbol: 'circle',
           symbolSize: 6,
           data: revenue.map((r) => r.revenue),
-          lineStyle: { color: '#0e5d71', width: 2 },
-          itemStyle: { color: '#0e5d71' },
+          lineStyle: { color: '#1e4fa8', width: 2 },
+          itemStyle: { color: '#1e4fa8' },
           areaStyle: {
             color: {
               type: 'linear',

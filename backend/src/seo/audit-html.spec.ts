@@ -1,17 +1,17 @@
 import { hasSelfServingRating, jsonLdAuthors, jsonLdDate, parsePage } from './audit-html';
 
-const URL_ = 'https://glitz-holidays.in/packages/from/delhi';
+const URL_ = 'https://ladakhvacation.in/packages/from/delhi';
 
 const HTML = `<!doctype html><html lang="en-IN"><head>
-<title>Kashmir Tour Packages from Delhi | Glitz</title>
+<title>Kashmir Tour Packages from Delhi | Ladakh Vacation</title>
 <meta name="description" content="Plan a Kashmir trip   from Delhi.">
 <meta name="robots" content="index, follow">
 <meta name="viewport" content="width=device-width">
-<meta name="author" content="Glitz Holidays">
+<meta name="author" content="Ladakh Vacation">
 <link rel="canonical" href="/packages/from/delhi">
-<link rel="alternate" hreflang="hi" href="https://glitz-holidays.in/hi/packages">
+<link rel="alternate" hreflang="hi" href="https://ladakhvacation.in/hi/packages">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[
-  {"@type":"TravelAgency","url":"https://glitz-holidays.in","aggregateRating":{"@type":"AggregateRating","ratingValue":4.8}},
+  {"@type":"TravelAgency","url":"https://ladakhvacation.in","aggregateRating":{"@type":"AggregateRating","ratingValue":4.8}},
   {"@type":"Article","author":{"@type":"Person","name":"Tariq Ahmad"},"dateModified":"2026-09-01"}]}</script>
 <script type="application/ld+json">{ broken </script>
 <script>var ignored = "script words";</script>
@@ -41,14 +41,14 @@ describe('HTML fact extraction', () => {
   const f = parsePage(HTML, URL_);
 
   it('reads head metadata', () => {
-    expect(f.titles).toEqual(['Kashmir Tour Packages from Delhi | Glitz']);
+    expect(f.titles).toEqual(['Kashmir Tour Packages from Delhi | Ladakh Vacation']);
     expect(f.metaDescriptions).toEqual(['Plan a Kashmir trip from Delhi.']);
     expect(f.canonicals).toEqual([URL_]);
     expect(f.robotsDirectives).toEqual(['index', 'follow']);
-    expect(f.hreflang).toEqual([{ lang: 'hi', href: 'https://glitz-holidays.in/hi/packages' }]);
+    expect(f.hreflang).toEqual([{ lang: 'hi', href: 'https://ladakhvacation.in/hi/packages' }]);
     expect(f.htmlLang).toBe('en-IN');
     expect(f.hasViewport).toBe(true);
-    expect(f.metaAuthor).toBe('Glitz Holidays');
+    expect(f.metaAuthor).toBe('Ladakh Vacation');
   });
 
   it('keeps main content apart from navigation, scripts and SVG titles', () => {
@@ -70,24 +70,24 @@ describe('HTML fact extraction', () => {
 
   it('records images, missing alt text and CSS background images', () => {
     expect(f.images).toEqual([
-      { src: 'https://glitz-holidays.in/img/dal.jpg', alt: 'Dal Lake at dawn', inMain: true },
+      { src: 'https://ladakhvacation.in/img/dal.jpg', alt: 'Dal Lake at dawn', inMain: true },
       { src: 'https://images.unsplash.com/photo.jpg', alt: null, inMain: true },
-      { src: 'https://glitz-holidays.in/g.jpg', alt: 'Gulmarg guide', inMain: true },
+      { src: 'https://ladakhvacation.in/g.jpg', alt: 'Gulmarg guide', inMain: true },
     ]);
     expect(f.cssBackgroundImages).toBe(1);
   });
 
   it('resolves crawlable links and counts the ones Google cannot follow', () => {
     const byHref = Object.fromEntries(f.links.map((l) => [l.href, l]));
-    expect(byHref['https://glitz-holidays.in/routes/delhi-to-srinagar']).toMatchObject({
+    expect(byHref['https://ladakhvacation.in/routes/delhi-to-srinagar']).toMatchObject({
       text: 'Delhi to Srinagar by road',
       inMain: true,
       inChrome: false,
     });
-    expect(byHref['https://glitz-holidays.in/guides/gulmarg'].text).toBe('Gulmarg guide');
-    expect(byHref['https://glitz-holidays.in/packages']).toMatchObject({ inMain: false, inChrome: true });
-    expect(byHref['https://glitz-holidays.in/breadcrumb']).toMatchObject({ inMain: false });
-    expect(byHref['https://glitz-holidays.in/about'].nofollow).toBe(true);
+    expect(byHref['https://ladakhvacation.in/guides/gulmarg'].text).toBe('Gulmarg guide');
+    expect(byHref['https://ladakhvacation.in/packages']).toMatchObject({ inMain: false, inChrome: true });
+    expect(byHref['https://ladakhvacation.in/breadcrumb']).toMatchObject({ inMain: false });
+    expect(byHref['https://ladakhvacation.in/about'].nofollow).toBe(true);
     expect(byHref['https://wa.me/91']).toBeDefined();
     expect(f.links.some((l) => l.href.includes('#top') || l.href.startsWith('mailto'))).toBe(false);
     expect(f.uncrawlableLinks).toBe(1);
@@ -102,8 +102,8 @@ describe('HTML fact extraction', () => {
   });
 
   it('spots ratings on the site owner\'s own business markup', () => {
-    expect(hasSelfServingRating(f.jsonLd, 'glitz-holidays.in')).toBe(true);
-    expect(hasSelfServingRating(f.jsonLd, 'www.glitz-holidays.in')).toBe(true);
+    expect(hasSelfServingRating(f.jsonLd, 'ladakhvacation.in')).toBe(true);
+    expect(hasSelfServingRating(f.jsonLd, 'www.ladakhvacation.in')).toBe(true);
     expect(hasSelfServingRating(f.jsonLd, 'example.com')).toBe(false);
   });
 

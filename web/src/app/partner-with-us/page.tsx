@@ -8,7 +8,7 @@ import { SITE } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'B2B Travel Agent Partner Program — Ground DMC for Kashmir & Ladakh',
   description:
-    'Partner directly with Glitz Holidays as your local ground DMC in Srinagar & Leh. Guaranteed hotel allocations, dedicated commercial fleet, white-label client vouchers, and 24/7 on-ground assistance.',
+    'Partner directly with Ladakh Vacation as your local ground DMC in Srinagar & Leh. Guaranteed hotel allocations, dedicated commercial fleet, white-label client vouchers, and 24/7 on-ground assistance.',
   alternates: { canonical: '/partner-with-us' },
 };
 
@@ -52,7 +52,7 @@ export default function PartnerWithUsPage() {
       <PageHero
         kicker="B2B Travel Partner Network"
         title="Your Ground DMC Partner in Kashmir & Ladakh"
-        lede="Join 120+ retail travel agencies across India who trust Glitz Holidays to manage their clients on the ground with zero friction and guaranteed service quality."
+        lede="Join 120+ retail travel agencies across India who trust Ladakh Vacation to manage their clients on the ground with zero friction and guaranteed service quality."
         crumbs={[
           { label: 'Home', href: '/' },
           { label: 'Partner With Us' },

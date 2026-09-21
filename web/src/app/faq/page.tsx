@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const GENERAL = [
   {
-    q: 'How do I book a trip with Glitz Holidays?',
+    q: 'How do I book a trip with Ladakh Vacation?',
     a: 'Send an enquiry or WhatsApp us with your dates, group size and rough plan. We come back with a custom itinerary and quote within a few hours. Once you are happy, a booking advance confirms your hotels and vehicles, and the balance is due before arrival.',
   },
   {

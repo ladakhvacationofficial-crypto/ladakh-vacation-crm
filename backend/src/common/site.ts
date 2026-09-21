@@ -1,10 +1,9 @@
 /**
  * Canonical hosts for the two public surfaces.
  *
- * The business moved from glitzholidays.in (the legacy PHP site, est. 2013) to
- * the hyphenated glitz-holidays.in — see migration/README.md. The legacy host
- * now 301s everything across, so anything still pointing at it costs a
- * redirect hop and, in the SEO dashboard, showed the old site.
+ * The site is served at the bare domain ladakhvacation.in; www is redirected
+ * onto it, so any URL still pointing at www costs a redirect hop and, in the
+ * SEO dashboard, would show a second copy of the site.
  *
  * Build public URLs from here rather than hardcoding a host. Hardcoding is how
  * the two domains drifted apart across the SEO module, the PDF templates and
@@ -12,10 +11,10 @@
  */
 
 /** Public marketing site (Next.js on Vercel). */
-export const SITE_DOMAIN = 'https://glitz-holidays.in';
+export const SITE_DOMAIN = 'https://ladakhvacation.in';
 
 /** Hosts retired in favour of SITE_DOMAIN. */
-export const LEGACY_HOSTS = ['glitzholidays.in', 'www.glitzholidays.in'];
+export const LEGACY_HOSTS = ['www.ladakhvacation.in'];
 
 /**
  * Internal CRM origin, used to build links inside transactional email.
@@ -26,7 +25,7 @@ export const LEGACY_HOSTS = ['glitzholidays.in', 'www.glitzholidays.in'];
  * password-reset links will point at a host that may not resolve.
  */
 export function crmBaseUrl(configured?: string | null): string {
-  return (configured || 'https://crm.glitz-holidays.in').replace(/\/+$/, '');
+  return (configured || 'https://ladakh-vacation-crm.vercel.app').replace(/\/+$/, '');
 }
 
 /** Rewrite a URL onto the canonical host, leaving its path and query intact. */

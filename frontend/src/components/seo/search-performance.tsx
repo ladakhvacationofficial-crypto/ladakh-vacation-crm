@@ -733,7 +733,7 @@ function BrandSplit({ report }: { report: SearchReport }) {
               </div>
             </div>
             <p className="text-[11.5px] leading-relaxed text-ink-500">
-              Non-brand clicks are the ones SEO work wins. Brand clicks come from people who already know Glitz.
+              Non-brand clicks are the ones SEO work wins. Brand clicks come from people who already know Ladakh Vacation.
             </p>
           </>
         )}

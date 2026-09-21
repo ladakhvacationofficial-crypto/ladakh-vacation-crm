@@ -4,9 +4,9 @@ import { JsonLd } from '@/components/cards';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Glitz Holidays',
+  title: 'Privacy Policy — Ladakh Vacation',
   description:
-    'Learn how Glitz Holidays collects, protects, and manages customer travel enquiry data, cookies, and communications in accordance with data protection standards.',
+    'Learn how Ladakh Vacation collects, protects, and manages customer travel enquiry data, cookies, and communications in accordance with data protection standards.',
   alternates: { canonical: '/privacy-policy' },
 };
 
@@ -14,8 +14,8 @@ export default function PrivacyPolicyPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Privacy Policy — Glitz Holidays',
-    description: 'Privacy Policy and data protection terms for Glitz Holidays.',
+    name: 'Privacy Policy — Ladakh Vacation',
+    description: 'Privacy Policy and data protection terms for Ladakh Vacation.',
     url: `${SITE.domain}/privacy-policy`,
     publisher: { '@id': `${SITE.domain}/#org` },
   };

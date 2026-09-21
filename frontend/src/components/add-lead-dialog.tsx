@@ -155,7 +155,7 @@ export function AddLeadDialog({ onCreated }: { onCreated: (leadId: string) => vo
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="+91 98184 34726"
+                placeholder="+91 98765 43210"
                 required
               />
             </div>

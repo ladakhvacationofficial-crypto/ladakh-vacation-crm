@@ -45,9 +45,9 @@ export class LeadNurturingService {
     const firstName = lead.name?.split(' ')[0] || 'Traveler';
 
     const message =
-      `Salam ${firstName}! 🌄 Thank you for inquiring with Glitz Holidays regarding your ${dest} tour.\n\n` +
+      `Salam ${firstName}! 🌄 Thank you for inquiring with Ladakh Vacation regarding your ${dest} tour.\n\n` +
       `Our Srinagar office specialist has received your details and is curating your personalized itinerary. ` +
-      `You can also explore our curated verified packages here: https://glitz-holidays.in/packages\n\n` +
+      `You can also explore our curated verified packages here: https://ladakhvacation.in/packages\n\n` +
       `If you have specific dates, flight timings, or must-see preferences (Gulmarg Gondola, Dal Lake Houseboat, Pahalgam Valley), simply reply to this message! ❄️✨`;
 
     // Check if WhatsApp integration is active

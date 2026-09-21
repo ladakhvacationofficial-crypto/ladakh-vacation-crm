@@ -138,13 +138,13 @@ export default function DashboardPage() {
               type: 'linear',
               x: 0, y: 0, x2: 1, y2: 0,
               colorStops: [
-                { offset: 0, color: '#f4c85a' },
-                { offset: 1, color: '#1b7d93' },
+                { offset: 0, color: '#d8bf80' },
+                { offset: 1, color: '#3670d8' },
               ],
             },
             borderRadius: [0, 6, 6, 0],
           },
-          emphasis: { itemStyle: { color: '#0e5d71' } },
+          emphasis: { itemStyle: { color: '#1e4fa8' } },
         },
       ],
     };

@@ -9,11 +9,11 @@ import {
 
 /** Structurally valid, cryptographically useless. Never a real key. */
 const FAKE_PEM = '-----BEGIN PRIVATE KEY-----\nFAKEKEYFORTESTSONLY\n-----END PRIVATE KEY-----\n';
-const EMAIL = 'gsc-reader@glitz-test.iam.gserviceaccount.com';
+const EMAIL = 'gsc-reader@lv-test.iam.gserviceaccount.com';
 
 const keyObject = (overrides: Record<string, unknown> = {}) => ({
   type: 'service_account',
-  project_id: 'glitz-test',
+  project_id: 'lv-test',
   client_email: EMAIL,
   private_key: FAKE_PEM,
   ...overrides,

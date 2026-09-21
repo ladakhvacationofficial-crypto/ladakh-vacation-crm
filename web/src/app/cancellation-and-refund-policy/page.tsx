@@ -4,9 +4,9 @@ import { JsonLd } from '@/components/cards';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Cancellation & Refund Policy — Glitz Holidays',
+  title: 'Cancellation & Refund Policy — Ladakh Vacation',
   description:
-    'Review transparent cancellation timelines, refund deductions, and weather contingency policies for travel packages with Glitz Holidays.',
+    'Review transparent cancellation timelines, refund deductions, and weather contingency policies for travel packages with Ladakh Vacation.',
   alternates: { canonical: '/cancellation-and-refund-policy' },
 };
 
@@ -14,8 +14,8 @@ export default function CancellationPolicyPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Cancellation & Refund Policy — Glitz Holidays',
-    description: 'Cancellation and refund guidelines for Glitz Holidays.',
+    name: 'Cancellation & Refund Policy — Ladakh Vacation',
+    description: 'Cancellation and refund guidelines for Ladakh Vacation.',
     url: `${SITE.domain}/cancellation-and-refund-policy`,
     publisher: { '@id': `${SITE.domain}/#org` },
   };
@@ -87,7 +87,7 @@ export default function CancellationPolicyPage() {
             <div className="border-t border-paper-300 pt-8">
               <h2 className="display d3 text-ink-950">3. Flight Disruptions & Force Majeure</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                In the event of flight cancellations due to Srinagar/Leh airport weather or unavoidable natural road disruptions, Glitz Holidays will assist in rescheduling hotel stays without penalty wherever suppliers permit. Any unutilized transport days will be adjusted or refunded honestly.
+                In the event of flight cancellations due to Srinagar/Leh airport weather or unavoidable natural road disruptions, Ladakh Vacation will assist in rescheduling hotel stays without penalty wherever suppliers permit. Any unutilized transport days will be adjusted or refunded honestly.
               </p>
             </div>
 

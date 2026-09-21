@@ -433,7 +433,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       "The newly operational rail connectivity through Katra allows Amritsar travellers to board express trains to Jammu/Katra and ride the scenic Vande Bharat into Srinagar.",
       "Many Amritsar families travel during the winter snow months for skiing and gondola rides in Gulmarg. We provide heated hotel accommodations and heavy-duty winter vehicles with snow chains for high-altitude passes.",
     ],
-    planningNote: "In winter months, ensure your cab has snow-chain clearance for the Tangmarg-Gulmarg stretch, which Glitz Holidays manages automatically.",
+    planningNote: "In winter months, ensure your cab has snow-chain clearance for the Tangmarg-Gulmarg stretch, which Ladakh Vacation manages automatically.",
     flight: null,
     train: null,
     faqs: [
@@ -587,7 +587,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Guwahati?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -621,7 +621,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Patna?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -655,7 +655,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Dehradun?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -689,7 +689,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Varanasi?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -723,7 +723,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Bhopal?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -757,7 +757,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Vadodara?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -791,7 +791,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Ludhiana?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -825,7 +825,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Jalandhar?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -859,7 +859,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Kanpur?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -893,7 +893,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Agra?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -927,7 +927,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Jodhpur?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -961,7 +961,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Udaipur?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -995,7 +995,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Raipur?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1029,7 +1029,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Ranchi?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1063,7 +1063,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Coimbatore?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1097,7 +1097,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Trivandrum?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1131,7 +1131,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Calicut?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1165,7 +1165,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Mangalore?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1199,7 +1199,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Mysore?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1233,7 +1233,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Nashik?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1267,7 +1267,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Aurangabad?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1301,7 +1301,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Rajkot?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1335,7 +1335,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Siliguri?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1369,7 +1369,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Gwalior?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1403,7 +1403,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Jabalpur?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1437,7 +1437,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Allahabad?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1471,7 +1471,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Meerut?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1505,7 +1505,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Noida?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1539,7 +1539,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Gurgaon?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1573,7 +1573,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Madurai?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1607,7 +1607,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Vijayawada?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },
@@ -1641,7 +1641,7 @@ export const ORIGIN_CITIES: OriginCity[] = [
       },
       {
         q: "How can we book our tour from Visakhapatnam?",
-        a: "You can connect with our Srinagar team via WhatsApp (+91 78895 30413) or phone, finalize your custom itinerary, and book securely with a partial advance.",
+        a: "You can connect with our Srinagar team via WhatsApp (+91 96229 55386) or phone, finalize your custom itinerary, and book securely with a partial advance.",
       },
     ],
   },

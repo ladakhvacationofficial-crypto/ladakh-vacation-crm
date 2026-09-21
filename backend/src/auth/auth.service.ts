@@ -71,16 +71,16 @@ export class AuthService {
           },
           body: JSON.stringify({
             sender: {
-              name: 'Glitz Holidays CRM',
-              email: this.config.get<string>('BREVO_SENDER_EMAIL') || 'hello@glitz-holidays.in',
+              name: 'Ladakh Vacation CRM',
+              email: this.config.get<string>('BREVO_SENDER_EMAIL') || 'ladakhvacation@gmail.com',
             },
             to: [{ email: user.email, name: user.name }],
-            subject: 'Reset your Glitz Holidays CRM password',
+            subject: 'Reset your Ladakh Vacation CRM password',
             htmlContent: `
               <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
                 <h2>Password Reset Request</h2>
                 <p>Hello ${user.name},</p>
-                <p>A password reset was requested for your Glitz Holidays CRM account. Click the button below to reset your password. This link expires in 15 minutes.</p>
+                <p>A password reset was requested for your Ladakh Vacation CRM account. Click the button below to reset your password. This link expires in 15 minutes.</p>
                 <p style="margin: 24px 0;">
                   <a href="${resetUrl}" style="background: #0f5147; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
                 </p>

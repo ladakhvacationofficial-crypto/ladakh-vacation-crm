@@ -42,9 +42,9 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
   return (
     <Document
       title={`Invoice ${inv.invoiceNumber}`}
-      author="Glitz Holidays"
+      author="Ladakh Vacation"
       subject="GST Invoice"
-      creator="Glitz CRM"
+      creator="Ladakh Vacation CRM"
     >
       <Page size="A4" style={pdfStyles.page}>
         <BrandHeader
@@ -65,10 +65,10 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
           <View style={pdfStyles.partyBox}>
             <Text style={pdfStyles.sectionLabel}>Billed from</Text>
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
-              Glitz Holidays
+              Ladakh Vacation
             </Text>
             <Text style={pdfStyles.small}>Srinagar, Kashmir</Text>
-            <Text style={pdfStyles.small}>hello@glitzholidays.in</Text>
+            <Text style={pdfStyles.small}>ladakhvacation@gmail.com</Text>
           </View>
         </View>
 

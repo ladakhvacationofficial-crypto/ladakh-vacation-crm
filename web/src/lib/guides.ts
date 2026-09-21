@@ -1,6 +1,6 @@
 /**
  * Curated high-value informational travel guides for Kashmir, Ladakh, and the Himalayas.
- * Auto-generated and verified for Glitz Holidays 2026 programmatic SEO build.
+ * Auto-generated and verified for Ladakh Vacation 2026 programmatic SEO build.
  */
 
 export type GuideArticle = {
@@ -57,7 +57,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-kashmir",
     "title": "Places to Visit in Kashmir",
-    "seoTitle": "Places to Visit in Kashmir (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Kashmir (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Kashmir.",
     "summary": "Complete guide to visiting Kashmir: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -186,7 +186,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-kashmir",
     "title": "Best Time to Visit Kashmir",
-    "seoTitle": "Best Time to Visit Kashmir (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Kashmir (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Kashmir.",
     "summary": "Best time to visit Kashmir: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -325,7 +325,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-srinagar",
     "title": "How to Reach Srinagar",
-    "seoTitle": "How to Reach Srinagar (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Srinagar (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Srinagar.",
     "summary": "How to reach Srinagar in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -453,7 +453,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-srinagar",
     "title": "Places to Visit in Srinagar",
-    "seoTitle": "Places to Visit in Srinagar (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Srinagar (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Srinagar.",
     "summary": "Complete guide to visiting Srinagar: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -581,7 +581,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-kashmir",
     "title": "How to Reach Kashmir",
-    "seoTitle": "How to Reach Kashmir (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Kashmir (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Kashmir.",
     "summary": "How to reach Kashmir in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -710,7 +710,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-jammu",
     "title": "Places to Visit in Jammu",
-    "seoTitle": "Places to Visit in Jammu (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Jammu (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Jammu.",
     "summary": "Complete guide to visiting Jammu: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "vaishno",
@@ -837,7 +837,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-kashmir",
     "title": "Where to Stay in Kashmir",
-    "seoTitle": "Where to Stay in Kashmir (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Kashmir (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Kashmir.",
     "summary": "Where to stay in Kashmir: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -966,7 +966,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "srinagar-tour-packages-prices",
     "title": "Srinagar Tour Packages & Prices",
-    "seoTitle": "Srinagar Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Srinagar Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Srinagar.",
     "summary": "Srinagar tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -992,7 +992,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Srinagar?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Srinagar be customized?",
@@ -1021,7 +1021,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Srinagar?\nWhen evaluating travel quotes for **Srinagar**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Srinagar?\nWhen evaluating travel quotes for **Srinagar**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -1094,7 +1094,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-srinagar",
     "title": "Where to Stay in Srinagar",
-    "seoTitle": "Where to Stay in Srinagar (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Srinagar (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Srinagar.",
     "summary": "Where to stay in Srinagar: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -1222,7 +1222,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-gulmarg",
     "title": "How to Reach Gulmarg",
-    "seoTitle": "How to Reach Gulmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Gulmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Gulmarg.",
     "summary": "How to reach Gulmarg in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -1350,7 +1350,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "vaishno-devi-tour-packages-prices",
     "title": "Vaishno Devi Tour Packages & Prices",
-    "seoTitle": "Vaishno Devi Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Vaishno Devi Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Vaishno Devi.",
     "summary": "Vaishno Devi tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "vaishno",
@@ -1376,7 +1376,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Vaishno Devi?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Vaishno Devi be customized?",
@@ -1405,7 +1405,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Vaishno Devi?\nWhen evaluating travel quotes for **Vaishno Devi**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Vaishno Devi?\nWhen evaluating travel quotes for **Vaishno Devi**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "vaishno-devi-2-nights",
@@ -1477,7 +1477,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-gulmarg",
     "title": "Best Time to Visit Gulmarg",
-    "seoTitle": "Best Time to Visit Gulmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Gulmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Gulmarg.",
     "summary": "Best time to visit Gulmarg: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -1615,7 +1615,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-katra",
     "title": "Places to Visit in Katra",
-    "seoTitle": "Places to Visit in Katra (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Katra (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Katra.",
     "summary": "Complete guide to visiting Katra: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "vaishno",
@@ -1742,7 +1742,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "ladakh-tour-packages-prices",
     "title": "Ladakh Tour Packages & Prices",
-    "seoTitle": "Ladakh Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Ladakh Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Ladakh.",
     "summary": "Ladakh tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "ladakh",
@@ -1768,7 +1768,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Ladakh?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Ladakh be customized?",
@@ -1797,7 +1797,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Ladakh?\nWhen evaluating travel quotes for **Ladakh**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Ladakh?\nWhen evaluating travel quotes for **Ladakh**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "ladakh-leh-nubra-pangong-6-nights",
@@ -1869,7 +1869,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "gulmarg-tour-packages-prices",
     "title": "Gulmarg Tour Packages & Prices",
-    "seoTitle": "Gulmarg Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Gulmarg Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Gulmarg.",
     "summary": "Gulmarg tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -1895,7 +1895,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Gulmarg?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Gulmarg be customized?",
@@ -1924,7 +1924,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Gulmarg?\nWhen evaluating travel quotes for **Gulmarg**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Gulmarg?\nWhen evaluating travel quotes for **Gulmarg**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1614082242765-7c98ca0f3df3?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -1997,7 +1997,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-srinagar",
     "title": "Best Time to Visit Srinagar",
-    "seoTitle": "Best Time to Visit Srinagar (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Srinagar (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Srinagar.",
     "summary": "Best time to visit Srinagar: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -2135,7 +2135,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-pahalgam",
     "title": "How to Reach Pahalgam",
-    "seoTitle": "How to Reach Pahalgam (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Pahalgam (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Pahalgam.",
     "summary": "How to reach Pahalgam in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -2263,7 +2263,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-vaishno-devi",
     "title": "Places to Visit in Vaishno Devi",
-    "seoTitle": "Places to Visit in Vaishno Devi (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Vaishno Devi (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Vaishno Devi.",
     "summary": "Complete guide to visiting Vaishno Devi: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "vaishno",
@@ -2390,7 +2390,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-gulmarg",
     "title": "Where to Stay in Gulmarg",
-    "seoTitle": "Where to Stay in Gulmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Gulmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Gulmarg.",
     "summary": "Where to stay in Gulmarg: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -2518,7 +2518,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-pahalgam",
     "title": "Where to Stay in Pahalgam",
-    "seoTitle": "Where to Stay in Pahalgam (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Pahalgam (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Pahalgam.",
     "summary": "Where to stay in Pahalgam: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -2646,7 +2646,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-pahalgam",
     "title": "Places to Visit in Pahalgam",
-    "seoTitle": "Places to Visit in Pahalgam (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Pahalgam (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Pahalgam.",
     "summary": "Complete guide to visiting Pahalgam: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -2774,7 +2774,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-gulmarg",
     "title": "Places to Visit in Gulmarg",
-    "seoTitle": "Places to Visit in Gulmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Gulmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Gulmarg.",
     "summary": "Complete guide to visiting Gulmarg: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -2902,7 +2902,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-patnitop",
     "title": "How to Reach Patnitop",
-    "seoTitle": "How to Reach Patnitop (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Patnitop (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Patnitop.",
     "summary": "How to reach Patnitop in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "vaishno",
@@ -3029,7 +3029,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "amarnath-tour-packages-prices",
     "title": "Amarnath Tour Packages & Prices",
-    "seoTitle": "Amarnath Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Amarnath Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Amarnath Yatra.",
     "summary": "Amarnath Yatra tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -3055,7 +3055,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Amarnath Yatra?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Amarnath Yatra be customized?",
@@ -3084,7 +3084,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Amarnath Yatra?\nWhen evaluating travel quotes for **Amarnath Yatra**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Amarnath Yatra?\nWhen evaluating travel quotes for **Amarnath Yatra**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -3156,7 +3156,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-vaishno-devi",
     "title": "How to Reach Vaishno Devi",
-    "seoTitle": "How to Reach Vaishno Devi (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Vaishno Devi (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Vaishno Devi.",
     "summary": "How to reach Vaishno Devi in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "vaishno",
@@ -3283,7 +3283,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-sonmarg",
     "title": "Places to Visit in Sonmarg",
-    "seoTitle": "Places to Visit in Sonmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Sonmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Sonmarg.",
     "summary": "Complete guide to visiting Sonmarg: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -3410,7 +3410,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-vaishno-devi",
     "title": "Best Time to Visit Vaishno Devi",
-    "seoTitle": "Best Time to Visit Vaishno Devi (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Vaishno Devi (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Vaishno Devi.",
     "summary": "Best time to visit Vaishno Devi: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "vaishno",
@@ -3547,7 +3547,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-ladakh",
     "title": "Best Time to Visit Ladakh",
-    "seoTitle": "Best Time to Visit Ladakh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Ladakh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Ladakh.",
     "summary": "Best time to visit Ladakh: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "ladakh",
@@ -3684,7 +3684,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-katra",
     "title": "How to Reach Katra",
-    "seoTitle": "How to Reach Katra (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Katra (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Katra.",
     "summary": "How to reach Katra in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "vaishno",
@@ -3811,7 +3811,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-patnitop",
     "title": "Places to Visit in Patnitop",
-    "seoTitle": "Places to Visit in Patnitop (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Patnitop (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Patnitop.",
     "summary": "Complete guide to visiting Patnitop: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "vaishno",
@@ -3938,7 +3938,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "jammu-tour-packages-prices",
     "title": "Jammu Tour Packages & Prices",
-    "seoTitle": "Jammu Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Jammu Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Jammu.",
     "summary": "Jammu tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "vaishno",
@@ -3964,7 +3964,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Jammu?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Jammu be customized?",
@@ -3993,7 +3993,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Jammu?\nWhen evaluating travel quotes for **Jammu**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Jammu?\nWhen evaluating travel quotes for **Jammu**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "vaishno-devi-2-nights",
@@ -4065,7 +4065,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-ladakh",
     "title": "Places to Visit in Ladakh",
-    "seoTitle": "Places to Visit in Ladakh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Ladakh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Ladakh.",
     "summary": "Complete guide to visiting Ladakh: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "ladakh",
@@ -4192,7 +4192,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-udhampur",
     "title": "How to Reach Udhampur",
-    "seoTitle": "How to Reach Udhampur (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Udhampur (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Udhampur.",
     "summary": "How to reach Udhampur in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "vaishno",
@@ -4319,7 +4319,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-jammu",
     "title": "How to Reach Jammu",
-    "seoTitle": "How to Reach Jammu (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Jammu (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Jammu.",
     "summary": "How to reach Jammu in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "vaishno",
@@ -4446,7 +4446,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-jammu",
     "title": "Where to Stay in Jammu",
-    "seoTitle": "Where to Stay in Jammu (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Jammu (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Jammu.",
     "summary": "Where to stay in Jammu: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "vaishno",
@@ -4573,7 +4573,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-amarnath",
     "title": "How to Reach Amarnath",
-    "seoTitle": "How to Reach Amarnath (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Amarnath (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Amarnath Yatra.",
     "summary": "How to reach Amarnath Yatra in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -4700,7 +4700,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-sonmarg",
     "title": "Best Time to Visit Sonmarg",
-    "seoTitle": "Best Time to Visit Sonmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Sonmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Sonmarg.",
     "summary": "Best time to visit Sonmarg: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -4837,7 +4837,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-udhampur",
     "title": "Places to Visit in Udhampur",
-    "seoTitle": "Places to Visit in Udhampur (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Udhampur (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Udhampur.",
     "summary": "Complete guide to visiting Udhampur: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "vaishno",
@@ -4964,7 +4964,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "pahalgam-tour-packages-prices",
     "title": "Pahalgam Tour Packages & Prices",
-    "seoTitle": "Pahalgam Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Pahalgam Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Pahalgam.",
     "summary": "Pahalgam tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -4990,7 +4990,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Pahalgam?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Pahalgam be customized?",
@@ -5019,7 +5019,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Pahalgam?\nWhen evaluating travel quotes for **Pahalgam**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Pahalgam?\nWhen evaluating travel quotes for **Pahalgam**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -5092,7 +5092,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-dal-lake",
     "title": "Where to Stay in Dal Lake",
-    "seoTitle": "Where to Stay in Dal Lake (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Dal Lake (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Dal Lake.",
     "summary": "Where to stay in Dal Lake: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -5220,7 +5220,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-sonmarg",
     "title": "How to Reach Sonmarg",
-    "seoTitle": "How to Reach Sonmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Sonmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Sonmarg.",
     "summary": "How to reach Sonmarg in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -5347,7 +5347,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-sonmarg",
     "title": "Where to Stay in Sonmarg",
-    "seoTitle": "Where to Stay in Sonmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Sonmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Sonmarg.",
     "summary": "Where to stay in Sonmarg: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -5474,7 +5474,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "leh-tour-packages-prices",
     "title": "Leh Tour Packages & Prices",
-    "seoTitle": "Leh Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Leh Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Leh.",
     "summary": "Leh tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "ladakh",
@@ -5500,7 +5500,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Leh?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Leh be customized?",
@@ -5529,7 +5529,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Leh?\nWhen evaluating travel quotes for **Leh**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Leh?\nWhen evaluating travel quotes for **Leh**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "ladakh-leh-nubra-pangong-6-nights",
@@ -5601,7 +5601,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "patnitop-tour-packages-prices",
     "title": "Patnitop Tour Packages & Prices",
-    "seoTitle": "Patnitop Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Patnitop Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Patnitop.",
     "summary": "Patnitop tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "vaishno",
@@ -5627,7 +5627,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Patnitop?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Patnitop be customized?",
@@ -5656,7 +5656,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Patnitop?\nWhen evaluating travel quotes for **Patnitop**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Patnitop?\nWhen evaluating travel quotes for **Patnitop**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "vaishno-devi-kashmir-7-nights",
@@ -5728,7 +5728,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "dal-lake-tour-packages-prices",
     "title": "Dal Lake Tour Packages & Prices",
-    "seoTitle": "Dal Lake Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Dal Lake Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Dal Lake.",
     "summary": "Dal Lake tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -5754,7 +5754,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Dal Lake?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Dal Lake be customized?",
@@ -5783,7 +5783,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Dal Lake?\nWhen evaluating travel quotes for **Dal Lake**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Dal Lake?\nWhen evaluating travel quotes for **Dal Lake**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "classic-kashmir-4-nights",
@@ -5856,7 +5856,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-pahalgam",
     "title": "Best Time to Visit Pahalgam",
-    "seoTitle": "Best Time to Visit Pahalgam (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Pahalgam (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Pahalgam.",
     "summary": "Best time to visit Pahalgam: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -5994,7 +5994,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-ladakh",
     "title": "How to Reach Ladakh",
-    "seoTitle": "How to Reach Ladakh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Ladakh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Ladakh.",
     "summary": "How to reach Ladakh in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "ladakh",
@@ -6121,7 +6121,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-patnitop",
     "title": "Best Time to Visit Patnitop",
-    "seoTitle": "Best Time to Visit Patnitop (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Patnitop (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Patnitop.",
     "summary": "Best time to visit Patnitop: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "vaishno",
@@ -6258,7 +6258,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-kargil",
     "title": "Places to Visit in Kargil",
-    "seoTitle": "Places to Visit in Kargil (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Kargil (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Kargil.",
     "summary": "Complete guide to visiting Kargil: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "ladakh",
@@ -6385,7 +6385,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-tulip-garden",
     "title": "Best Time to Visit Tulip Garden",
-    "seoTitle": "Best Time to Visit Tulip Garden (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Tulip Garden (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Tulip Garden.",
     "summary": "Best time to visit Tulip Garden: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -6522,7 +6522,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "katra-tour-packages-prices",
     "title": "Katra Tour Packages & Prices",
-    "seoTitle": "Katra Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Katra Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Katra.",
     "summary": "Katra tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "vaishno",
@@ -6548,7 +6548,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Katra?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Katra be customized?",
@@ -6577,7 +6577,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Katra?\nWhen evaluating travel quotes for **Katra**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Katra?\nWhen evaluating travel quotes for **Katra**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "vaishno-devi-2-nights",
@@ -6649,7 +6649,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-patnitop",
     "title": "Where to Stay in Patnitop",
-    "seoTitle": "Where to Stay in Patnitop (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Patnitop (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Patnitop.",
     "summary": "Where to stay in Patnitop: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "vaishno",
@@ -6776,7 +6776,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-dal-lake",
     "title": "Best Time to Visit Dal Lake",
-    "seoTitle": "Best Time to Visit Dal Lake (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Dal Lake (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Dal Lake.",
     "summary": "Best time to visit Dal Lake: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -6914,7 +6914,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "gulmarg-gondola-tour-packages-prices",
     "title": "Gulmarg Gondola Tour Packages & Prices",
-    "seoTitle": "Gulmarg Gondola Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Gulmarg Gondola Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Gulmarg Gondola.",
     "summary": "Gulmarg Gondola tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -6940,7 +6940,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Gulmarg Gondola?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Gulmarg Gondola be customized?",
@@ -6969,7 +6969,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Gulmarg Gondola?\nWhen evaluating travel quotes for **Gulmarg Gondola**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Gulmarg Gondola?\nWhen evaluating travel quotes for **Gulmarg Gondola**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -7041,7 +7041,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "sonmarg-tour-packages-prices",
     "title": "Sonmarg Tour Packages & Prices",
-    "seoTitle": "Sonmarg Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Sonmarg Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Sonmarg.",
     "summary": "Sonmarg tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -7067,7 +7067,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Sonmarg?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Sonmarg be customized?",
@@ -7096,7 +7096,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Sonmarg?\nWhen evaluating travel quotes for **Sonmarg**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Sonmarg?\nWhen evaluating travel quotes for **Sonmarg**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -7168,7 +7168,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-bhaderwah",
     "title": "Places to Visit in Bhaderwah",
-    "seoTitle": "Places to Visit in Bhaderwah (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Bhaderwah (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Bhaderwah.",
     "summary": "Complete guide to visiting Bhaderwah: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "vaishno",
@@ -7294,7 +7294,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-leh",
     "title": "Places to Visit in Leh",
-    "seoTitle": "Places to Visit in Leh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Leh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Leh.",
     "summary": "Complete guide to visiting Leh: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "ladakh",
@@ -7421,7 +7421,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-jammu",
     "title": "Best Time to Visit Jammu",
-    "seoTitle": "Best Time to Visit Jammu (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Jammu (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Jammu.",
     "summary": "Best time to visit Jammu: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "vaishno",
@@ -7558,7 +7558,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-leh",
     "title": "Best Time to Visit Leh",
-    "seoTitle": "Best Time to Visit Leh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Leh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Leh.",
     "summary": "Best time to visit Leh: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "ladakh",
@@ -7695,7 +7695,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-katra",
     "title": "Where to Stay in Katra",
-    "seoTitle": "Where to Stay in Katra (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Katra (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Katra.",
     "summary": "Where to stay in Katra: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "vaishno",
@@ -7822,7 +7822,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-ladakh",
     "title": "Where to Stay in Ladakh",
-    "seoTitle": "Where to Stay in Ladakh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Ladakh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Ladakh.",
     "summary": "Where to stay in Ladakh: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "ladakh",
@@ -7949,7 +7949,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "gurez-tour-packages-prices",
     "title": "Gurez Tour Packages & Prices",
-    "seoTitle": "Gurez Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Gurez Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Gurez Valley.",
     "summary": "Gurez Valley tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -7975,7 +7975,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Gurez Valley?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Gurez Valley be customized?",
@@ -8004,7 +8004,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Gurez Valley?\nWhen evaluating travel quotes for **Gurez Valley**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Gurez Valley?\nWhen evaluating travel quotes for **Gurez Valley**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights"
@@ -8075,7 +8075,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-gurez",
     "title": "Where to Stay in Gurez",
-    "seoTitle": "Where to Stay in Gurez (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Gurez (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Gurez Valley.",
     "summary": "Where to stay in Gurez Valley: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -8201,7 +8201,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-doodhpathri",
     "title": "Where to Stay in Doodhpathri",
-    "seoTitle": "Where to Stay in Doodhpathri (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Doodhpathri (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Doodhpathri.",
     "summary": "Where to stay in Doodhpathri: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -8328,7 +8328,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-vaishno-devi",
     "title": "Where to Stay in Vaishno Devi",
-    "seoTitle": "Where to Stay in Vaishno Devi (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Vaishno Devi (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Vaishno Devi.",
     "summary": "Where to stay in Vaishno Devi: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "vaishno",
@@ -8455,7 +8455,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-dal-lake",
     "title": "Places to Visit in Dal Lake",
-    "seoTitle": "Places to Visit in Dal Lake (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Dal Lake (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Dal Lake.",
     "summary": "Complete guide to visiting Dal Lake: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -8583,7 +8583,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-doodhpathri",
     "title": "Places to Visit in Doodhpathri",
-    "seoTitle": "Places to Visit in Doodhpathri (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Doodhpathri (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Doodhpathri.",
     "summary": "Complete guide to visiting Doodhpathri: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -8710,7 +8710,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-gurez",
     "title": "How to Reach Gurez",
-    "seoTitle": "How to Reach Gurez (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Gurez (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Gurez Valley.",
     "summary": "How to reach Gurez Valley in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -8836,7 +8836,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-kargil",
     "title": "How to Reach Kargil",
-    "seoTitle": "How to Reach Kargil (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Kargil (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Kargil.",
     "summary": "How to reach Kargil in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "ladakh",
@@ -8963,7 +8963,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-gurez",
     "title": "Best Time to Visit Gurez",
-    "seoTitle": "Best Time to Visit Gurez (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Gurez (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Gurez Valley.",
     "summary": "Best time to visit Gurez Valley: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "kashmir",
@@ -9099,7 +9099,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-betaab-valley",
     "title": "How to Reach Betaab Valley",
-    "seoTitle": "How to Reach Betaab Valley (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Betaab Valley (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Betaab Valley.",
     "summary": "How to reach Betaab Valley in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -9226,7 +9226,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-yusmarg",
     "title": "Where to Stay in Yusmarg",
-    "seoTitle": "Where to Stay in Yusmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Yusmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Yusmarg.",
     "summary": "Where to stay in Yusmarg: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -9353,7 +9353,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-leh",
     "title": "How to Reach Leh",
-    "seoTitle": "How to Reach Leh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Leh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Leh.",
     "summary": "How to reach Leh in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "ladakh",
@@ -9480,7 +9480,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "best-time-to-visit-katra",
     "title": "Best Time to Visit Katra",
-    "seoTitle": "Best Time to Visit Katra (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Best Time to Visit Katra (2026 Guide) | Ladakh Vacation",
     "subtitle": "Month-by-month weather, snowfall probability, blossom calendars, and seasonal crowds in Katra.",
     "summary": "Best time to visit Katra: 4 seasons compared with monthly temperatures, snow chances, tulip/autumn calendars, costs & clothing advice. Updated 2026.",
     "destination": "vaishno",
@@ -9617,7 +9617,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "doodhpathri-tour-packages-prices",
     "title": "Doodhpathri Tour Packages & Prices",
-    "seoTitle": "Doodhpathri Tour Packages & Prices (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Doodhpathri Tour Packages & Prices (2026 Guide) | Ladakh Vacation",
     "subtitle": "Cost breakdown, per-person rates, vehicle charges, hotel categories, and verified package prices for Doodhpathri.",
     "summary": "Doodhpathri tour packages & prices 2026: realistic budget vs luxury costs per person, private cab tariffs, meal plans & booking advice from Srinagar DMC.",
     "destination": "kashmir",
@@ -9643,7 +9643,7 @@ export const GUIDES: GuideArticle[] =
       },
       {
         "q": "Is GST included in tour package quotes for Doodhpathri?",
-        "a": "Glitz Holidays quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
+        "a": "Ladakh Vacation quotes always declare standard 5% government GST transparently so there are zero surprise billing additions upon arrival."
       },
       {
         "q": "Can tour itineraries for Doodhpathri be customized?",
@@ -9672,7 +9672,7 @@ export const GUIDES: GuideArticle[] =
         "title": "Frequently Asked Questions"
       }
     ],
-    "content": "## 1. What Determines Tour Package Prices for Doodhpathri?\nWhen evaluating travel quotes for **Doodhpathri**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Glitz Holidays:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
+    "content": "## 1. What Determines Tour Package Prices for Doodhpathri?\nWhen evaluating travel quotes for **Doodhpathri**, ensure you are comparing identical service components. Most price variations come down to four specific elements:\n\n1. **Vehicle Allocation:** A dedicated private vehicle for the entire itinerary vs. shared coach transfers. Private vehicles offer flexible departure timings and photo stops.\n2. **Hotel Category & Room Type:** Named hotels with verified central heating and valley views vs. unlisted \"or similar\" budget dharamshalas.\n3. **Meal Plans:** Packages with both Breakfast & Dinner (MAP plan) save significant dining expenses compared to room-only rates.\n4. **Declared Inclusions:** Transparent quotes explicitly state whether airport transfers, toll taxes, driver allowances, and 5% GST are included.\n\n## 2. Inclusions vs Exclusions to Watch For\n- **Always Included by Ladakh Vacation:** All airport/station transfers, private designated vehicle with commercial permit, named accommodations with breakfast & dinner, toll taxes, and 24/7 Srinagar operations support.\n- **Standard Exclusions:** Personal expenses (pony rides, camera fees, river rafting), personal shopping, and internal union transport where government regulations prohibit outside vehicles.\n\n> [!NOTE]\n> Booking directly with a Srinagar-based Destination Management Company (DMC) eliminates middleman reseller markups of 15% to 25%, while guaranteeing immediate on-ground support during your journey.",
     "image": "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1200&auto=format&fit=crop",
     "relatedPackages": [
       "complete-kashmir-6-nights",
@@ -9744,7 +9744,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-leh",
     "title": "Where to Stay in Leh",
-    "seoTitle": "Where to Stay in Leh (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Leh (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Leh.",
     "summary": "Where to stay in Leh: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "ladakh",
@@ -9871,7 +9871,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-bhaderwah",
     "title": "Where to Stay in Bhaderwah",
-    "seoTitle": "Where to Stay in Bhaderwah (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Bhaderwah (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Bhaderwah.",
     "summary": "Where to stay in Bhaderwah: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "vaishno",
@@ -9997,7 +9997,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-nubra",
     "title": "Places to Visit in Nubra",
-    "seoTitle": "Places to Visit in Nubra (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Nubra (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Nubra Valley.",
     "summary": "Complete guide to visiting Nubra Valley: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "ladakh",
@@ -10124,7 +10124,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-gurez",
     "title": "Places to Visit in Gurez",
-    "seoTitle": "Places to Visit in Gurez (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Gurez (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Gurez Valley.",
     "summary": "Complete guide to visiting Gurez Valley: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -10250,7 +10250,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-yusmarg",
     "title": "Places to Visit in Yusmarg",
-    "seoTitle": "Places to Visit in Yusmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Yusmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Yusmarg.",
     "summary": "Complete guide to visiting Yusmarg: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -10377,7 +10377,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-pangong",
     "title": "Where to Stay in Pangong",
-    "seoTitle": "Where to Stay in Pangong (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Pangong (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Pangong Tso.",
     "summary": "Where to stay in Pangong Tso: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "ladakh",
@@ -10504,7 +10504,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-doodhpathri",
     "title": "How to Reach Doodhpathri",
-    "seoTitle": "How to Reach Doodhpathri (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Doodhpathri (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Doodhpathri.",
     "summary": "How to reach Doodhpathri in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -10631,7 +10631,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-amarnath",
     "title": "Places to Visit in Amarnath",
-    "seoTitle": "Places to Visit in Amarnath (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Amarnath (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Amarnath Yatra.",
     "summary": "Complete guide to visiting Amarnath Yatra: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",
@@ -10758,7 +10758,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "how-to-reach-tulip-garden",
     "title": "How to Reach Tulip Garden",
-    "seoTitle": "How to Reach Tulip Garden (2026 Guide) | Glitz Holidays",
+    "seoTitle": "How to Reach Tulip Garden (2026 Guide) | Ladakh Vacation",
     "subtitle": "Flights, trains, road routes, mountain driving times, and 2026 transit advice for reaching Tulip Garden.",
     "summary": "How to reach Tulip Garden in 2026: direct flights, train connectivity, road conditions, driving times & verified taxi fares from Srinagar/Jammu.",
     "destination": "kashmir",
@@ -10885,7 +10885,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "where-to-stay-in-aru-valley",
     "title": "Where to Stay in Aru Valley",
-    "seoTitle": "Where to Stay in Aru Valley (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Where to Stay in Aru Valley (2026 Guide) | Ladakh Vacation",
     "subtitle": "Best areas, heated houseboats, luxury pine resorts, and budget boutique hotels in Aru Valley.",
     "summary": "Where to stay in Aru Valley: verified hotel zones, central heating vs electric blankets, boutique stays, quiet areas vs market hubs. Updated 2026.",
     "destination": "kashmir",
@@ -11012,7 +11012,7 @@ export const GUIDES: GuideArticle[] =
   {
     "slug": "places-to-visit-in-tangmarg",
     "title": "Places to Visit in Tangmarg",
-    "seoTitle": "Places to Visit in Tangmarg (2026 Guide) | Glitz Holidays",
+    "seoTitle": "Places to Visit in Tangmarg (2026 Guide) | Ladakh Vacation",
     "subtitle": "Top attractions, entry fees, union rules, driving times, and realistic day-trip routes for Tangmarg.",
     "summary": "Complete guide to visiting Tangmarg: entry tickets, driving times from Srinagar/Jammu, local union rules, top photography spots & what to skip. Updated 2026.",
     "destination": "kashmir",

@@ -353,7 +353,7 @@ export default function NewSocialPostPage() {
                   <div className="flex items-center gap-2 px-3 py-2">
                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">G</div>
                     <div>
-                      <p className="font-semibold text-[11px] text-gray-900">Glitz Holidays</p>
+                      <p className="font-semibold text-[11px] text-gray-900">Ladakh Vacation</p>
                       <p className="text-[9px] text-gray-400">Just now · 🌐</p>
                     </div>
                   </div>

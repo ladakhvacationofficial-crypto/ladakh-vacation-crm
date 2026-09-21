@@ -7,7 +7,7 @@ import { ChevronRight } from 'lucide-react';
  * hero so every page feels like the same site, but shorter so content starts
  * above the fold on a laptop.
  */
-const DEFAULT_HERO_BG = 'linear-gradient(135deg, #0a2419 0%, #124430 50%, #17573c 100%)';
+const DEFAULT_HERO_BG = 'linear-gradient(160deg, #0a1428 0%, #16294f 60%, #1e4fa8 160%)';
 
 export function PageHero({
   kicker,
@@ -36,7 +36,7 @@ export function PageHero({
         <div className="absolute inset-0 -z-20 overflow-hidden">
           <Image
             src={heroImage}
-            alt={heroImageAlt || (typeof title === 'string' ? title : 'Glitz Holidays Kashmir')}
+            alt={heroImageAlt || (typeof title === 'string' ? title : 'Ladakh Vacation Kashmir')}
             fill
             priority
             sizes="100vw"

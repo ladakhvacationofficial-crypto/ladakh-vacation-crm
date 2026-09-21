@@ -11,7 +11,7 @@ export class HealthController {
   root() {
     return {
       status: 'ok',
-      service: 'glitz-backend',
+      service: 'ladakh-vacation-backend',
       ts: new Date().toISOString(),
     };
   }

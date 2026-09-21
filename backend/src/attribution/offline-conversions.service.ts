@@ -120,7 +120,7 @@ export class OfflineConversionsService {
                 {
                   event_name: 'Purchase',
                   event_time: Math.floor(Date.now() / 1000),
-                  event_source_url: 'https://glitz-holidays.in',
+                  event_source_url: 'https://ladakhvacation.in',
                   action_source: 'website',
                   user_data: {
                     fbc: `fb.1.${Date.now()}.${lead.fbclid}`,

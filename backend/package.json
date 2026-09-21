@@ -1,7 +1,7 @@
 {
-  "name": "glitz-backend",
+  "name": "ladakh-vacation-backend",
   "version": "0.1.0",
-  "description": "Glitz Holidays CRM backend (NestJS + Prisma)",
+  "description": "Ladakh Vacation CRM backend (NestJS + Prisma)",
   "private": true,
   "engines": {
     "node": ">=20"

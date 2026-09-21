@@ -7,7 +7,7 @@ import { runProbe } from './probes';
  */
 describe('google_search_console probe: configuration errors', () => {
   it('asks for an auth method when none is chosen', async () => {
-    const r = await runProbe('google_search_console', { siteUrl: 'sc-domain:glitz-holidays.in' });
+    const r = await runProbe('google_search_console', { siteUrl: 'sc-domain:ladakhvacation.in' });
     expect(r.ok).toBe(false);
     expect(r.message).toMatch(/Choose an auth method/);
   });
@@ -16,7 +16,7 @@ describe('google_search_console probe: configuration errors', () => {
     const r = await runProbe('google_search_console', {
       authMethod: 'service_account',
       serviceAccountKey: JSON.stringify({ web: { client_id: 'x' } }),
-      siteUrl: 'sc-domain:glitz-holidays.in',
+      siteUrl: 'sc-domain:ladakhvacation.in',
     });
     expect(r.ok).toBe(false);
     expect(r.message).toMatch(/OAuth client file/);
@@ -26,7 +26,7 @@ describe('google_search_console probe: configuration errors', () => {
     const r = await runProbe('google_search_console', {
       authMethod: 'oauth',
       clientId: 'x',
-      siteUrl: 'sc-domain:glitz-holidays.in',
+      siteUrl: 'sc-domain:ladakhvacation.in',
     });
     expect(r.ok).toBe(false);
     expect(r.message).toMatch(/clientSecret, refreshToken are missing/);

@@ -8,7 +8,7 @@ import { EnquiryForm } from '@/components/enquiry-form';
 
 export const metadata: Metadata = {
   title: 'About Us — A Srinagar-Based Himalayan DMC',
-  description: `Glitz Holidays is a destination management company based in Hawal, Srinagar. Founded ${SITE.founded}, ${SITE.stats.guests} guests hosted across Kashmir, Ladakh, Himachal and Vaishno Devi.`,
+  description: `Ladakh Vacation is a destination management company based in Hawal, Srinagar. Founded ${SITE.founded}, ${SITE.stats.guests} guests hosted across Kashmir, Ladakh, Himachal and Vaishno Devi.`,
   alternates: { canonical: '/about' },
 };
 
@@ -61,7 +61,7 @@ export default function AboutPage() {
           <div className="md:col-span-7" data-reveal>
             <div className="space-y-5">
               <p className="text-[17.5px] leading-[1.75] text-ink-800">
-                Glitz Holidays started in {SITE.founded} when a few Srinagar friends
+                Ladakh Vacation started in {SITE.founded} when a few Srinagar friends
                 grew tired of watching agencies from Delhi and Mumbai sell our valley
                 to visitors who then arrived to find the itinerary did not match the
                 place. We opened a small office in Hawal, bought one Innova, and

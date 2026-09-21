@@ -15,8 +15,8 @@
  * error, so the default window ends several days back. See DATA_LAG_DAYS.
  *
  * PROPERTY FORMS. A Search Console property is either a domain property
- * (`sc-domain:glitz-holidays.in`) or a URL-prefix property
- * (`https://glitz-holidays.in/`). They are different properties with different
+ * (`sc-domain:ladakhvacation.in`) or a URL-prefix property
+ * (`https://ladakhvacation.in/`). They are different properties with different
  * data, and the string is used verbatim in the request path.
  */
 

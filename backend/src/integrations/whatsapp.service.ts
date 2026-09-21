@@ -178,14 +178,14 @@ export class WhatsAppService {
         ],
       },
       {
-        name: 'glitz_announcement',
+        name: 'lv_announcement',
         category: 'MARKETING',
         language: 'en',
         status: 'APPROVED',
         components: [
           {
             type: 'BODY',
-            text: 'Greetings {{1}}! Glitz Holidays has launched new curated tours for the upcoming holiday season. Click here to check the details.',
+            text: 'Greetings {{1}}! Ladakh Vacation has launched new curated tours for the upcoming holiday season. Click here to check the details.',
           },
         ],
       },

@@ -2,7 +2,7 @@
  * Shared types for the page health audit.
  *
  * Every check records what it rests on. `google` checks follow published
- * Google Search documentation, linked in docUrl. `house` checks are Glitz's
+ * Google Search documentation, linked in docUrl. `house` checks are Ladakh Vacation's
  * own people-first standards that Google does not document as signals; they
  * carry little weight and the dashboard labels them as such.
  */

@@ -69,9 +69,9 @@ export default function NewCampaignWizardPage() {
   // Template State
   const [waTemplates, setWaTemplates] = useState<any[]>([]);
   const [selectedWaTemplate, setSelectedWaTemplate] = useState<string>('kashmir_seasonal_offer');
-  const [emailSubject, setEmailSubject] = useState('Special Holiday Offer from Glitz Holidays');
+  const [emailSubject, setEmailSubject] = useState('Special Holiday Offer from Ladakh Vacation');
   const [emailHtml, setEmailHtml] = useState(
-    `<p>Hello {{name}},</p>\n<p>We have refreshed holiday packages for <strong>{{destination}}</strong> with special seasonal pricing.</p>\n<p>Reply to this email or contact your Glitz travel advisor to plan your getaway.</p>`,
+    `<p>Hello {{name}},</p>\n<p>We have refreshed holiday packages for <strong>{{destination}}</strong> with special seasonal pricing.</p>\n<p>Reply to this email or contact your Ladakh Vacation travel advisor to plan your getaway.</p>`,
   );
 
   // Scheduling State
@@ -553,7 +553,7 @@ export default function NewCampaignWizardPage() {
                   <div className="mt-2 max-w-md rounded-2xl border border-emerald-900/60 bg-[#0B141A] p-4 font-sans text-white shadow-lg">
                     <div className="flex items-center gap-2 border-b border-emerald-900/40 pb-2 text-[12px] font-semibold text-emerald-400">
                       <MessageSquare className="size-4" />
-                      Glitz Holidays (Verified Business)
+                      Ladakh Vacation (Verified Business)
                     </div>
 
                     <div className="mt-3 rounded-xl bg-[#202C33] p-3 text-[13px] leading-relaxed text-zinc-100">

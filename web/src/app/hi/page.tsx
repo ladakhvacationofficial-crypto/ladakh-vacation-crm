@@ -7,7 +7,7 @@ import { HINDI_PAGES } from '@/lib/hindi-pages';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'कश्मीर यात्रा गाइड एवं टूर पैकेज (हिंदी में) — Glitz Holidays',
+  title: 'कश्मीर यात्रा गाइड एवं टूर पैकेज (हिंदी में) — Ladakh Vacation',
   description:
     'कश्मीर के प्रमुख पर्यटन स्थल, मौसम, बर्फबारी का समय, दिल्ली से टूर पैकेज और वैष्णो देवी यात्रा की पूरी जानकारी हिंदी में।',
   alternates: { canonical: '/hi' },
@@ -17,7 +17,7 @@ export default function HindiIndexPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'हिंदी यात्रा गाइड — Glitz Holidays',
+    name: 'हिंदी यात्रा गाइड — Ladakh Vacation',
     description: 'कश्मीर और हिमालय की संपूर्ण यात्रा जानकारी हिंदी में।',
     url: `${SITE.domain}/hi`,
   };

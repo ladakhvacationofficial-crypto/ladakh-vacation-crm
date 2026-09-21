@@ -11,7 +11,7 @@ import {
   toSitePath,
 } from './search-console-insights';
 
-const HOST = 'glitz-holidays.in';
+const HOST = 'ladakhvacation.in';
 const U = (path: string) => `https://${HOST}${path}`;
 const NOW = new Date('2026-09-14T12:00:00Z');
 const W = comparisonWindows(7, NOW);
@@ -61,13 +61,13 @@ describe('comparisonWindows', () => {
 describe('toSitePath', () => {
   it('reduces URLs to comparable site paths', () => {
     expect(toSitePath(U('/routes/a/'), HOST)).toBe('/routes/a');
-    expect(toSitePath('https://www.glitz-holidays.in/routes/a?utm=x#faq', HOST)).toBe('/routes/a');
+    expect(toSitePath('https://www.ladakhvacation.in/routes/a?utm=x#faq', HOST)).toBe('/routes/a');
     expect(toSitePath(U('/'), HOST)).toBe('/');
     expect(toSitePath('/routes/a/', HOST)).toBe('/routes/a');
   });
 
   it('rejects another host and unparseable input', () => {
-    expect(toSitePath('https://glitzholidays.in/routes/a', HOST)).toBeNull();
+    expect(toSitePath('https://example.com/routes/a', HOST)).toBeNull();
     expect(toSitePath('not a url', HOST)).toBeNull();
     expect(toSitePath('', HOST)).toBeNull();
   });
@@ -75,7 +75,7 @@ describe('toSitePath', () => {
 
 describe('coversQuery', () => {
   it('ignores short words and requires every meaningful word', () => {
-    expect(coversQuery('Gulmarg by Month | Glitz Holidays', 'gulmarg in june')).toBe(false);
+    expect(coversQuery('Gulmarg by Month | Ladakh Vacation', 'gulmarg in june')).toBe(false);
     expect(coversQuery('Gulmarg in June: Snow, Prices', 'gulmarg in june')).toBe(true);
   });
 });
@@ -196,7 +196,7 @@ describe('buildSearchReport: issues', () => {
           q(CUR, '/guides/gulmarg-by-month', 'gulmarg in june', 1, 200, 12),
           q(CUR, '/x', 'far query', 0, 1000, 25),
         ],
-        manifest: [{ url: '/guides/gulmarg-by-month', title: 'Gulmarg by Month | Glitz Holidays' }],
+        manifest: [{ url: '/guides/gulmarg-by-month', title: 'Gulmarg by Month | Ladakh Vacation' }],
       }),
     );
     const sd = ofType(r, 'striking_distance');

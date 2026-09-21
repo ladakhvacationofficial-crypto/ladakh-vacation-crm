@@ -354,7 +354,7 @@ export class MarketingService {
           const res = await this.brevo.sendEmail({
             toEmail: recipient.email,
             toName: leadName,
-            subject: campaign.emailSubject || 'Special Offer from Glitz Holidays',
+            subject: campaign.emailSubject || 'Special Offer from Ladakh Vacation',
             htmlContent: campaign.emailHtml || `<p>Hello ${leadName}, discover new holiday packages for ${destination}.</p>`,
             unsubscribeUrl,
           });
@@ -447,7 +447,7 @@ export class MarketingService {
       }
     }
 
-    return { message: 'You have been successfully unsubscribed from Glitz Holidays marketing broadcasts.' };
+    return { message: 'You have been successfully unsubscribed from Ladakh Vacation marketing broadcasts.' };
   }
 
   /**

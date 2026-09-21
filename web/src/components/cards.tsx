@@ -21,7 +21,7 @@ export function DestinationCard({ d, tall = false }: { d: Destination; tall?: bo
         {d.image ? (
           <Image
             src={d.image}
-            alt={`${d.name} Tour Packages & Travel Guide — Glitz Holidays`}
+            alt={`${d.name} Tour Packages & Travel Guide — Ladakh Vacation`}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -73,7 +73,7 @@ export function PackageCard({ p }: { p: Pkg }) {
           {p.image ? (
             <Image
               src={p.image}
-              alt={`${p.name} — ${p.nights} Nights ${p.days} Days ${p.destinationName} Tour Package by Glitz Holidays`}
+              alt={`${p.name} — ${p.nights} Nights ${p.days} Days ${p.destinationName} Tour Package by Ladakh Vacation`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"

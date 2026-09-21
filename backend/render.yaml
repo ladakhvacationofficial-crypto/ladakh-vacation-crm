@@ -1,8 +1,8 @@
-# Render Blueprint for the Glitz backend.
+# Render Blueprint for the Ladakh Vacation backend.
 # Push to GitHub, then in Render: New + -> Blueprint -> pick this repo.
 services:
   - type: web
-    name: glitz-backend
+    name: ladakh-vacation-backend
     runtime: node
     plan: free
     buildCommand: npm install && npx prisma generate && npm run build
