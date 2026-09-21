@@ -14,15 +14,15 @@ import {
 } from 'lucide-react';
 
 /**
- * 7-day Srinagar forecast — the only city that matters for the dashboard
- * (Ladakh and Himachal moved off; those live on itinerary pages where the
- * chosen destination drives the fetch).
+ * 7-day Leh forecast for the dashboard: every trip starts and ends there.
+ * Other stops live on itinerary pages, where the chosen destination drives
+ * the fetch.
  *
  * Uses Open-Meteo (no key). If the fetch fails we show dashes rather than
  * throwing — a broken widget must never crash the dashboard around it.
  */
 
-const CITY = { name: 'Srinagar', region: 'Kashmir', lat: 34.09, lon: 74.79 };
+const CITY = { name: 'Leh', region: 'Ladakh', lat: 34.1526, lon: 77.5771 };
 
 interface DayReading {
   date: Date;

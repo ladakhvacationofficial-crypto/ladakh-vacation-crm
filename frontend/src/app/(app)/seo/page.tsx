@@ -207,7 +207,7 @@ export default function SeoPage() {
       const res = await api.post<{ id: string }>('/seo/sites', {
         name: 'Ladakh Vacation Main Website',
         url: SITE_DOMAIN,
-        crawlPaths: ['/', '/packages', '/destinations/gulmarg', '/destinations/pahalgam', '/destinations/sonmarg'],
+        crawlPaths: ['/', '/packages', '/destinations/leh', '/destinations/nubra-pangong', '/destinations/hanle'],
       });
       await loadSites();
       setSelectedSiteId(res.id);
@@ -1070,7 +1070,7 @@ function MediaLibraryTab({
         <div>
           <h2 className="text-[16px] font-semibold text-ink-100">Original Photography & Media Library</h2>
           <p className="text-[12.5px] text-ink-400">
-            Upload genuine Kashmir photos to replace stock Unsplash imagery and fulfill Google Information Gain standards.
+            Upload genuine Ladakh photos and assign them to pages to meet Google's Information Gain standards.
           </p>
         </div>
 
@@ -1083,7 +1083,7 @@ function MediaLibraryTab({
           </DialogTrigger>
           <DialogContent
             title="Upload Website Photography"
-            description="Upload authentic photos taken by the Srinagar ground team. Assign to a destination or package guide page."
+            description="Upload authentic photos taken by the Leh ground team. Assign to a destination or package page."
           >
             <form onSubmit={handleUpload} className="p-5 space-y-4">
               <div className="space-y-1.5">
@@ -1122,7 +1122,7 @@ function MediaLibraryTab({
                   required
                   value={altText}
                   onChange={(e) => setAltText(e.target.value)}
-                  placeholder="e.g. Shikara ride on Dal Lake Srinagar at sunset with snow peaks in background"
+                  placeholder="e.g. Sunrise over Pangong Tso from the Spangmik camps, snow on the peaks behind"
                 />
               </div>
 
@@ -1132,7 +1132,7 @@ function MediaLibraryTab({
                   id="caption"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="e.g. Photographed by Tariq Ahmad, Ladakh Vacation Srinagar"
+                  placeholder="e.g. Photographed by the Ladakh Vacation team, Leh"
                 />
               </div>
 
@@ -1142,7 +1142,7 @@ function MediaLibraryTab({
                   id="tags"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
-                  placeholder="gulmarg, winter, gondola, hero-image"
+                  placeholder="pangong, summer, camp, hero-image"
                 />
               </div>
 
@@ -1419,7 +1419,7 @@ function OffPageEditDialog({
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Target of Q3 Kashmir travel outreach campaign"
+              placeholder="e.g. Target of Q3 Ladakh travel outreach campaign"
               className="w-full rounded-md border border-ink-700 bg-ink-950 px-3 py-2 text-sm text-ink-100 placeholder:text-ink-500 focus:border-signal-500 focus:outline-none"
             />
           </div>
@@ -1457,7 +1457,7 @@ function PageChecklistDialog({
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         title={`SEO Health Audit: ${page.title || page.path}`}
-        description={`Target Query: "${page.targetKeyword || 'kashmir tour package'}" · Total Score: ${page.score ?? '—'}/100`}
+        description={`Target Query: "${page.targetKeyword || 'ladakh tour package'}" · Total Score: ${page.score ?? '—'}/100`}
       >
         <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
           {/* Header score overview */}
@@ -1806,7 +1806,7 @@ function AddSiteDialog({ onCreated }: { onCreated: (id: string) => void }) {
               rows={3}
               value={paths}
               onChange={(e) => setPaths(e.target.value)}
-              placeholder="/kashmir&#10;/ladakh&#10;/packages/from/delhi"
+              placeholder="/destinations/leh&#10;/packages/8-nights-ladakh-tour&#10;/packages/from/delhi"
               className="w-full rounded-md border border-ink-700 bg-ink-950 px-3 py-2 text-sm text-ink-100 placeholder:text-ink-500 focus:border-signal-500 focus:outline-none"
             />
           </div>
@@ -2079,7 +2079,7 @@ function IndexNowPanel({ onNotified }: { onNotified?: (msg: string) => void }) {
           <Input
             value={singleUrl}
             onChange={(e) => setSingleUrl(e.target.value)}
-            placeholder="e.g. /packages/classic-kashmir"
+            placeholder="e.g. /packages/8-nights-ladakh-tour"
             className="h-8 text-[12px] bg-ink-900 border-ink-800"
           />
           <Button
@@ -2289,7 +2289,7 @@ function DomainSignalsPanel({
             {!loading && !data && (
               <p className="text-[13px] leading-relaxed text-ink-500">
                 Nothing recorded yet. Google reviews and citation consistency are
-                the strongest signals available to an operator based in Srinagar.
+                the strongest signals available to an operator based in Leh.
               </p>
             )}
 

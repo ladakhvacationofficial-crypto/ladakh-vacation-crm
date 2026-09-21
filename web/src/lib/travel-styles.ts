@@ -20,7 +20,7 @@ export type TravelStyle = {
   // ─────────────────────────────────────────────────────────────────
   // Optional depth. Added for pillar pages that carry real search
   // demand; the lighter style pages leave these undefined and
-  // render exactly as before. See seo/CONTENT-STANDARD.md.
+  // render exactly as before.
   // ─────────────────────────────────────────────────────────────────
 
   /** Overrides the truncated-intro meta description. Written for the click. */

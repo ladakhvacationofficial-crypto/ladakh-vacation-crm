@@ -157,7 +157,7 @@ export default function VendorDetailPage() {
         </div>
 
         <div className="space-y-4">
-          {(vendor.type === 'HOTEL' || vendor.type === 'HOUSEBOAT') && (
+          {(vendor.type === 'HOTEL' || vendor.type === 'CAMP' || vendor.type === 'HOUSEBOAT') && (
             <PropertyPanel vendor={vendor} />
           )}
           <ContactPanel vendor={vendor} />
@@ -443,7 +443,7 @@ function AddRate({
         : v.type === 'ACTIVITY'
           ? 'PER_PERSON'
           : 'PER_ROOM_NIGHT';
-  const isHotel = v.type === 'HOTEL' || v.type === 'HOUSEBOAT';
+  const isHotel = v.type === 'HOTEL' || v.type === 'CAMP' || v.type === 'HOUSEBOAT';
 
   const [variant, setVariant] = useState('');
   const [season, setSeason] = useState<string>('PEAK');

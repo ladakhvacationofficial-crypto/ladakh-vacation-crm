@@ -369,14 +369,14 @@ export default function SocialStudioPage() {
       {tab === 'trends' && trends && (
         <div className="grid gap-4 md:grid-cols-2">
           <Panel>
-            <PanelHeader><PanelTitle>Rising Travel Keywords</PanelTitle></PanelHeader>
+            <PanelHeader><PanelTitle>Seasonal Ladakh Keywords</PanelTitle></PanelHeader>
             <PanelBody className="space-y-3">
               {trends.risingKeywords?.map((kw: any, i: number) => (
                 <div key={i} className="flex items-center gap-3">
                   <span className="w-5 text-[10px] text-ink-600">#{i + 1}</span>
                   <span className="flex-1 text-sm text-ink-300">{kw.keyword}</span>
                   <span className="text-[10px] text-green-400 bg-green-950/40 border border-green-800 px-1.5 py-0.5 rounded">{kw.trend}</span>
-                  <span className="text-[10px] text-ink-500">{kw.volume}</span>
+                  {kw.volume && <span className="text-[10px] text-ink-500">{kw.volume}</span>}
                 </div>
               ))}
             </PanelBody>

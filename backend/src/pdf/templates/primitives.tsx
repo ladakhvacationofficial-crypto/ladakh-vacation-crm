@@ -24,14 +24,14 @@ export function shortDate(value: Date | string | null | undefined): string {
 }
 
 /**
- * Every document header. LADAKH VACATION in serif gold, HOLIDAYS in caps teal.
+ * Every document header. LADAKH in serif gold, VACATION in caps.
  * Right side carries the document label + number + issue date.
  */
 export function BrandHeader({
   docLabel,
   docNumber,
   issuedOn = new Date(),
-  tagline = 'Kashmir · Ladakh · Himachal — since 2011',
+  tagline = 'Discover Ladakh · Experience Life — since 2012',
 }: {
   docLabel: string;
   docNumber: string;
@@ -42,8 +42,8 @@ export function BrandHeader({
     <View style={pdfStyles.header}>
       <View>
         <View style={pdfStyles.brandRow}>
-          <Text style={pdfStyles.brandGold}>Ladakh Vacation</Text>
-          <Text style={pdfStyles.brandTeal}>Holidays</Text>
+          <Text style={pdfStyles.brandGold}>Ladakh</Text>
+          <Text style={pdfStyles.brandTeal}>Vacation</Text>
         </View>
         <Text style={pdfStyles.brandTagline}>{tagline}</Text>
       </View>
@@ -66,7 +66,7 @@ export function BrandFooter({
   return (
     <View style={pdfStyles.footer} fixed>
       <Text style={pdfStyles.footerText}>
-        Ladakh Vacation  ·  Srinagar, Kashmir  ·  ladakhvacation.in
+        Ladakh Vacation  ·  Leh, Ladakh  ·  ladakhvacation.in
       </Text>
       {typeof page === 'number' && typeof totalPages === 'number' ? (
         <Text style={pdfStyles.footerText}>

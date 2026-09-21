@@ -176,46 +176,40 @@ export class MlScoringService {
     const travelDate = lead.travelDate ? new Date(lead.travelDate) : null;
     const travelMonth = travelDate ? travelDate.getMonth() + 1 : null; // 1 = Jan, 12 = Dec
 
-    if (dest.includes('gulmarg') || dest.includes('ski')) {
-      if (travelMonth && [12, 1, 2].includes(travelMonth)) {
-        z += 0.9;
-        positiveSignals.push('Peak Gulmarg winter snow & skiing window (+24%)');
-      } else if (travelMonth && [3, 11].includes(travelMonth)) {
-        z += 0.4;
-        positiveSignals.push('Shoulder snow season for Gulmarg (+10%)');
-      } else if (travelMonth && [6, 7, 8].includes(travelMonth)) {
-        z -= 0.3;
-        riskSignals.push('Summer travel for snow/ski destination (-8%)');
-      } else {
-        z += 0.3;
-        positiveSignals.push('High-value Gulmarg mountain query (+8%)');
-      }
-    } else if (dest.includes('ladakh') || dest.includes('leh')) {
-      if (travelMonth && [6, 7, 8, 9].includes(travelMonth)) {
+    const isRoad = ['manali', 'bike', 'sarchu', 'srinagar', 'kashmir', 'zoji', 'kargil'].some((k) => dest.includes(k));
+    const isHanle = ['hanle', 'moriri', 'umling', 'star'].some((k) => dest.includes(k));
+    const isLadakh =
+      isRoad ||
+      isHanle ||
+      ['ladakh', 'leh', 'nubra', 'pangong', 'turtuk', 'khardung', 'sham', 'monaster'].some((k) => dest.includes(k));
+
+    if (isLadakh && travelMonth) {
+      if (isRoad && ![6, 7, 8, 9].includes(travelMonth)) {
+        if ([5, 10].includes(travelMonth)) {
+          z += 0.2;
+          riskSignals.push('Road opening/closing month for the Manali or Srinagar route: confirm the pass is open (-3%)');
+        } else {
+          z -= 0.85;
+          riskSignals.push('Manali–Leh and Srinagar–Leh roads closed in this month (-22%)');
+        }
+      } else if (isHanle && [9, 10].includes(travelMonth)) {
         z += 0.95;
-        positiveSignals.push('Prime Ladakh highway & pass opening season (+25%)');
-      } else if (travelMonth && [11, 12, 1, 2, 3].includes(travelMonth)) {
+        positiveSignals.push('Clear-sky season at Hanle (+25%)');
+      } else if ([5, 6, 9].includes(travelMonth)) {
+        z += 0.95;
+        positiveSignals.push('Prime Ladakh season: passes open, camps running (+25%)');
+      } else if ([7, 8].includes(travelMonth)) {
+        z += 0.6;
+        positiveSignals.push('Ladakh summer season; allow a spare day for roadblocks (+16%)');
+      } else if ([4, 10].includes(travelMonth)) {
+        z += 0.4;
+        positiveSignals.push('Ladakh shoulder season (+10%)');
+      } else {
         z -= 0.85;
-        riskSignals.push('Extreme sub-zero winter; high mountain passes closed (-22%)');
-      } else {
-        z += 0.4;
+        riskSignals.push('Ladakh winter: sub-zero nights, high passes and camps closed (-22%)');
       }
-    } else if (dest.includes('kashmir') || dest.includes('srinagar') || dest.includes('pahalgam')) {
-      if (travelMonth && [3, 4].includes(travelMonth)) {
-        z += 0.85;
-        positiveSignals.push('World-famous Srinagar Tulip Festival & Spring window (+22%)');
-      } else if (travelMonth && [5, 6].includes(travelMonth)) {
-        z += 0.8;
-        positiveSignals.push('Peak Himalayan summer vacation window (+20%)');
-      } else if (travelMonth && [10, 11].includes(travelMonth)) {
-        z += 0.7;
-        positiveSignals.push('Autumn golden Chinar season (+18%)');
-      } else if (travelMonth && [12, 1, 2].includes(travelMonth)) {
-        z += 0.8;
-        positiveSignals.push('Winter wonderland snow season (+20%)');
-      } else {
-        z += 0.4;
-      }
+    } else if (isLadakh) {
+      z += 0.3;
     }
 
     // ── 3. Party Size & Group Viability ─────────────────────────────────────
@@ -288,7 +282,7 @@ export class MlScoringService {
     // ── 6. Message Keyword Intent Mining ────────────────────────────────────
     const msg = (lead.message || '').toLowerCase();
     const highIntentKeywords = [
-      'gondola',
+      'permit',
       'flight',
       'honeymoon',
       'booked',
@@ -297,7 +291,7 @@ export class MlScoringService {
       'urgent',
       'ready',
       '4 star',
-      'houseboat',
+      'camp',
       'advance',
       'package price',
     ];

@@ -152,7 +152,7 @@ export default function MlIntelligencePage() {
             <span>Machine Learning & Tourism Intelligence</span>
           </h1>
           <p className="mt-1 text-sm text-ink-400 max-w-2xl">
-            Real-time demand forecasting, triple exponential smoothing, dynamic margin optimization, and K-Means traveler segmentation for Kashmir & Ladakh.
+            Real-time demand forecasting, triple exponential smoothing, dynamic margin optimization, and K-Means traveller segmentation for Ladakh.
           </p>
         </div>
 

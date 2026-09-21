@@ -12,7 +12,7 @@ import { money } from '@/lib/format';
 import { humanise } from '@/lib/constants';
 
 const SEASONS = ['PEAK', 'SHOULDER', 'OFF', 'FESTIVE'];
-const TYPES = ['HOTEL', 'HOUSEBOAT', 'TRANSPORT', 'GUIDE', 'ACTIVITY'];
+const TYPES = ['HOTEL', 'CAMP', 'HOUSEBOAT', 'TRANSPORT', 'GUIDE', 'ACTIVITY'];
 
 /**
  * Pulls a stored supplier rate. Two shapes:

@@ -9,8 +9,7 @@ import { StorageService } from '../storage/storage.service';
 import { Actor } from '../common/access';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
-import * as fs from 'fs';
-import * as path from 'path';
+import { HOMEPAGE_ENTRY, MANIFEST } from '../seo/seo-manifest';
 
 export interface PageManifestItem {
   url: string;
@@ -160,43 +159,17 @@ export class MediaService {
   }
 
   /**
-   * Return the list of website pages available for assignment.
-   * Reads from seo/page-manifest.json or returns built-in routes.
+   * Return the list of website pages available for assignment: the same
+   * manifest the SEO dashboard audits (seo/generate-manifest.mjs).
    */
   getWebsitePages(): PageManifestItem[] {
-    const possiblePaths = [
-      path.resolve(process.cwd(), '../seo/page-manifest.json'),
-      path.resolve(process.cwd(), 'seo/page-manifest.json'),
-      path.resolve(__dirname, '../../../../seo/page-manifest.json'),
-    ];
-
-    for (const p of possiblePaths) {
-      if (fs.existsSync(p)) {
-        try {
-          const raw = fs.readFileSync(p, 'utf-8');
-          const data: any[] = JSON.parse(raw);
-          return data.map((d) => ({
-            url: d.url,
-            title: d.title || d.h1 || d.url,
-            h1: d.h1,
-            tier: d.tier,
-            family: d.family,
-            primary: d.primary,
-          }));
-        } catch (e) {
-          this.logger.warn(`Failed reading manifest from ${p}: ${e}`);
-        }
-      }
-    }
-
-    // Default fallback pages if file read fails
-    return [
-      { url: '/', title: 'Homepage | Ladakh Vacation' },
-      { url: '/packages/kashmir-luxury-tour', title: 'Kashmir Luxury Tour Package' },
-      { url: '/packages/kashmir-honeymoon-package', title: 'Kashmir Honeymoon Package' },
-      { url: '/destinations/gulmarg', title: 'Gulmarg Destination Guide' },
-      { url: '/destinations/pahalgam', title: 'Pahalgam Destination Guide' },
-      { url: '/destinations/sonmarg', title: 'Sonmarg Destination Guide' },
-    ];
+    return [HOMEPAGE_ENTRY, ...MANIFEST].map((d) => ({
+      url: d.url,
+      title: d.title || d.h1 || d.url,
+      h1: d.h1,
+      tier: d.tier,
+      family: d.family,
+      primary: d.primary,
+    }));
   }
 }

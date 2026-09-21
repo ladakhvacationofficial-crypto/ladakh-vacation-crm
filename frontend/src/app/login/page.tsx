@@ -10,7 +10,7 @@ import { Input, Label } from '@/components/ui/input';
 
 /**
  * Login is the only page a not-yet-authenticated visitor sees. It carries
- * the brand — warm parchment on the right, a deep Kashmir-teal thesis panel
+ * the brand — warm parchment on the right, a deep Ladakh-navy thesis panel
  * on the left, with the mountain silhouette echoing the logo.
  *
  * The graphic is drawn inline (SVG) rather than raster imported. Keeps the
@@ -47,7 +47,7 @@ export default function LoginPage() {
 
   return (
     <main className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
-      {/* Left: the thesis. Deep Kashmir teal with a sunrise glow behind the peaks. */}
+      {/* Left: the thesis. Deep Ladakh navy with a sunrise glow behind the peaks. */}
       <section className="relative hidden overflow-hidden bg-signal-600 lg:block">
         {/* Slow-drifting warm sun — behind everything. */}
         <div

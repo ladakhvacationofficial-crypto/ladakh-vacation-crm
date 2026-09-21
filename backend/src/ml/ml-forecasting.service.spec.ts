@@ -34,19 +34,23 @@ describe('MlForecastingService', () => {
   });
 
   it('evaluates dynamic margin for specific dates and destinations', () => {
-    // Peak winter Gulmarg (December/January)
-    const peakWinter = service.getDynamicMarginForDate('2026-01-15', 'Gulmarg Snow');
-    expect(peakWinter.strategy).toBe('PREMIUM_SURGE');
-    expect(peakWinter.recommendedMarginPercent).toBe(22);
-    expect(peakWinter.surgePercentage).toBeGreaterThanOrEqual(35);
+    // Peak summer on the Nubra and Pangong circuit (June)
+    const peakSummer = service.getDynamicMarginForDate('2026-06-15', 'Nubra & Pangong');
+    expect(peakSummer.strategy).toBe('PREMIUM_SURGE');
+    expect(peakSummer.recommendedMarginPercent).toBe(22);
+    expect(peakSummer.surgePercentage).toBeGreaterThanOrEqual(35);
 
-    // Spring bloom (April)
-    const springBloom = service.getDynamicMarginForDate('2026-04-10', 'Srinagar');
-    expect(springBloom.strategy).toBe('PREMIUM_SURGE');
-    expect(springBloom.recommendedMarginPercent).toBe(22);
+    // Clear-sky season at Hanle (September)
+    const clearSkies = service.getDynamicMarginForDate('2026-09-20', 'Hanle');
+    expect(clearSkies.strategy).toBe('PREMIUM_SURGE');
+    expect(clearSkies.recommendedMarginPercent).toBe(22);
 
-    // Off peak / moderate
-    const offPeak = service.getDynamicMarginForDate('2026-09-15', 'Kashmir');
-    expect(offPeak.recommendedMarginPercent).toBe(18);
+    // Autumn shoulder (October)
+    const shoulder = service.getDynamicMarginForDate('2026-10-20', 'Leh');
+    expect(shoulder.recommendedMarginPercent).toBe(18);
+
+    // Deep winter (January): roads closed, lean margin
+    const winter = service.getDynamicMarginForDate('2026-01-15', 'Leh');
+    expect(winter.strategy).toBe('VOLUME_PROMOTIONAL');
   });
 });

@@ -154,14 +154,14 @@ export class WhatsAppService {
   private getDefaultTemplates() {
     return [
       {
-        name: 'kashmir_seasonal_offer',
+        name: 'ladakh_seasonal_offer',
         category: 'MARKETING',
         language: 'en',
         status: 'APPROVED',
         components: [
           {
             type: 'BODY',
-            text: 'Hello {{1}}, explore magical Kashmir with exclusive packages tailored for you. Reply to this message to claim your ₹{{2}} discount!',
+            text: 'Hello {{1}}, planning {{2}} this season? Our team in Leh can send you a day-by-day itinerary with permits, a private 4×4 and oxygen on board. Reply to this message and we will share it.',
           },
         ],
       },

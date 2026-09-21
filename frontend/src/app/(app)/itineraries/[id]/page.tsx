@@ -414,7 +414,7 @@ function CoverPanel({
           <Input
             value={headline}
             onChange={(e) => setHeadline(e.target.value)}
-            placeholder="A honeymoon between Dal Lake and the Zanskar range"
+            placeholder="A honeymoon between the Nubra dunes and Pangong Tso"
           />
         </div>
         <div className="space-y-1">
@@ -674,13 +674,13 @@ function DayHeaderPanel({
       <PanelBody className="grid gap-4 md:grid-cols-3">
         <div className="space-y-1">
           <Label>City</Label>
-          <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="Srinagar" />
+          <Input value={city} onChange={(e) => setCity(e.target.value)} placeholder="Leh" />
         </div>
         <div className="md:col-span-2 space-y-1">
           <Label>Headline</Label>
           <Input
             value={headline} onChange={(e) => setHeadline(e.target.value)}
-            placeholder="Arrival & Shikara ride on the Dal"
+            placeholder="Arrive Leh · acclimatisation afternoon"
           />
         </div>
         <div className="space-y-1">
@@ -993,7 +993,7 @@ function AddItem({
         <Label>Title</Label>
         <Input
           value={title} onChange={(e) => setTitle(e.target.value)}
-          placeholder="Shikara ride on the Dal"
+          placeholder="Sunset at Shanti Stupa"
           onKeyDown={(e) => e.key === 'Enter' && submit()}
         />
       </div>

@@ -314,22 +314,25 @@ export class SocialService {
   // ─────────────────────────────── TRENDS ──────────────────────────────────────
 
   async getTrends() {
-    // Static curated trends for Kashmir/Ladakh travel (update via Google Trends API if needed)
+    // Static list of Ladakh keywords with the months they peak. The season
+    // windows are facts about Ladakh; there are no search volumes here because
+    // none have been measured. Replace with Google Trends / Search Console
+    // data once an integration is connected.
     return {
       risingKeywords: [
-        { keyword: 'Kashmir winter 2025', trend: '+82%', volume: '18K/mo' },
-        { keyword: 'Gulmarg skiing package', trend: '+74%', volume: '12K/mo' },
-        { keyword: 'Ladakh road trip', trend: '+61%', volume: '22K/mo' },
-        { keyword: 'Dal Lake houseboat', trend: '+55%', volume: '9K/mo' },
-        { keyword: 'Pahalgam honeymoon', trend: '+48%', volume: '7K/mo' },
-        { keyword: 'Kashmir tulip festival', trend: '+43%', volume: '5K/mo' },
-        { keyword: 'Sonmarg camping', trend: '+38%', volume: '6K/mo' },
-        { keyword: 'Leh Ladakh bike trip', trend: '+35%', volume: '15K/mo' },
+        { keyword: 'Leh Ladakh tour package', trend: 'Peak Apr–Jun', volume: '' },
+        { keyword: 'Pangong Lake trip', trend: 'Peak May–Sep', volume: '' },
+        { keyword: 'Leh Ladakh bike trip', trend: 'Peak Jun–Sep', volume: '' },
+        { keyword: 'Manali to Leh road trip', trend: 'Peak Jun–Sep', volume: '' },
+        { keyword: 'Hanle stargazing', trend: 'Peak Sep–Oct', volume: '' },
+        { keyword: 'Ladakh honeymoon package', trend: 'Peak May–Jun, Sep', volume: '' },
+        { keyword: 'Nubra Valley camp', trend: 'Peak May–Sep', volume: '' },
+        { keyword: 'Hemis festival', trend: 'Jun–Jul', volume: '' },
       ],
       bestHashtagsByPlatform: {
-        instagram: ['#KashmirDiaries', '#ParadiseOnEarth', '#GulmargSkiing', '#PangongTso', '#KashmirWinter'],
-        facebook: ['#KashmirTourism', '#LadakhTour', '#KashmirPackage', '#IncredibleIndia'],
-        pinterest: ['Kashmir Travel Guide', 'Ladakh Road Trip', 'Gulmarg Snow Activities', 'Dal Lake Kashmir'],
+        instagram: ['#Ladakh', '#LehLadakh', '#PangongTso', '#NubraValley', '#LadakhVacation'],
+        facebook: ['#LadakhTourism', '#LehLadakh', '#LadakhTour', '#IncredibleIndia'],
+        pinterest: ['Ladakh Travel Guide', 'Leh Ladakh Road Trip', 'Pangong Lake', 'Hanle Dark Sky'],
       },
       bestTimeToPost: [
         { platform: 'INSTAGRAM', days: 'Wed, Fri, Sat', time: '7:00–9:30 PM IST' },

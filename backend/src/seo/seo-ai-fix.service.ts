@@ -90,19 +90,19 @@ export class SeoAiFixService {
             "Google's Helpful Content System strongly favors pages demonstrating genuine first-hand expertise. Explicitly warning travelers about rough terrain, altitude acclimation, or seasonal trade-offs builds immense trust and reduces bounce rates.",
           suggestion: `### ⚠️ Who This ${destination} Tour Is NOT For & Important Trade-Offs
 
-While ${destination} offers unforgettable Himalayan landscapes, we want you to have realistic expectations before booking:
+While ${destination} is one of the most striking places in the Himalaya, we want you to have realistic expectations before booking:
 
-1. **Not for Travelers Seeking Fast-Paced Sightseeing:**
-   Mountain roads between valleys (such as Srinagar to Gulmarg or Jammu to Patnitop) can experience weather-related delays and winding ghat roads. If you dislike spending 3–4 hours in a vehicle enjoying scenic views, a more compact itinerary is recommended.
+1. **Not for travellers who want to rush the altitude:**
+   Leh sits at 3,500 m. Every itinerary we run keeps the first afternoon empty, the second day low, and the high passes (Khardung La, Chang La, Umling La) for day three or later. We will not move Pangong earlier to fit more in.
 
-2. **Weather & Accessibility Constraints:**
-   During peak winter (January–February), heavy snowfall can lead to temporary tire-chain requirements or road closures near high passes. Please factor in buffer time for return flights.
+2. **Not for anyone with an uncontrolled cardiac or pulmonary condition:**
+   Speak to your doctor before booking anything at this altitude, and then to us. Every vehicle carries oxygen and an oximeter, but the right route matters more than the equipment.
 
-3. **Physical Comfort & Altitude:**
-   Visiting high-altitude points like Apharwat Peak Phase 2 (Gulmarg) or steep temple stairs (Vaishno Devi / Shankaracharya) requires moderate mobility. Guests with respiratory sensitivities or knee concerns should pace their ascents.
+3. **Weather and road closures:**
+   Passes can close for snow or landslides at short notice, and from November to March most high roads are shut. Leave a spare day before an onward flight.
 
-4. **Skip Tourist Traps:**
-   We advise against paying unauthorized pony guides at parking areas; always book pre-paid tickets at government-regulated counters to avoid inflated pricing.`,
+4. **Connectivity:**
+   Prepaid SIMs from other states generally do not work in Ladakh, and coverage is patchy or absent at Pangong, Hanle and on the passes.`,
           instructions: [
             'Copy this markdown/HTML section into your package detail page or itinerary tab.',
             'Place it under an accordion titled "Who This Trip is NOT For & Travel Advisory" or near the FAQ section.',
@@ -130,7 +130,7 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
 <div className="relative h-96 w-full overflow-hidden rounded-2xl shadow-lg">
   <Image
     src="/images/packages/${destSlug}-tour.jpg"
-    alt="${destination} tour package featuring snow-capped Himalayan peaks, local pine valleys, and private travel arrangements by Ladakh Vacation"
+    alt="${destination}, Ladakh: high-altitude desert landscape photographed on a Ladakh Vacation trip"
     fill
     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
     priority
@@ -149,9 +149,9 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
       }
 
       case 'meta-description': {
-        const desc1 = `Explore handcrafted ${destination} tour packages with 4-star stays, private cab transfers & 24/7 local support. Get instant custom quotes & best seasonal deals!`;
-        const desc2 = `Book verified ${destination} holiday packages from ₹9,500. Includes hotel stays, sightseeing itineraries & Shikara/Gondola assistance. Inquire via WhatsApp.`;
-        const desc3 = `Plan your dream trip to ${destination}. Transparent pricing, customizable itineraries & verified local Kashmir tour guides with Ladakh Vacation. Call now!`;
+        const desc1 = `${destination} tour packages from a Leh-based team: altitude-first itineraries, private 4×4 with a Ladakhi driver, all permits and oxygen on board.`;
+        const desc2 = `Book ${destination} with Ladakh Vacation from ₹14,500. Hotels and camps, Inner Line Permits, private cab and 24×7 support from Leh. WhatsApp us.`;
+        const desc3 = `Plan ${destination} with local experts in Leh. Itemised quotes, custom itineraries sequenced by altitude, and no-cost EMI. Get your itinerary today.`;
 
         return {
           checkId,
@@ -180,7 +180,7 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
       case 'title-unique':
       case 'query-coverage': {
         const title1 = `${destination} Tour Packages 2026: Itineraries, Best Deals & Stays | Ladakh Vacation`;
-        const title2 = `Best ${destination} Holiday Packages from ₹9,500 | Ladakh Vacation`;
+        const title2 = `${destination} Tour Packages from ₹14,500 | Ladakh Vacation`;
         const title3 = `${keyword.replace(/\b\w/g, (c) => c.toUpperCase())} — Custom Itineraries & Local Guides`;
 
         return {
@@ -237,14 +237,14 @@ While ${destination} offers unforgettable Himalayan landscapes, we want you to h
             "Programmatic SEO pages that repeat identical boilerplate text risk classification as thin or doorway pages under Google's Spam Policies. Adding 200+ words of authentic local details resolves content duplication.",
           suggestion: `### Discover Authentic ${destination} with Local Specialists
 
-When planning your trip to ${destination}, having insider local knowledge makes all the difference between a rushed road trip and a deeply rejuvenating holiday. Located in the majestic Himalayan foothills, ${destination} combines spiritual landmarks, pristine pine valleys, and authentic regional cuisine that cannot be experienced from standard tourist brochures.
+When planning ${destination}, the order of the days matters more than the list of sights. Our team in Leh sequences every route by altitude, so the places you came for are enjoyed rather than endured.
 
-#### Key Highlights & Best Times to Visit:
-- **Optimal Season:** The most pleasant sightseeing months are April through June for temperate weather, and October through February for crisp Himalayan air and winter landscapes.
-- **Local Culinary Stops:** Don't miss sampling authentic local delicacies—from traditional Rogan Josh and Yakhni in the valley to steaming bowls of Rajma Chawal and Kaladi cheese along the scenic highway stops.
-- **Seamless Transit:** Our private cab fleet is driven by verified mountain-experienced local drivers who know the safest bypass routes, best photo vantage points, and government-approved toll gates.
+#### What to know before you go:
+- **Best months:** May, June and September are the prime months; September and October bring the clearest skies. From November to March most high roads close.
+- **Permits:** Nubra, Pangong, Hanle, Tso Moriri and Umling La need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print them before you land.
+- **Getting around:** A private Innova Crysta or Xylo with a Ladakhi driver, carrying oxygen, an oximeter and a first-aid kit.
 
-Every itinerary is 100% customizable to your family's pace, fitness levels, and preferred hotel categories.`,
+Every itinerary is a starting point, reshaped around your dates, your group and your pace.`,
           instructions: [
             'Insert this unique copy onto the package page, ideally in the "Overview" or "Destination Guide" section.',
             'Customize any specific hotel names or private transfers included in your offering.',
@@ -261,17 +261,19 @@ Every itinerary is 100% customizable to your family's pace, fitness levels, and 
           headline: 'E-E-A-T Author Byline & Editorial Schema',
           rationale:
             "Google's Search Quality Evaluator Guidelines emphasize Experience, Expertise, Authoritativeness, and Trustworthiness (E-E-A-T). Naming an authentic travel specialist demonstrates real human curation.",
-          suggestion: `<!-- Visual Byline Component -->
+          suggestion: `<!-- Visual Byline Component. Replace [Author name] and [Role] with a real
+     member of the Leh team before publishing: a named person who actually
+     plans these trips is the point of this check. -->
 <div className="flex items-center gap-3 py-4 my-6 border-y border-slate-200">
-  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-800">
-    SH
+  <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center font-bold text-slate-800">
+    LV
   </div>
   <div>
     <p className="text-xs font-semibold text-slate-900">
-      Curated by <a href="https://shahid.co.in" target="_blank" rel="noopener noreferrer" className="text-emerald-700 underline font-bold">Shahid</a> · 15+ Years in Travel & Travel Tech
+      Planned by [Author name] · [Role], Ladakh Vacation, Leh
     </p>
     <p className="text-[11px] text-slate-500">
-      Founder, Ladakh Vacation · Verified Destination & Travel-Tech Specialist (shahid.co.in). Last verified: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+      Last reviewed: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
     </p>
   </div>
 </div>
@@ -284,17 +286,14 @@ Every itinerary is 100% customizable to your family's pace, fitness levels, and 
   "name": "${destination} Tour Package",
   "author": {
     "@type": "Person",
-    "name": "Shahid",
-    "jobTitle": "Founder & Travel Technologist",
-    "url": "https://shahid.co.in",
-    "sameAs": [
-      "https://shahid.co.in"
-    ]
+    "name": "[Author name]",
+    "jobTitle": "[Role]",
+    "worksFor": { "@type": "Organization", "name": "Ladakh Vacation" }
   }
 }
 </script>`,
           instructions: [
-            'Add the visual author byline above the itinerary breakdown.',
+            'Replace [Author name] and [Role] with a real member of the team, then add the byline above the itinerary breakdown.',
             'Include the structured JSON-LD schema in the `<head>` or via Next.js metadata.',
             'Re-audit to score full points on the Author check (4/4 pts).',
           ],
@@ -460,7 +459,7 @@ Every itinerary is 100% customizable to your family's pace, fitness levels, and 
   }
 
   private buildAiPrompt(dto: GenerateSeoFixDto, pageTitle: string, keyword: string): string {
-    return `You are a world-class Technical SEO & Helpful Content specialist for Ladakh Vacation, a premium travel agency specializing in Kashmir, Ladakh, and Jammu tours.
+    return `You are a world-class Technical SEO & Helpful Content specialist for Ladakh Vacation, a Leh-based Ladakh tour operator (Leh, Nubra, Pangong, Hanle, Tso Moriri, and the Manali and Srinagar roads into Ladakh). Its itineraries are sequenced by altitude, include all Inner Line Permits, a private 4×4 with a Ladakhi driver and oxygen on board. Never invent prices, awards, statistics or staff names.
 
 A page audit flagged an SEO issue that needs an immediate, actionable fix:
 - Check ID: "${dto.checkId}" (${dto.label || ''})
@@ -507,26 +506,27 @@ Return strictly a JSON object with keys:
   // ── Helper Utilities ─────────────────────────────────────────────────────
 
   private extractTitleFromUrl(url: string): string {
-    const slug = url.split('/').filter(Boolean).pop() || 'kashmir';
+    const slug = url.split('/').filter(Boolean).pop() || 'ladakh';
     return slug
       .replace(/-/g, ' ')
       .replace(/\b\w/g, (c) => c.toUpperCase());
   }
 
   private extractKeywordFromUrl(url: string): string {
-    const slug = url.split('/').filter(Boolean).pop() || 'kashmir-tour-packages';
+    const slug = url.split('/').filter(Boolean).pop() || 'ladakh-tour-packages';
     return slug.replace(/-/g, ' ');
   }
 
   private detectDestination(url: string, title: string, keyword: string): string {
     const combined = `${url} ${title} ${keyword}`.toLowerCase();
-    if (combined.includes('jammu')) return 'Jammu';
-    if (combined.includes('gulmarg')) return 'Gulmarg';
-    if (combined.includes('pahalgam')) return 'Pahalgam';
-    if (combined.includes('sonamarg')) return 'Sonamarg';
-    if (combined.includes('ladakh') || combined.includes('leh')) return 'Leh Ladakh';
-    if (combined.includes('patnitop')) return 'Patnitop';
-    if (combined.includes('katra') || combined.includes('vaishno')) return 'Katra & Vaishno Devi';
-    return 'Kashmir Valley';
+    if (combined.includes('hanle') || combined.includes('moriri') || combined.includes('umling')) return 'Hanle & Tso Moriri';
+    if (combined.includes('pangong')) return 'Pangong Tso';
+    if (combined.includes('nubra') || combined.includes('turtuk') || combined.includes('khardung')) return 'Nubra Valley';
+    if (combined.includes('bike')) return 'Leh Ladakh Bike Trip';
+    if (combined.includes('manali')) return 'Manali to Leh';
+    if (combined.includes('kashmir') || combined.includes('srinagar')) return 'Kashmir & Ladakh';
+    if (combined.includes('monaster') || combined.includes('lamayuru') || combined.includes('alchi') || combined.includes('hemis')) return 'Ladakh Monasteries';
+    if (/\bleh\b/.test(combined)) return 'Leh';
+    return 'Ladakh';
   }
 }

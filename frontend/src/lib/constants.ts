@@ -129,6 +129,7 @@ export const SEASONS = ['PEAK', 'SHOULDER', 'OFF', 'FESTIVE'] as const;
 
 export const VENDOR_TYPES = [
   'HOTEL',
+  'CAMP',
   'HOUSEBOAT',
   'TRANSPORT',
   'GUIDE',

@@ -11,7 +11,7 @@ import { SocialPublisherService } from './social-publisher.service';
 
 describe('Social Media Studio', () => {
   describe('AiGeneratorService', () => {
-    it('generates 3 travel copy variants with hashtags for Kashmir', async () => {
+    it('generates 3 travel copy variants with hashtags for Leh', async () => {
       const prismaMock = {
         integration: {
           findFirst: jest.fn().mockResolvedValue(null), // fallback to specialized template engine
@@ -21,18 +21,18 @@ describe('Social Media Studio', () => {
       const generator = new AiGeneratorService(prismaMock as any);
 
       const result = await generator.generateSocialCopy({
-        destination: 'Kashmir',
+        destination: 'Leh',
         packageTitle: '5N/6D Autumn Serenade',
         season: 'Autumn',
       });
 
-      expect(result.destination).toBe('Kashmir');
+      expect(result.destination).toBe('Leh');
       expect(result.variants.length).toBe(3);
       expect(result.variants[0].tone).toBe(ContentTone.STORYTELLING);
       expect(result.variants[1].tone).toBe(ContentTone.PROMOTIONAL);
       expect(result.variants[2].tone).toBe(ContentTone.PUNCHY_REEL);
       expect(result.suggestedHashtags).toEqual(
-        expect.arrayContaining(['#KashmirTourism', '#Ladakh VacationHolidays']),
+        expect.arrayContaining(['#LehDiaries', '#LadakhVacation']),
       );
       expect(result.bestPostingTimes.length).toBeGreaterThan(0);
     });
@@ -50,7 +50,7 @@ describe('Social Media Studio', () => {
       });
 
       expect(result.suggestedHashtags).toEqual(
-        expect.arrayContaining(['#LadakhTourism', '#PangongTso', '#Ladakh VacationHolidays']),
+        expect.arrayContaining(['#LadakhTourism', '#PangongTso', '#LadakhVacation']),
       );
     });
   });

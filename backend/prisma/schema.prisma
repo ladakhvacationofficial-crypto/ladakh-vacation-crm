@@ -984,6 +984,8 @@ model Activity {
 enum VendorType {
   HOTEL
   HOUSEBOAT
+  /// Seasonal tented camps (Nubra, Pangong, Sarchu, Tso Moriri, Hanle).
+  CAMP
   TRANSPORT
   GUIDE
   ACTIVITY
@@ -1044,11 +1046,11 @@ model Vendor {
   panNumber    String?
   paymentTerms String?
 
-  // transport only — Kashmir union taxi zone constraints
+  // transport only — local taxi-union zone constraints
   unionZone String?
 
   // --- hotel / property specifics -----------------------------------------
-  // All optional. Filled in for HOTEL/HOUSEBOAT/RESORT; ignored for TRANSPORT etc.
+  // All optional. Filled in for HOTEL/HOUSEBOAT/CAMP; ignored for TRANSPORT etc.
   /// "14:00" — kept as a HH:MM string so timezone confusion can't creep in.
   checkInTime  String?
   /// "11:00" — checkout is the number ops needs on the client voucher.

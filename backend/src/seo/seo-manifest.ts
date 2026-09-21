@@ -19,9 +19,9 @@ export const MANIFEST: ManifestPage[] = manifestData as unknown as ManifestPage[
 /** The homepage is not in the manifest file but is tracked like a manifest page. */
 export const HOMEPAGE_ENTRY: ManifestPage = {
   url: '/',
-  title: 'Ladakh Vacation — Srinagar Kashmir Tour Operator',
-  h1: 'Kashmir Tour Packages with Local Srinagar Experts',
+  title: 'Ladakh Tour Packages | Ladakh Vacation — Leh-based Tour Operator',
+  h1: 'Ladakh, planned by Ladakhis.',
   tier: 0,
   family: 'core-homepage',
-  primary: 'kashmir tour package',
+  primary: 'ladakh tour package',
 };

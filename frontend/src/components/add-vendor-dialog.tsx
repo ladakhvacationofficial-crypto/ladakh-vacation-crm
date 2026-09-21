@@ -19,7 +19,7 @@ import { VENDOR_TYPES, humanise } from '@/lib/constants';
  * write-once (once entered, only the owner sees them); rates get added on
  * the detail page where a live table is easier.
  *
- * Hotel/houseboat types unlock the property panel (check-in/out, room count,
+ * Hotel/camp/houseboat types unlock the property panel (check-in/out, room count,
  * amenities). Everything else keeps a lean form.
  */
 const COMMON_AMENITIES = [
@@ -67,7 +67,7 @@ export function AddVendorDialog({
   const [amenities, setAmenities] = useState<string[]>([]);
   const [customAmenity, setCustomAmenity] = useState('');
 
-  const isProperty = type === 'HOTEL' || type === 'HOUSEBOAT';
+  const isProperty = type === 'HOTEL' || type === 'CAMP' || type === 'HOUSEBOAT';
 
   function reset() {
     setName(''); setType('HOTEL'); setCity(''); setArea('');
@@ -177,7 +177,7 @@ export function AddVendorDialog({
               <Input
                 id="v-city" value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="Srinagar"
+                placeholder="Leh"
               />
             </div>
             <div className="space-y-1">

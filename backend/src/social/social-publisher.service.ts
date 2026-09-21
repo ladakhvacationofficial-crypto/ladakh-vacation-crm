@@ -80,7 +80,7 @@ export class SocialPublisherService {
     try {
       const token = decryptSecret(account.accessToken);
       const igUserId = account.externalId;
-      const imageUrl = post.mediaUrls[0] || 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d'; // Kashmir fallback
+      const imageUrl = post.mediaUrls[0] || 'https://ladakhvacation.in/img/ladakh-hero.webp'; // the website's own hero photo
 
       // Step 1: Create media container
       const containerUrl = `https://graph.facebook.com/v20.0/${igUserId}/media`;

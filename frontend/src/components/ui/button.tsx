@@ -13,7 +13,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Primary CTA — the deep Kashmir teal from the logo, with a warm
+        // Primary CTA — the Ladakh royal blue from the logo, with a warm
         // gold underglow that lifts slightly on hover.
         primary:
           'bg-signal-600 text-ink-950 hover:bg-signal-500 ' +

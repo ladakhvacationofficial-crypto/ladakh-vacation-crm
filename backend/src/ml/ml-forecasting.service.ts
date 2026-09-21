@@ -39,21 +39,23 @@ export interface TourismForecastResponse {
 export class MlForecastingService {
   private readonly logger = new Logger(MlForecastingService.name);
 
-  // 12-month empirical Kashmir tourism seasonality index (1.0 = annual average)
-  // Derived from J&K Tourism Directorate historical arrival patterns
-  private readonly KASHMIR_SEASONALITY_WEIGHTS: Record<number, { factor: number; tag: string }> = {
-    1: { factor: 1.35, tag: 'Winter Snow & Gulmarg Skiing Season' }, // Jan
-    2: { factor: 1.25, tag: 'Peak Winter Snow & Frozen Dal Lake' }, // Feb
-    3: { factor: 1.45, tag: 'Srinagar Tulip Garden Opening & Spring Bloom' }, // Mar
-    4: { factor: 1.4, tag: 'Spring Bloom & Mild Valleys' }, // Apr
-    5: { factor: 1.55, tag: 'Summer Vacation Peak & Family Holidays' }, // May
-    6: { factor: 1.5, tag: 'Summer Season & Leh-Ladakh Highway Open' }, // Jun
-    7: { factor: 1.3, tag: 'Monsoon Retreat & Amarnath Yatra' }, // Jul
-    8: { factor: 1.15, tag: 'Late Summer & High Himalayan Treks' }, // Aug
-    9: { factor: 1.1, tag: 'Crisp Mountain Air & Apple Harvest' }, // Sep
-    10: { factor: 1.35, tag: 'Autumn Golden Chinar & Saffron Bloom' }, // Oct
-    11: { factor: 1.1, tag: 'Early Snow & Pre-Winter Getaways' }, // Nov
-    12: { factor: 1.45, tag: 'Christmas, New Year & First Snowfalls' }, // Dec
+  // 12-month Ladakh seasonality index (1.0 = annual average). A planning
+  // heuristic, not measured data: Ladakh's season is set by the roads, which
+  // open from May and close from November, and by the camps, which run
+  // roughly May to September. Replace with booking history once it exists.
+  private readonly LADAKH_SEASONALITY_WEIGHTS: Record<number, { factor: number; tag: string }> = {
+    1: { factor: 0.4, tag: 'Deep winter: Leh by air only' }, // Jan
+    2: { factor: 0.4, tag: 'Deep winter: Leh by air only' }, // Feb
+    3: { factor: 0.55, tag: 'Late winter: high roads still closed' }, // Mar
+    4: { factor: 0.85, tag: 'Season opening: Leh and the monasteries' }, // Apr
+    5: { factor: 1.55, tag: 'Peak: snow-lined passes, roads opening' }, // May
+    6: { factor: 1.7, tag: 'Peak: every route and camp open' }, // Jun
+    7: { factor: 1.4, tag: 'Summer: warmest weeks, Hemis festival' }, // Jul
+    8: { factor: 1.3, tag: 'Summer: roadblock risk from rain elsewhere' }, // Aug
+    9: { factor: 1.5, tag: 'Clear skies, thin crowds, best at Hanle' }, // Sep
+    10: { factor: 1.1, tag: 'Autumn shoulder: camps closing' }, // Oct
+    11: { factor: 0.5, tag: 'High roads closing for winter' }, // Nov
+    12: { factor: 0.45, tag: 'Winter: Leh by air only' }, // Dec
   };
 
   constructor(private readonly prisma: PrismaService) {}
@@ -96,7 +98,7 @@ export class MlForecastingService {
       const monthName = targetDate.toLocaleDateString('en-US', { month: 'long' });
       const year = targetDate.getFullYear();
 
-      const seasonal = this.KASHMIR_SEASONALITY_WEIGHTS[monthIndex] || { factor: 1.0, tag: 'Standard Tourism Period' };
+      const seasonal = this.LADAKH_SEASONALITY_WEIGHTS[monthIndex] || { factor: 1.0, tag: 'Standard Tourism Period' };
       const demandIndex = Math.round(seasonal.factor * 100) / 100;
 
       // Holt-Winters level * seasonal factor
@@ -112,7 +114,7 @@ export class MlForecastingService {
           pricingStrategy: 'PREMIUM_SURGE',
           headline: `High Demand Surge in ${monthName} (+${Math.round((demandIndex - 1) * 100)}%)`,
           actionableAdvice:
-            'Hotel rooms and private cabs will be scarce. Raise package markup to 20–25% to capture premium margins and pre-block houseboat/hotel inventory immediately.',
+            'Leh hotels, Nubra and Pangong camps and 4×4s will be scarce. Raise package markup to 20–25% and pre-block camp and hotel inventory immediately.',
         };
       } else if (demandIndex >= 1.1) {
         marginAdvice = {
@@ -120,7 +122,7 @@ export class MlForecastingService {
           pricingStrategy: 'OPTIMAL_STANDARD',
           headline: `Healthy Steady Demand in ${monthName}`,
           actionableAdvice:
-            'Maintain standard 16–18% markup. Offer complementary shikara ride or airport upgrade to close hesitant quotes faster.',
+            'Maintain standard 16–18% markup. Offer a free extra acclimatisation night in Leh or an airport upgrade to close hesitant quotes faster.',
         };
       } else {
         marginAdvice = {
@@ -128,7 +130,7 @@ export class MlForecastingService {
           pricingStrategy: 'VOLUME_PROMOTIONAL',
           headline: `Moderate / Off-Peak in ${monthName}`,
           actionableAdvice:
-            'Hotel tariffs drop significantly. Run promotional packages with 10–12% margin and emphasize discounts on social/email to maximize booking volume.',
+            'Off-season: most high roads are closed and many camps shut. Sell Leh, monastery and winter trips by air on a lean 10–12% margin.',
         };
       }
 
@@ -148,36 +150,36 @@ export class MlForecastingService {
     // Destination level breakdown
     const destinationBreakdown: DestinationForecastBreakdown[] = [
       {
-        destination: 'Gulmarg (Snow & Gondola)',
-        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.42),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.38),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.35),
-        trend: monthlyProjections[0].demandIndex >= 1.25 ? 'SURGING' : 'STABLE',
-        keyDriver: 'Phase 1 & 2 Gondola tickets, winter ski packages & luxury resort stays',
+        destination: 'Leh & Sham Valley',
+        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.9),
+        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.9),
+        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.9),
+        trend: monthlyProjections[0].demandIndex >= 1.35 ? 'SURGING' : 'STABLE',
+        keyDriver: 'Every trip starts here: acclimatisation nights, Leh hotels, Sham Valley and the Indus monasteries',
       },
       {
-        destination: 'Srinagar & Dal Lake (Heritage & Stays)',
+        destination: 'Nubra & Pangong',
         next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.65),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.68),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.72),
-        trend: monthlyProjections[1].demandIndex >= 1.3 ? 'SURGING' : 'STABLE',
-        keyDriver: 'Houseboat stays, Shikara rides, Mughal Gardens & Tulip Festival',
+        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.65),
+        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.65),
+        trend: monthlyProjections[1].demandIndex >= 1.35 ? 'SURGING' : 'STABLE',
+        keyDriver: 'Khardung La, Hunder and Turtuk, Pangong shoreline camps (seasonal, roughly May–Sep)',
       },
       {
-        destination: 'Pahalgam & Betaab Valley',
-        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.48),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.52),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.55),
-        trend: 'STABLE',
-        keyDriver: 'Lidder river retreats, Aru Valley pony rides & family leisure tours',
+        destination: 'Hanle & Tso Moriri',
+        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.2),
+        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.2),
+        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.25),
+        trend: [9, 10].includes(monthlyProjections[0].monthIndex) ? 'SURGING' : 'STABLE',
+        keyDriver: 'Dark Sky Reserve stays, Umling La, Tso Moriri camps; clearest skies Sep–Oct',
       },
       {
-        destination: 'Leh-Ladakh (High Mountain Passes)',
+        destination: 'Manali & Srinagar roads',
         next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.15),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.22),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.35),
-        trend: monthlyProjections[2].monthIndex >= 5 && monthlyProjections[2].monthIndex <= 8 ? 'SURGING' : 'STABLE',
-        keyDriver: 'Pangong Lake, Nubra Valley, Khardung La & motorcycling expeditions',
+        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.15),
+        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.15),
+        trend: monthlyProjections[0].monthIndex >= 6 && monthlyProjections[0].monthIndex <= 9 ? 'SURGING' : 'STABLE',
+        keyDriver: 'Overland and bike trips; Manali–Leh roughly late May to mid-October, Zoji La May to late October',
       },
     ];
 
@@ -185,7 +187,7 @@ export class MlForecastingService {
       `📈 Projected 90-day gross inquiry volume: ${monthlyProjections.reduce((a, b) => a + b.projectedInquiries, 0).toLocaleString()} inquiries.`,
       `💰 Expected gross booking pipeline: ₹${(monthlyProjections.reduce((a, b) => a + b.expectedGrossRevenue, 0) / 100000).toFixed(1)} Lakhs.`,
       `⚡ Dynamic Pricing Alert: ${monthlyProjections[0].marginAdvice.headline}. Implement ${monthlyProjections[0].marginAdvice.recommendedMarginPercent}% markup.`,
-      `🚗 Fleet Advisory: Pre-block verified 4x4 snow-chain cabs for Gulmarg / Tangmarg transfers during peak snowfall periods.`,
+      `🚗 Fleet Advisory: Pre-block Innova Crysta and Xylo 4×4s, with oxygen and oximeters checked, for the May–June and September peaks.`,
     ];
 
     return {
@@ -215,7 +217,7 @@ export class MlForecastingService {
 
     const monthIndex = date.getMonth() + 1;
     const monthName = date.toLocaleDateString('en-US', { month: 'long' });
-    const seasonal = this.KASHMIR_SEASONALITY_WEIGHTS[monthIndex] || {
+    const seasonal = this.LADAKH_SEASONALITY_WEIGHTS[monthIndex] || {
       factor: 1.0,
       tag: 'Standard Tourism Period',
     };
@@ -224,10 +226,10 @@ export class MlForecastingService {
 
     // Destination-specific fine-tuning
     const destLower = (destination || '').toLowerCase();
-    if (destLower.includes('gulmarg') && (monthIndex === 12 || monthIndex === 1 || monthIndex === 2)) {
-      demandIndex += 0.15; // Gulmarg peak winter snow extra surge
-    } else if (destLower.includes('ladakh') && (monthIndex >= 6 && monthIndex <= 8)) {
-      demandIndex += 0.15; // Ladakh summer passes extra surge
+    if ((destLower.includes('hanle') || destLower.includes('moriri')) && (monthIndex === 9 || monthIndex === 10)) {
+      demandIndex += 0.15; // clearest skies at Hanle
+    } else if ((destLower.includes('pangong') || destLower.includes('nubra')) && monthIndex >= 6 && monthIndex <= 8) {
+      demandIndex += 0.1; // camps full through the summer
     }
 
     demandIndex = Math.round(demandIndex * 100) / 100;
@@ -264,7 +266,7 @@ export class MlForecastingService {
         badge: `❄️ Value Season`,
         headline: `Moderate / Off-Peak in ${monthName}`,
         seasonTag: seasonal.tag,
-        actionableAdvice: `Hotel tariffs discounted. Recommend 12% promotional margin to maximize conversions.`,
+        actionableAdvice: `Off-season in Ladakh. Recommend a lean 12% margin, and check the route is open on these dates.`,
       };
     }
   }

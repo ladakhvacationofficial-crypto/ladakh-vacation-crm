@@ -139,7 +139,7 @@ export default function SeoMediaPage() {
             Website Media Library
           </h1>
           <p className="mt-1 text-[13px] text-ink-400 max-w-2xl">
-            Upload genuine Srinagar and Kashmir photos to boost Information Gain and Google E-E-A-T scores across all 270+ pages.
+            Upload genuine Ladakh photos to boost Information Gain and Google E-E-A-T scores across the site.
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export default function SeoMediaPage() {
           </DialogTrigger>
           <DialogContent
             title="Upload Website Photography"
-            description="Upload authentic photos taken by the Srinagar team. Assign to a destination or package guide."
+            description="Upload authentic photos taken by the Leh team. Assign to a destination or package page."
           >
             <form onSubmit={handleUpload} className="p-5 space-y-4">
               <div className="space-y-1.5">
@@ -191,7 +191,7 @@ export default function SeoMediaPage() {
                   required
                   value={altText}
                   onChange={(e) => setAltText(e.target.value)}
-                  placeholder="e.g. Shikara ride on Dal Lake Srinagar at sunset"
+                  placeholder="e.g. Sunrise over Pangong Tso from the Spangmik camps"
                 />
               </div>
 
@@ -201,7 +201,7 @@ export default function SeoMediaPage() {
                   id="caption"
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="e.g. Photographed by Tariq Ahmad, Ladakh Vacation"
+                  placeholder="e.g. Photographed by the Ladakh Vacation team, Leh"
                 />
               </div>
 
@@ -211,7 +211,7 @@ export default function SeoMediaPage() {
                   id="tags"
                   value={tags}
                   onChange={(e) => setTags(e.target.value)}
-                  placeholder="gulmarg, winter, gondola, hero-image"
+                  placeholder="pangong, summer, camp, hero-image"
                 />
               </div>
 

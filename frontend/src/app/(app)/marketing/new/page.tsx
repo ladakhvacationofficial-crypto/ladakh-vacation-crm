@@ -68,7 +68,7 @@ export default function NewCampaignWizardPage() {
 
   // Template State
   const [waTemplates, setWaTemplates] = useState<any[]>([]);
-  const [selectedWaTemplate, setSelectedWaTemplate] = useState<string>('kashmir_seasonal_offer');
+  const [selectedWaTemplate, setSelectedWaTemplate] = useState<string>('ladakh_seasonal_offer');
   const [emailSubject, setEmailSubject] = useState('Special Holiday Offer from Ladakh Vacation');
   const [emailHtml, setEmailHtml] = useState(
     `<p>Hello {{name}},</p>\n<p>We have refreshed holiday packages for <strong>{{destination}}</strong> with special seasonal pricing.</p>\n<p>Reply to this email or contact your Ladakh Vacation travel advisor to plan your getaway.</p>`,
@@ -136,7 +136,7 @@ export default function NewCampaignWizardPage() {
   const currentTemplateObj = waTemplates.find((t) => t.name === selectedWaTemplate);
   const currentTemplateBody =
     currentTemplateObj?.components?.find((c: any) => c.type === 'BODY')?.text ||
-    'Hello {{1}}, explore magical Kashmir with exclusive packages tailored for you. Reply to this message to claim your ₹{{2}} discount!';
+    'Hello {{1}}, planning {{2}} this season? Our team in Leh can send you a day-by-day itinerary with permits, a private 4×4 and oxygen on board. Reply to this message and we will share it.';
 
   const handleSubmit = async (sendImmediately: boolean) => {
     if (!name.trim()) {
@@ -244,7 +244,7 @@ export default function NewCampaignWizardPage() {
             <div>
               <Label className="text-[13px] text-ink-300">Campaign Name</Label>
               <Input
-                placeholder="e.g. Kashmir Autumn Fest — Re-engagement Broadcast"
+                placeholder="e.g. September clear skies — Hanle re-engagement broadcast"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="mt-1.5 bg-ink-900 border-ink-700 text-ink-100 placeholder:text-ink-600"
@@ -391,7 +391,7 @@ export default function NewCampaignWizardPage() {
                   <div>
                     <Label className="text-[13px] text-ink-300">Destination Keyword</Label>
                     <Input
-                      placeholder="e.g. Kashmir, Ladakh, Gulmarg"
+                      placeholder="e.g. Leh, Nubra, Pangong, Hanle"
                       value={destination}
                       onChange={(e) => setDestination(e.target.value)}
                       className="mt-1.5 bg-ink-900 border-ink-700 text-ink-100 text-[13px]"
@@ -506,7 +506,7 @@ export default function NewCampaignWizardPage() {
                       <div key={l.id} className="rounded-md border border-ink-800/80 bg-ink-900/40 px-2.5 py-1.5 text-[11px]">
                         <p className="font-medium text-ink-200">{l.name}</p>
                         <p className="text-[10px] text-ink-500">
-                          {channel === 'WHATSAPP' ? l.phone : l.email || 'No email'} · {l.destination || 'Kashmir'}
+                          {channel === 'WHATSAPP' ? l.phone : l.email || 'No email'} · {l.destination || 'Ladakh'}
                         </p>
                       </div>
                     ))}

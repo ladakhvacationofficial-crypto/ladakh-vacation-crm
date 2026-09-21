@@ -28,20 +28,20 @@ const PLATFORMS = [
 ] as const;
 
 const DESTINATIONS = [
-  'Kashmir — Dal Lake & Srinagar',
-  'Gulmarg — Snow & Skiing',
-  'Pahalgam — Scenic Valley',
-  'Sonmarg — Meadow of Gold',
+  'Leh — Old Town & Shanti Stupa',
+  'Nubra — Khardung La & Hunder Dunes',
+  'Pangong Tso — Lakeside Camps',
+  'Hanle — Dark Sky Reserve',
   'Ladakh — Leh & Pangong Tso',
   'Nubra Valley — Sand Dunes',
 ];
 
-const SEASONS = ['Autumn', 'Winter Snow', 'Spring Tulip', 'Summer', 'Monsoon'];
+const SEASONS = ['Spring', 'Summer', 'Autumn', 'Winter', 'Peak Season (May–Jun)', 'Clear Skies (Sep–Oct)'];
 
 export default function NewSocialPostPage() {
   const router = useRouter();
 
-  const [destination, setDestination] = useState('Kashmir — Dal Lake & Srinagar');
+  const [destination, setDestination] = useState('Leh — Old Town & Shanti Stupa');
   const [season, setSeason] = useState('Autumn');
   const [customPrompt, setCustomPrompt] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -214,7 +214,7 @@ export default function NewSocialPostPage() {
               <div>
                 <label className="text-[10px] uppercase tracking-widest text-ink-500 mb-1 block">Custom Prompt (optional)</label>
                 <Input
-                  placeholder="e.g. Focus on family-friendly Gulmarg skiing activities…"
+                  placeholder="e.g. Focus on family-friendly first days in Leh…"
                   value={customPrompt}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCustomPrompt(e.target.value)}
                 />
@@ -278,7 +278,7 @@ export default function NewSocialPostPage() {
               <div>
                 <label className="text-[10px] uppercase tracking-widest text-ink-500 mb-1 block">Photo URL</label>
                 <Input
-                  placeholder="https://storage.supabase.co/kashmir-photo.jpg"
+                  placeholder="https://ladakhvacation.in/img/ladakh-hero.webp"
                   value={mediaUrl}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMediaUrl(e.target.value)}
                 />
@@ -334,7 +334,7 @@ export default function NewSocialPostPage() {
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
                     <div>
                       <p className="font-semibold text-[11px] text-gray-900">glitz.holidays</p>
-                      <p className="text-[9px] text-gray-400">Kashmir, India</p>
+                      <p className="text-[9px] text-gray-400">Ladakh, India</p>
                     </div>
                   </div>
                   {mediaUrl

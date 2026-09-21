@@ -21,17 +21,17 @@ describe('MlScoringService', () => {
   });
 
   describe('calculateLeadScore', () => {
-    it('ranks a high-budget WhatsApp family lead during peak Gulmarg snow season as HOT', () => {
+    it('ranks a high-budget WhatsApp family lead in peak Ladakh season as HOT', () => {
       const res = service.calculateLeadScore({
         name: 'Amit Sharma',
         source: LeadSource.WHATSAPP,
-        destination: 'Gulmarg',
-        travelDate: '2027-01-15', // Jan = peak snow
+        destination: 'Nubra & Pangong',
+        travelDate: '2027-06-15', // Jun = peak season
         nights: 5,
         adults: 2,
         children: 2,
         budget: 90000,
-        message: 'Looking for 4 star hotel in Gulmarg and Phase 2 Gondola tickets for family. Dates are fixed.',
+        message: 'Looking for 4 star hotel in Leh and a camp at Pangong for family. Dates are fixed, flight booked.',
         enquiryCount: 1,
         createdAt: new Date().toISOString(),
         firstContactAt: new Date(Date.now() + 30 * 60000).toISOString(), // 30 min latency
@@ -41,7 +41,7 @@ describe('MlScoringService', () => {
       expect(res.grade).toBe('HOT');
       expect(res.winProbability).toBeGreaterThanOrEqual(0.75);
       expect(res.positiveSignals.length).toBeGreaterThan(0);
-      expect(res.positiveSignals.some((s) => s.includes('Gulmarg'))).toBe(true);
+      expect(res.positiveSignals.some((s) => s.includes('Ladakh'))).toBe(true);
       expect(res.positiveSignals.some((s) => s.includes('WhatsApp'))).toBe(true);
       expect(res.recommendedAction).toContain('Priority Lead');
     });
@@ -72,8 +72,8 @@ describe('MlScoringService', () => {
       const res = service.calculateLeadScore({
         name: 'Pooja Verma',
         source: LeadSource.PHONE,
-        destination: 'Srinagar',
-        travelDate: '2027-04-05', // Tulip festival
+        destination: 'Hanle',
+        travelDate: '2027-09-20', // clear-sky season
         nights: 4,
         adults: 2,
         budget: 45000,
@@ -81,7 +81,7 @@ describe('MlScoringService', () => {
       });
 
       expect(res.positiveSignals.some((s) => s.includes('Repeat inquiry'))).toBe(true);
-      expect(res.positiveSignals.some((s) => s.includes('Tulip'))).toBe(true);
+      expect(res.positiveSignals.some((s) => s.includes('Hanle'))).toBe(true);
       expect(res.score).toBeGreaterThanOrEqual(60);
     });
   });

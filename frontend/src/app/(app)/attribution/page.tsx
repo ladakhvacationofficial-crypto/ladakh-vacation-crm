@@ -521,7 +521,7 @@ function LandingPagePanel({
               id="lp-slug"
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              placeholder="kashmir-honeymoon-2026"
+              placeholder="ladakh-honeymoon-2026"
             />
           </div>
           <div className="space-y-1">
@@ -530,7 +530,7 @@ function LandingPagePanel({
               id="lp-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Kashmir honeymoon 2026"
+              placeholder="Ladakh honeymoon 2026"
             />
           </div>
           <div className="space-y-1">

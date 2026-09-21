@@ -207,7 +207,7 @@ export function AddLeadDialog({ onCreated }: { onCreated: (leadId: string) => vo
                 id="al-dest"
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                placeholder="Kashmir, Ladakh, Sonmarg…"
+                placeholder="Leh, Nubra, Pangong, Hanle…"
               />
             </div>
 

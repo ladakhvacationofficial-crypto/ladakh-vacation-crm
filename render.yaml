@@ -34,6 +34,10 @@ services:
         generateValue: true
       - key: JWT_EXPIRES_IN
         value: "7d"
+      - key: INTEGRATION_KEY
+        generateValue: true  # encrypts saved integration credentials; kept
+                             # separate so rotating JWT_SECRET does not lock
+                             # them
       - key: CORS_ORIGIN
         value: "*"         # as on Glitz: any site may call the API. Logins use
                            # a bearer token, not cookies, so this does not let

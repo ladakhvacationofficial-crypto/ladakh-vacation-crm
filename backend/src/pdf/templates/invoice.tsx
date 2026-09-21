@@ -93,7 +93,7 @@ export function InvoiceDocument({ b }: { b: InvoiceInput }) {
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
               Ladakh Vacation
             </Text>
-            <Text style={pdfStyles.small}>Srinagar, Kashmir</Text>
+            <Text style={pdfStyles.small}>Leh, Ladakh</Text>
             <Text style={pdfStyles.small}>ladakhvacation@gmail.com</Text>
           </View>
         </View>

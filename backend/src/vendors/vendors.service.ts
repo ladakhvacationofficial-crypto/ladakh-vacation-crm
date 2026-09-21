@@ -306,7 +306,7 @@ export class VendorsService {
   }
 
   /**
-   * Rate lookup for quoting: "Deluxe hotels in Gulmarg, peak season, MAP".
+   * Rate lookup for quoting: "Deluxe camps in Nubra, peak season, MAP".
    * Returns rates with their vendor (redacted per role).
    *
    * Only rates whose contract period covers `on` (default: today) are

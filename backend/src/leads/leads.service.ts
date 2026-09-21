@@ -86,8 +86,8 @@ export class LeadsService {
   }
 
   /**
-   * Title-case a free-form destination string so "kashmir", "KASHMIR", and
-   * "Kashmir" all render as one label in the leads list. Preserves the
+   * Title-case a free-form destination string so "ladakh", "LADAKH", and
+   * "Ladakh" all render as one label in the leads list. Preserves the
    * word "and"/"&" small on multi-word entries.
    */
   private normaliseDestination(raw: string | null | undefined): string | null {
@@ -118,7 +118,7 @@ export class LeadsService {
     const since = new Date();
     since.setDate(since.getDate() - DEDUPE_WINDOW_DAYS);
 
-    // Title-case the destination so "kashmir", "KASHMIR" and "Kashmir" all
+    // Title-case the destination so "ladakh", "LADAKH" and "Ladakh" all
     // group as one label in the leads list. Mutates once so every downstream
     // write sees the normalised value.
     const normalisedDest = this.normaliseDestination(dto.destination);

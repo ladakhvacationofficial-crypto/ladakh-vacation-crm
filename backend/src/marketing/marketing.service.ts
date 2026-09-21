@@ -322,7 +322,7 @@ export class MarketingService {
     for (const recipient of recipients) {
       const lead = recipient.leadId ? leadMap.get(recipient.leadId) : null;
       const leadName = recipient.name || 'Traveler';
-      const destination = lead?.destination || 'Kashmir';
+      const destination = lead?.destination || 'Ladakh';
 
       try {
         if (campaign.channel === CampaignChannel.WHATSAPP && recipient.phone) {
@@ -334,7 +334,7 @@ export class MarketingService {
 
           const res = await this.whatsapp.sendTemplateMessage(
             recipient.phone,
-            campaign.templateName || 'kashmir_seasonal_offer',
+            campaign.templateName || 'ladakh_seasonal_offer',
             campaign.templateLang || 'en',
             params,
           );

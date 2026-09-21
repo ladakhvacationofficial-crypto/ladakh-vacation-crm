@@ -70,6 +70,7 @@ export default function VendorsPage() {
         {[
           { value: '', label: 'All' },
           { value: 'HOTEL', label: 'Hotels' },
+          { value: 'CAMP', label: 'Camps' },
           { value: 'HOUSEBOAT', label: 'Houseboats' },
           { value: 'TRANSPORT', label: 'Transport' },
           { value: 'GUIDE', label: 'Guides' },

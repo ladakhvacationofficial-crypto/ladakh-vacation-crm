@@ -14,7 +14,7 @@ export class CreateLandingPageDto {
   @MaxLength(120)
   @Matches(/^[a-z0-9][a-z0-9-]*$/, {
     message:
-      'slug must be lowercase letters, numbers and dashes only (e.g. kashmir-honeymoon-2026)',
+      'slug must be lowercase letters, numbers and dashes only (e.g. ladakh-honeymoon-2026)',
   })
   slug: string;
 
