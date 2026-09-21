@@ -8,9 +8,9 @@ import { DestinationCard, JsonLd } from '@/components/cards';
 import { PageHero } from '@/components/page-hero';
 
 export const metadata: Metadata = {
-  title: 'Destinations — Kashmir, Ladakh, Himachal & Vaishno Devi',
+  title: 'Ladakh Destinations — Leh, Monasteries, Nubra, Pangong & Hanle',
   description:
-    'Explore our four Himalayan destinations. Kashmir, Ladakh, Himachal and Vaishno Devi tour packages from a Srinagar-based DMC, with honest advice on where to go and when.',
+    'The four regions of Ladakh we plan trips around: Leh and the Sham Valley, the monasteries, Nubra and Pangong, and Hanle. Honest advice on altitude, permits and when to go.',
   alternates: { canonical: '/destinations' },
 };
 
@@ -42,9 +42,9 @@ export default function DestinationsIndex() {
       <JsonLd data={jsonLd} />
 
       <PageHero
-        kicker="Where we operate"
-        title="Four regions we know by heart."
-        lede="We do not sell every destination in India. We sell four, because those are the four we can stand behind — the roads, the hotels, the drivers and the weather."
+        kicker="The ground we cover"
+        title="Four Ladakhs, one journey."
+        lede="Each region asks for a different pace, which is exactly why we never sell a single fixed route. Most trips combine two or three of them, in an order the altitude decides."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Destinations' }]}
         background="linear-gradient(180deg, rgba(7,15,31,0.40) 0%, rgba(7,15,31,0.90) 100%), radial-gradient(140% 120% at 24% 8%, #3670d8 0%, #16294f 46%, #070f1f 100%)"
       />

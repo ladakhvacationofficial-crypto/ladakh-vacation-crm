@@ -91,7 +91,7 @@ export default async function RoutePage({ params }: { params: Params }) {
           { label: 'Routes', href: '/routes' },
           { label: `${r.origin} to ${r.destination}` },
         ]}
-        background={TONE_HERO.kashmir}
+        background={TONE_HERO.valley}
       >
         <FactStrip
           facts={[
@@ -328,7 +328,7 @@ export default async function RoutePage({ params }: { params: Params }) {
         <div
           aria-hidden
           className="blob right-[-6%] top-[6%] h-[400px] w-[400px]"
-          style={{ background: 'rgba(232,185,35,0.15)' }}
+          style={{ background: 'rgba(201,169,97,0.15)' }}
         />
         <div className="wrap relative grid items-start gap-12 lg:grid-cols-2">
           <div data-reveal>

@@ -6,8 +6,8 @@ import { PageHero } from '@/components/page-hero';
 import { EnquiryForm } from '@/components/enquiry-form';
 
 export const metadata: Metadata = {
-  title: 'Contact Us — Talk to a Kashmir Travel Specialist',
-  description: `Contact Ladakh Vacation. WhatsApp or call ${SITE.phone.display}, email ${SITE.email}, or send an enquiry. Our Srinagar team replies within hours, ${SITE.hours}.`,
+  title: 'Contact Us — Talk to a Ladakh Trip Planner in Leh',
+  description: `Contact Ladakh Vacation. WhatsApp or call ${SITE.phone.display}, email ${SITE.email}, or send an enquiry. Our team in Leh replies within hours, ${SITE.hours}.`,
   alternates: { canonical: '/contact' },
 };
 
@@ -66,8 +66,8 @@ export default function ContactPage() {
 
       <PageHero
         kicker="Get in touch"
-        title="Talk to someone who's actually in Kashmir."
-        lede={`Our office is in Hawal, Srinagar. We are on WhatsApp ${SITE.hours} and the person who replies is the person who will run your trip.`}
+        title="Talk to someone who's actually in Ladakh."
+        lede={`Our office is in Leh. We are on WhatsApp ${SITE.hours}, and the person who replies is the person who will run your trip.`}
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
         background="linear-gradient(180deg, rgba(7,15,31,0.40) 0%, rgba(7,15,31,0.92) 100%), radial-gradient(140% 120% at 26% 8%, #3670d8 0%, #16294f 46%, #070f1f 100%)"
       />
@@ -133,9 +133,9 @@ export default function ContactPage() {
                 <strong className="font-semibold text-ink-900">
                   Planning for peak season?
                 </strong>{' '}
-                Hotels in Gulmarg and Pahalgam for May–June and the Pangong camps for
-                July–August book out months ahead. Message us early even if your dates
-                are not final &mdash; we will tell you what needs locking in first.
+                Leh hotels and the Nubra and Pangong camps for May–June book out
+                months ahead. Message us early even if your dates are not final
+                &mdash; we will tell you what needs locking in first.
               </p>
             </div>
           </div>

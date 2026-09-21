@@ -7,8 +7,8 @@ import { PageHero } from '@/components/page-hero';
 import { EnquiryForm } from '@/components/enquiry-form';
 
 export const metadata: Metadata = {
-  title: 'About Us — A Srinagar-Based Himalayan DMC',
-  description: `Ladakh Vacation is a destination management company based in Hawal, Srinagar. Founded ${SITE.founded}, ${SITE.stats.guests} guests hosted across Kashmir, Ladakh, Himachal and Vaishno Devi.`,
+  title: 'About Us — A Leh-Based Ladakh Tour Operator',
+  description: `Ladakh Vacation is a Ladakh-registered tour operator with an office in Leh. Running Ladakh trips since ${SITE.founded}, with ${SITE.stats.guests} travellers hosted and a ${SITE.stats.rating}★ rating on Google.`,
   alternates: { canonical: '/about' },
 };
 
@@ -16,22 +16,22 @@ const VALUES = [
   {
     n: '01',
     t: 'We answer our own phone',
-    b: 'No call centre, no ticketing queue. The specialist who quotes your trip is the one who runs it and the one who picks up when you call from a mountain road.',
+    b: 'No call centre, no ticketing queue. The planner who writes your itinerary is the one who answers at 11pm from Leh when a pass closes.',
   },
   {
     n: '02',
-    t: 'We would rather lose the booking',
-    b: 'If your dates are wrong for what you want, we say so. Some of our best reviews are from people we talked out of travelling — they came back in a better month.',
+    t: 'Altitude comes first',
+    b: 'We refuse to sell a Pangong-on-day-two itinerary. Every route is sequenced by elevation, and if your dates or your days are wrong for what you want, we say so.',
   },
   {
     n: '03',
-    t: 'We only sell what we know',
-    b: 'Four destinations, not forty. Every hotel slept in, every road driven, every operator known personally. It is a smaller catalogue and a much better trip.',
+    t: 'No middlemen in the chain',
+    b: 'We own the relationships with drivers, camps and hotels directly, and every stay we sell has been personally inspected. That is why the same trip costs less.',
   },
   {
     n: '04',
     t: 'The price is the price',
-    b: 'GST included, exclusions listed plainly, no surprise charges at a barrier gate. If we quote it, that is what you pay.',
+    b: 'An itemised quote showing what each night and each vehicle costs, and exclusions listed plainly. A written itinerary and invoice before you pay anything.',
   },
 ];
 
@@ -49,9 +49,9 @@ export default function AboutPage() {
       <JsonLd data={jsonLd} />
 
       <PageHero
-        kicker={`Founded ${SITE.founded} · Hawal, Srinagar`}
-        title="Locals who fell in love with hosting."
-        lede="We started because we were tired of watching agencies a thousand miles away mis-sell our own valley to people who deserved better."
+        kicker={`Since ${SITE.founded} · Leh, Ladakh`}
+        title="Ladakh, planned by Ladakhis."
+        lede="The people planning your trip are the people running it: a Ladakh-registered tour operator with an office in Leh, not an intermediary reselling somebody else’s trip."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
         background="linear-gradient(180deg, rgba(7,15,31,0.40) 0%, rgba(7,15,31,0.92) 100%), radial-gradient(140% 120% at 26% 8%, #3670d8 0%, #16294f 46%, #070f1f 100%)"
       />
@@ -61,30 +61,28 @@ export default function AboutPage() {
           <div className="md:col-span-7" data-reveal>
             <div className="space-y-5">
               <p className="text-[17.5px] leading-[1.75] text-ink-800">
-                Ladakh Vacation started in {SITE.founded} when a few Srinagar friends
-                grew tired of watching agencies from Delhi and Mumbai sell our valley
-                to visitors who then arrived to find the itinerary did not match the
-                place. We opened a small office in Hawal, bought one Innova, and
-                started arranging trips for friends of friends.
+                Ladakh Vacation has been planning and running trips in Ladakh since
+                {' '}{SITE.founded}. We are a Ladakh-registered tour operator with an
+                office in Leh, and the team is local: the planners, the drivers and
+                the coordinators who pick up the phone.
               </p>
               <p className="text-[15.5px] leading-[1.8] text-ink-600">
-                Twelve years and {SITE.stats.guests} guests later we still work the same
-                way. We answer every enquiry ourselves. We host every itinerary
-                ourselves. We stand behind every hotel we book, because someone on
-                this team has slept in it. When you message us at 11pm from Gulmarg,
-                you are texting the same people who quoted your trip.
+                {SITE.stats.guests} travellers later, the principle has not changed.
+                Every route is sequenced by altitude rather than by how many sights
+                fit into a day. Every permit is applied for, paid and printed before
+                you land. Every vehicle carries oxygen, and every stay we sell has
+                been personally inspected.
               </p>
               <p className="text-[15.5px] leading-[1.8] text-ink-600">
-                We now run Kashmir, Ladakh, Himachal and Vaishno Devi. Different
-                geographies, same principle: local hands, local knowledge, and
-                pricing you can read without a magnifying glass.
+                We own the relationships with drivers, camps and hotels directly,
+                so there is no chain of commissions between you and the person
+                actually serving you. When a pass closes at 11pm, the person who
+                replies is sitting in Leh, not in a call centre in another state.
               </p>
               <p className="text-[15.5px] leading-[1.8] text-ink-600">
-                What we are not is a marketplace. We do not list four hundred hotels
-                we have never visited or sell packages to states we have never worked
-                in. Four destinations is a deliberate limit, and it is the reason we
-                can answer a question about a specific road on a specific week
-                without checking.
+                What we are not is a marketplace. We do one region, and we do it
+                properly: Leh and the Sham Valley, the monasteries, Nubra and
+                Pangong, and Hanle, plus the two roads in from Manali and Srinagar.
               </p>
             </div>
           </div>
@@ -96,10 +94,10 @@ export default function AboutPage() {
               </h2>
               <dl className="mt-5 space-y-4">
                 {[
-                  [Clock, 'Founded', `${SITE.founded}, Srinagar`],
-                  [Users, 'Guests hosted', `${SITE.stats.guests} and counting`],
-                  [Star, 'Rating', `${SITE.stats.rating} from ${SITE.stats.reviewCount} reviews`],
-                  [MapPin, 'Coverage', 'Kashmir · Ladakh · Himachal · Vaishno Devi'],
+                  [Clock, 'Since', `${SITE.founded}, Leh`],
+                  [Users, 'Travellers hosted', `${SITE.stats.guests} and counting`],
+                  [Star, 'Rating', `${SITE.stats.rating} from ${SITE.stats.reviewCount.toLocaleString('en-IN')}+ Google reviews`],
+                  [MapPin, 'Coverage', 'Leh · Nubra · Pangong · Hanle · Tso Moriri'],
                 ].map(([Icon, k, v]) => {
                   const I = Icon as typeof Clock;
                   return (
@@ -140,7 +138,7 @@ export default function AboutPage() {
         <div
           aria-hidden
           className="blob right-[-8%] top-[8%] h-[420px] w-[420px]"
-          style={{ background: 'rgba(232,185,35,0.14)' }}
+          style={{ background: 'rgba(201,169,97,0.14)' }}
         />
         <div className="wrap relative">
           <SectionHead light kicker="How we work" title="Four rules we do not bend." />

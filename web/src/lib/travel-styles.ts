@@ -1,7 +1,7 @@
 /**
  * Travel-style landing pages. These capture intent-stage searches
- * ("kashmir honeymoon package", "family tour kashmir") that destination
- * hubs and individual packages both miss.
+ * ("ladakh honeymoon package", "ladakh group tour") that destination hubs
+ * and individual packages both miss.
  */
 
 export type TravelStyle = {
@@ -19,7 +19,7 @@ export type TravelStyle = {
 
   // ─────────────────────────────────────────────────────────────────
   // Optional depth. Added for pillar pages that carry real search
-  // demand; the six lighter style pages leave these undefined and
+  // demand; the lighter style pages leave these undefined and
   // render exactly as before. See seo/CONTENT-STANDARD.md.
   // ─────────────────────────────────────────────────────────────────
 
@@ -68,315 +68,197 @@ export type TravelStyle = {
 export const TRAVEL_STYLES: TravelStyle[] = [
   {
     slug: 'honeymoon',
-    image: 'https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1000&auto=format&fit=crop',
+    image: '/img/hanle-night-sky-sm.webp',
     name: 'Honeymoon',
-    seoTitle: 'Kashmir Honeymoon Packages — Prices Decoded',
+    seoTitle: 'Ladakh Honeymoon Packages',
     metaDescription:
-      'Why Kashmir honeymoon quotes range from ₹12,000 to ₹97,000, and what the trip really costs. Real prices from ₹32,500 per person, plus the month to avoid.',
-    /** Carries the head term — the page targets "kashmir honeymoon packages". */
-    headline: 'Kashmir honeymoon packages, priced honestly',
+      'Ladakh honeymoon packages with a private cab, 4★ hotels in Leh, a luxury camp in Nubra and a private candlelight dinner in the dunes. 5N/6D from ₹34,900 per person.',
+    headline: 'A honeymoon where the silence is the luxury',
     intro:
-      'A first holiday that is actually a holiday: private transfers, better rooms, quieter valleys and at least one day with nothing on it. Honeymoon trips fail when they are built like sightseeing tours with rose petals added.',
-
-    author: { name: 'Tariq Ahmad', role: 'Head of Operations, Srinagar' },
-    updatedAt: '2026-08-31',
-
-    answer: {
-      heading: 'What a Kashmir honeymoon actually costs',
-      body: 'A five-night Kashmir honeymoon with private transfers, an upgraded room category and a houseboat night costs ₹32,500 per person — twin-sharing, GST included, land only. That is the real, complete figure, not a starting point that grows when you enquire. Flights are separate and depend entirely on your city and dates. If you have seen prices from ₹12,000 to ₹97,000 while searching, both are real numbers describing very different things, and the section below explains exactly what.',
-      figure: '₹32,500',
-      figureNote: 'per person · 5 nights · twin-sharing · GST included · land only',
-    },
-
-    priceDecoder: {
-      heading: 'Why honeymoon quotes range from ₹12,000 to ₹97,000',
-      intro:
-        'Search this and page one will show you a four-figure price next to a six-figure one, both described as a Kashmir honeymoon package. Neither is necessarily dishonest. They are measuring different things, and no one explains which — because the confusion favours whoever quotes lowest. Here is how a headline number gets built.',
-      rows: [
-        {
-          claim: 'A very low four-figure price',
-          reality:
-            'Almost always per person per night rather than per trip, and usually the lowest season, lowest hotel tier and a shared vehicle. Multiply by nights and travellers before comparing it to anything.',
-        },
-        {
-          claim: 'A price "starting from"',
-          reality:
-            'The floor of a range, priced on the cheapest month of the year for the smallest room in the cheapest property. Legitimate, but you will almost never travel on that number.',
-        },
-        {
-          claim: 'A price excluding GST',
-          reality:
-            'Makes a quote look roughly five percent cheaper for no real reason. Always ask whether the figure is inclusive; ours are.',
-        },
-        {
-          claim: 'A price excluding union taxi charges',
-          reality:
-            'The runs inside Gulmarg, Sonmarg and Pahalgam are controlled by local taxi unions at state-regulated rates, and no outside operator may drive them. This is charged on the day, in cash, and is left out of most headline prices.',
-        },
-        {
-          claim: 'A six-figure price',
-          reality:
-            'Usually seven or eight nights, luxury properties, and return flights folded into a single number. Often genuinely good value — but it is not comparable to a five-night land-only quote.',
-        },
-        {
-          claim: '"Upto 50% off"',
-          reality:
-            'Discounted against a list price that nobody has ever paid. Ignore the percentage and compare the final figure on identical terms.',
-        },
-      ],
-      conclusion:
-        'Normalise every quote to the same four things before comparing: number of nights, per person or per couple, GST in or out, and whether union charges are declared. Do that and the spread between serious operators collapses to a narrow band. Anything still far below it is excluding something you will pay for later.',
-    },
-
-    commodity: {
-      heading: 'Everyone offers the same inclusions. Here is what actually differs.',
-      intro:
-        'Read five Kashmir honeymoon pages and you will find the same list on every one. Those items are real, and we provide them too — but because everybody does, they tell you nothing about which operator to choose. The things that genuinely vary are rarely advertised, because they cost money.',
-      same: [
-        'Celebration cake',
-        'Candlelit dinner',
-        'Flower-bed room decoration',
-        'Shikara ride on Dal Lake',
-        'A houseboat night',
-        'Airport pickup and drop',
-      ],
-      different: [
-        {
-          label: 'Private vehicle, or shared',
-          body: 'The single most common silent downgrade in this market, and the one couples complain about most. Shared sightseeing means a fixed departure time and four strangers in the car on your honeymoon. Ours is private throughout, in the base price, not as an upgrade.',
-        },
-        {
-          label: 'A named houseboat, or a category',
-          body: 'A good Dal Lake houseboat is often the night people remember; a poor one is cold, noisy and memorably bad. "Deluxe houseboat" is not a specification. We name the property in your quote so you can look it up before you commit.',
-        },
-        {
-          label: 'How many times you change hotel',
-          body: 'A five-night itinerary that moves you every single night is cheaper to operate and worse to experience — you spend the honeymoon packing. We build two-night stays wherever the route allows.',
-        },
-        {
-          label: 'Room category and view',
-          body: 'The difference between the cheapest room and a lake-facing one is a small part of the total and a large part of the trip. It should be stated in the quote, not discovered at check-in.',
-        },
-        {
-          label: 'When the shikara is scheduled',
-          body: 'Mid-afternoon is when the light is flat and the lake is busiest. We schedule the hour before sunset. It costs nothing and it is the difference between the photograph you imagined and the one you get.',
-        },
-        {
-          label: 'Whether there is an empty day',
-          body: 'Most itineraries fill every slot because a full schedule looks like better value on paper. We deliberately leave one day unscheduled, and couples consistently tell us afterwards it was the one they remember.',
-        },
-      ],
-    },
-
-    months: [
-      { month: 'January', verdict: 'good', note: 'Deep snow and the most reliable Gulmarg conditions. Cold, slow, and genuinely beautiful. Some higher roads shut.' },
-      { month: 'February', verdict: 'good', note: 'Still reliably snowy and quieter than January. The best month for snow without peak-season crowds.' },
-      { month: 'March', verdict: 'mixed', note: 'The awkward month. Snow is receding, tulips have not arrived, and it can be grey. Cheap for a reason.' },
-      { month: 'April', verdict: 'best', note: 'Tulip garden in bloom for a narrow window, gardens at their best, comfortable days. Book early — the window is short and everyone knows about it.' },
-      { month: 'May', verdict: 'best', note: 'Warm days, everything open, valleys green. The most forgiving month for a first visit and our most requested.' },
-      { month: 'June', verdict: 'best', note: 'Peak season. Excellent weather and the only reliable window if you want to add Ladakh. Busiest and priciest.' },
-      { month: 'July', verdict: 'mixed', note: 'Escape from the plains and pleasantly cool, but this is monsoon elsewhere and mountain roads can be affected.' },
-      { month: 'August', verdict: 'mixed', note: 'Similar to July. Fine for Srinagar and the gardens, less reliable for the higher valleys.' },
-      { month: 'September', verdict: 'best', note: 'Clear skies, thinning crowds, and the start of autumn colour. Quietly the best value month of the year.' },
-      { month: 'October', verdict: 'best', note: 'Chinars turning, saffron in bloom near Pampore, crisp air. The most photogenic month and our own favourite.' },
-      { month: 'November', verdict: 'good', note: 'Cold and clear, very quiet, prices soften. Early snow is possible but not dependable.' },
-      { month: 'December', verdict: 'good', note: 'Snow arrives and Christmas and New Year are the busiest, priciest weeks of winter. Beautiful, but book far ahead.' },
-    ],
-
-    negative: {
-      heading: 'When Kashmir is the wrong honeymoon',
-      body: 'It is worth saying plainly, because nobody selling this trip will. Kashmir is a poor choice if you want guaranteed beach weather and a resort you never leave — the valley involves driving, and the drives are part of it. March is genuinely disappointing and we would rather move your dates than take the booking. If either of you is unwell at altitude, Gulmarg phase two and any Ladakh extension are not the honeymoon to attempt. And if what you actually want is complete privacy and zero logistics, the Maldives does that better than we can. We would rather tell you now than have you find out in the second week of your marriage.',
-    },
+      'No shared vehicle, no group schedule, no rushing. A private car, 4★ stays, a luxury camp under the Nubra dunes and afternoons with nothing in them.',
     body: [
-      'The most common honeymoon mistake in Kashmir is booking a five-night itinerary that moves hotels every single night. You spend the trip packing. We build honeymoon trips with two-night stays wherever possible, so you unpack once and actually settle in.',
-      'The second mistake is the shared shikara. A shared boat with four strangers is not the ride from the photographs. Ours are private, and we schedule them for the hour before sunset rather than mid-afternoon when the light is flat and the lake is busy.',
-      'We also build in a genuinely empty day. No pickup time, no driver waiting downstairs. Guests are surprised by how much that one unscheduled day ends up mattering.',
+      'Honeymoon trips fail when they are built like sightseeing tours with rose petals added. Ours is slower on purpose: unscheduled afternoons instead of an hour-by-hour plan, and the same private car and driver for the two of you from the airport to the last morning.',
+      'The altitude rules do not change because it is a honeymoon. The first afternoon in Leh is free, the second day stays low, and Pangong comes after Nubra, never on day two. It is the difference between a lakeside night you remember and one spent with a headache.',
+      'What does change is where you sleep and how the evenings go: a 4★ hotel in Leh with the room decorated for your arrival, a luxury tented camp among the Hunder dunes, and one candlelight dinner set up privately in the dunes, weather permitting.',
     ],
     promises: [
-      { title: 'Two-night stays', body: 'Unpack once. We route so you are not changing hotels every evening.' },
-      { title: 'Private, never shared', body: 'Shikara, vehicle, guide. You will not be sharing a boat with strangers.' },
-      { title: 'Rooms that earn it', body: 'Upgraded categories, lake or valley views where the property has them.' },
-      { title: 'One empty day', body: 'Deliberately unscheduled, because a honeymoon is not a sightseeing sprint.' },
+      { title: 'A private cab, never shared', body: 'One car and one driver for the two of you, for the whole trip.' },
+      { title: 'Better rooms', body: 'A 4★ hotel in Leh and a luxury tented camp in Nubra.' },
+      { title: 'One dinner for two', body: 'A private candlelight dinner in the Nubra dunes, weather permitting.' },
+      { title: 'Empty afternoons', body: 'Unscheduled time built in, instead of every hour filled.' },
     ],
+    months: [
+      { month: 'January – March', verdict: 'avoid', note: 'Leh is open by air, but the high roads to Nubra and Pangong are closed and nights are well below freezing.' },
+      { month: 'April', verdict: 'mixed', note: 'Quiet and cold. Some camps have not opened yet, so the route may need changing.' },
+      { month: 'May – June', verdict: 'best', note: 'The busiest and most photogenic months, with snow still lining the passes.' },
+      { month: 'July – August', verdict: 'good', note: 'The warmest weeks, but rain elsewhere can cause roadblocks. Build in a spare day.' },
+      { month: 'September', verdict: 'best', note: 'Our honest pick. Clear skies, thin crowds and golden poplars.' },
+      { month: 'October', verdict: 'good', note: 'Crisp and beautiful. Camps start closing toward the end of the month.' },
+      { month: 'November – December', verdict: 'avoid', note: 'Most high roads close. Not the trip you are imagining.' },
+    ],
+    negative: {
+      heading: 'When we would not book it',
+      body: 'If either of you has a cardiac or pulmonary condition, speak to your doctor before booking anything at this altitude. And if you only have four days, a Ladakh honeymoon with Nubra and Pangong is too rushed to be safe; we would rather plan a gentler Leh-only trip, or suggest you wait until you have the full week.',
+    },
     faqs: [
       {
-        q: 'How much does a Kashmir honeymoon package cost?',
-        a: '₹32,500 per person for five nights on twin-sharing, GST included, land only. That covers private transfers throughout, an upgraded room category, a houseboat night, and the honeymoon inclusions. Flights are quoted separately because they vary far more than the land cost does.',
+        q: 'What actually makes the honeymoon package different?',
+        a: 'A private cab for the two of you rather than a shared vehicle, 4★ hotels in Leh and a luxury tented camp in Nubra rather than standard camps, a room decorated on arrival, and one candlelight dinner set up privately at the dunes in Nubra, weather permitting. The pace is also slower: we build in unscheduled afternoons instead of filling every hour.',
       },
       {
-        q: 'Why are some Kashmir honeymoon packages so much cheaper?',
-        a: 'Usually one of five reasons: the price is per night rather than per trip, it excludes GST, it excludes the union taxi charges at Gulmarg and Sonmarg, it uses a shared sightseeing vehicle instead of a private one, or it is the lowest-season floor of a range. Normalise those and the gap between serious operators mostly disappears.',
+        q: 'Can we add Hanle or Turtuk to the honeymoon?',
+        a: 'Yes. Every route is a starting point. Hanle adds two nights and the darkest sky in India; Turtuk adds a night among the apricot orchards. Tell us how many days you have and we will reshape it.',
       },
       {
-        q: 'When is the best time for a Kashmir honeymoon?',
-        a: 'April and May for tulips, gardens and mild days. September and October for clear skies, autumn chinars and the saffron bloom — October is our own favourite and September is the best value. December to February if snow is the point. March is the one month we would steer you away from.',
-      },
-      {
-        q: 'How many nights do we need for a Kashmir honeymoon?',
-        a: 'Five is the right length and the one we build for. Four works but leaves no margin if weather closes a road, and a honeymoon is a bad trip to have no slack in. Six adds Pahalgam properly. Beyond seven you are into Ladakh territory, which is a different kind of holiday.',
-      },
-      {
-        q: 'Is a houseboat night worth it on a honeymoon?',
-        a: 'On the right boat, it is often the night couples remember. On the wrong one it is cold and noisy. The variable is the specific property, not the category, so we name it in your quote. If you would rather have every night in a hotel, that is fine and there is no penalty for saying so.',
-      },
-      {
-        q: 'Is Kashmir safe for a honeymoon?',
-        a: 'Tourist Kashmir has run normally for years and we operate here every day — our office is in Srinagar, not elsewhere. We will always give you the current on-ground picture straight when you ask, including when it is not what you were hoping to hear.',
-      },
-      {
-        q: 'Do you arrange cake, decoration and a candlelit dinner?',
-        a: 'Yes, and so does everyone else — these are table stakes rather than a differentiator. Tell us at booking rather than on the day, because the good options need notice. What we would rather you judge us on is the private vehicle, the named houseboat and the unscheduled day.',
-      },
-      {
-        q: 'Can we combine Kashmir with Ladakh for a honeymoon?',
-        a: 'Yes, from June to September. Be aware Ladakh means altitude, mandatory rest days and long drives — it is an adventure honeymoon, not a restful one. Many couples do Kashmir now and save Ladakh for an anniversary, and we think that is usually the better call.',
+        q: 'How does payment work?',
+        a: 'A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months.',
       },
     ],
-    hero: 'linear-gradient(180deg, rgba(10,8,14,0.42), rgba(10,8,14,0.82)), radial-gradient(130% 110% at 30% 12%, #8d5a72 0%, #4a2c42 50%, #14090f 100%)',
+    hero: 'linear-gradient(180deg, rgba(7,15,31,0.42), rgba(7,15,31,0.84)), url("/img/hanle-night-sky-sm.webp") center / cover',
   },
 
   {
     slug: 'family',
-    image: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1000&auto=format&fit=crop',
+    image: '/img/ladakh-hero-sm.webp',
     name: 'Family',
-    seoTitle: 'Family Tour Packages — Kashmir, Himachal & Vaishno Devi',
+    seoTitle: 'Ladakh Family Tour Packages',
     headline: 'Built around the slowest person in the group',
     intro:
-      'Shorter driving days, hotels with real rooms rather than converted attics, and an itinerary that survives contact with a seven-year-old and a seventy-year-old on the same trip.',
+      'Gentle first days, rooms that actually fit, and an itinerary sequenced by altitude, so it survives a seven-year-old and a seventy-year-old on the same trip.',
     body: [
-      'Family trips break on the drives. A six-hour transfer that is fine for two adults becomes the worst day of the holiday with a toddler or a grandparent in the car. We cap driving days and break long transfers with proper stops — not petrol pumps, actual places.',
-      'Hotel choice matters more than families expect. We only use properties where we know triple rooms are genuinely triple rooms and not a camp bed wedged beside a double, and where the kitchen will make plain food on request without a fuss.',
-      'And we build the day around when people actually have energy. Sightseeing in the morning, back by late afternoon, evenings free. Nobody enjoys a garden at 6pm with three tired children.',
+      'Family trips to Ladakh break on the altitude, not the sightseeing. We keep the first 48 hours low-effort for everyone, put the high passes on day three or later, and never drive to Pangong early in a trip. If someone struggles, we change the plan the same day.',
+      'Every vehicle carries an oxygen cylinder, an oximeter and a stocked first-aid kit, and our drivers are trained to recognise AMS. You travel in a private Innova Crysta or Xylo with a Ladakhi driver, never a shared cab.',
+      'The shorter routes around Leh and the Indus monasteries suit younger children and older parents best. Longer circuits work well for families with teenagers, with a free day in Leh built in.',
     ],
     promises: [
-      { title: 'Capped driving days', body: 'Long transfers broken with real stops. No six-hour pushes.' },
-      { title: 'Rooms that fit', body: 'Verified triples and connecting rooms — no camp beds passed off as extra occupancy.' },
-      { title: 'Food without drama', body: 'Jain, plain and no-onion-garlic arranged in advance at every property.' },
-      { title: 'Morning-heavy days', body: 'Sightseeing early, back by late afternoon, evenings free.' },
+      { title: 'Altitude first', body: 'An empty first afternoon and no high passes before day three.' },
+      { title: 'Oxygen in every vehicle', body: 'A cylinder, an oximeter and a first-aid kit, always.' },
+      { title: 'Your own car', body: 'A private 4×4 with a Ladakhi driver, never shared.' },
+      { title: 'Changes on the day', body: 'If someone is struggling, the plan changes. No argument, no extra charge.' },
     ],
     faqs: [
       {
-        q: 'What age is too young for Kashmir?',
-        a: 'Kashmir works at any age — Srinagar is at 1,585 m, which is not meaningful altitude. Gulmarg tops out at 2,650 m and the gondola goes higher, so we keep Phase 2 optional for families with very young children.',
+        q: 'Is Ladakh suitable for children and older parents?',
+        a: 'Yes, with the right route. Leh is at 3,500 m, so we keep the first days gentle for everyone. The Leh and monastery routes stay low with no high passes. If anyone in the family has a cardiac or pulmonary condition, speak to your doctor first and then to us.',
       },
       {
-        q: 'Is Ladakh suitable for children?',
-        a: 'We generally advise against Ladakh for children under five. Leh is at 3,500 m and the passes go far higher. For older children we build a gentler profile with extra acclimatisation days.',
+        q: 'How bad is the altitude, honestly?',
+        a: 'Roughly one traveller in four feels mild breathlessness or a headache on day one in Leh. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter.',
       },
       {
-        q: 'Can you arrange child seats or extra beds?',
-        a: 'Extra beds yes, at every property, arranged in advance. Child car seats are not standard in Indian tourist vehicles — if you need one, bring your own and tell us so we can allocate a vehicle that fits it.',
+        q: 'Can the itinerary be changed around us?',
+        a: 'Every route is a starting point. Travel with a toddler or a ninety-year-old, swap camps for hotels, drop Pangong or add a rest day, and we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries.',
       },
     ],
-    hero: 'linear-gradient(180deg, rgba(6,14,9,0.42), rgba(6,14,9,0.82)), radial-gradient(130% 110% at 40% 12%, #4f7d55 0%, #24422e 52%, #0a150e 100%)',
+    hero: 'linear-gradient(180deg, rgba(7,15,31,0.42), rgba(7,15,31,0.84)), url("/img/ladakh-hero-sm.webp") center / cover',
   },
 
   {
     slug: 'adventure',
-    image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1000&auto=format&fit=crop',
+    image: '/img/ladakh-hanle-sm.webp',
     name: 'Adventure',
-    seoTitle: 'Himalayan Adventure Tour Packages',
-    headline: 'High passes, real snow, and roads that count as an activity',
+    seoTitle: 'Ladakh Adventure Tours & Bike Trips',
+    headline: 'High passes, long roads and the highest motorable road on earth',
     intro:
-      'Gulmarg powder, Khardung La, Chandratal, the Shyok river road. Trips for people whose idea of a holiday involves altitude and some discomfort.',
+      'Khardung La, the Shyok river road, Manali to Leh over five passes, and Umling La at 5,798 m. Trips for people whose idea of a holiday involves altitude and a little discomfort.',
     body: [
-      'Adventure in the Himalayas is mostly a logistics problem disguised as a fitness problem. The mountain does not care how fit you are if the pass is shut, the permit is not filed, or you gained 2,000 metres in a day.',
-      'We handle the boring parts — Inner Line Permits, oxygen in every vehicle, drivers who have done these roads for a decade, and an acclimatisation profile that is not negotiable. What is left is the part you came for.',
-      'Skiing at Gulmarg is worth a specific mention. It has some of the best lift-accessed powder in Asia and almost no queues, and we work with certified local instructors rather than whoever is standing at the base with skis.',
+      'Adventure in Ladakh is mostly a logistics problem disguised as a fitness problem. The mountain does not care how fit you are if the pass is shut, the permit is not printed, or you gained two thousand metres in a day.',
+      'We handle the boring parts: Inner Line Permits applied for and printed before you land, oxygen in every vehicle, drivers who have run these passes for years, and an acclimatisation profile we do not negotiate on. What is left is the part you came for.',
+      'For riders, the Manali to Leh bike trip runs on Royal Enfield Himalayans with fuel and a mechanic included, and a support vehicle carrying luggage, spares and oxygen behind the group every day.',
     ],
     promises: [
-      { title: 'Permits, filed', body: 'Inner Line Permits for Nubra, Pangong, Tso Moriri, Turtuk. You sign, we file.' },
-      { title: 'Oxygen as standard', body: 'A cylinder in every high-altitude vehicle and twice-daily oximeter checks.' },
-      { title: 'Drivers who know the road', body: 'Not a booking-app driver from the plains. Ours have run these passes for years.' },
-      { title: 'Certified instructors', body: 'Ski and trek guides with actual certification, not a rented board and good luck.' },
+      { title: 'Permits, handled', body: 'Nubra, Pangong, Hanle, Tso Moriri and Umling La, printed before you arrive.' },
+      { title: 'Oxygen as standard', body: 'A cylinder, an oximeter and a first-aid kit in every vehicle.' },
+      { title: 'Drivers who know the road', body: 'Ladakhi drivers who run these passes every week of the season.' },
+      { title: 'A backup vehicle for riders', body: 'Luggage, spares, fuel, oxygen and a mechanic behind you every day.' },
     ],
     faqs: [
       {
         q: 'How fit do I need to be for Ladakh?',
-        a: 'Ordinary fitness is enough for the standard circuits — they are drives, not treks. What matters far more is acclimatisation discipline and no cardiac or severe respiratory history. If you have either, see a doctor before booking.',
+        a: 'Ordinary fitness is enough for the road circuits; they are drives, not treks. What matters far more is acclimatisation discipline and no cardiac or severe respiratory history. If you have either, see a doctor before booking.',
       },
       {
-        q: 'Can beginners ski at Gulmarg?',
-        a: 'Yes. The Kongdoori bowl above gondola Phase 1 has gentle beginner terrain and certified instructors. The Apharwat descents from Phase 2 are expert-only, genuinely.',
+        q: 'Do I need a special licence or previous Himalayan experience for the bike trip?',
+        a: 'A valid motorcycle licence is mandatory and we check it at handover. Previous high-altitude riding is not required, but you should be comfortable riding 150–250 km a day on mixed surfaces. If you are unsure, ride in the backup vehicle for the first two days and take over at Leh.',
       },
       {
-        q: 'Do you run treks?',
-        a: 'We arrange guided treks in Kashmir — Tarsar Marsar, the Great Lakes — and shorter routes in Ladakh with certified guides and full support. Tell us your dates and experience level and we will build it.',
+        q: 'Is the Manali–Leh highway safe?',
+        a: 'It is a well-travelled route from roughly late May to mid-October, and our drivers run it weekly through the season. It crosses five passes above 4,000 m, so we break the journey at Jispa and Sarchu rather than pushing through in one day.',
       },
     ],
-    hero: 'linear-gradient(180deg, rgba(16,10,4,0.40), rgba(16,10,4,0.84)), radial-gradient(130% 110% at 66% 14%, #c99a5e 0%, #6d4a2c 48%, #180f05 100%)',
+    hero: 'linear-gradient(180deg, rgba(7,15,31,0.42), rgba(7,15,31,0.84)), url("/img/ladakh-hanle-sm.webp") center / cover',
   },
 
   {
-    slug: 'pilgrimage',
-    image: 'https://images.unsplash.com/photo-1626714485848-d3e91d575fa9?q=80&w=1000&auto=format&fit=crop',
-    name: 'Pilgrimage',
-    seoTitle: 'Vaishno Devi & Amarnath Pilgrimage Packages',
-    headline: 'The logistics handled, so the journey is the only thing left',
+    slug: 'culture',
+    image: '/img/ladakh-monastery-sm.webp',
+    name: 'Monasteries & Culture',
+    seoTitle: 'Ladakh Monastery & Culture Tours',
+    headline: 'The cultural spine of Ladakh, walked slowly',
     intro:
-      'Yatra Parchi registration, cloakroom rules, helicopter assistance, and hotels close enough to the base that the morning does not start with a drive.',
+      'Thiksey at dawn prayers, Alchi’s 11th-century murals, Lamayuru above the Moonland and Hemis, the wealthiest monastery in Ladakh. Trips for people who came for the place, not only the view.',
     body: [
-      'Most pilgrimage stress is administrative. The Yatra Parchi that must be collected before you start. The cloakroom rules on leather and phones that nobody tells you until you are at the gate. The Bhairon Temple leg that people discover exists only after they have come back down.',
-      'We handle every one of those before you arrive, and brief you on the rest the evening you land, so the climb itself is uncomplicated.',
-      'We also strongly suggest pairing Vaishno Devi with Kashmir. Jammu to Srinagar is a scenic seven-hour drive or a twenty-minute flight. If you have flown from South or West India for the darshan, adding the valley costs a few days and doubles the trip.',
+      'The monasteries of the Indus valley are why Ladakh looks and feels the way it does. We give them the time they need: a monastery guide, unhurried mornings, and a route that stays along the valley at comfortable altitudes.',
+      'West of Leh are Likir, Alchi, Basgo and Lamayuru. East are Thiksey, Shey and Hemis. Further north, Turtuk offers something else again: a Balti village with its own language, food and architecture, open to visitors only since 2010.',
+      'If you can, time the trip for a monastery festival. The Hemis festival falls in June or July by the Tibetan calendar, and we will build your dates around it.',
     ],
     promises: [
-      { title: 'Registration done', body: 'Yatra Parchi completed on arrival. You do not queue for paperwork.' },
-      { title: 'Briefed properly', body: 'What can go up, what must stay in the cloakroom, when to start climbing.' },
-      { title: 'Helicopter assistance', body: 'We book where seats exist and always plan a walking backup, since flights are weather-dependent.' },
-      { title: 'Bhairon planned in', body: 'The 2.5 km beyond the Bhawan is in the day plan, not a surprise at 4pm.' },
+      { title: 'A monastery guide', body: 'Someone who can explain what you are looking at, not just open the door.' },
+      { title: 'Gentle altitude', body: 'The Indus valley route stays between about 3,100 m and 3,500 m.' },
+      { title: 'Festival dates', body: 'Tell us you want a festival and we plan the trip around it.' },
+      { title: 'Time at each stop', body: 'Two or three monasteries a day, not six.' },
     ],
     faqs: [
       {
-        q: 'How long does the Vaishno Devi climb take?',
-        a: 'Four to six hours one way on foot for most pilgrims, plus queue time for darshan. The helicopter to Sanjhichhat reduces the round trip to under two hours of travel with a short walk at the top.',
+        q: 'Which monasteries does the culture route cover?',
+        a: 'Thiksey, Shey and Hemis east of Leh, and Likir, Alchi, Basgo and Lamayuru to the west, with Leh Old Town and Shanti Stupa in between. We can add Diskit in Nubra or a night in Turtuk.',
       },
       {
-        q: 'Can elderly parents do the yatra?',
-        a: 'Yes, and many do. The track is paved and gradual rather than steep. Ponies, palkis and porters run the whole route, and the helicopter removes most of the climb. We arrange this for guests in their seventies regularly.',
+        q: 'Is it suitable for older travellers?',
+        a: 'It is the gentlest way to see Ladakh, with no high passes on the core route. Some monasteries involve stairs, and your guide will tell you in advance which ones.',
       },
       {
-        q: 'Do you arrange Amarnath Yatra?',
-        a: 'Yes, during the official yatra window (usually July–August) and subject to Shrine Board registration, which requires a medical certificate and opens months ahead. Contact us in the spring to plan it.',
+        q: 'What should we wear inside the monasteries?',
+        a: 'Covered shoulders and knees, and shoes off where asked. Photography is usually fine in courtyards and often not allowed inside prayer halls, so ask first.',
       },
     ],
-    hero: 'linear-gradient(180deg, rgba(14,7,2,0.42), rgba(14,7,2,0.84)), radial-gradient(130% 110% at 38% 18%, #c2701c 0%, #6d360b 48%, #180a03 100%)',
+    hero: 'linear-gradient(180deg, rgba(7,15,31,0.42), rgba(7,15,31,0.84)), url("/img/ladakh-monastery-sm.webp") center / cover',
   },
 
   {
     slug: 'group',
-    image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1000&auto=format&fit=crop',
-    name: 'Groups & Corporate',
-    seoTitle: 'Group & Corporate Tour Packages — Kashmir & Ladakh',
-    headline: 'Fifteen people, one plan, nobody left at a petrol pump',
+    image: '/img/ladakh-hanle-sm.webp',
+    name: 'Group Tours',
+    seoTitle: 'Ladakh Group Tours & Fixed Departures',
+    headline: 'Arrive alone. Leave with fourteen friends.',
     intro:
-      'Tempo Travellers and coach fleets, block-booked hotels, a single point of contact, and one consolidated invoice with GST at the end.',
+      'Twice-monthly fixed departures of 8 to 16 travellers with a trip captain from our Leh team. Most people who book these come on their own, which is rather the point.',
     body: [
-      'Group travel fails on the small things. Two vehicles arrive at different times. Half the rooms are on the fourth floor with no lift. The invoice arrives in eleven pieces and finance sends it back.',
-      'We run groups from a single coordinator who is on WhatsApp for the whole trip, block-book rooms on the same floors, and issue one consolidated GST invoice at the end that your accounts team will accept without a follow-up.',
-      'For corporate offsites we also handle conference rooms, projector and AV, themed dinners and team activities — everything from a Wazwan night to a treasure hunt across the Mughal gardens.',
+      'Fixed departures run from mid-May to late September, usually leaving on the 5th and 20th of each month. The route covers Leh, the Sham Valley, Nubra, Pangong and Hanle, with the same altitude rules as every private trip we run.',
+      'Solo travellers are the majority of our group bookings. You are matched into twin-sharing with someone of the same gender, or you can pay a single-occupancy supplement for your own room.',
+      'If your dates fall between departures, or you are a group of six or more, we run the same itinerary privately at close to the same per-person cost.',
     ],
     promises: [
-      { title: 'One coordinator', body: 'A single named contact on WhatsApp for the entire trip. Not a call centre.' },
-      { title: 'Blocked together', body: 'Rooms on the same floors, vehicles convoyed, nobody separated from the group.' },
-      { title: 'One GST invoice', body: 'Consolidated, compliant, issued at the end. Your finance team will accept it first time.' },
-      { title: 'Offsite-ready', body: 'Conference rooms, AV, themed dinners and team activities arranged on request.' },
+      { title: 'A trip captain', body: 'Someone from our Leh team travels with the group throughout.' },
+      { title: '8 to 16 people', body: 'Big enough to be sociable, small enough to stay flexible.' },
+      { title: 'Solo-friendly', body: 'Twin-sharing matched by gender, or a single room on request.' },
+      { title: 'Private at group prices', body: 'Six or more of you? We run the same route privately.' },
     ],
     faqs: [
       {
-        q: 'What is your minimum group size?',
-        a: 'Group pricing starts at ten travelling together. Below that our standard per-person rates are usually better anyway.',
+        q: 'How big are the groups, and can I join on my own?',
+        a: 'Fixed departures run at 8 to 16 travellers with a trip captain from our Leh team. Solo travellers are welcome and are the majority of our group bookings.',
       },
       {
-        q: 'Do you handle corporate offsites?',
-        a: 'Yes — conference rooms, projector and AV, themed dinners, team-building activities and full event coordination alongside the travel itself.',
+        q: 'When do the fixed departures run?',
+        a: 'Twice monthly from mid-May to late September, usually departing on the 5th and 20th. Dates for the coming season are confirmed in January.',
       },
       {
-        q: 'How does payment work for a group?',
-        a: 'A booking advance to confirm hotels and vehicles, then the balance before arrival. One consolidated GST invoice at the end. For corporate bookings we can work to your PO and payment-terms process.',
+        q: 'Can we book a private group instead?',
+        a: 'Yes. If you are six or more people, or your dates fall between departures, we run the same itinerary privately at close to the same per-person cost.',
       },
     ],
-    hero: 'linear-gradient(180deg, rgba(6,12,16,0.42), rgba(6,12,16,0.82)), radial-gradient(130% 110% at 28% 12%, #3d6d82 0%, #1c3a49 52%, #08141b 100%)',
+    hero: 'linear-gradient(180deg, rgba(7,15,31,0.42), rgba(7,15,31,0.84)), url("/img/ladakh-hanle-sm.webp") center / cover',
   },
 ];
 

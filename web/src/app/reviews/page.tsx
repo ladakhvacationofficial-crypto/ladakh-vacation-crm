@@ -9,7 +9,7 @@ import { EnquiryForm } from '@/components/enquiry-form';
 
 export const metadata: Metadata = {
   title: 'Guest Reviews — What Travellers Say About Ladakh Vacation',
-  description: `Read ${SITE.stats.reviewCount} verified guest reviews of Ladakh Vacation. ${SITE.stats.rating} out of 5 across Kashmir, Ladakh, Himachal and Vaishno Devi trips.`,
+  description: `What travellers say about their Ladakh trips with Ladakh Vacation. Rated ${SITE.stats.rating} out of 5 across ${SITE.stats.reviewCount.toLocaleString('en-IN')}+ reviews on Google.`,
   alternates: { canonical: '/reviews' },
 };
 
@@ -32,7 +32,7 @@ export default function ReviewsPage() {
       <PageHero
         kicker={`${SITE.stats.rating} out of 5 · ${SITE.stats.reviewCount} reviews`}
         title="The reviews are the itinerary."
-        lede="We do not publish curated highlights. These are the trips, the months and the things guests actually mentioned — including the times we talked someone out of a booking."
+        lede="A few of the things travellers have told us after their trips. The full, unfiltered set lives on our Google Business Profile."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Reviews' }]}
         background="linear-gradient(180deg, rgba(10,8,4,0.42) 0%, rgba(10,8,4,0.92) 100%), radial-gradient(140% 120% at 30% 8%, #a8842f 0%, #634d22 46%, #120d04 100%)"
       >

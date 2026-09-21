@@ -59,8 +59,8 @@ export default function PrivacyPolicyPage() {
               </p>
               <ul className="mt-3 list-disc pl-6 space-y-1.5 text-[14.5px] text-ink-700">
                 <li>Designing tailored day-by-day travel itineraries and generating transparent price estimates.</li>
-                <li>Connecting you with an assigned Srinagar-based tour specialist via phone, WhatsApp, or email.</li>
-                <li>Processing hotel, houseboat, and local transport bookings upon quotation confirmation.</li>
+                <li>Connecting you with an assigned trip planner in Leh via phone, WhatsApp, or email.</li>
+                <li>Processing hotel, camp and local transport bookings upon quotation confirmation.</li>
                 <li><strong>Strict Supplier Protection:</strong> We never sell, rent, or trade your personal information to third-party marketing databases.</li>
               </ul>
             </div>

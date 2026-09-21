@@ -1,12 +1,14 @@
 /**
  * Destination hubs — the "pillar" pages in our hub-and-spoke SEO model.
- * Each hub links down to its packages (the spokes) and up from the home grid.
+ * Each hub links down to the packages whose route passes through it (the
+ * spokes) and up from the home grid.
  *
- * Photos: `tone` picks a placeholder gradient until real photography lands in
- * /public/images/destinations/<slug>.jpg.
+ * The four hubs are the same four regions the Ads landers present as "Four
+ * Ladakhs, one journey", with the same photographs.
  */
 
-export type Tone = 'kashmir' | 'ladakh' | 'himachal' | 'vaishno';
+/** Picks the photograph behind cards and heroes. One per lander photo. */
+export type Tone = 'valley' | 'monastery' | 'highroad' | 'nightsky';
 
 export type Destination = {
   slug: string;
@@ -32,265 +34,243 @@ export type Destination = {
   heroImage: string;
 };
 
+const AIRPORT = 'Leh (IXL), Kushok Bakula Rimpochee Airport, about 10 minutes from town';
+
 export const DESTINATIONS: Destination[] = [
   {
-    slug: 'kashmir',
-    name: 'Kashmir',
-    seoTitle: 'Kashmir Tour Packages',
-    headline: 'Where the Himalayas learned to write poetry',
+    slug: 'leh',
+    name: 'Leh & Sham Valley',
+    seoTitle: 'Leh Tour Packages',
+    headline: 'Your first 48 hours, spent gently',
     intro:
-      "Dal Lake at first light. Gulmarg's gondola climbing into cloud. Sonmarg's glacier meadows, Pahalgam's pine valleys. Kashmir is India's most complete mountain destination — and we've lived here our whole lives.",
+      'Old Town lanes, Shanti Stupa at dusk, and the low-altitude Sham loop that lets your body catch up before the passes begin. Every Ladakh trip starts here, and how you spend these two days decides how the rest of it goes.',
     body: [
-      "Most Kashmir itineraries you'll find online were written by someone who has never spent a winter here. They send you to Gulmarg on the one day the gondola is shut, book you into a houseboat on the wrong side of the lake, and route Pahalgam and Sonmarg back-to-back so you spend two full days in a car.",
-      "We build it differently because we live here. Our office is in Hawal, a fifteen-minute drive from Dal Gate. Our drivers are Kashmiri. When we tell you late April is better than early April, it's because we drove that road last week.",
-      "A Kashmir trip works best across five to seven nights: three in Srinagar as your base, one or two in Gulmarg or Pahalgam, and a full unhurried day for Sonmarg. Anything shorter and the valley becomes a checklist. Anything longer and you'll want to start adding Doodhpathri and Yusmarg — which, honestly, you should.",
+      'Leh sits at 3,500 m. You arrive by air in about ninety minutes from Delhi, which is far faster than your body can adjust, and roughly one traveller in four feels mild breathlessness or a headache on the first day. That is why the first afternoon on every itinerary we run is deliberately empty: hydration, a slow walk to the Main Bazaar, an early dinner.',
+      'Day two stays low. The Sham Valley loop runs west along the Indus to Magnetic Hill, the Sangam where the Indus meets the Zanskar, and Alchi, whose 11th-century murals are among the oldest surviving Buddhist paintings in the Himalaya. You see a great deal and gain almost no height, which is exactly the point.',
+      'Leh itself rewards the time. The 17th-century palace above the Old Town, the lanes below it, Shanti Stupa at sunset over the Stok range, and the cafés and craft shops along Changspa Road. Short trips can be built entirely around Leh and the Indus valley, with no high passes at all.',
     ],
-    bestTime: 'March to October, plus December to February for snow',
-    bestMonths: 'Apr–Jun · Sep–Oct · Dec–Feb (snow)',
-    idealDuration: '5 to 7 nights',
-    startingFrom: 18500,
-    airport: 'Srinagar (SXR) — 30 min from Dal Lake',
-    altitude: '1,585 m (Srinagar) to 2,650 m (Gulmarg)',
+    bestTime: 'April to October; Leh is reachable by air all year',
+    bestMonths: 'Apr–Oct (Sep–Oct our pick)',
+    idealDuration: '3 to 5 nights',
+    startingFrom: 14500,
+    airport: AIRPORT,
+    altitude: '3,100 m (Sham Valley) to 3,500 m (Leh)',
     regions: [
-      { name: 'Srinagar', note: 'Dal Lake, houseboats, Mughal gardens, Old City' },
-      { name: 'Gulmarg', note: "Asia's highest gondola, ski slopes, the meadow of flowers" },
-      { name: 'Sonmarg', note: 'Thajiwas glacier, alpine meadows, the Zoji-La gateway' },
-      { name: 'Pahalgam', note: 'Aru, Betaab and Chandanwari valleys along the Lidder' },
-      { name: 'Doodhpathri', note: 'Off-radar meadows — a quiet day trip from Srinagar' },
-      { name: 'Yusmarg', note: 'Nomad shepherd country. The Kashmir tour buses miss.' },
+      { name: 'Leh Old Town', note: 'The palace, the lanes below it and the Main Bazaar' },
+      { name: 'Shanti Stupa', note: 'Sunset over the Stok range, a short drive above town' },
+      { name: 'Magnetic Hill', note: 'The stretch of road where a car appears to roll uphill' },
+      { name: 'Sangam', note: 'Where the green Indus meets the brown Zanskar' },
+      { name: 'Shey & Thiksey', note: 'The copper Buddha at Shey and the hilltop gompa at Thiksey' },
+      { name: 'Changspa Road', note: 'Cafés, bakeries and craft shops for a free afternoon' },
     ],
     highlights: [
-      'A night on a deluxe Dal Lake houseboat, carved walnut and all',
-      'Gondola Phase 1 and Phase 2 to Apharwat Peak, Gulmarg',
-      'Thajiwas glacier by pony, Sonmarg',
-      'Sunset shikara ride through the floating vegetable market',
-      'A full Wazwan — the 36-course Kashmiri wedding feast',
-      'Saffron fields at Pampore (October bloom)',
+      'A deliberately empty first afternoon, planned as carefully as any sightseeing day',
+      'Sunset at Shanti Stupa over the Stok range',
+      'Leh Palace and the Old Town lanes on foot',
+      'The Indus–Zanskar confluence at the Sangam',
+      'Alchi’s 11th-century murals on the Sham Valley loop',
+      'Morning prayers at Thiksey',
     ],
     knowBefore: [
-      { label: 'Permits', value: 'None needed for Indian nationals. Foreign nationals need passport + standard Indian visa.' },
-      { label: 'Connectivity', value: 'Postpaid SIMs only. Prepaid from other states will not work in J&K.' },
-      { label: 'ATMs', value: 'Widely available in Srinagar. Carry cash for Gulmarg, Sonmarg and Pahalgam.' },
-      { label: 'Clothing', value: 'Layers year-round. Nights drop sharply even in June. Snow gear rentable in Gulmarg.' },
+      { label: 'Altitude', value: 'Leh is at 3,500 m. Rest on day one, drink plenty of water, and keep the first 48 hours low-effort.' },
+      { label: 'Permits', value: 'None needed for Leh and the Sham Valley. Nubra, Pangong and Hanle need Inner Line Permits, which we arrange.' },
+      { label: 'Connectivity', value: 'Postpaid mobile connections work in Leh. Prepaid SIMs from other states generally do not.' },
+      { label: 'Clothing', value: 'Layers in every month. Days are bright and warm, and nights drop sharply even in summer.' },
     ],
     faqs: [
       {
-        q: 'Is Kashmir safe for tourists right now?',
-        a: 'Yes. Tourism runs year-round and 2024–25 were record seasons for visitor numbers. Our staff live in Srinagar and track conditions daily — if anything regional changes, we tell you before your trip, not after you land.',
+        q: 'How many days should I spend in Leh before going higher?',
+        a: 'Two nights at the least. The first afternoon should be rest, and the second day should stay low: the Sham Valley loop or the monasteries along the Indus. On every route we run, the high passes start on day three or later.',
       },
       {
-        q: 'When is the best time to visit Kashmir?',
-        a: 'April to June for tulips, gardens and comfortable days. September to October for chinar autumn colour and saffron bloom. December to February if you specifically want snow in Gulmarg. July–August is warm and busy; it is the cheapest window.',
+        q: 'Can I do Ladakh in just three or four days?',
+        a: 'Yes, if you stay around Leh. Our 3-night trip covers Leh, the Indus monasteries and the Sham Valley with no high passes, because four days is not enough time to earn them safely. Add a night and you can reach Nubra over Khardung La.',
       },
       {
-        q: 'How many days do I need for Kashmir?',
-        a: 'Five nights covers Srinagar, Gulmarg and Pahalgam without rushing. Six or seven adds Sonmarg properly and gives you a free day on the lake. Four nights works but you will be moving every day.',
-      },
-      {
-        q: 'Are houseboats worth it?',
-        a: 'One night, yes — it is genuinely unlike anywhere else. Two or more and most guests wish they had moved to a hotel. We usually book one houseboat night and the rest on land.',
-      },
-      {
-        q: 'Do we need to book the Gulmarg gondola in advance?',
-        a: 'Phase 1 tickets are usually available on arrival. Phase 2 sells out in peak season and during snow months. We pre-book both where the operator allows it.',
+        q: 'Is Leh open in winter?',
+        a: 'Leh is reachable by air all year, and the town and the Indus valley monasteries stay open. From November to March most high roads close, so Nubra, Pangong and Hanle are best planned between May and October.',
       },
     ],
-    tone: 'kashmir',
-    image: 'https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1000&auto=format&fit=crop',
-    heroImage: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?q=80&w=1600&auto=format&fit=crop',
+    tone: 'valley',
+    image: '/img/ladakh-hero-sm.webp',
+    heroImage: '/img/ladakh-hero.webp',
   },
 
   {
-    slug: 'ladakh',
-    name: 'Ladakh',
-    seoTitle: 'Ladakh Tour Packages',
-    headline: 'The land where the sky begins',
+    slug: 'ladakh-monasteries',
+    name: 'Monastery Country',
+    seoTitle: 'Ladakh Monastery Tours',
+    headline: 'The cultural spine of Ladakh, walked slowly',
     intro:
-      'Cold desert at 3,500 metres. Monasteries older than most countries. Passes that steal your breath in both senses. Ladakh is a bucket-list trip — and altitude is the thing that ruins most of them.',
+      'Thiksey at sunrise prayers, the 11th-century woodwork at Alchi, and Lamayuru’s moonland ridges. The monasteries of the Indus valley are the reason Ladakh looks the way it does, and they deserve more than a photo stop.',
     body: [
-      "Ladakh punishes bad planning more than any destination in India. Guests fly into Leh at 3,500 m, get driven straight to Khardung La at 5,600 m the next morning, and spend the rest of the trip in a hotel room with a headache and an oxygen cylinder.",
-      "We schedule the first full day in Leh as a rest day. No exceptions, no negotiation. Monastery visits within the valley, an easy afternoon, early night. High passes start day three. It costs you one day of itinerary and saves the entire trip.",
-      "Beyond acclimatisation, Ladakh rewards slowness. Pangong deserves an overnight, not a photo stop. Nubra is worth two nights if you can spare them. And Turtuk — India's last village before Pakistan, Balti-speaking, apricot-growing — is the part guests talk about years later.",
+      'Most Ladakh itineraries treat the monasteries as a morning filler between passes. We build a whole trip around them instead: five nights, a monastery guide, and a route along the Indus that stays at comfortable altitudes the whole way.',
+      'West of Leh the road passes Likir and its giant seated Maitreya, Alchi, where the temple walls carry some of the oldest Buddhist paintings in the Himalaya, and the ruined royal citadel at Basgo. Further on is Lamayuru, one of the oldest monasteries in Ladakh, set above eroded ridges that people call the Moonland.',
+      'East of Leh are the great working monasteries: Thiksey on its hill, where morning prayers start at dawn, Shey with its copper Buddha, and Hemis, the wealthiest monastery in Ladakh and home of the summer Hemis festival. It is the gentlest way to see Ladakh, and one of the richest.',
     ],
-    bestTime: 'May to September, when the passes and roads are open',
-    bestMonths: 'May–Sep (Jun–Aug peak)',
-    idealDuration: '6 to 9 nights',
-    startingFrom: 32500,
-    airport: 'Leh (IXL) — direct flights from Delhi',
-    altitude: '3,500 m (Leh) to 5,600 m (Khardung La)',
+    bestTime: 'April to October',
+    bestMonths: 'Apr–Oct',
+    idealDuration: '5 to 6 nights',
+    startingFrom: 14500,
+    airport: AIRPORT,
+    altitude: '3,100 m (Alchi) to 3,510 m (Lamayuru)',
     regions: [
-      { name: 'Leh', note: 'Acclimatisation base, old town, monasteries, night market' },
-      { name: 'Nubra Valley', note: 'Khardung La, cold-desert dunes, double-humped camels' },
-      { name: 'Pangong Tso', note: 'The lake from 3 Idiots. Overnight camps on the shore.' },
-      { name: 'Tso Moriri', note: 'Higher, quieter and more spiritual than Pangong' },
-      { name: 'Turtuk', note: "India's last village before Pakistan — Balti culture, apricots" },
-      { name: 'Zanskar', note: 'Sham valley, Lamayuru moonland, the Indus–Zanskar sangam' },
+      { name: 'Thiksey', note: 'Hilltop gompa with morning prayers at dawn' },
+      { name: 'Hemis', note: 'The wealthiest monastery in Ladakh, home of the Hemis festival' },
+      { name: 'Alchi', note: '11th-century murals and carved woodwork' },
+      { name: 'Likir', note: 'A giant seated Maitreya above the valley' },
+      { name: 'Basgo', note: 'The ruined citadel of an old Ladakhi capital' },
+      { name: 'Lamayuru', note: 'A cliff-edge gompa above the Moonland ridges' },
     ],
     highlights: [
-      'A lakeside night at Pangong Tso under a full Milky Way',
-      'Khardung La at 18,380 ft — one of the highest motorable passes on earth',
-      'Diskit Monastery and a Bactrian camel ride across Hunder dunes',
-      'Dinner with a Ladakhi family in a traditional home-stay',
-      'Magnetic Hill, Gurudwara Pathar Sahib and the Sangam confluence',
-      'Thiksey Monastery morning prayers at sunrise',
+      'Dawn prayers at Thiksey',
+      'Alchi’s 11th-century murals with a monastery guide',
+      'The Moonland ridges at Lamayuru',
+      'The citadel ruins at Basgo',
+      'Hemis, and Shey’s copper Buddha',
+      'An unhurried route with no high passes',
     ],
     knowBefore: [
-      { label: 'Acclimatisation', value: 'Day 1 in Leh is a mandatory rest day. Non-negotiable on every itinerary we sell.' },
-      { label: 'Permits', value: 'Inner Line Permits needed for Nubra, Pangong, Tso Moriri and Turtuk. We file them; you just sign.' },
-      { label: 'Oxygen', value: 'Every vehicle carries a cylinder. Guests get pulse-oximeter readings twice daily.' },
-      { label: 'Season', value: 'Roads to Nubra and Pangong close roughly Oct–Apr. Flying in is the only reliable option off-season.' },
+      { label: 'Dress', value: 'Covered shoulders and knees inside the monasteries. Remove shoes where asked.' },
+      { label: 'Photography', value: 'Allowed in most courtyards, often not inside the prayer halls. Ask first.' },
+      { label: 'Entry tickets', value: 'Each monastery charges a small entry fee, paid on the day.' },
+      { label: 'Festivals', value: 'The Hemis festival falls in June or July by the Tibetan calendar. Ask us for the year’s dates.' },
     ],
     faqs: [
       {
-        q: 'How do I handle the altitude in Ladakh?',
-        a: 'Fly into Leh and rest completely for the first 24 hours — no sightseeing, no exertion, lots of water. Our itineraries schedule high passes from day three onward. Every vehicle carries oxygen and we take oximeter readings morning and evening.',
+        q: 'Is a monastery tour suitable for older parents?',
+        a: 'It is the gentlest way to see Ladakh. The route follows the Indus valley between about 3,100 m and 3,500 m, with no high passes, and the pace is set around rest. Some monasteries involve stairs, and your guide will tell you in advance which ones.',
       },
       {
-        q: 'Should I fly to Leh or drive via Manali or Srinagar?',
-        a: 'Fly if this is your first Himalayan trip — the road journeys gain altitude fast and significantly raise AMS risk. The Manali–Leh and Srinagar–Leh highways are spectacular but add two days each way and are best for guests who have been at altitude before.',
+        q: 'Which is the oldest monastery we will visit?',
+        a: 'Lamayuru is one of the oldest monasteries in Ladakh, and the murals at Alchi date to the 11th century. Your monastery guide explains the history at each stop.',
       },
       {
-        q: 'Are Inner Line Permits included in the package?',
-        a: 'Yes. We handle permits for Nubra, Pangong, Tso Moriri and Turtuk as part of every Ladakh package. You provide ID copies; we do the filing.',
-      },
-      {
-        q: 'Can families with children visit Ladakh?',
-        a: 'Yes, with care. We generally advise against Ladakh for children under five and for anyone with cardiac or severe respiratory conditions. For older children we build a gentler profile with extra rest days.',
-      },
-      {
-        q: 'What is the best month for Ladakh?',
-        a: 'June to early September has the most reliable road access and the mildest weather. May is beautiful and quieter but some high passes may still be clearing. Mid-September brings golden light and thinner crowds.',
+        q: 'Can we time the trip for the Hemis festival?',
+        a: 'Yes. The festival follows the Tibetan lunar calendar and usually falls in June or July. Tell us you want it when you enquire and we will build the dates around it, and book early, because Leh fills up that week.',
       },
     ],
-    tone: 'ladakh',
-    image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1000&auto=format&fit=crop',
-    heroImage: 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=1600&auto=format&fit=crop',
+    tone: 'monastery',
+    image: '/img/ladakh-monastery-sm.webp',
+    heroImage: '/img/ladakh-monastery.webp',
   },
 
   {
-    slug: 'himachal',
-    name: 'Himachal',
-    seoTitle: 'Himachal Tour Packages',
-    headline: 'From cedar hush to Spiti silence',
+    slug: 'nubra-pangong',
+    name: 'Nubra & Pangong',
+    seoTitle: 'Nubra Valley & Pangong Tour Packages',
+    headline: 'Over Khardung La, and on until the land stops',
     intro:
-      'Shimla for colonial calm, Manali for adventure, Dharamshala for Tibet-in-India, and Spiti for the trip that quietly rearranges you. Himachal is four holidays wearing one name.',
+      'Over Khardung La into the dunes at Hunder, north to Turtuk’s apricot orchards, then east until the land stops and Pangong’s impossible blue begins. This is the Ladakh most people picture, and the part where the order of the days matters most.',
     body: [
-      'Himachal is the most-visited hill state in India, which is exactly its problem. Mall Road in May is a traffic jam with a view. Solang Valley in June is a queue. The difference between a wonderful Himachal trip and a frustrating one is almost entirely about timing and routing.',
-      'We route around the crowds — early starts, the quieter side of each valley, and shoulder-season dates wherever your calendar allows. Shimla in late September is a different town from Shimla in mid-June.',
-      'And if you have eight days and a sense of adventure, skip the classic circuit entirely and do Spiti. Kaza, Key Monastery, Chandratal. High-altitude cold desert, Buddhist villages at 4,000 m, and roads that will be the best and worst part of your trip.',
+      'Khardung La, at 5,359 m, is the road into Nubra. On the far side the valley opens out at about 3,100 m: sand dunes at Hunder with double-humped Bactrian camels, the great Maitreya above Diskit, and villages set among poplars and sea buckthorn. North again is Turtuk, a Balti village closed to visitors until 2010, which is worth a night of its own.',
+      'Pangong Tso sits at 4,350 m on the border with Tibet. Most of it lies on the far side of the line; the part in India is still long enough to change colour hour by hour. The single most common altitude mistake in Ladakh is driving there on day two. We never do: on every route we run, Pangong comes after two nights around Leh and a night in Nubra.',
+      'The better route to the lake comes east from Nubra along the Shyok river, which avoids a second high-pass crossing in one trip, and you return to Leh over Chang La at 5,360 m. The camps at Nubra and Pangong are seasonal, roughly May to September, and the ones we use have attached bathrooms, heating and hot water.',
     ],
-    bestTime: 'March to June and September to November; December to February for snow',
-    bestMonths: 'Mar–Jun · Sep–Nov · Dec–Feb (snow)',
+    bestTime: 'May to September, when the camps are open',
+    bestMonths: 'May–Sep',
     idealDuration: '5 to 8 nights',
-    startingFrom: 15500,
-    airport: 'Chandigarh (IXC) or Bhuntar (KUU) for Manali',
-    altitude: '2,050 m (Shimla) to 4,590 m (Kunzum La, Spiti)',
+    startingFrom: 18900,
+    airport: AIRPORT,
+    altitude: '2,900 m (Turtuk) to 5,360 m (Chang La)',
     regions: [
-      { name: 'Manali', note: 'Solang, Atal Tunnel, Old Manali cafés, Hadimba temple' },
-      { name: 'Shimla', note: 'The Ridge, Kufri, Mall Road, the Kalka toy train' },
-      { name: 'Dharamshala & McLeodganj', note: 'Dalai Lama residence, Triund trek, Bhagsu falls' },
-      { name: 'Spiti Valley', note: 'Kaza, Key Monastery, Chandratal — high cold desert' },
-      { name: 'Kasol & Tosh', note: 'Parvati valley, riverside cafés, the backpacker circuit' },
-      { name: 'Dalhousie & Khajjiar', note: "Quiet colonial hill station and India's mini-Switzerland" },
+      { name: 'Khardung La', note: 'The pass into Nubra at 5,359 m, crossed with a short stop' },
+      { name: 'Hunder', note: 'Sand dunes and Bactrian camels on the valley floor' },
+      { name: 'Diskit', note: 'The monastery and its great Maitreya above the valley' },
+      { name: 'Turtuk', note: 'A Balti village of apricot orchards, open to visitors since 2010' },
+      { name: 'Shyok river road', note: 'The quieter way from Nubra to Pangong' },
+      { name: 'Pangong Tso', note: 'The lake at 4,350 m, with camps on the shoreline' },
     ],
     highlights: [
-      'The Kalka–Shimla toy train, a UNESCO World Heritage line',
-      'Atal Tunnel to Sissu and the Lahaul valley',
-      'Paragliding at Solang or Bir-Billing, one of the world\'s best sites',
-      'Morning prayers at Namgyal Monastery, McLeodganj',
-      'Key Monastery at sunrise over the Spiti river',
-      'Camping beside Chandratal, the moon lake',
+      'Crossing Khardung La at 5,359 m',
+      'Bactrian camels at golden hour in the Hunder dunes',
+      'A night in Turtuk, among the apricot orchards',
+      'The Shyok river road east to Pangong',
+      'Sunrise on Pangong Tso from a shoreline camp',
+      'Back over Chang La, with a stop at Thiksey on the way down',
     ],
     knowBefore: [
-      { label: 'Rohtang Pass', value: 'Opens roughly mid-May to mid-October and needs a separate permit. The Atal Tunnel now bypasses it year-round.' },
-      { label: 'Road time', value: 'Distances are short but hill roads are slow. Delhi–Manali is 12–14 hours by road; Chandigarh–Shimla is 3–4.' },
-      { label: 'Spiti season', value: 'The Manali–Kaza route opens roughly June–October. Shimla–Kaza stays open longer but is a longer drive.' },
-      { label: 'Peak crowds', value: 'Mid-May to end-June and Christmas–New Year are the busiest and priciest windows.' },
+      { label: 'Permits', value: 'Nubra, Turtuk and Pangong need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print them before you arrive.' },
+      { label: 'Altitude', value: 'Pangong is at 4,350 m. On all our routes it comes after two nights around Leh and a night in Nubra, which do the acclimatisation work.' },
+      { label: 'Camps', value: 'Seasonal, roughly May to September. Ours have attached bathrooms, heating and hot water.' },
+      { label: 'Oxygen', value: 'Every vehicle carries a cylinder, an oximeter and a first-aid kit, and drivers are trained to recognise AMS.' },
     ],
     faqs: [
       {
-        q: 'Can I combine Shimla and Manali in one trip?',
-        a: 'Yes — the six-night Shimla–Manali circuit is our most-booked Himachal package. The drive between them is roughly seven hours, so we break it with a stop rather than doing it in one push.',
+        q: 'Why do you not go to Pangong on the second day?',
+        a: 'Because driving from Leh to a 4,350 m lake over a 5,360 m pass on day two is the most common altitude mistake in Ladakh. A meaningful number of people who do it spend the night at the lake with a headache and no sleep. We put Pangong after two nights around Leh and a night in Nubra.',
       },
       {
-        q: 'When does Rohtang Pass open?',
-        a: 'Typically mid-May to mid-October, weather permitting, and it requires a permit with a daily vehicle cap. The Atal Tunnel is open year-round and reaches Sissu and Lahaul without the pass, so we route through it when Rohtang is shut.',
+        q: 'Is Turtuk worth adding?',
+        a: 'Yes, as an overnight rather than a day trip. It is seven hours from Leh via Khardung La and Nubra, and the Balti culture, food and apricot orchards are unlike anywhere else in Ladakh. The 7-night and 8-night routes include it.',
       },
       {
-        q: 'Is Spiti suitable for a first Himalayan trip?',
-        a: 'Only if you are comfortable with high altitude and long, rough drives. Spiti crosses 4,000 m and medical facilities are sparse. If it is your first mountain trip, do the Shimla–Manali circuit and save Spiti for the next one.',
-      },
-      {
-        q: 'Where will I actually see snow?',
-        a: 'From late December to February, Solang and Kufri are reliable. Outside those months you need to go higher — Rohtang when open, or the Atal Tunnel exit at Sissu, where snow lingers into May.',
+        q: 'What are the camps at Nubra and Pangong like?',
+        a: 'We use deluxe or Swiss camps with attached bathrooms, heating and hot water, which is the only sensible option at that altitude. Honeymoon trips use a luxury tented camp in Nubra.',
       },
     ],
-    tone: 'himachal',
-    image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1000&auto=format&fit=crop',
-    heroImage: 'https://images.unsplash.com/photo-1605649487212-47bdab064df8?q=80&w=1600&auto=format&fit=crop',
+    tone: 'highroad',
+    image: '/img/ladakh-hanle-sm.webp',
+    heroImage: '/img/ladakh-hanle.webp',
   },
 
   {
-    slug: 'vaishno-devi',
-    name: 'Vaishno Devi',
-    seoTitle: 'Vaishno Devi Tour Packages',
-    headline: "Mata's darshan, and the mountains beyond",
+    slug: 'hanle',
+    name: 'Hanle Dark Sky',
+    seoTitle: 'Hanle & Tso Moriri Tour Packages',
+    headline: 'Where the Milky Way casts a shadow',
     intro:
-      "The Vaishno Devi yatra is a once-in-a-lifetime pilgrimage. We pair it with Kashmir or Amritsar so you don't fly all the way to Jammu for a single temple — one trip, two lifetimes of memory.",
+      'India’s first Dark Sky Reserve, at 4,500 m with almost no light pollution. Add Tso Moriri, the Changthang grasslands and Umling La, the highest motorable road on earth, and this is the Ladakh most travellers never reach.',
     body: [
-      'The yatra itself is straightforward: 12 kilometres uphill from Katra to the Bhawan, then 2.5 km further to Bhairon Temple, which tradition holds you must visit for the darshan to be complete. Most pilgrims walk it in four to six hours. Ponies, palkis and a helicopter to Sanjhichhat are all available.',
-      "What trips people up is the logistics around it — the Yatra Parchi registration, cloakroom rules on what you can carry up, when to start the climb to avoid both the heat and the crush, and where to stay in Katra so you're not adding an hour to your morning.",
-      'And the geography argument: Jammu is a short drive or a twenty-minute flight from Srinagar. If you are travelling from South or West India, doing Vaishno Devi without adding Kashmir is leaving the best part of the region on the table.',
+      'Hanle is a small village on the Changthang plateau, south-east of Leh, and home to the Indian Astronomical Observatory. The area around it was declared India’s first Dark Sky Reserve in 2022. On a clear, moonless night the Milky Way is bright enough to throw shadows, and we plan the stay with an astro guide so you know what you are looking at.',
+      'Getting there is half of it. The road follows the Indus south-east past the Chumathang hot springs, then climbs onto the plateau to Tso Moriri at 4,522 m, a quieter and higher lake than Pangong, with the village of Korzok on its shore. The grasslands between Tso Moriri, Tso Kar and Hanle are nomad country, and it is common to see kiang and black-necked cranes from the road.',
+      'Umling La, at 5,798 m, is reached from Hanle and is the highest motorable road on earth. Everything here is high, so this part of Ladakh comes after acclimatisation, never before it. Two nights at Hanle give you two chances at a clear sky.',
     ],
-    bestTime: 'October to April — avoid monsoon, when the track gets slippery',
-    bestMonths: 'Oct–Apr (Mar–Apr and Navratri busiest)',
-    idealDuration: '2 nights standalone · 6 to 8 nights as a combo',
-    startingFrom: 9500,
-    airport: 'Jammu (IXJ) — 50 km to Katra, or Katra railway station',
-    altitude: '875 m (Katra) to 1,584 m (Bhawan)',
+    bestTime: 'May to October; September and October for the clearest skies',
+    bestMonths: 'May–Oct (Sep–Oct our pick)',
+    idealDuration: '6 to 8 nights',
+    startingFrom: 26500,
+    airport: AIRPORT,
+    altitude: '4,500 m (Hanle) to 5,798 m (Umling La)',
     regions: [
-      { name: 'Katra', note: 'Base town for the yatra — hotels, registration, cloakrooms' },
-      { name: 'Bhawan', note: "Mata's cave shrine — 12 km trek or helicopter to Sanjhichhat" },
-      { name: 'Bhairon Temple', note: '2.5 km beyond Bhawan. Traditionally completes the darshan.' },
-      { name: 'Patnitop', note: 'Cedar-forest hill stop on the Jammu–Srinagar highway' },
-      { name: 'Combo · Kashmir', note: 'Jammu → Srinagar by road or air. Six to eight nights total.' },
-      { name: 'Combo · Amritsar', note: 'Golden Temple and the Wagah border ceremony added on' },
+      { name: 'Hanle', note: 'The observatory and the Dark Sky Reserve' },
+      { name: 'Umling La', note: 'The highest motorable road on earth, at 5,798 m' },
+      { name: 'Tso Moriri', note: 'A high, quiet lake at 4,522 m, with Korzok on its shore' },
+      { name: 'Tso Kar', note: 'A salt lake on the Changthang grasslands' },
+      { name: 'Chumathang', note: 'Hot springs on the Indus, on the way south-east' },
+      { name: 'Nyoma', note: 'The road back to Leh along the Indus' },
     ],
     highlights: [
-      'Helicopter transfer Katra ↔ Sanjhichhat, ideal for elders',
-      'Battery-car service between Bhawan and Bhairon',
-      'VIP darshan arrangement, subject to Shrine Board availability',
-      'AC transfers from Jammu airport or Katra railway station',
-      'Combo circuits into Kashmir or Amritsar',
-      'Cloakroom, medical support and cash desk assistance at base',
+      'The Milky Way over the Hanle Dark Sky Reserve, with an astro guide',
+      'The Indian Astronomical Observatory by day',
+      'Umling La at 5,798 m in the morning light',
+      'A night on the shore of Tso Moriri',
+      'Kiang and black-necked cranes on the Changthang plateau',
+      'The Chumathang hot springs on the Indus',
     ],
     knowBefore: [
-      { label: 'Yatra Parchi', value: 'Free registration slip is mandatory before starting the climb. We arrange it on arrival.' },
-      { label: 'Not permitted', value: 'Leather items, cameras and phones are restricted beyond a point. Cloakrooms are provided.' },
-      { label: 'Helicopter', value: 'Books out weeks ahead in peak season and is weather-dependent. Book as early as you can.' },
-      { label: 'Fitness', value: 'The climb is paved and gradual but long. Ponies and palkis are available the whole way.' },
+      { label: 'Permits', value: 'Hanle, Tso Moriri and Umling La need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print them before you arrive.' },
+      { label: 'Altitude', value: 'Hanle is at 4,500 m and Umling La at 5,798 m. This region always comes after at least two nights around Leh.' },
+      { label: 'Light', value: 'The reserve depends on darkness. Use red torches at night and keep phone screens dim.' },
+      { label: 'Moon', value: 'Skies are darkest around the new moon. Tell us your flexibility and we will suggest dates.' },
     ],
     faqs: [
       {
-        q: 'How long does the Vaishno Devi yatra take?',
-        a: 'Four to six hours one way on foot for most pilgrims, plus darshan queue time. The helicopter to Sanjhichhat cuts the round trip to under two hours of travel, leaving a short walk at the top.',
+        q: 'When is the best time to see the stars at Hanle?',
+        a: 'September and October usually bring the clearest skies of the year, and the nights around the new moon are the darkest. July and August can be cloudier. Two nights at Hanle give you two chances at a clear sky.',
       },
       {
-        q: 'Can we arrange VIP darshan?',
-        a: 'Yes, with advance notice and subject to Shrine Board availability. It is not guaranteed on peak dates such as Navratri, so we always plan for the standard queue and treat VIP as a bonus.',
+        q: 'Do I need a telescope or special camera?',
+        a: 'No. The Milky Way is plainly visible to the naked eye. Our astro guide brings equipment for the night session, and a phone on a small tripod with night mode will capture more than you expect.',
       },
       {
-        q: 'Is the Kashmir combo practical after the yatra?',
-        a: 'Very. Jammu to Srinagar is a seven to eight hour scenic drive over the Banihal pass, or a twenty-minute flight. Our seven-night combo does the yatra first, then moves to the valley.',
-      },
-      {
-        q: 'What is the best time for the yatra?',
-        a: 'October to April has the most comfortable walking weather. Avoid July and August — the track is slippery and landslides can close it. Navratri in March/April is spiritually special but extremely crowded.',
+        q: 'Is Hanle too high for a first trip to Ladakh?',
+        a: 'Not if it is sequenced properly. Our Stargazer’s route spends two nights around Leh and a night at Tso Moriri before Hanle, so your body has adjusted by the time you arrive. If you have a cardiac or pulmonary condition, speak to your doctor first and then to us.',
       },
     ],
-    tone: 'vaishno',
-    image: 'https://images.unsplash.com/photo-1626714485848-d3e91d575fa9?q=80&w=1000&auto=format&fit=crop',
-    heroImage: 'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=1600&auto=format&fit=crop',
+    tone: 'nightsky',
+    image: '/img/hanle-night-sky-sm.webp',
+    heroImage: '/img/hanle-night-sky.webp',
   },
 ];
 
@@ -298,29 +278,25 @@ export function getDestination(slug: string): Destination | undefined {
   return DESTINATIONS.find((d) => d.slug === slug);
 }
 
-/**
- * Visual background scrims per destination. Blends authentic Himalayan
- * landscape photography with dark gradients for maximum text readability.
- */
-export const TONE_BG: Record<Tone, string> = {
-  kashmir:
-    'linear-gradient(180deg, rgba(6,12,16,0.10) 0%, rgba(6,12,16,0.85) 100%), url("https://images.unsplash.com/photo-1595815771614-ade9d652a65d?q=80&w=1000&auto=format&fit=crop")',
-  ladakh:
-    'linear-gradient(180deg, rgba(16,10,4,0.10) 0%, rgba(16,10,4,0.85) 100%), url("https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1000&auto=format&fit=crop")',
-  himachal:
-    'linear-gradient(180deg, rgba(6,14,9,0.10) 0%, rgba(6,14,9,0.85) 100%), url("https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1000&auto=format&fit=crop")',
-  vaishno:
-    'linear-gradient(180deg, rgba(14,7,2,0.10) 0%, rgba(14,7,2,0.85) 100%), url("https://images.unsplash.com/photo-1626714485848-d3e91d575fa9?q=80&w=1000&auto=format&fit=crop")',
+const PHOTO: Record<Tone, string> = {
+  valley: 'ladakh-hero',
+  monastery: 'ladakh-monastery',
+  highroad: 'ladakh-hanle',
+  nightsky: 'hanle-night-sky',
 };
 
-/** High-contrast dark photography backdrop for hero sections. */
-export const TONE_HERO: Record<Tone, string> = {
-  kashmir:
-    'linear-gradient(180deg, rgba(6,12,16,0.65) 0%, rgba(6,12,16,0.92) 100%), url("https://images.unsplash.com/photo-1598091383021-15ddea10925d?q=80&w=1600&auto=format&fit=crop")',
-  ladakh:
-    'linear-gradient(180deg, rgba(16,10,4,0.65) 0%, rgba(16,10,4,0.92) 100%), url("https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?q=80&w=1600&auto=format&fit=crop")',
-  himachal:
-    'linear-gradient(180deg, rgba(6,14,9,0.65) 0%, rgba(6,14,9,0.92) 100%), url("https://images.unsplash.com/photo-1605649487212-47bdab064df8?q=80&w=1600&auto=format&fit=crop")',
-  vaishno:
-    'linear-gradient(180deg, rgba(14,7,2,0.65) 0%, rgba(14,7,2,0.92) 100%), url("https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=1600&auto=format&fit=crop")',
-};
+/** Card backgrounds: the small photograph under a navy scrim for legible text. */
+export const TONE_BG = Object.fromEntries(
+  (Object.keys(PHOTO) as Tone[]).map((t) => [
+    t,
+    `linear-gradient(180deg, rgba(7,15,31,0.10) 0%, rgba(7,15,31,0.85) 100%), url("/img/${PHOTO[t]}-sm.webp") center / cover`,
+  ]),
+) as Record<Tone, string>;
+
+/** High-contrast hero backdrop: the full photograph under a heavier navy scrim. */
+export const TONE_HERO = Object.fromEntries(
+  (Object.keys(PHOTO) as Tone[]).map((t) => [
+    t,
+    `linear-gradient(180deg, rgba(7,15,31,0.65) 0%, rgba(7,15,31,0.92) 100%), url("/img/${PHOTO[t]}.webp") center / cover`,
+  ]),
+) as Record<Tone, string>;

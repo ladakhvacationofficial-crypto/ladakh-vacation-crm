@@ -14,7 +14,7 @@ export function SiteFooter() {
       <div
         aria-hidden
         className="blob left-[-10%] top-[-20%] h-[420px] w-[420px]"
-        style={{ background: 'rgba(232,185,35,0.13)' }}
+        style={{ background: 'rgba(201,169,97,0.13)' }}
       />
 
       {/* ---------- CTA band ---------- */}
@@ -43,9 +43,9 @@ export function SiteFooter() {
         <div className="md:col-span-4">
           <Wordmark light />
           <p className="mt-4 max-w-xs text-[13.5px] leading-relaxed text-paper-200/70">
-            A Srinagar-based destination management company running Kashmir,
-            Ladakh, Himachal and Vaishno Devi journeys since {SITE.founded}. We
-            are the people other agencies forward your enquiry to.
+            A Ladakh-registered tour operator with an office in Leh, running
+            Ladakh journeys since {SITE.founded}. The people planning your trip
+            are the people running it.
           </p>
 
           <div className="mt-5 flex items-center gap-2">
@@ -119,7 +119,7 @@ export function SiteFooter() {
             <FooterLink href="/plan-my-trip">Custom Itinerary Wizard</FooterLink>
             <FooterLink href="/guides">Travel Guides & Blog</FooterLink>
             <FooterLink href="/hi">हिंदी यात्रा गाइड (Hindi)</FooterLink>
-            <FooterLink href="/partner-with-us">B2B Travel Agent DMC</FooterLink>
+            <FooterLink href="/partner-with-us">Travel agent partners</FooterLink>
           </ul>
 
           <h3 className="mt-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-paper-50">
@@ -177,7 +177,7 @@ export function SiteFooter() {
             <Link href="/contact" className="transition-colors hover:text-gold-300">
               Contact
             </Link>
-            <span>Handcrafted in Srinagar, Kashmir.</span>
+            <span>Planned in Leh, Ladakh.</span>
           </div>
         </div>
       </div>

@@ -8,50 +8,70 @@ import { PageHero } from '@/components/page-hero';
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions — Booking, Payments & Travel',
   description:
-    'Answers on booking, payments, cancellation, permits, safety, best times to travel and what our Kashmir, Ladakh, Himachal and Vaishno Devi packages include.',
+    'Answers on booking, payments, EMI, Inner Line Permits, altitude, the best months for Ladakh and what our Ladakh tour packages include.',
   alternates: { canonical: '/faq' },
 };
 
 const GENERAL = [
   {
-    q: 'How do I book a trip with Ladakh Vacation?',
-    a: 'Send an enquiry or WhatsApp us with your dates, group size and rough plan. We come back with a custom itinerary and quote within a few hours. Once you are happy, a booking advance confirms your hotels and vehicles, and the balance is due before arrival.',
+    q: "How do I book a trip with Ladakh Vacation?",
+    a: "Send an enquiry or WhatsApp us with your dates, group size and the shape of the trip you have in mind. A planner in Leh comes back with a written itinerary and an itemised quote, usually the same day. A 25% deposit confirms the booking, and the balance is due seven days before you arrive.",
   },
   {
-    q: 'How much advance do you need to confirm a booking?',
-    a: 'Typically 25% of the package value to confirm hotels and vehicles, with the balance before arrival. For peak-season dates or where a hotel demands full prepayment, we tell you upfront rather than after you have committed.',
+    q: "Are you a registered travel agency, and how do I know my money is safe?",
+    a: "Yes — we are a Ladakh-registered tour operator with an office in Leh, not an intermediary reselling someone else’s trip. You get a written itinerary and an itemised invoice before any payment, a 25% deposit confirms the booking, and the balance is only due seven days before you arrive. Payments go to a company account, never to an individual.",
   },
   {
-    q: 'What payment methods do you accept?',
-    a: 'Bank transfer (NEFT/RTGS/IMPS) and UPI. We issue a GST invoice for every booking. We do not ask for payment to a personal account — if anyone claiming to be us does, stop and call our office number.',
+    q: "Why book with a Leh-based operator rather than a big portal?",
+    a: "Because the people answering your questions are the people running your trip. We own the relationships with the drivers, camps and hotels directly, so there is no chain of commissions between you and the person actually serving you — and when a pass closes at 11pm, the person who replies is sitting in Leh, not in a call centre in another state.",
   },
   {
-    q: 'What is your cancellation policy?',
-    a: 'It varies by season and by what the hotels have already charged us. As a rule, more than 30 days out you recover most of the advance; inside 15 days, hotel and transport commitments are largely non-refundable. The exact terms are written into every quote before you pay anything.',
+    q: "How does payment work? Is EMI available?",
+    a: "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum.",
   },
   {
-    q: 'Are your prices per person or for the whole group?',
-    a: 'All listed prices are per person on twin-sharing, GST included. Single occupancy, triple rooms, extra beds and children pricing are quoted separately based on your actual group.',
+    q: "Can the itinerary be changed?",
+    a: "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries.",
   },
   {
-    q: 'Do prices change with season?',
-    a: 'Yes, substantially. Peak windows — May–June, Christmas–New Year, Navratri for Vaishno Devi — can run 30–50% above shoulder season for the identical itinerary. The starting prices on this site reflect shoulder season.',
+    q: "How bad is the altitude, honestly?",
+    a: "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us.",
   },
   {
-    q: 'Do you handle flights?',
-    a: 'No. We do not book airfare, because you will almost always find a better fare yourself and we would just be adding a margin. We do advise on which airports to fly into and out of so your itinerary is not wasting a day backtracking.',
+    q: "Do I need permits, and do you arrange them?",
+    a: "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking.",
   },
   {
-    q: 'Can you customise a package?',
-    a: 'Every package on this site is a starting point. Add nights, change hotel category, start from a different city, travel with fifteen people instead of two — tell us what changes and we rebuild the itinerary and the quote.',
+    q: "When should I actually visit?",
+    a: "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close.",
   },
   {
-    q: 'Do you work with travel agents and B2B partners?',
-    a: 'Yes. We handle ground operations for agencies across India as a DMC. Contact us directly for partner rates and terms.',
+    q: "What kind of hotels do you use?",
+    a: "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request.",
   },
   {
-    q: 'What if something goes wrong during the trip?',
-    a: 'You have one named coordinator on WhatsApp for the whole trip, and our office number reaches a person, not a queue. Hotels get changed, routes get rerouted, and roads get closed — what matters is how fast someone picks up.',
+    q: "Should I fly into Leh or drive up?",
+    a: "Flying is faster but drops you at 3,500 m in ninety minutes, so acclimatisation matters more. Driving in via Manali or Srinagar takes two to three days and lets your body adjust gradually. We plan both, and often recommend flying in and driving out.",
+  },
+  {
+    q: "Do you book flights?",
+    a: "You book the flight; we handle everything that happens after you land. Send us your flight times before you ticket and we will confirm they fit the itinerary. We time the airport pickup to your actual arrival, and if your connection slips we move the pickup at no charge.",
+  },
+  {
+    q: "Is the Manali–Leh highway safe?",
+    a: "It is a well-travelled route from roughly late May to mid-October, and our drivers run it weekly through the season. The road crosses five passes above 4,000 m, so we break the journey at Jispa and Sarchu rather than pushing through in a single day — that pacing is the biggest safety factor there is.",
+  },
+  {
+    q: "Is the Srinagar–Leh road open all year?",
+    a: "No. The Zoji La section typically opens from May to late October and closes with the first heavy snow. Outside that window we fly you into Leh and run the Ladakh half only, or move your dates — we will always tell you honestly rather than sell you a closed pass.",
+  },
+  {
+    q: "Do you work with travel agents and B2B partners?",
+    a: "Yes. We run ground operations in Ladakh for agencies across India. Use the partner page or contact us directly for partner rates and terms.",
+  },
+  {
+    q: "What if something goes wrong during the trip?",
+    a: "You have one WhatsApp thread and one named coordinator sitting in Leh for the whole trip. Passes close and plans change in Ladakh; what matters is that the person who picks up is here, and can reroute you the same day.",
   },
 ];
 

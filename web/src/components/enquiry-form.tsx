@@ -105,7 +105,7 @@ export function EnquiryForm({
 
   const field = light
     ? 'w-full rounded-lg border border-paper-100/20 bg-paper-50/10 px-3.5 py-3 text-[14.5px] text-paper-50 placeholder:text-paper-200/40 transition-all duration-200 focus:border-gold-400 focus:bg-paper-50/15 focus:outline-none'
-    : 'w-full rounded-lg border border-paper-300 bg-white px-3.5 py-3 text-[14.5px] text-ink-900 placeholder:text-ink-400 transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(232,185,35,0.15)] focus:outline-none';
+    : 'w-full rounded-lg border border-paper-300 bg-white px-3.5 py-3 text-[14.5px] text-ink-900 placeholder:text-ink-400 transition-all duration-200 focus:border-gold-400 focus:shadow-[0_0_0_3px_rgba(201,169,97,0.15)] focus:outline-none';
 
   return (
     <form onSubmit={handleSubmit} className={className} noValidate={false}>
@@ -180,7 +180,7 @@ export function EnquiryForm({
             placeholder={
               packageName
                 ? `Interested in ${packageName} — tell us group size, dates, anything specific.`
-                : 'E.g. 6 nights in Kashmir in late June, family of four, one grandparent.'
+                : 'E.g. 7 nights in Ladakh in late June, family of four, one grandparent.'
             }
           />
         </label>

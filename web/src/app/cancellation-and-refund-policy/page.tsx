@@ -40,7 +40,7 @@ export default function CancellationPolicyPage() {
             <div>
               <h2 className="display d3 text-ink-950">1. Standard Cancellation Slabs</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                If you need to cancel your trip, notice must be received in writing via email (glitzholidaysofficial@gmail.com) or official WhatsApp. Refund percentages are calculated on total tour cost:
+                If you need to cancel your trip, notice must be received in writing via email ({SITE.email}) or our official WhatsApp ({SITE.phone.display}). Refund percentages are calculated on total tour cost:
               </p>
               <div className="mt-5 overflow-hidden rounded-2xl border border-paper-300">
                 <table className="w-full text-left text-[14px]">
@@ -80,14 +80,14 @@ export default function CancellationPolicyPage() {
             <div className="border-t border-paper-300 pt-8">
               <h2 className="display d3 text-ink-950">2. Peak Season & Festive Bookings</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                For reservations during Peak Christmas/New Year week (Dec 22 – Jan 5), Gulmarg peak ski months (Jan–Feb), and April Tulip Festival, partner hotels enforce 100% non-refundable retention within 21 days of arrival.
+                For peak-season dates, and for camps at Nubra, Pangong and Hanle, some hotels and camps apply stricter cancellation terms of their own. Where they do, we show those terms in your quote before you pay anything, and they apply in place of the slabs above for that part of the booking.
               </p>
             </div>
 
             <div className="border-t border-paper-300 pt-8">
               <h2 className="display d3 text-ink-950">3. Flight Disruptions & Force Majeure</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                In the event of flight cancellations due to Srinagar/Leh airport weather or unavoidable natural road disruptions, Ladakh Vacation will assist in rescheduling hotel stays without penalty wherever suppliers permit. Any unutilized transport days will be adjusted or refunded honestly.
+                If a flight into Leh is cancelled for weather, or a pass or road closes because of snow, landslides or an administrative order, Ladakh Vacation will reschedule stays without penalty wherever suppliers permit and reroute the trip where it is safe to do so. Any unused transport days will be adjusted or refunded.
               </p>
             </div>
 

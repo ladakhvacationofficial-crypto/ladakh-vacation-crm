@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!d) return {};
 
   const title = `${d.seoTitle} — ${d.idealDuration} from ${inr(d.startingFrom)}`;
-  const description = `${d.seoTitle} by a Srinagar-based DMC. ${d.regions
+  const description = `${d.seoTitle} from a Leh-based team. ${d.regions
     .slice(0, 4)
     .map((r) => r.name)
     .join(', ')}. Best time: ${d.bestMonths}. All-inclusive itineraries from ${inr(d.startingFrom)} per person.`;
@@ -157,7 +157,7 @@ export default async function DestinationHub({ params }: { params: Params }) {
         <div className="wrap">
           <SectionHead
             kicker="Where you'll go"
-            title={`${d.regions.length} regions worth crossing a country for.`}
+            title={`${d.regions.length} places worth the drive.`}
           />
           <div data-reveal-group className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {d.regions.map((r, i) => (
@@ -176,20 +176,6 @@ export default async function DestinationHub({ params }: { params: Params }) {
             ))}
           </div>
 
-          {d.slug === 'kashmir' && (
-            <div className="mt-10 rounded-2xl border border-paper-300 bg-paper-50 p-6 md:p-8 flex flex-wrap items-center justify-between gap-4">
-              <div className="max-w-xl">
-                <p className="kicker">Detailed Sightseeing Guide</p>
-                <h4 className="display text-xl font-bold text-ink-950 mt-1">Places to Visit in Kashmir: 2026 Practical Guide</h4>
-                <p className="text-sm text-ink-600 mt-2">
-                  Driving times, union cab rules, entry fees, and what to skip — from our Srinagar operations team.
-                </p>
-              </div>
-              <Link href="/guides/places-to-visit-in-kashmir" className="btn btn-secondary text-xs font-semibold">
-                Read Places Guide →
-              </Link>
-            </div>
-          )}
         </div>
       </section>
 
@@ -198,7 +184,7 @@ export default async function DestinationHub({ params }: { params: Params }) {
         <div
           aria-hidden
           className="blob right-[-6%] top-[10%] h-[400px] w-[400px]"
-          style={{ background: 'rgba(232,185,35,0.15)' }}
+          style={{ background: 'rgba(201,169,97,0.15)' }}
         />
         <div className="wrap relative grid gap-12 lg:grid-cols-2">
           <SectionHead

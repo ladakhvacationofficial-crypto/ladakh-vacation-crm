@@ -7,29 +7,29 @@ import { PageHero } from '@/components/page-hero';
 import { SITE, whatsAppLink } from '@/lib/site';
 
 const DESTINATIONS = [
-  { id: 'Kashmir', name: 'Kashmir', sub: 'Srinagar, Gulmarg, Pahalgam, Sonmarg', emoji: '🏔️' },
-  { id: 'Ladakh', name: 'Ladakh', sub: 'Leh, Nubra, Pangong Tso, Khardung La', emoji: '✨' },
-  { id: 'Himachal', name: 'Himachal', sub: 'Manali, Shimla, Spiti, Dharamshala', emoji: '🌲' },
-  { id: 'Vaishno Devi', name: 'Vaishno Devi + Kashmir', sub: 'Katra, Bhavan, Srinagar Circuit', emoji: '🙏' },
+  { id: 'Leh & Sham Valley', name: 'Leh & Sham Valley', sub: 'Leh, the monasteries, Sham Valley. No high passes', emoji: '🏔️' },
+  { id: 'Nubra & Pangong', name: 'Nubra & Pangong', sub: 'Khardung La, Hunder, Turtuk, Pangong Tso', emoji: '✨' },
+  { id: 'Hanle & Tso Moriri', name: 'Hanle & Tso Moriri', sub: 'Dark Sky Reserve, Umling La, Changthang', emoji: '🌌' },
+  { id: 'Overland', name: 'Overland to Leh', sub: 'Manali–Leh or Srinagar–Leh by road, or by bike', emoji: '🛣️' },
 ];
 
 const DURATIONS = [
-  { id: '4N/5D', label: '4 Nights / 5 Days', hint: 'Short Escape' },
-  { id: '5N/6D', label: '5 Nights / 6 Days', hint: 'Popular Honeymoon & Family' },
-  { id: '6N/7D', label: '6 Nights / 7 Days', hint: 'Classic Complete Tour' },
-  { id: '7N/8D+', label: '7+ Nights', hint: 'Grand Circuit' },
+  { id: '3-4N', label: '3 to 4 Nights', hint: 'Leh, with Nubra on four' },
+  { id: '5-6N', label: '5 to 6 Nights', hint: 'Honeymoon, monasteries, Hanle' },
+  { id: '7N', label: '7 Nights', hint: 'Nubra, Turtuk & Pangong' },
+  { id: '8N+', label: '8+ Nights', hint: 'The whole of Ladakh' },
 ];
 
 const HOTEL_TIERS = [
-  { id: 'Standard', name: 'Standard 3★', desc: 'Clean, verified comfortable mountain properties' },
-  { id: 'Deluxe', name: 'Deluxe 4★ + Houseboat', desc: 'Premium view resorts and heritage cedarwood suites' },
-  { id: 'Luxury', name: 'Luxury 5★ Heritage', desc: 'The Khyber, Radisson, boutique valley villas' },
+  { id: 'Standard', name: 'Standard 3★', desc: 'Centrally located 3★ hotels in Leh and deluxe camps, all personally inspected' },
+  { id: 'Deluxe', name: 'Deluxe 4★', desc: '4★ hotels in Leh and the better camps at Nubra and Pangong' },
+  { id: 'Luxury', name: 'Luxury', desc: 'The best available rooms in Leh and luxury tented camps' },
 ];
 
 export default function PlanMyTripPage() {
   const [step, setStep] = useState(1);
-  const [destination, setDestination] = useState('Kashmir');
-  const [duration, setDuration] = useState('5N/6D');
+  const [destination, setDestination] = useState('Nubra & Pangong');
+  const [duration, setDuration] = useState('5-6N');
   const [hotelTier, setHotelTier] = useState('Deluxe');
   const [month, setMonth] = useState('Next Month');
   const [adults, setAdults] = useState('2');
@@ -84,7 +84,7 @@ export default function PlanMyTripPage() {
       <PageHero
         kicker="Interactive Itinerary Creator"
         title="Custom Holiday Planner"
-        lede="Answer 4 quick questions and our Srinagar travel curators will craft an exact day-by-day itinerary tailored to your dates and preferences."
+        lede="Answer 4 quick questions and a planner in Leh will build a day-by-day itinerary around your dates, your group and the altitude."
         crumbs={[
           { label: 'Home', href: '/' },
           { label: 'Plan My Trip' },
@@ -100,7 +100,7 @@ export default function PlanMyTripPage() {
               </div>
               <h2 className="display d2 text-ink-950">Your Custom Trip Plan is in Motion!</h2>
               <p className="text-[15.5px] leading-relaxed text-ink-700 max-w-lg mx-auto">
-                Thank you, <strong>{name}</strong>. Our destination specialist for <strong>{destination}</strong> is reviewing your <strong>{duration}</strong> request and will share a detailed day-by-day proposal within 2 hours.
+                Thank you, <strong>{name}</strong>. A planner in Leh is reviewing your <strong>{destination}</strong>, <strong>{duration}</strong> request and will share a day-by-day proposal, usually the same day.
               </p>
               <div className="pt-4 flex flex-wrap justify-center gap-3">
                 <a
@@ -145,7 +145,7 @@ export default function PlanMyTripPage() {
                 <div className="space-y-6">
                   <div>
                     <h3 className="display d3 text-ink-950">Where would you like to travel?</h3>
-                    <p className="text-sm text-ink-600 mt-1">Select your primary Himalayan destination.</p>
+                    <p className="text-sm text-ink-600 mt-1">Pick the part of Ladakh you most want to see. We will build the rest around it.</p>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {DESTINATIONS.map((d) => (
@@ -301,7 +301,7 @@ export default function PlanMyTripPage() {
                 <form onSubmit={handleFinalSubmit} className="space-y-5">
                   <div>
                     <h3 className="display d3 text-ink-950">Where Should We Send Your Itinerary?</h3>
-                    <p className="text-sm text-ink-600 mt-1">Our Srinagar team will prepare your quote and message you.</p>
+                    <p className="text-sm text-ink-600 mt-1">Our team in Leh will prepare your quote and message you.</p>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-paper-100 border border-paper-300 text-xs text-ink-700 flex items-center justify-between">

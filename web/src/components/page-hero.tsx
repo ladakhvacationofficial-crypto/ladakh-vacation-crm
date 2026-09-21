@@ -36,7 +36,7 @@ export function PageHero({
         <div className="absolute inset-0 -z-20 overflow-hidden">
           <Image
             src={heroImage}
-            alt={heroImageAlt || (typeof title === 'string' ? title : 'Ladakh Vacation Kashmir')}
+            alt={heroImageAlt || (typeof title === 'string' ? title : 'Ladakh Vacation')}
             fill
             priority
             sizes="100vw"
@@ -50,7 +50,7 @@ export function PageHero({
       <div
         aria-hidden
         className="blob -z-10 left-[8%] top-[10%] h-[340px] w-[340px]"
-        style={{ background: 'rgba(232,185,35,0.16)' }}
+        style={{ background: 'rgba(201,169,97,0.16)' }}
       />
       <div aria-hidden className="grain absolute inset-0 -z-10" />
 

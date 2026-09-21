@@ -5,7 +5,6 @@ import { Check, ArrowUpRight, AlertTriangle, Equal, Sparkles } from 'lucide-reac
 import { TRAVEL_STYLES, getTravelStyle } from '@/lib/travel-styles';
 import { packagesForStyle } from '@/lib/packages';
 import { COLLECTIONS } from '@/lib/collections';
-import { HONEYMOON_COLLECTIONS } from '@/lib/honeymoon-collections';
 import { PackageCard, SectionHead, Faq, JsonLd } from '@/components/cards';
 import { PageHero } from '@/components/page-hero';
 import { EnquiryForm } from '@/components/enquiry-form';
@@ -51,11 +50,8 @@ export default async function TravelStylePage({ params }: { params: Params }) {
   const pkgs = packagesForStyle(s.slug);
   const url = `${SITE.domain}/travel-styles/${s.slug}`;
 
-  /** Collections whose slug names this style — honeymoon pages feed honeymoon collections. */
-  const related = [
-    ...COLLECTIONS.filter((c) => c.slug.includes(s.slug)),
-    ...(s.slug === 'honeymoon' ? HONEYMOON_COLLECTIONS : []),
-  ];
+  /** Collections tagged with this style. */
+  const related = COLLECTIONS.filter((c) => c.styles.includes(s.slug));
 
   const jsonLd = [
     ...(s.author
@@ -334,7 +330,7 @@ export default async function TravelStylePage({ params }: { params: Params }) {
         <div
           aria-hidden
           className="blob left-[-6%] top-[8%] h-[400px] w-[400px]"
-          style={{ background: 'rgba(232,185,35,0.15)' }}
+          style={{ background: 'rgba(201,169,97,0.15)' }}
         />
         <div className="wrap relative">
           <SectionHead

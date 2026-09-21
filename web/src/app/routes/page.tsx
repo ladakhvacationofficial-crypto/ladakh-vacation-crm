@@ -49,7 +49,7 @@ export default function RoutesIndex() {
         title="Getting here, answered honestly"
         lede="Timings, fares and the things that have recently changed — each one dated and sourced, because a transport page that is confidently wrong makes people miss trains."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Routes' }]}
-        background={TONE_HERO.kashmir}
+        background={TONE_HERO.valley}
       />
 
       <div className="mesh-warm">

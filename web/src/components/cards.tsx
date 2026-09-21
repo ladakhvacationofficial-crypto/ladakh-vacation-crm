@@ -167,7 +167,7 @@ export function ReviewCard({ r }: { r: Review }) {
         <p className="mt-0.5 text-[11.5px] text-ink-500">
           {r.from} · {r.trip}
         </p>
-        <p className="mt-0.5 text-[11px] text-ink-400">{r.month}</p>
+        {r.month && <p className="mt-0.5 text-[11px] text-ink-400">{r.month}</p>}
       </figcaption>
     </figure>
   );

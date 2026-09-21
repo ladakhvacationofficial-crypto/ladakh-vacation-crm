@@ -6,6 +6,10 @@ import type { Tone } from './destinations';
  * itinerary, honest inclusions/exclusions and FAQs, because thin price-list
  * pages do not rank and do not convert.
  *
+ * The eleven packages, their prices, day-by-day text and FAQs are the same
+ * ones the Google Ads landers at go.ladakhvacation.in sell (that site's
+ * build/pages.js), so a traveller never sees two versions of one trip.
+ *
  * Prices are per-person on twin-sharing, the convention every Indian traveller
  * already expects. They are starting points, not quotes.
  */
@@ -13,16 +17,18 @@ import type { Tone } from './destinations';
 export type Pkg = {
   slug: string;
   name: string;
-  /** Destination slug this package belongs to. */
+  /** Primary destination hub. Groups the package on /packages. */
   destination: string;
   destinationName: string;
+  /** Every destination hub the route passes through. Drives each hub's package list. */
+  regions: string[];
   nights: number;
   days: number;
   priceFrom: number;
   /** Travel-style slugs this package suits. Drives /travel-styles pages. */
   styles: string[];
   summary: string;
-  /** Cities in order — rendered as the route ribbon. */
+  /** Stops in order — rendered as the route ribbon. */
   route: string[];
   bestMonths: string;
   idealFor: string;
@@ -42,723 +48,1392 @@ export type Pkg = {
   featured?: boolean;
 };
 
-const STD_INCLUSIONS_KASHMIR = [
-  'All accommodation on twin-sharing in hand-picked 3★/4★ hotels',
-  'Daily breakfast and dinner (MAP plan)',
-  'Private air-conditioned vehicle for all transfers and sightseeing',
-  'All toll, parking, driver allowance and fuel',
-  'Airport pickup and drop at Srinagar (SXR)',
-  'Dedicated trip coordinator on WhatsApp for the full journey',
-  'All applicable taxes and GST',
-];
-
-const STD_EXCLUSIONS = [
-  'Airfare or train fare to and from the destination',
-  'Lunch and any meals not specified in the inclusions',
-  'Entry tickets to monuments, gardens and parks',
-  'Pony rides, gondola tickets, sledging and adventure activities',
-  'Union taxi charges inside Gulmarg, Sonmarg, Pahalgam (state-regulated)',
-  'Personal expenses — laundry, tips, telephone, room service',
-  'Anything not explicitly listed under inclusions',
-];
-
 export const PACKAGES: Pkg[] = [
-  // ─────────────────────────────────────────────── KASHMIR
   {
-    slug: 'classic-kashmir-4-nights',
-    image: 'https://images.unsplash.com/photo-1566837945700-30057527ade0?q=80&w=1000&auto=format&fit=crop',
-    name: 'Classic Kashmir',
-    destination: 'kashmir',
-    destinationName: 'Kashmir',
-    nights: 4,
-    days: 5,
-    priceFrom: 18500,
-    styles: ['family', 'first-timers'],
-    summary:
-      'The valley in its essential form — Srinagar, Gulmarg and Pahalgam, one houseboat night, and no day that starts before you want it to.',
-    route: ['Srinagar', 'Gulmarg', 'Pahalgam', 'Srinagar'],
-    bestMonths: 'Apr–Jun · Sep–Oct',
-    idealFor: 'First-time visitors and families who want the highlights without a punishing pace',
-    itinerary: [
-      {
-        day: 1,
-        title: 'Arrive Srinagar · Dal Lake and the Mughal gardens',
-        body: 'Met at Srinagar airport and driven to your hotel on the Boulevard. Afternoon at the Mughal gardens — Nishat and Shalimar, laid out by Shah Jahan\'s court along the lake. Sunset shikara ride through the floating vegetable market, which is a real working market, not a performance for tourists.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Dinner',
-      },
-      {
-        day: 2,
-        title: 'Gulmarg · gondola to Apharwat',
-        body: 'Drive to Gulmarg (about two hours) through rice terraces and willow groves. The gondola climbs to Kongdoori on Phase 1 and to the Apharwat ridge at 3,979 m on Phase 2 — snow at the top even in June. Afternoon back to Srinagar.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 3,
-        title: 'Pahalgam · Betaab and Aru valleys',
-        body: 'Two and a half hours south along the Lidder to Pahalgam, stopping at the saffron fields of Pampore and a cricket-bat workshop on the way. Local taxis run up to Betaab Valley, Aru and Chandanwari — the drive itself is the attraction.',
-        stay: 'Hotel in Pahalgam',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 4,
-        title: 'Return to Srinagar · a night on the water',
-        body: 'Unhurried morning in Pahalgam, then back to Srinagar by afternoon. Tonight is on a deluxe houseboat — carved walnut interiors, a verandah on the water, and the lake going quiet after dark. Optional Wazwan dinner arranged on request.',
-        stay: 'Deluxe houseboat, Dal Lake',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 5,
-        title: 'Old City walk · departure',
-        body: 'If your flight allows, a short walk through the Old City — Jamia Masjid, the shawl and papier-mâché workshops around Zaina Kadal. Airport drop with time to spare.',
-        meals: 'Breakfast',
-      },
+    "slug": "3-nights-ladakh-tour",
+    "name": "Leh Short Escape",
+    "destination": "leh",
+    "destinationName": "Ladakh",
+    "regions": [
+      "leh",
+      "ladakh-monasteries"
     ],
-    inclusions: STD_INCLUSIONS_KASHMIR,
-    exclusions: STD_EXCLUSIONS,
-    faqs: [
-      {
-        q: 'Is four nights enough for Kashmir?',
-        a: 'It covers Srinagar, Gulmarg and Pahalgam comfortably. It does not include Sonmarg — for that you want six nights. If Sonmarg matters to you, look at our Complete Kashmir itinerary instead.',
-      },
-      {
-        q: 'Why is the gondola not included in the price?',
-        a: 'Gondola tickets are sold by the state cable-car corporation at a fixed rate that changes seasonally, and Phase 2 availability varies daily. We pre-book where possible and you pay the actual fare, so nobody is paying a padded markup.',
-      },
-      {
-        q: 'Can we swap the houseboat night for a hotel?',
-        a: 'Yes, at no extra cost. Some guests prefer all four nights on land. Tell us at booking and we adjust.',
-      },
+    "nights": 3,
+    "days": 4,
+    "priceFrom": 14500,
+    "styles": [
+      "family",
+      "culture"
     ],
-    tone: 'kashmir',
-    featured: true,
+    "summary": "The shortest trip we will honestly sell. Leh, the Indus monasteries and the low Sham Valley, with no high passes, because four days is not enough time to earn them safely.",
+    "route": [
+      "Leh",
+      "Shey & Thiksey",
+      "Sham Valley",
+      "Leh"
+    ],
+    "bestMonths": "Apr–Oct",
+    "idealFor": "A long weekend, first-timers and anyone short on leave who still wants to do Ladakh safely",
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup and a deliberately empty afternoon. Hydration, a slow walk to the Main Bazaar, early dinner — on a short trip, resting on day one is what makes days two and three work.",
+        "stay": "Hotel in Leh",
+        "meals": "Dinner"
+      },
+      {
+        "day": 2,
+        "title": "Leh & the Indus monasteries",
+        "body": "Shanti Stupa, Leh Palace and the old town by morning, then Thiksey and Shey down the Indus. Gentle elevation, no passes.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 3,
+        "title": "Sham Valley & Magnetic Hill",
+        "body": "The low-altitude western loop — Magnetic Hill, the Sangam confluence of the Indus and Zanskar, and Alchi’s 11th-century murals.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 4,
+        "title": "Departure",
+        "body": "Morning transfer to Kushok Bakula Rimpochee Airport with breakfast packed for the flight out.",
+        "meals": "Breakfast"
+      }
+    ],
+    "inclusions": [
+      "Centrally located 3★ hotel in Leh on twin-sharing",
+      "Daily breakfast and dinner",
+      "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "valley",
+    "image": "/img/ladakh-hero.webp"
   },
-
   {
-    slug: 'complete-kashmir-6-nights',
-    image: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?q=80&w=1000&auto=format&fit=crop',
-    name: 'Complete Kashmir',
-    destination: 'kashmir',
-    destinationName: 'Kashmir',
-    nights: 6,
-    days: 7,
-    priceFrom: 27900,
-    styles: ['family', 'group', 'first-timers'],
-    summary:
-      'The valley without compromise — all four regions, a night in Gulmarg and a night in Pahalgam, and a free day to do nothing at all.',
-    route: ['Srinagar', 'Sonmarg', 'Gulmarg', 'Pahalgam', 'Srinagar'],
-    bestMonths: 'Apr–Jun · Sep–Oct',
-    idealFor: 'Travellers who would rather see one place properly than four places briefly',
-    itinerary: [
-      {
-        day: 1,
-        title: 'Arrive Srinagar · the lake at dusk',
-        body: 'Airport pickup and check-in. Easy first evening — the Boulevard, a shikara at sunset, dinner at the hotel. Nothing scheduled, because you have just flown.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Dinner',
-      },
-      {
-        day: 2,
-        title: 'Srinagar · gardens, Old City, Shankaracharya',
-        body: 'A full Srinagar day. Nishat and Shalimar in the morning, then the Old City — Jamia Masjid with its 378 deodar pillars, the shrine of Shah-e-Hamdan. Sunset from Shankaracharya Hill, which sits 1,000 feet above the city.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 3,
-        title: 'Sonmarg · Thajiwas glacier',
-        body: 'Three hours north-east along the Sindh river to Sonmarg, the meadow of gold. Ponies run up to the Thajiwas glacier — a genuinely alpine landscape at 3,000 m. Return to Srinagar by evening.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 4,
-        title: 'Gulmarg · overnight in the meadow',
-        body: 'Drive up to Gulmarg and stay the night, which most itineraries skip and which changes the place entirely. Gondola Phase 1 and 2 in the afternoon. Come evening, the day-trippers leave and the meadow belongs to you.',
-        stay: 'Hotel in Gulmarg',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 5,
-        title: 'Pahalgam via Pampore',
-        body: 'Cross-valley drive to Pahalgam, stopping at the Pampore saffron fields — in October you can watch the harvest. Afternoon in the Lidder valley, evening walk along the river.',
-        stay: 'Hotel in Pahalgam',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 6,
-        title: 'Aru and Betaab · back to a houseboat',
-        body: 'Morning run up to Aru and Betaab valleys before the crowds, then return to Srinagar. Final night on a deluxe houseboat with a Wazwan dinner if you want it.',
-        stay: 'Deluxe houseboat, Dal Lake',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 7,
-        title: 'Departure',
-        body: 'Breakfast on the water, last-minute shopping for pashmina or saffron if time allows, and an airport drop.',
-        meals: 'Breakfast',
-      },
+    "slug": "4-nights-ladakh-tour",
+    "name": "Leh Essentials",
+    "destination": "leh",
+    "destinationName": "Ladakh",
+    "regions": [
+      "leh",
+      "nubra-pangong",
+      "ladakh-monasteries"
     ],
-    inclusions: STD_INCLUSIONS_KASHMIR,
-    exclusions: STD_EXCLUSIONS,
-    faqs: [
-      {
-        q: 'What does staying overnight in Gulmarg add?',
-        a: 'Gulmarg empties out after 5pm when the day-trip buses leave. You get the meadow at dusk and dawn, a much better shot at Phase 2 gondola tickets the next morning, and you skip two hours of driving.',
-      },
-      {
-        q: 'Is Sonmarg worth a full day?',
-        a: 'Yes. It is the most genuinely alpine part of the valley and the drive along the Sindh is beautiful in itself. Squeezing it into a half-day is why so many visitors come back unimpressed.',
-      },
-      {
-        q: 'Can we add Doodhpathri or Yusmarg?',
-        a: 'Absolutely — both are day trips from Srinagar and neither sees many tourists. Add a night and we will build one in.',
-      },
+    "nights": 4,
+    "days": 5,
+    "priceFrom": 18900,
+    "styles": [
+      "family"
     ],
-    tone: 'kashmir',
-    featured: true,
+    "summary": "The short Ladakh trip done right: Leh, Sham Valley, Khardung La and Nubra, with the first 48 hours kept deliberately gentle so altitude never owns your holiday.",
+    "route": [
+      "Leh",
+      "Sham Valley",
+      "Khardung La",
+      "Nubra",
+      "Thiksey",
+      "Leh"
+    ],
+    "bestMonths": "May–Oct",
+    "idealFor": "First-timers who want Khardung La and a night in Nubra without a long trip",
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup and a deliberately empty afternoon — hydration, a slow walk to Main Bazaar, early dinner. This day is medicine, not sightseeing.",
+        "stay": "Hotel in Leh",
+        "meals": "Dinner"
+      },
+      {
+        "day": 2,
+        "title": "Sham Valley & the Indus",
+        "body": "A low-altitude loop to Magnetic Hill, the Sangam confluence and Alchi’s 11th-century murals. Almost no elevation gained, which is the point.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 3,
+        "title": "Khardung La & Nubra",
+        "body": "Cross the pass at 5,359 m with a short controlled stop, descend to the Hunder dunes among the Bactrian camels, and overnight in Nubra.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 4,
+        "title": "Nubra → Leh via Thiksey",
+        "body": "Return over Khardung La, then sunset prayers at Thiksey and the copper Buddha at Shey.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Departure",
+        "body": "Morning transfer to Kushok Bakula Rimpochee Airport with breakfast packed for the flight out.",
+        "meals": "Breakfast"
+      }
+    ],
+    "inclusions": [
+      "Centrally located 3★ hotel in Leh and a deluxe camp in Nubra, on twin-sharing",
+      "Daily breakfast and dinner",
+      "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "valley",
+    "image": "/img/ladakh-hero.webp"
   },
-
   {
-    slug: 'kashmir-honeymoon-5-nights',
-    image: 'https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1000&auto=format&fit=crop',
-    name: 'Kashmir Honeymoon',
-    destination: 'kashmir',
-    destinationName: 'Kashmir',
-    nights: 5,
-    days: 6,
-    priceFrom: 32500,
-    styles: ['honeymoon'],
-    summary:
-      'Quieter valleys, better rooms, a candlelit dinner on the water — the same Kashmir, arranged for two.',
-    route: ['Srinagar', 'Gulmarg', 'Pahalgam', 'Srinagar'],
-    bestMonths: 'Apr–Jun · Sep–Oct',
-    idealFor: 'Couples who want privacy, good rooms and nothing that feels like a group tour',
-    itinerary: [
-      {
-        day: 1,
-        title: 'Arrive Srinagar · private shikara at golden hour',
-        body: 'Airport pickup, flowers and a room upgrade where the hotel allows. Late-afternoon private shikara — just the two of you and the boatman — through the lotus channels behind Nehru Park.',
-        stay: 'Premium hotel, Srinagar',
-        meals: 'Dinner',
-      },
-      {
-        day: 2,
-        title: 'Gulmarg · gondola and the meadow',
-        body: 'Up to Gulmarg for the night. Gondola to Apharwat, then a walk out to the far side of the meadow where the day crowds do not reach. Dinner at the hotel.',
-        stay: 'Premium hotel, Gulmarg',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 3,
-        title: 'Pahalgam · the Lidder valley',
-        body: 'Scenic drive to Pahalgam with a saffron-field stop. Afternoon in Betaab and Aru, then an evening walk along the river. Pahalgam after dark is very quiet, which is the point.',
-        stay: 'Premium hotel, Pahalgam',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 4,
-        title: 'A slow day in Pahalgam',
-        body: 'Deliberately unscheduled. Ride up to Chandanwari, walk the pine trails, or stay in with the mountains through the window. Optional in-room spa treatment on request.',
-        stay: 'Premium hotel, Pahalgam',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 5,
-        title: 'Houseboat night · candlelit dinner on the water',
-        body: 'Back to Srinagar and onto a premium houseboat. Private candlelit dinner served on the verandah, cake arranged, lake going still around you.',
-        stay: 'Premium houseboat, Dal Lake',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 6,
-        title: 'Departure',
-        body: 'Unhurried breakfast, time for pashmina shopping with a trusted dealer if you want it, and an airport drop.',
-        meals: 'Breakfast',
-      },
+    "slug": "5-nights-ladakh-tour",
+    "name": "Monasteries & Moonland",
+    "destination": "ladakh-monasteries",
+    "destinationName": "Ladakh",
+    "regions": [
+      "ladakh-monasteries",
+      "leh"
     ],
-    inclusions: [
-      ...STD_INCLUSIONS_KASHMIR.slice(0, 5),
-      'Flower decoration on arrival and a celebration cake',
-      'One private candlelit dinner on the houseboat verandah',
-      'Private shikara ride (not shared)',
-      'Dedicated trip coordinator on WhatsApp for the full journey',
-      'All applicable taxes and GST',
+    "nights": 5,
+    "days": 6,
+    "priceFrom": 23400,
+    "styles": [
+      "culture",
+      "family"
     ],
-    exclusions: STD_EXCLUSIONS,
-    faqs: [
-      {
-        q: 'How is this different from the Classic Kashmir package?',
-        a: 'Better room categories throughout, overnight stays in Gulmarg and Pahalgam instead of day trips, a private rather than shared shikara, a slow day built into Pahalgam, and the candlelit dinner. The route is similar; the pace and the rooms are not.',
-      },
-      {
-        q: 'Do you need our wedding date or proof?',
-        a: 'No proof needed. Just tell us it is a honeymoon at booking and we will pass the note to the hotels — most will do something on their own initiative.',
-      },
-      {
-        q: 'Can we extend with Sonmarg or a Ladakh leg?',
-        a: 'Yes to both. Sonmarg adds a night from Srinagar. Ladakh needs at least four more nights and is best from June to September.',
-      },
+    "summary": "Lamayuru, Alchi’s 11th-century murals and an unhurried Indus valley. The cultural spine of Ladakh, walked slowly with a monastery guide.",
+    "route": [
+      "Leh",
+      "Likir",
+      "Alchi",
+      "Lamayuru",
+      "Thiksey",
+      "Hemis",
+      "Leh"
     ],
-    tone: 'kashmir',
+    "bestMonths": "Apr–Oct",
+    "idealFor": "Travellers who came for the culture, older parents, and anyone who would rather avoid the highest passes",
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup, then rest. Acclimatisation is the entire job today — no sightseeing, plenty of water.",
+        "stay": "Hotel in Leh",
+        "meals": "Dinner"
+      },
+      {
+        "day": 2,
+        "title": "Leh Old Town & Shanti Stupa",
+        "body": "A gentle walking day through the old lanes, Leh Palace and sunset at Shanti Stupa.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 3,
+        "title": "Likir, Alchi & Basgo",
+        "body": "West along the Indus to Likir’s giant Maitreya, Alchi’s 11th-century woodwork and the ruined citadel at Basgo.",
+        "stay": "Heritage stay in the Sham Valley",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 4,
+        "title": "Lamayuru & the Moonland",
+        "body": "The lunar ridges of Lamayuru and its cliff-edge gompa — the oldest surviving monastery in Ladakh.",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Thiksey & Hemis",
+        "body": "Dawn prayers at Thiksey, then Hemis, the wealthiest monastery in Ladakh, and Shey’s copper Buddha.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Departure",
+        "body": "A final Ladakhi breakfast and the morning transfer to the airport.",
+        "meals": "Breakfast"
+      }
+    ],
+    "inclusions": [
+      "3★ hotel in Leh and a heritage stay in the Sham Valley, on twin-sharing",
+      "Daily breakfast and dinner",
+      "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
+      "A monastery guide on the monastery days",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "monastery",
+    "image": "/img/ladakh-monastery.webp"
   },
-
   {
-    slug: 'kashmir-snow-winter-5-nights',
-    image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1000&auto=format&fit=crop',
-    name: 'Kashmir in Snow',
-    destination: 'kashmir',
-    destinationName: 'Kashmir',
-    nights: 5,
-    days: 6,
-    priceFrom: 26500,
-    styles: ['family', 'adventure'],
-    summary:
-      'December to February, when the valley goes white and Gulmarg turns into one of Asia\'s great ski mountains.',
-    route: ['Srinagar', 'Gulmarg', 'Pahalgam', 'Srinagar'],
-    bestMonths: 'Dec–Feb',
-    idealFor: 'Guests who came for snow and will not settle for a patch of it on a hilltop',
-    itinerary: [
-      {
-        day: 1,
-        title: 'Arrive Srinagar · the lake in winter',
-        body: 'Airport pickup. Winter Srinagar is a different city — mist on the water, chinar branches bare, kangris under every pheran. Shikara ride if the weather is kind, hotel and a heated room if it is not.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Dinner',
-      },
-      {
-        day: 2,
-        title: 'To Gulmarg · into the snow',
-        body: 'Drive up to Gulmarg, which from late December is under a metre or more of snow. Snow gear rental arranged on arrival. Afternoon sledging and a walk into the meadow.',
-        stay: 'Hotel in Gulmarg',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 3,
-        title: 'Gulmarg · gondola and ski slopes',
-        body: 'Gondola Phase 1 to Kongdoori and Phase 2 to Apharwat at 3,979 m, weather permitting. Beginner ski lessons can be arranged with certified local instructors — Gulmarg has some of the best powder in Asia.',
-        stay: 'Hotel in Gulmarg',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 4,
-        title: 'Pahalgam · a quieter white',
-        body: 'Down from Gulmarg and across the valley to Pahalgam. Less snow than Gulmarg but far fewer people, and the Lidder still runs clear between white banks.',
-        stay: 'Hotel in Pahalgam',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 5,
-        title: 'Back to Srinagar · Old City and crafts',
-        body: 'Return to Srinagar. Old City in winter, a shawl workshop where you can watch kani weaving, and hot noon-chai somewhere warm.',
-        stay: 'Hotel in Srinagar',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 6,
-        title: 'Departure',
-        body: 'Breakfast and airport drop, with a buffer built in — winter flights out of Srinagar can shift with the weather.',
-        meals: 'Breakfast',
-      },
+    "slug": "6-nights-ladakh-tour",
+    "name": "Stargazer’s Ladakh",
+    "destination": "hanle",
+    "destinationName": "Ladakh",
+    "regions": [
+      "hanle",
+      "leh"
     ],
-    inclusions: [
-      ...STD_INCLUSIONS_KASHMIR,
-      'Heated rooms at every property',
-      'Snow-chain-equipped vehicles with experienced winter drivers',
+    "nights": 6,
+    "days": 7,
+    "priceFrom": 31200,
+    "styles": [
+      "adventure",
+      "family"
     ],
-    exclusions: [
-      ...STD_EXCLUSIONS,
-      'Ski equipment rental and instructor fees',
-      'Snow-boot and jacket rental in Gulmarg',
+    "summary": "Tso Moriri, the Changthang plateau and two nights at Hanle, where the Milky Way is bright enough to cast a shadow.",
+    "route": [
+      "Leh",
+      "Chumathang",
+      "Tso Moriri",
+      "Hanle",
+      "Umling La",
+      "Leh"
     ],
-    faqs: [
+    "bestMonths": "May–Oct",
+    "idealFor": "Stargazers, photographers and anyone who has already done Nubra and Pangong",
+    "itinerary": [
       {
-        q: 'Is snow guaranteed?',
-        a: 'Nothing weather-related is ever guaranteed, but Gulmarg has reliable snow cover from late December through February in a normal year. If you book for early December or March you are gambling — we will tell you so rather than take the booking quietly.',
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup and a deliberately quiet afternoon. Hydration, a slow walk to the Main Bazaar, early dinner — altitude first, sightseeing later.",
+        "stay": "Hotel in Leh",
+        "meals": "Dinner"
       },
       {
-        q: 'What happens if the Srinagar–Gulmarg road closes?',
-        a: 'It occasionally shuts for a few hours during heavy snowfall while it is cleared. Our drivers know the conditions and we build buffer into the itinerary. If a full day is lost we rework the plan rather than cancelling on you.',
+        "day": 2,
+        "title": "Leh & Shanti Stupa",
+        "body": "A gentle acclimatisation day through Leh Old Town and the Palace, finishing at Shanti Stupa for sunset over the Stok range.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'Can beginners ski at Gulmarg?',
-        a: 'Yes. The Kongdoori bowl above Phase 1 has gentle beginner terrain and certified instructors. Phase 2 and the Apharwat descents are for experienced skiers only.',
+        "day": 3,
+        "title": "Leh → Chumathang → Tso Moriri",
+        "body": "South-east along the Indus to the Chumathang hot springs, then up onto the Rupshu plateau to Korzok on the shore of Tso Moriri.",
+        "stay": "Camp at Tso Moriri",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'How cold does it get?',
-        a: 'Srinagar sits around -2°C to 8°C in January. Gulmarg runs -8°C to 4°C. Every hotel we use has heating; layers and a proper jacket are essential.',
+        "day": 4,
+        "title": "Tso Moriri → Hanle",
+        "body": "Across the Changthang grasslands past Tso Kar, watching for kiang and black-necked cranes, into Hanle before dark.",
+        "stay": "Dark-sky camp at Hanle",
+        "meals": "Breakfast, dinner"
       },
+      {
+        "day": 5,
+        "title": "Hanle Dark Sky Reserve",
+        "body": "The Indian Astronomical Observatory by day, and the night you came for — the Milky Way at 4,500 m with an astro guide and zero light pollution.",
+        "stay": "Dark-sky camp at Hanle",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Hanle → Umling La → Leh",
+        "body": "The highest motorable road on earth at 5,798 m in the morning light, then the long descent back to Leh via Nyoma.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Departure",
+        "body": "Morning transfer to Kushok Bakula Rimpochee Airport with breakfast packed for the flight out.",
+        "meals": "Breakfast"
+      }
     ],
-    tone: 'kashmir',
+    "inclusions": [
+      "3★ hotel in Leh and dark-sky camps at Tso Moriri and Hanle, on twin-sharing",
+      "Daily breakfast and dinner",
+      "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
+      "An astro guide for the night at the Hanle Dark Sky Reserve",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "nightsky",
+    "image": "/img/hanle-night-sky.webp",
+    "featured": true
   },
-
-  // ─────────────────────────────────────────────── LADAKH
   {
-    slug: 'ladakh-leh-nubra-pangong-6-nights',
-    image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1000&auto=format&fit=crop',
-    name: 'Leh, Nubra & Pangong',
-    destination: 'ladakh',
-    destinationName: 'Ladakh',
-    nights: 6,
-    days: 7,
-    priceFrom: 38500,
-    styles: ['adventure', 'group', 'first-timers'],
-    summary:
-      'The essential Ladakh circuit, paced so the altitude does not decide how your trip goes. Rest day first. Passes later.',
-    route: ['Leh', 'Nubra', 'Pangong', 'Leh'],
-    bestMonths: 'May–Sep',
-    idealFor: 'First-time Ladakh travellers who want the classic route done safely',
-    itinerary: [
-      {
-        day: 1,
-        title: 'Fly into Leh · complete rest',
-        body: 'Met at Leh airport and driven straight to the hotel. Today is a full rest day and we mean it — no sightseeing, no walking uphill, plenty of water, an early night. This one decision is the difference between a good Ladakh trip and a miserable one.',
-        stay: 'Hotel in Leh',
-        meals: 'Dinner',
-      },
-      {
-        day: 2,
-        title: 'Leh valley · gentle acclimatisation',
-        body: 'Low-altitude sightseeing inside the valley. Shey Palace, Thiksey Monastery on its hill, Hemis, and the Sindhu Ghat. Back by mid-afternoon. Oximeter check before dinner.',
-        stay: 'Hotel in Leh',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 3,
-        title: 'Khardung La · into Nubra',
-        body: 'Over Khardung La at 18,380 ft — brief stop only, altitude is not a place to linger — and down into the Nubra valley. Diskit Monastery and its 32-metre Maitreya Buddha, then Bactrian camels on the Hunder dunes at sunset.',
-        stay: 'Camp or hotel in Nubra',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 4,
-        title: 'Nubra to Pangong via Shyok',
-        body: 'The Shyok river road east to Pangong Tso — rough, remote and one of the great drives in India. First sight of the lake in the afternoon, when the water runs through every blue there is.',
-        stay: 'Lakeside camp, Pangong',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 5,
-        title: 'Pangong sunrise · return to Leh',
-        body: 'Up early for sunrise over the lake, which is worth the cold. Then back to Leh over Chang La at 17,590 ft, with a stop at Thiksey if you want a second look.',
-        stay: 'Hotel in Leh',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 6,
-        title: 'Sham valley · Magnetic Hill and Sangam',
-        body: 'West from Leh — Hall of Fame, Gurudwara Pathar Sahib, Magnetic Hill, and the Sangam where the Indus and Zanskar meet in two visibly different colours. Free evening in Leh market.',
-        stay: 'Hotel in Leh',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 7,
-        title: 'Departure',
-        body: 'Early airport drop — Leh flights leave in the morning before the wind picks up.',
-        meals: 'Breakfast',
-      },
+    "slug": "7-nights-ladakh-tour",
+    "name": "Complete Ladakh",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "leh",
+      "ladakh-monasteries"
     ],
-    inclusions: [
-      'All accommodation on twin-sharing — hotels in Leh, camps in Nubra and Pangong',
-      'Daily breakfast and dinner',
-      'Private vehicle with an experienced high-altitude driver',
-      'All Inner Line Permits and wildlife fees',
-      'Oxygen cylinder in every vehicle, plus twice-daily oximeter checks',
-      'Airport transfers at Leh',
-      'Dedicated trip coordinator on WhatsApp for the full journey',
-      'All applicable taxes and GST',
+    "nights": 7,
+    "days": 8,
+    "priceFrom": 36500,
+    "styles": [
+      "family",
+      "adventure"
     ],
-    exclusions: [
-      'Airfare to and from Leh',
-      'Lunch throughout the trip',
-      'Monastery entry fees',
-      'Any adventure activity — rafting, biking, quad rides',
-      'Personal expenses, tips and medical costs',
-      'Anything not explicitly listed under inclusions',
+    "summary": "The week that adds the Balti frontier at Turtuk and a free day in Leh: the difference between seeing Ladakh and actually spending time in it.",
+    "route": [
+      "Leh",
+      "Sham Valley",
+      "Nubra",
+      "Turtuk",
+      "Pangong Tso",
+      "Leh"
     ],
-    faqs: [
+    "bestMonths": "May–Sep",
+    "idealFor": "Travellers with a full week who want Turtuk and a free day, not just the checklist",
+    "itinerary": [
       {
-        q: 'Why is the first day a rest day? It feels like a wasted day.',
-        a: 'Leh sits at 3,500 m and you arrive by air, which means no gradual ascent. Altitude sickness typically hits 12 to 24 hours after arrival. Guests who sightsee on day one are the ones who lose days three and four to a hotel room. One quiet day protects the other six.',
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup and a quiet afternoon. Hydration, a short walk, early dinner — altitude first.",
+        "stay": "Hotel in Leh",
+        "meals": "Dinner"
       },
       {
-        q: 'Is the Pangong camp comfortable?',
-        a: 'Comfortable by high-altitude standards — proper beds, attached washrooms, thick bedding and hot water in buckets. It is not a hotel. There is no heating overnight because there is no reliable power at 4,350 m, and it gets genuinely cold.',
+        "day": 2,
+        "title": "Sham Valley & the Indus",
+        "body": "Magnetic Hill, the Sangam confluence and Alchi. A low-altitude day by design.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'What if someone gets altitude sickness?',
-        a: 'Every vehicle carries oxygen and our drivers are trained to recognise AMS. Leh has a well-equipped hospital and the SNM medical facilities. If symptoms escalate, the treatment is descent, and we descend — no itinerary is worth pushing through it.',
+        "day": 3,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "Cross at 5,359 m with a short controlled stop, then drop into the Hunder dunes among the Bactrian camels.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'Can this be done in fewer days?',
-        a: 'It can be compressed to five nights but we do not recommend it — the compression always comes out of the acclimatisation days. If you only have five nights, do Leh and Nubra and save Pangong for a return trip.',
+        "day": 4,
+        "title": "Turtuk & the Balti frontier",
+        "body": "North to the last village before the border — apricot orchards, Balti kitchens and a culture only reachable since 2010.",
+        "stay": "Overnight in Turtuk",
+        "meals": "Breakfast, dinner"
       },
+      {
+        "day": 5,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "The river road east, reaching Pangong Tso in late afternoon light. Overnight in an insulated shoreline camp.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Pangong → Leh over Chang La",
+        "body": "Sunrise on the lake, then back over Chang La at 5,360 m with a stop at Thiksey on the descent.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Leh at leisure",
+        "body": "A free day — Hemis and Stok, rafting on the Zanskar, or simply the cafés and craft shops of Changspa Road.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "body": "Morning transfer to the airport, breakfast packed for the flight out over the range.",
+        "meals": "Breakfast"
+      }
     ],
-    tone: 'ladakh',
-    featured: true,
+    "inclusions": [
+      "3★ hotels in Leh and deluxe camps at Nubra and Pangong with attached bathrooms, heating and hot water",
+      "Daily breakfast and dinner",
+      "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "highroad",
+    "image": "/img/ladakh-hanle.webp"
   },
-
   {
-    slug: 'ladakh-complete-8-nights',
-    image: 'https://images.unsplash.com/photo-1518457607834-6e8d80c183c5?q=80&w=1000&auto=format&fit=crop',
-    name: 'Complete Ladakh',
-    destination: 'ladakh',
-    destinationName: 'Ladakh',
-    nights: 8,
-    days: 9,
-    priceFrom: 54900,
-    styles: ['adventure', 'group'],
-    summary:
-      'Everything the classic circuit leaves out — Turtuk on the Pakistan border, Tso Moriri, and Lamayuru\'s moonland. The trip people talk about years later.',
-    route: ['Leh', 'Nubra', 'Turtuk', 'Pangong', 'Tso Moriri', 'Leh'],
-    bestMonths: 'Jun–Sep',
-    idealFor: 'Return visitors, photographers, and anyone who found the standard circuit too short',
-    itinerary: [
-      { day: 1, title: 'Arrive Leh · complete rest', body: 'Airport pickup and a full rest day. No exceptions.', stay: 'Hotel in Leh', meals: 'Dinner' },
-      { day: 2, title: 'Leh valley acclimatisation', body: 'Shey, Thiksey, Hemis and the Sindhu Ghat. Gentle day inside the valley, back by mid-afternoon.', stay: 'Hotel in Leh', meals: 'Breakfast, dinner' },
-      { day: 3, title: 'Khardung La to Nubra', body: 'Over the pass and down to Diskit. Maitreya Buddha, Hunder dunes and Bactrian camels at sunset.', stay: 'Camp in Nubra', meals: 'Breakfast, dinner' },
-      { day: 4, title: 'Turtuk · India\'s last village', body: 'North-west along the Shyok to Turtuk, Balti-speaking and apricot-growing, which was part of Pakistan until 1971. Village walk with a local guide.', stay: 'Guest house in Turtuk', meals: 'Breakfast, dinner' },
-      { day: 5, title: 'Turtuk to Pangong', body: 'Long driving day back down the Shyok and east to Pangong Tso. Arrive by late afternoon for the light on the water.', stay: 'Lakeside camp, Pangong', meals: 'Breakfast, dinner' },
-      { day: 6, title: 'Pangong to Tso Moriri', body: 'Across the Changthang plateau via Chushul and Tsaga La. Kiang herds, nomad camps, and almost no other vehicles. Tso Moriri by evening.', stay: 'Camp at Korzok', meals: 'Breakfast, dinner' },
-      { day: 7, title: 'Tso Moriri to Leh via Tso Kar', body: 'Morning at Korzok Monastery, then back to Leh via the Tso Kar basin and the Taglang La pass at 17,480 ft.', stay: 'Hotel in Leh', meals: 'Breakfast, dinner' },
-      { day: 8, title: 'Lamayuru and the Sham valley', body: 'West to Lamayuru — the moonland formations and the oldest monastery in Ladakh. Magnetic Hill, Pathar Sahib and Sangam on the way back.', stay: 'Hotel in Leh', meals: 'Breakfast, dinner' },
-      { day: 9, title: 'Departure', body: 'Early morning airport drop.', meals: 'Breakfast' },
+    "slug": "8-nights-ladakh-tour",
+    "name": "Grand Ladakh Circuit",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "hanle",
+      "leh",
+      "ladakh-monasteries"
     ],
-    inclusions: [
-      'All accommodation on twin-sharing — hotels, camps and a Turtuk guest house',
-      'Daily breakfast and dinner',
-      'Private vehicle with an experienced high-altitude driver throughout',
-      'All Inner Line Permits including Turtuk and Tso Moriri',
-      'Oxygen cylinder in every vehicle, plus twice-daily oximeter checks',
-      'Local village guide at Turtuk',
-      'Airport transfers at Leh',
-      'Dedicated trip coordinator on WhatsApp for the full journey',
-      'All applicable taxes and GST',
+    "nights": 8,
+    "days": 9,
+    "priceFrom": 42000,
+    "styles": [
+      "adventure",
+      "family"
     ],
-    exclusions: [
-      'Airfare to and from Leh',
-      'Lunch throughout the trip',
-      'Monastery entry fees and camera charges',
-      'Any adventure activity',
-      'Personal expenses, tips and medical costs',
-      'Anything not explicitly listed under inclusions',
+    "summary": "Our most-booked route. Nubra, Turtuk, Pangong, Hanle and the highest motorable road on earth, sequenced so the altitude never catches you out.",
+    "route": [
+      "Leh",
+      "Sham Valley",
+      "Nubra",
+      "Turtuk",
+      "Pangong Tso",
+      "Hanle",
+      "Umling La",
+      "Tso Moriri",
+      "Leh"
     ],
-    faqs: [
+    "bestMonths": "May–Sep",
+    "idealFor": "Anyone who wants the whole of Ladakh in one trip and has nine days to do it properly",
+    "itinerary": [
       {
-        q: 'Is nine days too long for Ladakh?',
-        a: 'For most first-timers the seven-day circuit is enough. This one is for people who have either been before, or who travel specifically for landscape and want Changthang and Turtuk rather than only the headline stops.',
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup and a deliberately empty afternoon. Hydration, a slow walk to the Main Bazaar, early dinner.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Dinner"
       },
       {
-        q: 'How rough is the Pangong to Tso Moriri road?',
-        a: 'Genuinely rough — unpaved for long stretches, high, remote, and eight to ten hours of driving. It is one of the most beautiful drives in India and it is not comfortable. Both things are true.',
+        "day": 2,
+        "title": "Sham Valley & the Indus",
+        "body": "A low-altitude loop to Magnetic Hill, the Sangam confluence and Alchi. You gain almost no elevation, precisely the point.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'Is Turtuk worth the detour?',
-        a: 'It is the part of this itinerary guests mention most in their reviews. Balti culture, a completely different food and language from the rest of Ladakh, and a village that only opened to tourists in 2010.',
+        "day": 3,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "Cross at 5,359 m with a short stop, then descend into the Nubra dunes at Hunder among the double-humped Bactrian camels.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
       },
+      {
+        "day": 4,
+        "title": "Turtuk & the Balti frontier",
+        "body": "North to the last village before the border — apricot orchards, Balti cuisine and a culture only reachable since 2010.",
+        "stay": "Overnight in Turtuk",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "The river road east, arriving at Pangong Tso in late afternoon light. Overnight in an insulated shoreline camp.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Pangong → Hanle",
+        "body": "Across the Changthang plateau through Chushul and Loma, watching for kiang and black-necked cranes.",
+        "stay": "Overnight in Hanle",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Hanle & Umling La · 5,798 m",
+        "body": "The highest motorable road on earth by morning; the Milky Way over the Dark Sky Reserve by night, with an astro guide.",
+        "stay": "Overnight in Hanle",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 8,
+        "title": "Hanle → Tso Moriri → Leh",
+        "body": "West past Tso Moriri and the Chumathang hot springs, back into Leh by evening for a final dinner.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 9,
+        "title": "Departure",
+        "body": "Morning transfer to the airport, with breakfast packed for the flight out over the range.",
+        "meals": "Breakfast"
+      }
     ],
-    tone: 'ladakh',
+    "inclusions": [
+      "4★ hotels in Leh and deluxe camps at Nubra and Pangong with attached bathrooms, heating and hot water",
+      "Daily breakfast and dinner",
+      "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
+      "An astro guide for the night at the Hanle Dark Sky Reserve",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "highroad",
+    "image": "/img/ladakh-hanle.webp",
+    "featured": true
   },
-
-  // ─────────────────────────────────────────────── HIMACHAL
   {
-    slug: 'shimla-manali-6-nights',
-    image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1000&auto=format&fit=crop',
-    name: 'Shimla & Manali',
-    destination: 'himachal',
-    destinationName: 'Himachal',
-    nights: 6,
-    days: 7,
-    priceFrom: 21500,
-    styles: ['family', 'honeymoon', 'first-timers'],
-    summary:
-      'The classic Himachal circuit, routed and timed to dodge the worst of the crowds. Toy train included.',
-    route: ['Shimla', 'Manali', 'Solang', 'Chandigarh'],
-    bestMonths: 'Mar–Jun · Sep–Nov',
-    idealFor: 'Families and couples wanting hill-station comfort rather than high-altitude adventure',
-    itinerary: [
-      { day: 1, title: 'Chandigarh to Shimla', body: 'Met at Chandigarh airport or station and driven up to Shimla, roughly four hours through pine forest. Evening on the Ridge and Mall Road.', stay: 'Hotel in Shimla', meals: 'Dinner' },
-      { day: 2, title: 'Shimla · Kufri and the colonial town', body: 'Kufri in the morning for the views, then the Viceregal Lodge, Christ Church and the Jakhoo temple. Afternoon free on the Mall.', stay: 'Hotel in Shimla', meals: 'Breakfast, dinner' },
-      { day: 3, title: 'Shimla to Manali via Kullu', body: 'Long scenic drive north along the Beas. Stops at Sundernagar lake, the Pandoh dam and a Kullu shawl workshop. Manali by evening.', stay: 'Hotel in Manali', meals: 'Breakfast, dinner' },
-      { day: 4, title: 'Solang Valley and the Atal Tunnel', body: 'Up to Solang for paragliding, zorbing and ropeway, then through the Atal Tunnel to Sissu in the Lahaul valley — a completely different landscape ten kilometres apart.', stay: 'Hotel in Manali', meals: 'Breakfast, dinner' },
-      { day: 5, title: 'Manali local · Old Manali and Vashisht', body: 'Hadimba Devi temple among the deodars, the Vashisht hot springs, Manu temple and the Tibetan monastery. Afternoon free in Old Manali.', stay: 'Hotel in Manali', meals: 'Breakfast, dinner' },
-      { day: 6, title: 'Manali to Chandigarh', body: 'Drive back down with a stop at Kullu for river rafting on the Beas if you want it. Overnight in Chandigarh so nobody is racing a morning flight.', stay: 'Hotel in Chandigarh', meals: 'Breakfast' },
-      { day: 7, title: 'Departure', body: 'Airport or station drop at Chandigarh.', meals: 'Breakfast' },
+    "slug": "ladakh-honeymoon-packages",
+    "name": "Honeymoon in the High Desert",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "leh"
     ],
-    inclusions: [
-      'All accommodation on twin-sharing in 3★/4★ hotels',
-      'Daily breakfast and dinner (MAP plan)',
-      'Private air-conditioned vehicle throughout',
-      'All toll, parking, driver allowance and fuel',
-      'Pickup and drop at Chandigarh airport or railway station',
-      'Dedicated trip coordinator on WhatsApp for the full journey',
-      'All applicable taxes and GST',
+    "nights": 5,
+    "days": 6,
+    "priceFrom": 34900,
+    "styles": [
+      "honeymoon"
     ],
-    exclusions: [
-      'Airfare or train fare to and from Chandigarh',
-      'Lunch throughout the trip',
-      'Rohtang Pass permit and vehicle charges (when open)',
-      'Solang Valley activities — paragliding, ropeway, zorbing',
-      'River rafting and other adventure activities',
-      'Entry tickets to monuments and temples',
-      'Personal expenses, tips and laundry',
-      'Anything not explicitly listed under inclusions',
+    "summary": "No shared vehicle, no group schedule, no rushing. A private car, 4★ stays, a luxury camp under the Nubra dunes and afternoons with nothing in them.",
+    "route": [
+      "Leh",
+      "Nubra",
+      "Pangong Tso",
+      "Leh"
     ],
-    faqs: [
+    "bestMonths": "May–Sep",
+    "idealFor": "Couples who want privacy, slower days and a luxury camp rather than a shared schedule",
+    "itinerary": [
       {
-        q: 'Is Rohtang Pass included?',
-        a: 'No — it needs a separate permit with a daily vehicle quota and it is only open roughly mid-May to mid-October. We arrange it as an add-on when it is open. The Atal Tunnel, which is included, reaches the Lahaul valley year-round and many guests prefer it.',
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Private transfer to a 4★ hotel, room decorated for your arrival. The afternoon is deliberately free — tea on the terrace, nothing scheduled.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Dinner"
       },
       {
-        q: 'Can we do the Kalka–Shimla toy train?',
-        a: 'Yes, and it is worth it. It is a UNESCO heritage line and takes about five hours. We add it as a day-one alternative to the road drive — tell us at booking so we can get seats, which sell out early.',
+        "day": 2,
+        "title": "Leh & sunset at Shanti Stupa",
+        "body": "A slow morning, the old town and Leh Palace, then the Stupa for sunset over the Stok range. Dinner is yours alone, on the roof.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'When will we see snow?',
-        a: 'Late December to February for reliable snow at Kufri and Solang. Outside that window you need the Atal Tunnel exit at Sissu, where snow lasts into May.',
+        "day": 3,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "Cross at 5,359 m, then descend to Hunder. Overnight in a luxury tented camp among the dunes.",
+        "stay": "Luxury tented camp, Hunder",
+        "meals": "Breakfast, dinner"
       },
+      {
+        "day": 4,
+        "title": "Nubra · dunes and a private dinner",
+        "body": "Bactrian camels at golden hour in the Hunder dunes, the Diskit Maitreya above the valley, and a candlelight dinner set for two.",
+        "stay": "Luxury tented camp, Hunder",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "The river road east to Pangong Tso. A lakeside camp, and a sky with nothing in it but stars.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Pangong → Leh & departure",
+        "body": "Sunrise on the lake, back over Chang La to Leh, and your onward flight.",
+        "meals": "Breakfast"
+      }
     ],
-    tone: 'himachal',
+    "inclusions": [
+      "4★ hotel in Leh and a luxury tented camp in Nubra",
+      "A private cab for the two of you, never shared",
+      "Room decorated for your arrival",
+      "One private candlelight dinner in the Nubra dunes, weather permitting",
+      "Daily breakfast and dinner",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "What actually makes the honeymoon package different?",
+        "a": "A private cab for the two of you rather than a shared vehicle, 4★ hotels in Leh and a luxury tented camp in Nubra rather than standard camps, a room decorated on arrival, and one candlelight dinner set up privately — at the dunes in Nubra, weather permitting. The pace is also slower: we build in unscheduled afternoons instead of filling every hour."
+      },
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "nightsky",
+    "image": "/img/hanle-night-sky.webp",
+    "featured": true
   },
-
-  // ─────────────────────────────────────────────── VAISHNO DEVI
   {
-    slug: 'vaishno-devi-2-nights',
-    image: 'https://images.unsplash.com/photo-1626714485848-d3e91d575fa9?q=80&w=1000&auto=format&fit=crop',
-    name: 'Vaishno Devi Yatra',
-    destination: 'vaishno-devi',
-    destinationName: 'Vaishno Devi',
-    nights: 2,
-    days: 3,
-    priceFrom: 9500,
-    styles: ['pilgrimage', 'family'],
-    summary:
-      'The yatra done properly — registration handled, a hotel close to the base, and the Bhairon leg planned in rather than forgotten.',
-    route: ['Katra', 'Bhawan', 'Bhairon', 'Katra'],
-    bestMonths: 'Oct–Apr',
-    idealFor: 'Pilgrims who want the logistics taken care of so the climb is the only thing to think about',
-    itinerary: [
-      {
-        day: 1,
-        title: 'Arrive Katra · Yatra Parchi and rest',
-        body: 'Met at Jammu airport or Katra station and taken to a hotel near the base camp. We complete your Yatra Parchi registration and brief you on the cloakroom rules — what can and cannot go up. Early dinner and an early night.',
-        stay: 'Hotel in Katra',
-        meals: 'Dinner',
-      },
-      {
-        day: 2,
-        title: 'The yatra · Bhawan and Bhairon',
-        body: 'Start the 12 km climb early, before the day heats up and the queues build. Darshan at the Bhawan, then the 2.5 km leg to Bhairon Temple which tradition holds completes the pilgrimage. Battery car or helicopter available for either leg. Back to Katra by evening.',
-        stay: 'Hotel in Katra',
-        meals: 'Breakfast, dinner',
-      },
-      {
-        day: 3,
-        title: 'Departure',
-        body: 'Unhurried breakfast, and a drop to Jammu airport or Katra station. Optional stop at Shiv Khori shrine if your schedule allows.',
-        meals: 'Breakfast',
-      },
+    "slug": "ladakh-group-tour",
+    "name": "Fixed Departure Group Tour",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "hanle",
+      "leh",
+      "ladakh-monasteries"
     ],
-    inclusions: [
-      'Accommodation on twin-sharing in a hotel near the Katra base camp',
-      'Daily breakfast and dinner',
-      'Private air-conditioned vehicle for all transfers',
-      'Pickup and drop at Jammu airport or Katra railway station',
-      'Yatra Parchi registration assistance',
-      'Cloakroom and base-camp guidance',
-      'Dedicated trip coordinator on WhatsApp for the full journey',
-      'All applicable taxes and GST',
+    "nights": 6,
+    "days": 7,
+    "priceFrom": 26500,
+    "styles": [
+      "group"
     ],
-    exclusions: [
-      'Airfare or train fare to and from Jammu or Katra',
-      'Helicopter tickets (Katra ↔ Sanjhichhat)',
-      'Pony, palki and porter charges',
-      'Battery car between Bhawan and Bhairon',
-      'Lunch and any meals during the climb',
-      'VIP darshan charges where applicable',
-      'Personal expenses and offerings',
-      'Anything not explicitly listed under inclusions',
+    "summary": "Twice-monthly fixed departures with a trip captain from our Leh team. Most people who book these come on their own, which is rather the point.",
+    "route": [
+      "Leh",
+      "Sham Valley",
+      "Nubra",
+      "Pangong Tso",
+      "Hanle",
+      "Leh"
     ],
-    faqs: [
+    "bestMonths": "Mid-May–Sep",
+    "idealFor": "Solo travellers and friends who would rather share the road with 8 to 16 people",
+    "itinerary": [
       {
-        q: 'Can you book the helicopter for us?',
-        a: 'We assist with booking but cannot guarantee it — the Shrine Board releases limited seats, they sell out weeks ahead in peak season, and flights are weather-dependent. Book as early as you can and always have the walking plan as a backup.',
+        "day": 1,
+        "title": "Arrive Leh · 3,500 m",
+        "body": "Airport pickup, hotel check-in and an evening briefing with your trip captain. Rest of the day at rest — altitude first.",
+        "stay": "Hotel in Leh",
+        "meals": "Dinner"
       },
       {
-        q: 'Is the climb difficult for elderly parents?',
-        a: 'The track is fully paved and gradual rather than steep, but 12 km is 12 km. Ponies, palkis and porters are available the entire way, and the helicopter cuts most of the climb. We regularly arrange this trip for guests in their seventies.',
+        "day": 2,
+        "title": "Sham Valley & the Indus",
+        "body": "Magnetic Hill, the Sangam confluence and Alchi. A low-altitude acclimatisation day for the whole group.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'Do we have to visit Bhairon Temple?',
-        a: 'Tradition holds the yatra is incomplete without it. It is 2.5 km beyond the Bhawan, uphill, and there is a battery-car and ropeway service. We build the time for it into the day rather than leaving you to discover it at 4pm.',
+        "day": 3,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "Cross at 5,359 m together, then down to the Hunder dunes and the Bactrian camels.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
       },
+      {
+        "day": 4,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "The river road east, arriving at Pangong Tso for the afternoon light. Camp on the shoreline.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Pangong → Hanle",
+        "body": "Across the Changthang plateau through Chushul and Loma, watching for kiang and black-necked cranes.",
+        "stay": "Overnight in Hanle",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Hanle → Leh",
+        "body": "The observatory in the morning, then the long, spectacular run back to Leh via Nyoma and Chumathang.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Departure",
+        "body": "Group breakfast and transfers to the airport across the morning.",
+        "meals": "Breakfast"
+      }
     ],
-    tone: 'vaishno',
+    "inclusions": [
+      "3★ hotels in Leh and deluxe camps at Nubra and Pangong, twin-sharing matched by gender",
+      "A trip captain from our Leh team for the whole departure",
+      "Daily breakfast and dinner",
+      "Shared vehicles for the group with Ladakhi drivers",
+      "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare to and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "How big are the groups, and can I join on my own?",
+        "a": "Fixed departures run at 8 to 16 travellers with a trip captain from our Leh team. Solo travellers are welcome and are the majority of our group bookings — you will be matched into twin-sharing with someone of the same gender, or you can pay a single-occupancy supplement for your own room."
+      },
+      {
+        "q": "When do the fixed departures run?",
+        "a": "Twice monthly from mid-May to late September, usually departing on the 5th and 20th. Dates for the coming season are confirmed in January. If your dates fall between departures, or you are six or more people, we run the same itinerary privately at close to the same per-person cost."
+      },
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "highroad",
+    "image": "/img/ladakh-hanle.webp"
   },
-
   {
-    slug: 'vaishno-devi-kashmir-7-nights',
-    image: 'https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=1000&auto=format&fit=crop',
-    name: 'Vaishno Devi & Kashmir',
-    destination: 'vaishno-devi',
-    destinationName: 'Vaishno Devi',
-    nights: 7,
-    days: 8,
-    priceFrom: 31500,
-    styles: ['pilgrimage', 'family', 'group'],
-    summary:
-      "Darshan first, then the valley. One flight, two very different journeys — and the combo most of our pilgrimage guests wish they'd known about earlier.",
-    route: ['Katra', 'Bhawan', 'Patnitop', 'Srinagar', 'Gulmarg', 'Pahalgam'],
-    bestMonths: 'Mar–Jun · Sep–Nov',
-    idealFor: 'Families combining a pilgrimage with a proper holiday in one trip',
-    itinerary: [
-      { day: 1, title: 'Arrive Katra · registration and rest', body: 'Pickup at Jammu, hotel near the base camp, Yatra Parchi completed and a briefing on what to carry up.', stay: 'Hotel in Katra', meals: 'Dinner' },
-      { day: 2, title: 'The yatra · Bhawan and Bhairon', body: 'Early start for the 12 km climb, darshan at the Bhawan, then Bhairon Temple. Back to Katra by evening.', stay: 'Hotel in Katra', meals: 'Breakfast, dinner' },
-      { day: 3, title: 'Katra to Srinagar via Patnitop', body: 'The Jammu–Srinagar highway over the Banihal pass, with a cedar-forest stop at Patnitop and lunch on the way. Srinagar by evening.', stay: 'Hotel in Srinagar', meals: 'Breakfast, dinner' },
-      { day: 4, title: 'Srinagar · gardens and the lake', body: 'Nishat and Shalimar gardens, Shankaracharya Hill at sunset, and a shikara ride through the floating market.', stay: 'Hotel in Srinagar', meals: 'Breakfast, dinner' },
-      { day: 5, title: 'Gulmarg · gondola day', body: 'Up to Gulmarg through rice terraces. Gondola Phase 1 and 2, meadow walk, back to Srinagar by evening.', stay: 'Hotel in Srinagar', meals: 'Breakfast, dinner' },
-      { day: 6, title: 'Pahalgam · the Lidder valley', body: 'South to Pahalgam via the Pampore saffron fields. Betaab, Aru and Chandanwari in the afternoon.', stay: 'Hotel in Pahalgam', meals: 'Breakfast, dinner' },
-      { day: 7, title: 'Back to Srinagar · houseboat night', body: 'Return to Srinagar, Old City walk, and a final night on a deluxe houseboat on Dal Lake.', stay: 'Deluxe houseboat, Dal Lake', meals: 'Breakfast, dinner' },
-      { day: 8, title: 'Departure', body: 'Breakfast on the water and an airport drop at Srinagar.', meals: 'Breakfast' },
+    "slug": "leh-ladakh-bike-trip",
+    "name": "Himalayan Bike Expedition",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "leh"
     ],
-    inclusions: [
-      'All accommodation on twin-sharing — Katra hotel, Kashmir hotels and one houseboat night',
-      'Daily breakfast and dinner (MAP plan)',
-      'Private air-conditioned vehicle for the full circuit including the Jammu–Srinagar highway',
-      'Pickup at Jammu and drop at Srinagar airport',
-      'Yatra Parchi registration assistance',
-      'Shikara ride on Dal Lake',
-      'Dedicated trip coordinator on WhatsApp for the full journey',
-      'All applicable taxes and GST',
+    "nights": 8,
+    "days": 9,
+    "priceFrom": 39900,
+    "styles": [
+      "adventure",
+      "group"
     ],
-    exclusions: [
-      'Airfare in to Jammu and out of Srinagar',
-      'Helicopter, pony, palki and porter charges at Vaishno Devi',
-      'Lunch throughout the trip',
-      'Gondola tickets at Gulmarg',
-      'Union taxi charges inside Gulmarg and Pahalgam',
-      'Entry tickets to gardens and monuments',
-      'Personal expenses, tips and offerings',
-      'Anything not explicitly listed under inclusions',
+    "summary": "Royal Enfield Himalayans, fuel and a mechanic included, with a support vehicle carrying luggage, spares and oxygen behind you every kilometre.",
+    "route": [
+      "Manali",
+      "Jispa",
+      "Sarchu",
+      "Leh",
+      "Nubra",
+      "Pangong Tso",
+      "Leh"
     ],
-    faqs: [
+    "bestMonths": "Jun–Sep",
+    "idealFor": "Riders comfortable with 150–250 km days on mixed surfaces",
+    "itinerary": [
       {
-        q: 'Should we fly out of Srinagar or return to Jammu?',
-        a: 'Fly out of Srinagar. Doubling back to Jammu costs you a full day on the highway for no reason. Book your inbound to Jammu (IXJ) and your outbound from Srinagar (SXR) — we handle everything in between.',
+        "day": 1,
+        "title": "Arrive Manali",
+        "body": "Hotel check-in, bike allocation and a full safety briefing. Gear check, luggage sorted onto the backup vehicle.",
+        "stay": "Hotel in Manali",
+        "meals": "Dinner"
       },
       {
-        q: 'How long is the Katra to Srinagar drive?',
-        a: 'Seven to eight hours including stops, over the Banihal pass and through the Jawahar tunnel. It is a beautiful drive. If you would rather not do it, there is a twenty-minute Jammu–Srinagar flight and we can restructure the day.',
+        "day": 2,
+        "title": "Manali → Jispa · 140 km",
+        "body": "Through the Atal Tunnel into Lahaul, then along the Bhaga river past Keylong to Jispa. A gentle first riding day by design.",
+        "stay": "Hotel in Jispa",
+        "meals": "Breakfast, dinner"
       },
       {
-        q: 'Is this too much for elderly travellers?',
-        a: 'The yatra is the demanding part; the Kashmir leg is gentle. Many of our pilgrimage guests take the helicopter or a palki up to the Bhawan, then find the valley days genuinely restful afterward.',
+        "day": 3,
+        "title": "Jispa → Sarchu · 90 km",
+        "body": "Baralacha La at 4,890 m and the Suraj Tal lake, then onto the Sarchu plain. Swiss camp for the night.",
+        "stay": "Swiss camp at Sarchu",
+        "meals": "Breakfast, dinner"
       },
+      {
+        "day": 4,
+        "title": "Sarchu → Leh · 255 km",
+        "body": "The big one — the Gata Loops, Nakee La, Lachulung La and Tanglang La at 5,328 m, then down the Indus into Leh.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Leh · rest and service",
+        "body": "A full rest day. Bikes serviced and checked, permits collected, and nothing asked of your body above 3,500 m.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "The famous crossing at 5,359 m, then down to the Hunder dunes in Nubra.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "The Shyok river road east — rough, remote and the best riding of the trip — to Pangong Tso.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 8,
+        "title": "Pangong → Leh over Chang La",
+        "body": "Sunrise on the lake, then Chang La at 5,360 m and back into Leh for a final night together.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 9,
+        "title": "Departure",
+        "body": "Bikes handed back, breakfast, and transfers to the airport.",
+        "meals": "Breakfast"
+      }
     ],
-    tone: 'vaishno',
-    featured: true,
+    "inclusions": [
+      "Royal Enfield Himalayan 411, serviced before every departure, with fuel",
+      "Backup vehicle carrying luggage, spares, fuel and oxygen, with a mechanic on board every day",
+      "3★ hotels and a Swiss camp at Sarchu, on twin-sharing",
+      "Daily breakfast and dinner",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Travel to Manali and airfare from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting on the Zanskar or camel rides in Nubra",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Riding gear and damage to the motorcycle",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "Do I need a special licence or previous Himalayan experience?",
+        "a": "A valid motorcycle licence is mandatory and we check it at handover. Previous high-altitude riding is not required, but you should be genuinely comfortable riding 150–250 km in a day on mixed surfaces before you book. The Manali–Leh leg includes gravel, water crossings and five passes above 4,000 m. If you are unsure, ride the same route with us on the backup vehicle for the first two days and take over at Leh — we have done that for plenty of riders."
+      },
+      {
+        "q": "Whose motorcycle do I ride, and what if it breaks down?",
+        "a": "Royal Enfield Himalayan 411s, serviced before every departure, are included in the price along with fuel. You may bring your own bike instead and we will reduce the cost accordingly. A backup vehicle follows the group carrying luggage, spares, fuel and oxygen, with a mechanic on board every single day — nobody is ever left on a pass waiting for help."
+      },
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "When should I actually visit?",
+        "a": "September and October are our honest pick — clear skies, thin crowds, golden poplars and the year’s best conditions at Hanle. May and June are the busiest and most photogenic for snow-lined passes. July and August are warmest but can see rain-related roadblocks. From November to March most high roads close."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "valley",
+    "image": "/img/ladakh-hero.webp"
   },
+  {
+    "slug": "kashmir-ladakh-tour",
+    "name": "Kashmir & Ladakh",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "leh",
+      "ladakh-monasteries"
+    ],
+    "nights": 9,
+    "days": 10,
+    "priceFrom": 54900,
+    "styles": [
+      "family",
+      "adventure"
+    ],
+    "summary": "From a Dal Lake houseboat over Zoji La to the Changthang plateau: the classic Srinagar-to-Leh road, run by one team from end to end.",
+    "route": [
+      "Srinagar",
+      "Sonamarg",
+      "Kargil",
+      "Lamayuru",
+      "Leh",
+      "Nubra",
+      "Pangong Tso",
+      "Leh"
+    ],
+    "bestMonths": "May–Sep",
+    "idealFor": "Travellers who want to reach Leh by road and let the altitude come gradually",
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive Srinagar",
+        "body": "Transfer to your deluxe houseboat on Dal Lake, followed by an evening shikara ride through the floating gardens.",
+        "stay": "Deluxe houseboat, Dal Lake",
+        "meals": "Dinner"
+      },
+      {
+        "day": 2,
+        "title": "Srinagar & the Mughal gardens",
+        "body": "Nishat, Shalimar and Chashme Shahi, the old city mosques, and the craft workshops of downtown Srinagar.",
+        "stay": "Hotel in Srinagar",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 3,
+        "title": "Srinagar → Sonamarg → Kargil",
+        "body": "The Sindh valley to Sonamarg, over Zoji La, past Drass and into Kargil for the night.",
+        "stay": "Hotel in Kargil",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 4,
+        "title": "Kargil → Lamayuru → Leh",
+        "body": "Mulbekh’s rock-cut Maitreya, the moonland at Lamayuru, and the Indus confluence into Leh.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Leh acclimatisation",
+        "body": "A gentle day — Leh Palace, Shanti Stupa and the bazaar, letting altitude settle before the passes.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "Cross at 5,359 m and drop into the Nubra dunes at Hunder.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "The river road east to Pangong Tso, overnight in an insulated shoreline camp.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 8,
+        "title": "Pangong → Leh via Chang La",
+        "body": "Back over Chang La, with a stop at Thiksey monastery on the descent.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 9,
+        "title": "Leh at leisure",
+        "body": "A free day for monasteries, rafting on the Zanskar, or simply the cafés of Changspa Road.",
+        "stay": "4★ hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 10,
+        "title": "Departure",
+        "body": "Morning transfer to Leh airport.",
+        "meals": "Breakfast"
+      }
+    ],
+    "inclusions": [
+      "4★ hotels, one night on a deluxe Dal Lake houseboat, and camps at Nubra and Pangong",
+      "Evening shikara ride on Dal Lake",
+      "Daily breakfast and dinner",
+      "Private vehicle with driver from Srinagar to Leh and for all Ladakh sightseeing",
+      "Pickup at Srinagar airport, drop at Leh airport",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Airfare or train fare to Srinagar and from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "Is the Srinagar–Leh road open all year?",
+        "a": "No. The Zoji La section typically opens from May to late October and closes with the first heavy snow. Outside that window we fly you into Leh and run the Ladakh half only, or move your dates — we will always tell you honestly rather than sell you a closed pass."
+      },
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "valley",
+    "image": "/img/ladakh-hero.webp",
+    "featured": true
+  },
+  {
+    "slug": "manali-ladakh-tour",
+    "name": "Manali to Leh Overland",
+    "destination": "nubra-pangong",
+    "destinationName": "Ladakh",
+    "regions": [
+      "nubra-pangong",
+      "leh"
+    ],
+    "nights": 7,
+    "days": 8,
+    "priceFrom": 38500,
+    "styles": [
+      "adventure",
+      "family"
+    ],
+    "summary": "Five passes above 4,000 m, broken across nights at Jispa and Sarchu so you arrive in Leh acclimatised instead of wrecked.",
+    "route": [
+      "Manali",
+      "Jispa",
+      "Sarchu",
+      "Leh",
+      "Nubra",
+      "Pangong Tso",
+      "Leh"
+    ],
+    "bestMonths": "Jun–Sep",
+    "idealFor": "Road-trippers who want to arrive in Leh already acclimatised",
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrive Manali",
+        "body": "Transfer to your hotel in Old Manali. Evening free along the Mall and the Beas river.",
+        "stay": "Hotel in Manali",
+        "meals": "Dinner"
+      },
+      {
+        "day": 2,
+        "title": "Manali → Jispa",
+        "body": "Over the Atal Tunnel into Lahaul, along the Bhaga river through Keylong to Jispa for the night.",
+        "stay": "Hotel in Jispa",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 3,
+        "title": "Jispa → Sarchu · 4,290 m",
+        "body": "Baralacha La and the Suraj Tal lake, then the high plain of Sarchu. Overnight in a Swiss camp.",
+        "stay": "Swiss camp at Sarchu",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 4,
+        "title": "Sarchu → Leh",
+        "body": "The Gata Loops, Nakee La, Lachulung La and Tanglang La, then down the Indus valley into Leh.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 5,
+        "title": "Leh acclimatisation",
+        "body": "A recovery day after the overland run — Leh Palace, Shanti Stupa and the bazaar at an easy pace.",
+        "stay": "Hotel in Leh",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 6,
+        "title": "Leh → Nubra over Khardung La",
+        "body": "Cross at 5,359 m and descend to the Hunder dunes in Nubra.",
+        "stay": "Deluxe camp in Nubra",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 7,
+        "title": "Nubra → Pangong via Shyok",
+        "body": "East along the river to Pangong Tso, overnight on the shoreline.",
+        "stay": "Shoreline camp at Pangong Tso",
+        "meals": "Breakfast, dinner"
+      },
+      {
+        "day": 8,
+        "title": "Pangong → Leh & departure",
+        "body": "Back over Chang La to Leh, with a Thiksey stop, for your onward flight.",
+        "meals": "Breakfast"
+      }
+    ],
+    "inclusions": [
+      "3★ hotels and a Swiss camp at Sarchu, on twin-sharing",
+      "Daily breakfast and dinner",
+      "Private vehicle with driver from Manali to Leh and for all Ladakh sightseeing",
+      "Pickup in Manali, drop at Leh airport",
+      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
+      "24×7 on-ground support from a named coordinator in Leh"
+    ],
+    "exclusions": [
+      "Travel to Manali and airfare from Leh",
+      "Lunch and any meal not listed under inclusions",
+      "Monument and monastery entry tickets",
+      "Adventure activities such as rafting, camel rides and bike rental",
+      "Personal expenses such as laundry, tips and phone calls",
+      "Anything not listed under inclusions"
+    ],
+    "faqs": [
+      {
+        "q": "Is the Manali–Leh highway safe?",
+        "a": "It is a well-travelled route from roughly late May to mid-October, and our drivers run it weekly through the season. The road crosses five passes above 4,000 m, so we break the journey at Jispa and Sarchu rather than pushing through in a single day — that pacing is the biggest safety factor there is."
+      },
+      {
+        "q": "How bad is the altitude, honestly?",
+        "a": "Leh sits at 3,500 m and roughly one traveller in four feels mild breathlessness or a headache on day one. That is why our first 48 hours are deliberately low-effort and why we never drive to Pangong early in a trip. Every vehicle carries oxygen and an oximeter, and your driver is trained to recognise AMS. If you have a cardiac or pulmonary condition, speak to your doctor and then to us."
+      },
+      {
+        "q": "Do I need permits, and do you arrange them?",
+        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+      },
+      {
+        "q": "What kind of hotels do you use?",
+        "a": "Leh stays are 3★ or 4★ depending on the package, always centrally located and personally inspected. At Nubra, Pangong and Sarchu we use deluxe or Swiss camps with attached bathrooms, heating and hot water — the only sensible option at that altitude. All rates are quoted on twin-sharing; single occupancy is available on request."
+      },
+      {
+        "q": "Can the itinerary be changed?",
+        "a": "Every route on this page is a starting point. Add Turtuk, drop Pangong, extend Hanle, swap camps for hotels, travel with a toddler or a ninety-year-old — we build around it. Roughly two-thirds of our bookings end up as fully custom itineraries."
+      },
+      {
+        "q": "How does payment work? Is EMI available?",
+        "a": "A 25% deposit confirms your dates and locks your stays; the balance is due seven days before arrival. We accept UPI, bank transfer and all major cards, and offer no-cost EMI on cards for three, six and nine months. You receive an itemised quote showing exactly what each night and each vehicle costs — never a single lump sum."
+      }
+    ],
+    "tone": "highroad",
+    "image": "/img/ladakh-hanle.webp"
+  }
 ];
 
 export function getPackage(slug: string): Pkg | undefined {
@@ -766,7 +1441,7 @@ export function getPackage(slug: string): Pkg | undefined {
 }
 
 export function packagesFor(destinationSlug: string): Pkg[] {
-  return PACKAGES.filter((p) => p.destination === destinationSlug);
+  return PACKAGES.filter((p) => p.regions.includes(destinationSlug));
 }
 
 export function packagesForStyle(styleSlug: string): Pkg[] {

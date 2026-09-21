@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     .filter((p): p is NonNullable<typeof p> => Boolean(p))
     .reduce((min, p) => (p.priceFrom < min ? p.priceFrom : min), Infinity);
 
-  const title = `Kashmir Tour Packages from ${c.name}`;
-  const description = `Kashmir tour packages from ${c.name}. Land packages from ${inr(cheapest)} per person with hotels, private cab & shikara. Direct advice on ${c.name} flights & timing.`;
+  const title = `Ladakh Tour Packages from ${c.name}`;
+  const description = `Ladakh tour packages from ${c.name}. Land packages from ${inr(cheapest)} per person with hotels, all Inner Line Permits, a private 4×4 and 24×7 support from Leh. Honest advice on ${c.name} flights and timing.`;
 
   return {
     title,
@@ -61,7 +61,7 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
       '@id': `${url}#page`,
-      name: `Kashmir Tour Packages from ${c.name}`,
+      name: `Ladakh Tour Packages from ${c.name}`,
       description: c.summary,
       url,
       provider: { '@id': `${SITE.domain}/#org` },
@@ -112,21 +112,21 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
 
       <PageHero
         kicker={`Departing from ${c.name} · ${c.state}`}
-        title={`Kashmir tour packages from ${c.name}`}
+        title={`Ladakh tour packages from ${c.name}`}
         lede={c.summary}
         crumbs={[
           { label: 'Home', href: '/' },
           { label: 'Packages', href: '/packages' },
           { label: `From ${c.name}` },
         ]}
-        background={TONE_HERO.kashmir}
+        background={TONE_HERO.valley}
       >
         <FactStrip
           facts={[
             ['Land package from', `${inr(cheapest)} per person`],
             ['Itineraries', `${packages.length} built for ${c.name} travellers`],
-            ['Arrival airport', 'Srinagar (SXR)'],
-            ['Office', 'Srinagar — we operate this ourselves'],
+            ['Arrival airport', 'Leh (IXL)'],
+            ['Office', 'Leh — we run every trip ourselves'],
           ]}
         />
       </PageHero>
@@ -170,7 +170,7 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
               <section className="mt-14" data-reveal>
                 <p className="kicker">Getting here</p>
                 <h2 className="display d3 mt-2 text-ink-900">
-                  {c.name} to Srinagar, in real numbers.
+                  {c.name} to Leh, in real numbers.
                 </h2>
                 <div className="mt-8 grid gap-5 md:grid-cols-2">
                   {c.flight && (
@@ -240,10 +240,9 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
                 Built for {c.name} arrival times.
               </h2>
               <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-ink-600">
-                Land prices are per person on twin-sharing with GST included, and
-                are the same whichever city you fly from. Airfare sits on top and
-                we quote it separately, because bundling the two into one number
-                hides which half is actually moving.
+                Land prices are per person on twin-sharing, and are the same
+                whichever city you fly from. You book the flight; we handle
+                everything that happens after you land.
               </p>
               <div data-reveal-group className="mt-9 grid gap-5 md:grid-cols-2">
                 {packages.map((p) => (
@@ -266,7 +265,7 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-[104px]">
               <div className="overflow-hidden rounded-2xl border border-paper-300 bg-white shadow-lg">
-                <div className="relative px-6 py-7" style={{ background: TONE_HERO.kashmir }}>
+                <div className="relative px-6 py-7" style={{ background: TONE_HERO.valley }}>
                   <div aria-hidden className="grain absolute inset-0" />
                   <p className="relative text-[10.5px] uppercase tracking-[0.16em] text-paper-200/70">
                     Land package from
@@ -275,26 +274,26 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
                     {inr(cheapest)}
                   </p>
                   <p className="relative mt-2 text-[12px] text-paper-200/70">
-                    per person · twin-sharing · GST included
+                    per person · twin-sharing
                   </p>
                 </div>
 
                 <div className="p-6">
                   <p className="text-[13.5px] leading-relaxed text-ink-600">
-                    We do not publish live airfares from {c.name}, because a number
+                    We do not publish airfares from {c.name}, because a number
                     written here today would be wrong by the time you read it. Send
-                    us your dates and we will price the flights and the land package
-                    together, as two honest lines rather than one blended figure.
+                    us your dates and flight times, and we will confirm they fit the
+                    itinerary before you ticket.
                   </p>
 
                   <div className="mt-6 grid gap-2.5">
                     <a
-                      href={whatsAppLink(`a Kashmir package from ${c.name}`)}
+                      href={whatsAppLink(`a Ladakh package from ${c.name}`)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-gold btn-shine w-full"
                     >
-                      Get today&rsquo;s fare + quote
+                      Get a quote on WhatsApp
                     </a>
                     <a href={`tel:${SITE.phone.tel}`} className="btn btn-ghost w-full">
                       Call {SITE.phone.display}
@@ -302,19 +301,18 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
                   </div>
 
                   <p className="mt-4 text-center text-[11.5px] leading-relaxed text-ink-500">
-                    Answered from our Srinagar office by the person who will run
-                    your trip.
+                    Answered from Leh by the planner who will run your trip.
                   </p>
                 </div>
               </div>
 
               <Link
-                href="/destinations/kashmir"
+                href="/destinations"
                 className="lift group mt-5 flex items-center justify-between gap-3 rounded-2xl border border-paper-300 bg-paper-50 p-5 transition-colors hover:border-gold-400 hover:bg-white"
               >
                 <div>
                   <p className="kicker">Destination guide</p>
-                  <p className="display mt-1.5 text-[19px] text-ink-900">Kashmir Tour Packages</p>
+                  <p className="display mt-1.5 text-[19px] text-ink-900">The four regions of Ladakh</p>
                 </div>
                 <ArrowUpRight className="arrow-slide size-5 shrink-0 text-gold-600" strokeWidth={2} />
               </Link>
@@ -343,39 +341,38 @@ export default async function PackagesFromCity({ params }: { params: Params }) {
         <div
           aria-hidden
           className="blob right-[-6%] top-[6%] h-[400px] w-[400px]"
-          style={{ background: 'rgba(232,185,35,0.15)' }}
+          style={{ background: 'rgba(201,169,97,0.15)' }}
         />
         <div className="wrap relative grid items-start gap-12 lg:grid-cols-2">
           <div data-reveal>
             <p className="kicker kicker-light">Planning from {c.name}</p>
             <h2 className="display d2 mt-3 text-paper-50">
-              Tell us your dates. We&rsquo;ll tell you the real cost.
+              Tell us your dates. We&rsquo;ll plan the rest.
             </h2>
             <p className="lede mt-5 max-w-md !text-paper-200/75">
-              Flights and land package priced separately, so you can see which
-              half to move if the total is more than you had in mind. Most of the
-              time, shifting the dates by three days does more than cutting a
-              night.
+              Send us your dates and the shape of the trip you are imagining.
+              You will get a real itinerary and an itemised quote from a planner
+              in Leh, usually the same day.
             </p>
             <div className="mt-8">
               <MapPin className="mb-3 size-5 text-gold-300" strokeWidth={1.8} />
               <p className="text-[13.5px] leading-relaxed text-paper-200/60">
                 {SITE.address.street}, {SITE.address.city} — {SITE.stats.rating}★ from{' '}
-                {SITE.stats.reviewCount} Google reviews.
+                {SITE.stats.reviewCount.toLocaleString('en-IN')}+ Google reviews.
               </p>
             </div>
           </div>
           <div data-reveal="right" className="glass-dark rounded-2xl p-6 md:p-8" id="enquiry">
             <EnquiryForm
               source={`origin_city_${c.slug}`}
-              destination="Kashmir"
+              destination="Ladakh"
               light
             />
           </div>
         </div>
       </section>
 
-      <StickyMobileCta packageName={`Kashmir from ${c.name}`} priceFrom={cheapest} />
+      <StickyMobileCta packageName={`Ladakh from ${c.name}`} priceFrom={cheapest} />
     </>
   );
 }

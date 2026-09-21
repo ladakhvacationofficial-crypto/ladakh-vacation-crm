@@ -102,8 +102,8 @@ export function CollectionPage({ c }: { c: Collection }) {
           facts={[
             ['From', `${inr(cheapest)} per person`],
             ['Itineraries', `${packages.length} to compare`],
-            ['Pricing', 'Twin-sharing · GST included'],
-            ['Operated by', 'Our own Srinagar office'],
+            ['Pricing', 'Per person · twin-sharing'],
+            ['Operated by', 'Our own team in Leh'],
           ]}
         />
       </PageHero>
@@ -169,7 +169,7 @@ export function CollectionPage({ c }: { c: Collection }) {
                     {inr(cheapest)}
                   </p>
                   <p className="relative mt-2 text-[12px] text-paper-200/70">
-                    per person · twin-sharing · GST included
+                    per person · twin-sharing
                   </p>
                 </div>
 
@@ -220,7 +220,7 @@ export function CollectionPage({ c }: { c: Collection }) {
         <div
           aria-hidden
           className="blob right-[-6%] top-[6%] h-[400px] w-[400px]"
-          style={{ background: 'rgba(232,185,35,0.15)' }}
+          style={{ background: 'rgba(201,169,97,0.15)' }}
         />
         <div className="wrap relative grid items-start gap-12 lg:grid-cols-2">
           <div data-reveal>
@@ -242,7 +242,7 @@ export function CollectionPage({ c }: { c: Collection }) {
             </div>
           </div>
           <div data-reveal="right" className="glass-dark rounded-2xl p-6 md:p-8" id="enquiry">
-            <EnquiryForm source={`collection_${c.slug}`} destination="Kashmir" light />
+            <EnquiryForm source={`collection_${c.slug}`} destination="Ladakh" light />
           </div>
         </div>
       </section>

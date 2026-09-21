@@ -11,9 +11,10 @@ export const SITE = {
   landerDomain: 'https://go.ladakhvacation.in',
 
   /**
-   * NAP (name / address / phone) below is taken from the live Google
-   * Business Profile, NOT invented. Local SEO depends on these matching
-   * the GBP listing character-for-character across every citation — if
+   * NAP (name / address / phone). Local SEO depends on these matching the
+   * Google Business Profile character-for-character across every citation.
+   * Phone and email are the ones on the live landers; the street line has
+   * not been checked against the GBP yet, so confirm it before launch. If
    * the GBP is ever edited, edit here in the same sitting.
    */
   founded: '2012',
@@ -37,6 +38,9 @@ export const SITE = {
   geo: { lat: 34.1642, lng: 77.5848 },
 
   hours: 'Mon–Sun, 09:00–20:00 IST',
+
+  /** The Google Business Profile reviews link the landers use. */
+  googleReviews: 'https://share.google/597twcuknHlL2iW1e',
 
   social: {
     instagram: 'https://instagram.com/ladakhvacation',

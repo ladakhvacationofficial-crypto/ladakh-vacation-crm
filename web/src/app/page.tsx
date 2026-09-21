@@ -30,55 +30,55 @@ export const metadata = {
 };
 
 const TRUST = [
-  'Srinagar-based, not a reseller',
-  `${SITE.stats.guests} guests hosted`,
-  'Own fleet, own drivers',
-  'Hotels we have slept in',
-  '24×7 on-trip WhatsApp',
-  'GST-inclusive quotes',
-  'No hidden inclusions games',
+  'Leh-based, not a reseller',
+  `${SITE.stats.guests} travellers hosted`,
+  'All Inner Line Permits handled',
+  'Oxygen in every vehicle',
+  'Stays we have slept in',
+  '24×7 support from Leh',
+  'Itemised quotes, no-cost EMI',
 ];
 
 const WHY = [
   {
+    icon: ShieldCheck,
+    title: 'Altitude comes first, always',
+    body: 'We refuse to sell a Pangong-on-day-two itinerary. Our routes are sequenced by elevation, with an empty first afternoon in Leh and the high passes from day three, and oxygen in every vehicle.',
+  },
+  {
     icon: MapPin,
-    title: 'We are the local, not the layer',
-    body: 'Most Kashmir bookings online come from agencies in Delhi or Mumbai who forward your enquiry to a company like ours. You pay their margin and lose a day in the middle. Book us directly and skip both.',
+    title: 'No middlemen in the chain',
+    body: 'We own the relationships with drivers, camps and hotels directly. That is why the same trip costs less, and why the people serving you are paid properly.',
   },
   {
     icon: Car,
-    title: 'Our own vehicles and drivers',
-    body: 'Innovas, Xylos and Tempo Travellers on our own books. Our drivers are Kashmiri, know every road condition first-hand, and are not sourced from an app the morning you land.',
+    title: 'Private 4×4, Ladakhi driver',
+    body: 'An Innova Crysta or Xylo with a Ladakhi driver who has run these passes for years. Never a shared cab, never a stranger’s schedule.',
   },
   {
     icon: BedDouble,
-    title: 'Hotels we have actually stayed in',
-    body: 'Every property we sell has been slept in by someone on this team. That is why we will tell you which houseboat has the better verandah and which hotel has a lift that works.',
+    title: 'Stays we have slept in',
+    body: 'Centrally located 3★ and 4★ hotels in Leh, and deluxe camps at Nubra and Pangong with attached bathrooms, heating and hot water. Every one personally inspected.',
   },
   {
     icon: Headphones,
-    title: 'One person, start to finish',
-    body: 'The specialist who quotes your trip runs your trip. When you WhatsApp from Gulmarg at 11pm, you reach the same person, not a rotating support queue.',
+    title: 'One named planner, start to finish',
+    body: 'The person who writes your itinerary is the person who answers at 11pm from Leh when a pass closes. No handovers, no ticket numbers.',
   },
   {
     icon: Receipt,
-    title: 'Transparent, GST-inclusive pricing',
-    body: 'Our quotes include tax and spell out exclusions plainly. No surprise "union taxi charges" sprung on you at the Gulmarg barrier by a driver you have never met.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Honest advice, even when it costs us',
-    body: 'If you ask about snow in early December we will tell you it is a gamble rather than quietly take the booking. Some of our best reviews are from trips we talked people out of.',
+    title: 'Transparent pricing and EMI',
+    body: 'An itemised quote showing exactly what each night and each vehicle costs. A 25% deposit confirms your dates, and no-cost EMI is available on cards.',
   },
 ];
 
 const SEASONS = [
-  { m: 'Mar – Apr', t: 'Tulips & almond blossom', d: 'Asia\'s largest tulip garden opens in Srinagar. Crisp days, cold nights, snow still on the peaks.' },
-  { m: 'May – Jun', t: 'Peak season', d: 'Warmest, greenest, busiest. Gulmarg meadows in full flower and every valley road open.' },
-  { m: 'Jul – Aug', t: 'Ladakh opens up', d: 'Kashmir warm and cheapest. Ladakh at its most accessible — all passes and lakes reachable.' },
-  { m: 'Sep – Oct', t: 'Chinar gold & saffron', d: 'Our favourite window. Autumn colour, saffron harvest at Pampore, thinner crowds, perfect light.' },
-  { m: 'Nov – Dec', t: 'The quiet months', d: 'Bare chinars, mist on the lake, lowest rates. Snow starts in Gulmarg from late December.' },
-  { m: 'Jan – Feb', t: 'Deep winter', d: 'Gulmarg becomes a serious ski mountain. Metre-deep powder, frozen Dal, and very few tourists.' },
+  { m: 'Apr', t: 'The quiet opening', d: 'Leh and the monasteries are open and empty. Cold nights, and some high camps not yet running.' },
+  { m: 'May – Jun', t: 'Snow on the passes', d: 'The busiest and most photogenic months. Snow-lined passes, and the Manali and Srinagar roads opening.' },
+  { m: 'Jul – Aug', t: 'Warmest weeks', d: 'Everything is open and the days are warm, but rain elsewhere can cause roadblocks. Build in a spare day.' },
+  { m: 'Sep – Oct', t: 'Our honest pick', d: 'Clear skies, thin crowds, golden poplars, and the year’s best conditions for the stars at Hanle.' },
+  { m: 'Nov – Dec', t: 'Roads closing', d: 'Most high roads close for the winter. Leh stays reachable by air, but the lakes and passes do not.' },
+  { m: 'Jan – Mar', t: 'Deep winter', d: 'Leh by air only, and well below freezing at night. A harder trip than the one most people picture.' },
 ];
 
 export default function HomePage() {
@@ -101,46 +101,43 @@ export default function HomePage() {
           className="absolute inset-0 -z-20 bg-cover bg-center"
           style={{
             background:
-              'linear-gradient(180deg, rgba(6,12,16,0.45) 0%, rgba(6,12,16,0.65) 45%, rgba(6,12,16,0.95) 100%), url("https://images.unsplash.com/photo-1598091383021-15ddea10925d?q=80&w=2000&auto=format&fit=crop")',
+              'linear-gradient(180deg, rgba(7,15,31,0.45) 0%, rgba(7,15,31,0.65) 45%, rgba(7,15,31,0.95) 100%), url("/img/ladakh-hero.webp") center / cover',
           }}
         />
         {/* drifting light blobs — pure decoration, aria-hidden */}
         <div
           aria-hidden
           className="blob -z-10 left-[6%] top-[12%] h-[380px] w-[380px]"
-          style={{ background: 'rgba(232,185,35,0.20)' }}
+          style={{ background: 'rgba(201,169,97,0.20)' }}
         />
         <div
           aria-hidden
           className="blob -z-10 right-[4%] top-[38%] h-[300px] w-[300px]"
-          style={{ background: 'rgba(31,111,76,0.30)', animationDelay: '-6s' }}
+          style={{ background: 'rgba(30,79,168,0.30)', animationDelay: '-6s' }}
         />
         <div aria-hidden className="grain absolute inset-0 -z-10" />
 
         <div className="wrap relative w-full pb-16 pt-32 md:pb-24 md:pt-40">
           <p className="anim-fade kicker kicker-light">
-            Srinagar-based Himalayan DMC · Since {SITE.founded}
+            Leh-based Ladakh specialists · Since {SITE.founded}
           </p>
 
           <h1 className="display d1 mt-5 max-w-[19ch] text-paper-50">
             <span className="mask">
-              <span style={{ animationDelay: '80ms' }}>Kashmir,</span>
+              <span style={{ animationDelay: '80ms' }}>Ladakh,</span>
             </span>
             <span className="mask">
               <span style={{ animationDelay: '200ms' }}>
-                the way <em className="text-gold-grad not-italic">locals</em>
+                planned by <em className="text-gold-grad not-italic">Ladakhis.</em>
               </span>
-            </span>
-            <span className="mask">
-              <span style={{ animationDelay: '320ms' }}>would show you.</span>
             </span>
           </h1>
 
           <p className="anim-rise d-4 lede mt-7 max-w-xl !text-paper-200/85">
-            Handcrafted tour packages across Kashmir, Ladakh, Himachal and
-            Vaishno Devi &mdash; built by people whose grandparents walked these
-            mountains. Own vehicles, hotels we have slept in, and one specialist
-            from your first message to your flight home.
+            Every route is built around altitude, not a checklist &mdash;
+            permits handled, private 4×4s with Ladakhi drivers, oxygen on board,
+            and stays we have personally slept in. One planner in Leh from your
+            first message to your flight home.
           </p>
 
           <div className="anim-rise d-5 mt-9 flex flex-wrap gap-3">
@@ -157,8 +154,8 @@ export default function HomePage() {
           <div className="anim-rise d-5 mt-14 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-paper-100/12 bg-paper-100/8 backdrop-blur-md sm:grid-cols-4">
             {[
               [SITE.stats.guests, 'guests hosted'],
-              [`${SITE.stats.rating}★`, `${SITE.stats.reviewCount} reviews`],
-              [`${SITE.stats.years} yrs`, 'in the valley'],
+              [`${SITE.stats.rating}★`, `${SITE.stats.reviewCount.toLocaleString('en-IN')}+ reviews`],
+              [`${SITE.stats.years} yrs`, 'in Ladakh'],
               ['24×7', 'on-trip support'],
             ].map(([k, v]) => (
               <div key={v} className="bg-ink-950/25 px-5 py-4">
@@ -186,8 +183,9 @@ export default function HomePage() {
           </div>
         </div>
         <p className="sr-only">
-          Srinagar-based DMC since 2013. Over 5,000 guests hosted. Own fleet and drivers.
-          24×7 on-trip WhatsApp support. GST-inclusive pricing.
+          Leh-based Ladakh tour operator since {SITE.founded}. {SITE.stats.guests} travellers
+          hosted. All Inner Line Permits handled. Oxygen in every vehicle. 24×7
+          on-ground support from Leh.
         </p>
       </section>
 
@@ -199,8 +197,8 @@ export default function HomePage() {
               kicker="Where we take you"
               title={
                 <>
-                  Four regions. Every mood the
-                  <br className="hidden md:block" /> Himalayas can hold.
+                  Four Ladakhs,
+                  <br className="hidden md:block" /> one journey.
                 </>
               }
             />
@@ -231,7 +229,7 @@ export default function HomePage() {
           <SectionHead
             kicker="Most booked"
             title="Itineraries that keep coming back."
-            lede="Every package below is a starting point — tell us your dates and group and we will reshape it around you. Prices are per person on twin-sharing, GST included."
+            lede="Every package below is a starting point — tell us your dates and group and we will reshape it around you. Prices are per person on twin-sharing."
           />
 
           <div data-reveal-group className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -254,7 +252,7 @@ export default function HomePage() {
         <div
           aria-hidden
           className="blob right-[-8%] top-[6%] h-[460px] w-[460px]"
-          style={{ background: 'rgba(232,185,35,0.14)' }}
+          style={{ background: 'rgba(201,169,97,0.14)' }}
         />
         <div className="wrap relative">
           <SectionHead
@@ -262,10 +260,10 @@ export default function HomePage() {
             kicker="Why Ladakh Vacation"
             title={
               <>
-                A DMC, not a <em className="text-gold-grad not-italic">reseller</em>.
+                Run by Ladakhis. Not by a <em className="text-gold-grad not-italic">call centre</em>.
               </>
             }
-            lede="Six reasons guests pick us over the agency that appears first on Google — and why they come back."
+            lede="Six reasons travellers book a Leh-based team directly, rather than a portal that forwards their enquiry to one."
           />
 
           <div data-reveal-group className="mt-14 grid gap-x-10 gap-y-11 md:grid-cols-2 lg:grid-cols-3">
@@ -298,7 +296,7 @@ export default function HomePage() {
           <SectionHead
             kicker="However you travel"
             title="Same mountains. Very different trips."
-            lede="A honeymoon and a corporate offsite should not share an itinerary. Pick the shape of your trip and we build from there."
+            lede="A honeymoon and a bike trip should not share an itinerary. Pick the shape of your trip and we build from there."
           />
 
           <div data-reveal-group className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -336,7 +334,7 @@ export default function HomePage() {
           <SectionHead
             kicker="Timing is everything"
             title="When to come, and what you get."
-            lede="There is no bad month in the valley — only months that suit different trips. Here is the honest breakdown."
+            lede="Ladakh has a season, and the roads decide it. Here is the honest breakdown, month by month."
           />
 
           <div data-reveal-group className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-paper-300 bg-paper-300 sm:grid-cols-2 lg:grid-cols-3">
@@ -373,7 +371,7 @@ export default function HomePage() {
                   {SITE.stats.rating} / 5
                 </p>
                 <p className="text-[12px] text-ink-500">
-                  {SITE.stats.reviewCount} verified reviews
+                  {SITE.stats.reviewCount.toLocaleString('en-IN')}+ reviews on Google
                 </p>
               </div>
             </div>
@@ -399,7 +397,7 @@ export default function HomePage() {
         <div
           aria-hidden
           className="blob left-[-6%] bottom-[-10%] h-[420px] w-[420px]"
-          style={{ background: 'rgba(232,185,35,0.16)' }}
+          style={{ background: 'rgba(201,169,97,0.16)' }}
         />
         <div className="wrap relative grid items-start gap-14 lg:grid-cols-2">
           <div data-reveal>
@@ -408,16 +406,16 @@ export default function HomePage() {
               Tell us what you&rsquo;re dreaming about.
             </h2>
             <p className="lede mt-5 max-w-md !text-paper-200/75">
-              One note from you, one specialist assigned within a few hours. We
-              come back with a real itinerary and honest pricing &mdash; not a
-              brochure and a follow-up call from a call centre.
+              Send us your dates and the shape of the trip you are imagining.
+              You will get a real itinerary from a real planner in Leh &mdash;
+              usually the same day.
             </p>
 
             <ul className="mt-9 space-y-4">
               {[
-                [Users, 'A specialist, not a queue', 'The person who replies handles your trip end to end.'],
+                [Users, 'A planner, not a queue', 'The person who replies handles your trip end to end.'],
                 [ShieldCheck, 'No obligation, no spam', 'A quote is a quote. We do not sell your number on.'],
-                [Headphones, 'Reply within hours', 'During working hours, usually within one. 10am–9pm IST.'],
+                [Headphones, 'Reply within hours', `Usually the same day. ${SITE.hours}.`],
               ].map(([Icon, t, d]) => {
                 const I = Icon as typeof Users;
                 return (

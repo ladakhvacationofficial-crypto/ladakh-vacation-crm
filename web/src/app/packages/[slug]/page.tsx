@@ -18,7 +18,7 @@ type Params = Promise<{ slug: string }>;
 
 /**
  * This route serves two page types on one flat URL space: individual packages
- * and curated collections (`/packages/kashmir-tour-package-with-flight`).
+ * and curated collections (`/packages/leh-ladakh-road-trip-packages`).
  * Slugs are disjoint, so a package always wins the lookup and collections
  * fill in behind it. Keeping them flat matters — these collection slugs are
  * the exact commercial queries they target.
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   }
 
   const title = `${p.name} — ${p.nights} Nights ${p.days} Days ${p.destinationName} Package from ${inr(p.priceFrom)}`;
-  const description = `${p.summary} Day-by-day itinerary, clear inclusions and exclusions, GST-inclusive pricing from ${inr(p.priceFrom)} per person. Route: ${p.route.join(' → ')}.`;
+  const description = `${p.summary} Day-by-day itinerary, clear inclusions and exclusions, pricing from ${inr(p.priceFrom)} per person. Route: ${p.route.join(' → ')}.`;
 
   return {
     title,
@@ -105,26 +105,17 @@ export default async function PackageDetail({ params }: { params: Params }) {
       },
       image: [p.image],
       author: {
-        '@type': 'Person',
-        name: 'Shahid',
-        jobTitle: 'Founder & Lead Travel Technologist',
-        url: 'https://shahid.co.in',
-        sameAs: ['https://shahid.co.in'],
-        worksFor: {
-          '@type': 'Organization',
-          name: SITE.name,
-        },
-        description:
-          'Travel technologist with 15+ years of experience designing authentic Kashmir, Ladakh, and Himalayan itineraries.',
+        '@type': 'Organization',
+        name: SITE.name,
+        url: SITE.domain,
       },
-      dateModified: '2026-04-01',
       offers: {
         '@type': 'Offer',
         price: p.priceFrom,
         priceCurrency: 'INR',
         availability: 'https://schema.org/InStock',
         url,
-        description: `Per person on twin-sharing, GST inclusive. ${p.nights} nights / ${p.days} days.`,
+        description: `Per person on twin-sharing. ${p.nights} nights / ${p.days} days.`,
       },
     },
     {
@@ -194,35 +185,18 @@ export default async function PackageDetail({ params }: { params: Params }) {
               ))}
             </div>
 
-            {/* E-E-A-T Author Byline and Content Freshness */}
-            <div data-reveal className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-paper-300 bg-paper-50/80 px-4 py-3 text-[12.5px] text-ink-600">
-              <div className="flex items-center gap-3">
-                <div className="grid size-8 place-items-center rounded-full bg-gold-400 font-bold text-ink-950 text-[12px] shadow-sm">
-                  SH
-                </div>
-                <div>
-                  <p className="font-semibold text-ink-900 leading-none">
-                    Curated by{' '}
-                    <a
-                      href="https://shahid.co.in"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-ink-950 underline decoration-gold-400 underline-offset-2 transition-colors hover:text-gold-700"
-                    >
-                      Shahid
-                    </a>{' '}
-                    <span className="font-normal text-[11.5px] text-ink-500">· 15+ Years Travel & Tech Experience</span>
-                  </p>
-                  <p className="text-[11px] text-ink-500 mt-0.5">
-                    Founder, Ladakh Vacation · Verified Destination & Travel-Tech Specialist (<a href="https://shahid.co.in" target="_blank" rel="noopener noreferrer" className="hover:text-gold-600">shahid.co.in</a>)
-                  </p>
-                </div>
+            {/* Byline: the team that plans and runs the trip */}
+            <div data-reveal className="mt-4 flex items-center gap-3 rounded-xl border border-paper-300 bg-paper-50/80 px-4 py-3 text-[12.5px] text-ink-600">
+              <div className="grid size-8 place-items-center rounded-full bg-gold-400 font-bold text-ink-950 text-[12px] shadow-sm">
+                LV
               </div>
-              <div className="flex items-center gap-1.5 text-[11.5px] text-ink-500">
-                <span>Verified for 2026:</span>
-                <time dateTime="2026-04-01" className="font-medium text-ink-800">
-                  April 2026 Season
-                </time>
+              <div>
+                <p className="font-semibold text-ink-900 leading-none">
+                  Planned and run by the {SITE.name} team in Leh
+                </p>
+                <p className="text-[11px] text-ink-500 mt-0.5">
+                  Sequenced by altitude · all permits handled · private 4×4 with a Ladakhi driver
+                </p>
               </div>
             </div>
 
@@ -347,19 +321,19 @@ export default async function PackageDetail({ params }: { params: Params }) {
                   <ul className="mt-4 space-y-2.5 text-[13.5px] text-ink-800">
                     <li className="flex items-start gap-2.5">
                       <span className="text-amber-700 font-bold">•</span>
-                      <span><strong>High-speed checklist travelers:</strong> Mountain roads in Kashmir & Ladakh follow natural terrain with winter/monsoon checkpoints; rushing 4 towns into 3 days leads to road fatigue.</span>
+                      <span><strong>Anyone who wants to rush the altitude:</strong> We will not move the high passes or Pangong earlier to fit more in. The first afternoon in Leh stays empty on every route.</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="text-amber-700 font-bold">•</span>
-                      <span><strong>Expecting metro-style high-speed 5G everywhere:</strong> In remote mountain passes (Sonmarg glaciers, Nubra, higher Gulmarg), only postpaid BSNL, Airtel, and Jio SIMs operate reliably. Prepaid SIMs from other states do not work in J&K.</span>
+                      <span><strong>Travellers who need to stay connected everywhere:</strong> Prepaid SIMs from other states generally do not work in Ladakh, and coverage is patchy or absent at Pangong, Hanle and on the high passes. Postpaid connections work in Leh.</span>
                     </li>
                     <li className="flex items-start gap-2.5">
                       <span className="text-amber-700 font-bold">•</span>
-                      <span><strong>Strict elevator dependency:</strong> Traditional heritage houseboats on Dal Lake and boutique mountain cottages feature classic wooden steps without elevators.</span>
+                      <span><strong>Anyone with a cardiac or pulmonary condition:</strong> Speak to your doctor before booking anything at this altitude, and then to us. We will build the gentlest route that is safe for you.</span>
                     </li>
                   </ul>
                   <p className="mt-4 text-[12px] text-ink-600 border-t border-amber-200/80 pt-3">
-                    💡 If any of these apply to your party, speak to us! We happily adapt the route, select barrier-free hotels, or allocate additional buffer days.
+                    If any of these apply to your party, speak to us. We will adapt the route, add rest days, or suggest a lower-altitude itinerary.
                   </p>
                 </div>
               </div>
@@ -391,7 +365,7 @@ export default async function PackageDetail({ params }: { params: Params }) {
                     {inr(p.priceFrom)}
                   </p>
                   <p className="relative mt-2 text-[12px] text-paper-200/70">
-                    per person · twin-sharing · GST included
+                    per person · twin-sharing
                   </p>
                 </div>
 
@@ -553,7 +527,7 @@ export default async function PackageDetail({ params }: { params: Params }) {
         <div
           aria-hidden
           className="blob right-[-6%] top-[6%] h-[400px] w-[400px]"
-          style={{ background: 'rgba(232,185,35,0.15)' }}
+          style={{ background: 'rgba(201,169,97,0.15)' }}
         />
         <div className="wrap relative grid items-start gap-12 lg:grid-cols-2">
           <div data-reveal>
@@ -569,8 +543,8 @@ export default async function PackageDetail({ params }: { params: Params }) {
             <div className="mt-8">
               <MapPin className="mb-3 size-5 text-gold-300" strokeWidth={1.8} />
               <p className="text-[13.5px] leading-relaxed text-paper-200/60">
-                Every quote comes from our Srinagar office, from the specialist who
-                will actually run your trip.
+                Every quote comes from our team in Leh, from the planner who will
+                actually run your trip.
               </p>
             </div>
           </div>

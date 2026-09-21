@@ -11,9 +11,9 @@ import { PackageCard, SectionHead, JsonLd } from '@/components/cards';
 import { PageHero } from '@/components/page-hero';
 
 export const metadata: Metadata = {
-  title: 'All Tour Packages — Kashmir, Ladakh, Himachal & Vaishno Devi',
+  title: 'Ladakh Tour Packages — 3 to 9 Nights, from Leh',
   description:
-    'Every Ladakh Vacation tour package in one place. Kashmir, Ladakh, Himachal and Vaishno Devi itineraries with day-by-day plans, clear inclusions and GST-inclusive pricing from ₹9,500 per person.',
+    'Every Ladakh Vacation tour package in one place: Leh, Nubra, Pangong, Hanle, Kashmir to Ladakh, Manali to Leh and the bike trip. Day-by-day plans, clear inclusions, from ₹14,500 per person.',
   alternates: { canonical: '/packages' },
 };
 
@@ -135,7 +135,7 @@ export default function PackagesIndex() {
               >
                 <span>
                   <span className="display block text-[18px] text-ink-900">
-                    Kashmir from {c.name}
+                    Ladakh from {c.name}
                   </span>
                   <span className="mt-0.5 block text-[12px] text-ink-500">{c.state}</span>
                 </span>

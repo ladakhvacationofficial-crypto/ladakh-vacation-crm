@@ -10,7 +10,7 @@ export default function NotFound() {
       <div
         aria-hidden
         className="blob left-[10%] top-[16%] h-[360px] w-[360px]"
-        style={{ background: 'rgba(232,185,35,0.16)' }}
+        style={{ background: 'rgba(201,169,97,0.16)' }}
       />
       <div className="wrap relative text-center">
         <p className="anim-fade kicker kicker-light">Error 404</p>
