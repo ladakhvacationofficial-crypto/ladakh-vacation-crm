@@ -512,12 +512,6 @@ export default async function PackageDetail({ params }: { params: Params }) {
                 {c.crumbLabel}
               </Link>
             ))}
-            <Link
-              href="/routes"
-              className="rounded-full border border-paper-300 bg-white px-4 py-2 text-[13px] text-ink-600 transition-colors hover:border-gold-400 hover:text-gold-700"
-            >
-              Route guides
-            </Link>
           </div>
         </div>
       </section>

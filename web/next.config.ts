@@ -31,25 +31,52 @@ const config: NextConfig = {
   },
 
   async redirects() {
-    return [
-      // Short vanity URLs → canonical destination hubs.
-      { source: '/kashmir', destination: '/destinations/kashmir', permanent: true },
-      { source: '/ladakh', destination: '/destinations/ladakh', permanent: true },
-      { source: '/himachal', destination: '/destinations/himachal', permanent: true },
-      { source: '/vaishno-devi', destination: '/destinations/vaishno-devi', permanent: true },
+    // The Ads landers on go.ladakhvacation.in use flat slugs
+    // (/4-nights-ladakh-tour/, /ladakh-tour-from-delhi/). The same paths on
+    // the main domain send people to the equivalent page here, so a lander
+    // URL typed or shared against the wrong host still lands somewhere useful.
+    const landerPackages = [
+      '3-nights-ladakh-tour',
+      '4-nights-ladakh-tour',
+      '5-nights-ladakh-tour',
+      '6-nights-ladakh-tour',
+      '7-nights-ladakh-tour',
+      '8-nights-ladakh-tour',
+      'ladakh-honeymoon-packages',
+      'ladakh-group-tour',
+      'leh-ladakh-bike-trip',
+      'kashmir-ladakh-tour',
+      'manali-ladakh-tour',
+    ];
+    const landerCities = ['delhi', 'mumbai', 'bengaluru', 'hyderabad', 'chennai', 'pune', 'kolkata', 'ahmedabad'];
 
-      // Legacy keyword URLs people may have linked to.
-      { source: '/kashmir-tour-packages', destination: '/destinations/kashmir', permanent: true },
-      { source: '/ladakh-tour-packages', destination: '/destinations/ladakh', permanent: true },
-      { source: '/himachal-tour-packages', destination: '/destinations/himachal', permanent: true },
-      { source: '/vaishno-devi-tour-packages', destination: '/destinations/vaishno-devi', permanent: true },
+    return [
+      ...landerPackages.map((slug) => ({
+        source: `/${slug}`,
+        destination: `/packages/${slug}`,
+        permanent: true,
+      })),
+      ...landerCities.map((city) => ({
+        source: `/ladakh-tour-from-${city}`,
+        destination: `/packages/from/${city}`,
+        permanent: true,
+      })),
+      { source: '/ladakh-tour-packages', destination: '/packages', permanent: true },
+      { source: '/travel-agency-in-leh', destination: '/about', permanent: true },
+
+      // Short vanity URLs → destination hubs.
+      { source: '/leh', destination: '/destinations/leh', permanent: true },
+      { source: '/monasteries', destination: '/destinations/ladakh-monasteries', permanent: true },
+      { source: '/nubra', destination: '/destinations/nubra-pangong', permanent: true },
+      { source: '/pangong', destination: '/destinations/nubra-pangong', permanent: true },
+      { source: '/hanle', destination: '/destinations/hanle', permanent: true },
 
       // Travel-style shorthands.
       { source: '/honeymoon', destination: '/travel-styles/honeymoon', permanent: true },
       { source: '/family', destination: '/travel-styles/family', permanent: true },
       { source: '/adventure', destination: '/travel-styles/adventure', permanent: true },
-      { source: '/pilgrimage', destination: '/travel-styles/pilgrimage', permanent: true },
-      { source: '/corporate', destination: '/travel-styles/group', permanent: true },
+      { source: '/culture', destination: '/travel-styles/culture', permanent: true },
+      { source: '/group', destination: '/travel-styles/group', permanent: true },
 
       // There is no /travel-styles index page — send it to packages, which
       // cross-links every style.
@@ -57,42 +84,6 @@ const config: NextConfig = {
 
       { source: '/tours', destination: '/packages', permanent: true },
       { source: '/testimonials', destination: '/reviews', permanent: true },
-
-      // Route pages were briefly split by mode before being consolidated to
-      // one page per origin-destination pair. The per-mode URLs shipped, so
-      // they get 301s into the mode section on the consolidated page rather
-      // than being left to 404.
-      {
-        source: '/routes/delhi-to-srinagar-train',
-        destination: '/routes/delhi-to-srinagar#delhi-to-srinagar-train',
-        permanent: true,
-      },
-      {
-        source: '/routes/delhi-to-srinagar-flight',
-        destination: '/routes/delhi-to-srinagar#delhi-to-srinagar-flight',
-        permanent: true,
-      },
-      // Best time to visit Kashmir queries fold into the authoritative 12-month hub
-      {
-        source: '/guides/best-time-to-visit-kashmir',
-        destination: '/guides/by-month/kashmir-by-month',
-        permanent: true,
-      },
-      {
-        source: '/guides/best-time-to-visit-kashmir-month-by-month',
-        destination: '/guides/by-month/kashmir-by-month',
-        permanent: true,
-      },
-      {
-        source: '/best-time-to-visit-kashmir',
-        destination: '/guides/by-month/kashmir-by-month',
-        permanent: true,
-      },
-      {
-        source: '/routes/delhi-to-srinagar-road',
-        destination: '/routes/delhi-to-srinagar#delhi-to-srinagar-road',
-        permanent: true,
-      },
     ];
   },
 };

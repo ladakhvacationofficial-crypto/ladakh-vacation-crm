@@ -175,22 +175,6 @@ export default function PackagesIndex() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/routes"
-              className="lift inline-flex items-center gap-2 rounded-xl border border-paper-300 bg-white px-5 py-3.5 text-[14px] font-medium text-ink-800 transition-colors hover:border-gold-400"
-            >
-              Getting here: route guides by train, flight and road
-              <ArrowUpRight className="size-4 text-gold-600" strokeWidth={2.2} />
-            </Link>
-            <Link
-              href="/guides"
-              className="lift inline-flex items-center gap-2 rounded-xl border border-paper-300 bg-white px-5 py-3.5 text-[14px] font-medium text-ink-800 transition-colors hover:border-gold-400"
-            >
-              All travel guides
-              <ArrowUpRight className="size-4 text-gold-600" strokeWidth={2.2} />
-            </Link>
-          </div>
         </div>
       </section>
 

@@ -106,9 +106,6 @@ export function SiteHeader() {
               onEnter={() => setDrop('styles')}
               onToggle={() => setDrop(drop === 'styles' ? null : 'styles')}
             />
-            <Link href="/guides" className={linkBase}>
-              Guides
-            </Link>
             <Link href="/reviews" className={linkBase}>
               Reviews
             </Link>
@@ -238,10 +235,9 @@ export function SiteHeader() {
               <div className="mt-2 space-y-0.5">
                 {[
                   ['/packages', 'All packages'],
-                  ['/guides', 'Travel Guides'],
                   ['/reviews', 'Reviews'],
                   ['/about', 'About us'],
-                  ['/partner-with-us', 'B2B Travel Partner'],
+                  ['/partner-with-us', 'Travel agent partners'],
                   ['/contact', 'Contact'],
                 ].map(([href, label]) => (
                   <Link

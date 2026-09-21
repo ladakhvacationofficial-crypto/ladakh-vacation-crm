@@ -117,8 +117,6 @@ export function SiteFooter() {
           </h3>
           <ul className="mt-3 space-y-2 text-[13px]">
             <FooterLink href="/plan-my-trip">Custom Itinerary Wizard</FooterLink>
-            <FooterLink href="/guides">Travel Guides & Blog</FooterLink>
-            <FooterLink href="/hi">हिंदी यात्रा गाइड (Hindi)</FooterLink>
             <FooterLink href="/partner-with-us">Travel agent partners</FooterLink>
           </ul>
 
