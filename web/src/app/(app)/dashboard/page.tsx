@@ -169,21 +169,20 @@ export default function DashboardPage() {
           sits below the content and only paints the top 400px. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[320px] overflow-hidden opacity-40"
       >
         <div
-          className="aurora absolute -top-32 -left-24 h-[520px] w-[620px] rounded-full blur-[100px]"
+          className="absolute -top-32 -left-24 h-[420px] w-[520px] rounded-full blur-[120px]"
           style={{
             background:
-              'radial-gradient(circle at 30% 40%, rgba(244,200,90,0.35), transparent 60%)',
+              'radial-gradient(circle at 30% 40%, rgba(217,119,6,0.10), transparent 70%)',
           }}
         />
         <div
-          className="aurora absolute -top-24 right-0 h-[420px] w-[520px] rounded-full blur-[100px]"
+          className="absolute -top-24 right-0 h-[360px] w-[460px] rounded-full blur-[120px]"
           style={{
             background:
-              'radial-gradient(circle at 60% 50%, rgba(79,165,184,0.28), transparent 60%)',
-            animationDelay: '4s',
+              'radial-gradient(circle at 60% 50%, rgba(37,99,235,0.08), transparent 70%)',
           }}
         />
       </div>

@@ -14,41 +14,41 @@
   Treat 50 as "the ink itself" and 950 as "the empty page".
 */
 @theme {
-  /* Warm parchment → white → deep midnight-navy */
-  --color-ink-950: #f6f4ef;  /* page background — warm cream */
+  /* Surfaces: Pure white cards on crisp neutral slate canvas */
+  --color-ink-950: #f8fafc;  /* page background — clean slate canvas */
   --color-ink-900: #ffffff;  /* panel surface — pure white */
-  --color-ink-850: #efece4;  /* hover surface — parchment */
-  --color-ink-800: #e2ddd1;  /* subtle border / divider */
-  --color-ink-700: #cfc7b6;  /* border — visible on white */
-  --color-ink-600: #9b937f;  /* muted line / low-contrast text */
-  --color-ink-500: #5b6880;  /* helper text */
-  --color-ink-400: #43506a;  /* secondary text */
-  --color-ink-300: #1c2a42;  /* body text — deep navy */
-  --color-ink-200: #101f3d;  /* strong text */
-  --color-ink-100: #0a1428;  /* near-black */
-  --color-ink-50:  #070f1f;  /* deepest — headings on hero */
+  --color-ink-850: #f1f5f9;  /* hover surface — subtle slate */
+  --color-ink-800: #e2e8f0;  /* subtle border / divider */
+  --color-ink-700: #cbd5e1;  /* border — visible on white */
+  --color-ink-600: #94a3b8;  /* muted line / low-contrast text */
+  --color-ink-500: #64748b;  /* helper text */
+  --color-ink-400: #475569;  /* secondary text */
+  --color-ink-300: #334155;  /* body text — deep navy/slate */
+  --color-ink-200: #1e293b;  /* strong text */
+  --color-ink-100: #0f172a;  /* near-black */
+  --color-ink-50:  #020617;  /* deepest — headings on hero */
 
-  /* Signal / brand teal — the "HOLIDAYS" wordmark, deep Kashmir water. */
-  --color-signal-600: #173f86;
-  --color-signal-500: #1e4fa8;
-  --color-signal-400: #3670d8;
-  --color-signal-300: #6fa0f5;
-  --color-signal-200: #d9e5fb;
+  /* Signal / brand teal — royal sapphire blue */
+  --color-signal-600: #1d4ed8;
+  --color-signal-500: #2563eb;
+  --color-signal-400: #3b82f6;
+  --color-signal-300: #60a5fa;
+  --color-signal-200: #dbeafe;
 
-  /* Brand gold — the "LADAKH VACATION" wordmark. Used sparingly for accent, chips, sun. */
-  --color-brand-600: #a8842f;
-  --color-brand-500: #c9a961;
-  --color-brand-400: #d8bf80;
-  --color-brand-300: #e8d5a0;
-  --color-brand-200: #f4ecd6;
+  /* Brand gold — refined Himalayan gold */
+  --color-brand-600: #b45309;
+  --color-brand-500: #d97706;
+  --color-brand-400: #f59e0b;
+  --color-brand-300: #fcd34d;
+  --color-brand-200: #fef3c7;
 
   /* Financial verdicts — deepened for contrast on light backgrounds. */
-  --color-healthy-500: #2e7d5b;
-  --color-healthy-400: #3f9d6d;
-  --color-warn-500:    #b87116;
-  --color-warn-400:    #d08b27;
-  --color-loss-500:    #b84a37;
-  --color-loss-400:    #d06657;
+  --color-healthy-500: #16a34a;
+  --color-healthy-400: #22c55e;
+  --color-warn-500:    #ea580c;
+  --color-warn-400:    #f97316;
+  --color-loss-500:    #dc2626;
+  --color-loss-400:    #ef4444;
 
   --font-sans:    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-cormorant), 'Cormorant Garamond', ui-serif, Georgia, serif;

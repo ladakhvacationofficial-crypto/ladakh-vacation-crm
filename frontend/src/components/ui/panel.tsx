@@ -13,11 +13,9 @@ export function Panel({
   return (
     <div
       className={cn(
-        'rounded-[14px] border border-ink-800/80 bg-ink-900',
-        // Warm-tinted layered shadow so cards feel like they sit on parchment
-        // rather than glow on a black canvas.
-        'shadow-[0_1px_2px_rgba(28,30,40,0.04),0_6px_20px_-12px_rgba(28,30,40,0.14)]',
-        interactive && 'lift',
+        'rounded-[14px] border border-ink-800 bg-ink-900',
+        'shadow-[0_1px_3px_0_rgba(15,23,42,0.04),0_1px_2px_-1px_rgba(15,23,42,0.04)]',
+        interactive && 'lift hover:shadow-[0_6px_16px_-4px_rgba(15,23,42,0.08)]',
         className,
       )}
       {...props}
@@ -32,7 +30,7 @@ export function PanelHeader({
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-3 border-b border-ink-700/60 px-5 py-3.5',
+        'flex items-center justify-between gap-3 border-b border-ink-800 px-5 py-3.5',
         className,
       )}
       {...props}
@@ -47,7 +45,7 @@ export function PanelTitle({
   return (
     <h2
       className={cn(
-        'text-[11.5px] font-semibold tracking-[0.11em] uppercase text-ink-400',
+        'text-[11.5px] font-semibold tracking-[0.11em] uppercase text-ink-500',
         className,
       )}
       {...props}

@@ -263,9 +263,9 @@ export default function AppLayout({
   );
 
   return (
-    <div className="min-h-screen md:grid md:grid-cols-[232px_1fr]">
+    <div className="crm-theme min-h-screen bg-ink-950 text-ink-300 md:grid md:grid-cols-[232px_1fr]">
       {/* Mobile top bar — only visible below md */}
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-ink-800/60 bg-ink-900/95 px-4 py-3 backdrop-blur md:hidden">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-ink-800 bg-ink-900/95 px-4 py-3 backdrop-blur md:hidden">
         <button
           aria-label="Open menu"
           onClick={() => setDrawerOpen(true)}
@@ -295,7 +295,7 @@ export default function AppLayout({
       </header>
 
       {/* Desktop sidebar — always mounted, hidden below md */}
-      <aside className="hidden flex-col border-r border-ink-800/60 bg-ink-900 shadow-[1px_0_0_rgba(217,200,163,0.15)] md:flex">
+      <aside className="hidden flex-col border-r border-ink-800 bg-ink-900 shadow-sm md:flex">
         {sidebar}
       </aside>
 
@@ -322,7 +322,7 @@ export default function AppLayout({
         </div>
       )}
 
-      <main className="min-w-0 overflow-x-hidden">{children}</main>
+      <main className="min-w-0 overflow-x-hidden bg-ink-950">{children}</main>
       <CommandPalette />
     </div>
   );

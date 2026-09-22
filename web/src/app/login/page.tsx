@@ -46,7 +46,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
+    <main className="crm-theme grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
       {/* Left: the thesis. Deep Ladakh navy with a sunrise glow behind the peaks. */}
       <section className="relative hidden overflow-hidden bg-signal-600 lg:block">
         {/* Slow-drifting warm sun — behind everything. */}

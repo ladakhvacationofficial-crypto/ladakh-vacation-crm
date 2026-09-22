@@ -33,7 +33,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-ink-950 px-4">
+    <div className="crm-theme flex min-h-screen items-center justify-center bg-ink-950 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center">
           <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary-500/10 text-primary-400">
