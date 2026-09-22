@@ -14,8 +14,9 @@ console.log('  Source frontend:', frontendRoot);
 console.log('  Target web:     ', webRoot);
 
 if (!fs.existsSync(frontendRoot)) {
-  console.error('[sync-crm] Error: frontend directory not found at', frontendRoot);
-  process.exit(1);
+  console.log('[sync-crm] Notice: frontend directory not found at', frontendRoot);
+  console.log('[sync-crm] Using pre-committed CRM files in web/src (Vercel scoped build).');
+  process.exit(0);
 }
 
 function copyRecursive(src, dest, overwrite = false) {
