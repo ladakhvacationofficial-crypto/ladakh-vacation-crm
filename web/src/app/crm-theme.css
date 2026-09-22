@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/*
+  LADAKH VACATION — operations desk.
+
+  Colour system from the Ladakh Vacation logo: royal blue and muted gold on
+  paper, deep navy for text. Inherited from the Glitz desk, token NAMES
+  unchanged so every `bg-ink-900` / `text-signal-500` in the code keeps
+  working; only the values are Ladakh's.
+
+  Numeric convention is DELIBERATELY inverted from Tailwind's default:
+    ink-50  = the DEEPEST tone (near-black navy, used for strong text)
+    ink-950 = the LIGHTEST tone (paper, used for page background)
+  Treat 50 as "the ink itself" and 950 as "the empty page".
+*/
+@theme {
+  /* Warm parchment → white → deep midnight-navy */
+  --color-ink-950: #f6f4ef;  /* page background — warm cream */
+  --color-ink-900: #ffffff;  /* panel surface — pure white */
+  --color-ink-850: #efece4;  /* hover surface — parchment */
+  --color-ink-800: #e2ddd1;  /* subtle border / divider */
+  --color-ink-700: #cfc7b6;  /* border — visible on white */
+  --color-ink-600: #9b937f;  /* muted line / low-contrast text */
+  --color-ink-500: #5b6880;  /* helper text */
+  --color-ink-400: #43506a;  /* secondary text */
+  --color-ink-300: #1c2a42;  /* body text — deep navy */
+  --color-ink-200: #101f3d;  /* strong text */
+  --color-ink-100: #0a1428;  /* near-black */
+  --color-ink-50:  #070f1f;  /* deepest — headings on hero */
+
+  /* Signal / brand teal — the "HOLIDAYS" wordmark, deep Kashmir water. */
+  --color-signal-600: #173f86;
+  --color-signal-500: #1e4fa8;
+  --color-signal-400: #3670d8;
+  --color-signal-300: #6fa0f5;
+  --color-signal-200: #d9e5fb;
+
+  /* Brand gold — the "LADAKH VACATION" wordmark. Used sparingly for accent, chips, sun. */
+  --color-brand-600: #a8842f;
+  --color-brand-500: #c9a961;
+  --color-brand-400: #d8bf80;
+  --color-brand-300: #e8d5a0;
+  --color-brand-200: #f4ecd6;
+
+  /* Financial verdicts — deepened for contrast on light backgrounds. */
+  --color-healthy-500: #2e7d5b;
+  --color-healthy-400: #3f9d6d;
+  --color-warn-500:    #b87116;
+  --color-warn-400:    #d08b27;
+  --color-loss-500:    #b84a37;
+  --color-loss-400:    #d06657;
+
+  --font-sans:    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', ui-serif, Georgia, serif;
+  --font-mono:    var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-panel: 14px;
+}
+
+:root { color-scheme: light; }
+html, body { height: 100%; }
+
+body {
+  background: var(--color-ink-950);
+  color: var(--color-ink-300);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Numbers align. Money you misread is money you lose. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  letter-spacing: -0.01em;
+}
+
+/* Display type — warm serif for greetings and hero numbers only. */
+.display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-signal-400);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Warm scrollbar to match the parchment feel. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--color-ink-600) 45%, transparent);
+  border-radius: 6px;
+  border: 2px solid var(--color-ink-950);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--color-ink-600) 70%, transparent);
+}
+
+/* ---- motion library --------------------------------------------------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.rise { animation: rise 480ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes sweep {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.sweep { animation: sweep 700ms cubic-bezier(0.16, 1, 0.3, 1) both; transform-origin: left; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translate3d(-50%, -48%, 0) scale(0.98); }
+  to   { opacity: 1; transform: translate3d(-50%, -50%, 0) scale(1); }
+}
+
+/* Slow drifting aurora used behind the hero. Kept subtle enough to be text-safe. */
+@keyframes aurora {
+  0%   { transform: translate3d(0, 0, 0) rotate(0deg);   opacity: 0.55; }
+  50%  { transform: translate3d(-2%, 1%, 0) rotate(4deg); opacity: 0.75; }
+  100% { transform: translate3d(0, 0, 0) rotate(0deg);   opacity: 0.55; }
+}
+.aurora { animation: aurora 18s ease-in-out infinite; }
+
+/* Gentle spin for the sun / loading marks. */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.float { animation: float 4s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-ink-850) 0%,
+    var(--color-ink-800) 50%,
+    var(--color-ink-850) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Nudge a card upward and cast a warmer shadow on hover. */
+.lift {
+  transition:
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 220ms ease-out;
+}
+.lift:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 2px rgba(28, 30, 40, 0.04),
+    0 12px 32px -12px rgba(28, 30, 40, 0.18),
+    0 2px 6px -2px rgba(234, 177, 48, 0.10);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .aurora, .float { animation: none !important; }
+}
