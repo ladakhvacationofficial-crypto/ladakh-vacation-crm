@@ -31,7 +31,7 @@ export function middleware(request: NextRequest) {
     if (pathname === '/') {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = '/login';
-      return NextResponse.rewrite(loginUrl);
+      return NextResponse.redirect(loginUrl);
     }
   }
 

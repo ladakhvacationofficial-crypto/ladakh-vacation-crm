@@ -2,9 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
 import { SITE } from '@/lib/site';
-import { SiteHeader } from '@/components/site-header';
-import { SiteFooter } from '@/components/site-footer';
-import { WhatsAppFloat } from '@/components/wa-float';
+import { SiteChrome } from '@/components/site-chrome';
 import { RevealProvider, ScrollProgress } from '@/components/reveal';
 import './globals.css';
 
@@ -195,10 +193,9 @@ export default function RootLayout({
         <ScrollProgress />
         <RevealProvider />
 
-        <SiteHeader />
-        <main id="main">{children}</main>
-        <SiteFooter />
-        <WhatsAppFloat />
+        <SiteChrome>
+          {children}
+        </SiteChrome>
 
         {/*
           Render free-tier wake-ping. A 1×1 image request warms the backend on
