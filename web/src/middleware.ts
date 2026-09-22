@@ -20,11 +20,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check if request is coming from the CRM domain
+  // Check if request is coming from an explicit CRM subdomain (e.g. crm.ladakhvacation.in)
   const isCrmDomain =
-    host.includes('ladakh-vacation-crm') ||
-    host.includes('crm.') ||
-    host.includes('admin.');
+    host.startsWith('crm.') ||
+    host.startsWith('admin.');
 
   if (isCrmDomain) {
     // When visiting the root of the CRM domain, automatically show /login
