@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Check, Compass, Calendar, Users, Hotel, ArrowRight, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { PageHero } from '@/components/page-hero';
 import { SITE, whatsAppLink } from '@/lib/site';
-import { captureAttribution, getAttributionPayload } from '@/lib/attribution';
+import { captureAttribution, getAttributionPayload, captureContext } from '@/lib/attribution';
 
 const DESTINATIONS = [
   { id: 'Leh & Sham Valley', name: 'Leh & Sham Valley', sub: 'Leh, the monasteries, Sham Valley. No high passes', emoji: '🏔️' },

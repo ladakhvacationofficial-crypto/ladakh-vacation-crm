@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader2, Check, Phone } from 'lucide-react';
 import { SITE, whatsAppLink } from '@/lib/site';
 import { DESTINATIONS } from '@/lib/destinations';
-import { captureAttribution, getAttributionPayload } from '@/lib/attribution';
+import { captureAttribution, getAttributionPayload, captureContext } from '@/lib/attribution';
 
 type Props = {
   /** Which page this form sits on — sent to the CRM as `campaign`. */
