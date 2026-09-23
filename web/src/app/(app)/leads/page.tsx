@@ -11,7 +11,6 @@ import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Stage, Chip } from '@/components/ui/badge';
 import { RowActions } from '@/components/ui/row-actions';
-import { ScoreMeter } from '@/components/margin-ribbon';
 import { AddLeadDialog } from '@/components/add-lead-dialog';
 import { CloseLeadDialog } from '@/components/close-lead-dialog';
 import { DeleteLeadDialog } from '@/components/delete-lead-dialog';
@@ -276,11 +275,25 @@ export default function LeadsPage() {
             )}
           </div>
         ) : (
-          <table className="w-full min-w-[720px] text-left text-[13px]">
+          <table className="w-full min-w-[960px] table-fixed text-left text-[13px]">
+            {/* Fixed widths: without them the name and phone wrap while
+                "Landing page" and the owner select take space they do not
+                need. Every cell truncates instead of reflowing the row. */}
+            <colgroup>
+              {canAssign && <col className="w-9" />}
+              <col className="w-[25%]" />
+              <col className="w-[13%]" />
+              <col className="w-[13%]" />
+              <col className="w-[14%]" />
+              <col className="w-[13%]" />
+              <col className="w-[11%]" />
+              <col className="w-[11%]" />
+              <col className="w-14" />
+            </colgroup>
             <thead>
               <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
                 {canAssign && (
-                  <th className="w-8 px-3 py-2.5">
+                  <th className="px-3 py-2.5">
                     <input
                       type="checkbox"
                       aria-label="Select all"
@@ -290,15 +303,14 @@ export default function LeadsPage() {
                     />
                   </th>
                 )}
-                <th className="px-5 py-2.5 font-medium">Name</th>
-                <th className="px-5 py-2.5 font-medium">Trip</th>
-                <th className="px-5 py-2.5 font-medium">Source</th>
-                <th className="px-5 py-2.5 font-medium">Stage</th>
-                <th className="px-5 py-2.5 font-medium">Response</th>
-                <th className="px-5 py-2.5 font-medium">Owner</th>
-                <th className="px-5 py-2.5 font-medium">Score</th>
-                <th className="px-5 py-2.5 text-right font-medium">Received</th>
-                <th className="w-10 px-3 py-2.5" aria-label="Actions" />
+                <th className="px-4 py-2.5 font-medium">Lead</th>
+                <th className="px-4 py-2.5 font-medium">Trip</th>
+                <th className="px-4 py-2.5 font-medium">Source</th>
+                <th className="px-4 py-2.5 font-medium">Stage</th>
+                <th className="px-4 py-2.5 font-medium">Owner</th>
+                <th className="px-4 py-2.5 font-medium">Score</th>
+                <th className="px-4 py-2.5 text-right font-medium">Received</th>
+                <th className="px-3 py-2.5" aria-label="Actions" />
               </tr>
             </thead>
             <tbody>
@@ -307,7 +319,7 @@ export default function LeadsPage() {
                   key={lead.id}
                   className={
                     (selected.has(lead.id) ? 'bg-signal-500/6 ' : '') +
-                    'group rise border-b border-ink-800/60 transition-colors duration-150 last:border-0 hover:bg-ink-850'
+                    'group rise border-b border-ink-800/60 align-top transition-colors duration-150 last:border-0 hover:bg-ink-850'
                   }
                   style={{ animationDelay: `${Math.min(i, 12) * 18}ms` }}
                 >
@@ -321,39 +333,43 @@ export default function LeadsPage() {
                       />
                     </td>
                   )}
-                  <td className="px-5 py-3">
+                  <td className="px-4 py-3">
                     <Link
                       href={`/leads/${lead.id}`}
-                      className="font-medium text-ink-100 transition-colors group-hover:text-signal-300"
+                      title={lead.name}
+                      className="block truncate font-medium text-ink-100 transition-colors group-hover:text-signal-300"
                     >
                       {lead.name}
                     </Link>
-                    <div className="tabular mt-0.5 text-[11px] text-ink-500">
+                    <a
+                      href={`tel:${lead.phone}`}
+                      className="tabular mt-0.5 block truncate text-[11.5px] text-ink-500 transition-colors hover:text-ink-300"
+                    >
                       {lead.phone}
-                    </div>
+                    </a>
                   </td>
-                  <td className="px-5 py-3 text-ink-300">
+                  <td className="truncate px-4 py-3 text-ink-300" title={lead.destination ?? undefined}>
                     {lead.destination ?? '—'}
                   </td>
-                  <td className="px-5 py-3">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="text-[12.5px] font-medium text-ink-200">
-                        {humanise(lead.source)}
+                  <td className="px-4 py-3">
+                    <span className="block truncate text-[12.5px] text-ink-200" title={humanise(lead.source)}>
+                      {humanise(lead.source)}
+                    </span>
+                    {lead.utmSource && lead.utmSource !== lead.source && (
+                      <span className="block truncate text-[11px] text-signal-400" title={humanise(lead.utmSource)}>
+                        {humanise(lead.utmSource)}
                       </span>
-                      {lead.utmSource && lead.utmSource !== lead.source && (
-                        <span className="text-[11px] font-normal text-signal-400">
-                          {humanise(lead.utmSource)}
-                        </span>
-                      )}
+                    )}
+                  </td>
+                  <td className="px-4 py-3">
+                    {/* Stage and how long the lead has waited belong together:
+                        a NEW lead nobody has answered is the thing to see. */}
+                    <Stage value={lead.status} />
+                    <div className="mt-1.5">
+                      <ResponseBadge lead={lead} />
                     </div>
                   </td>
-                  <td className="px-5 py-3">
-                    <Stage value={lead.status} />
-                  </td>
-                  <td className="px-5 py-3">
-                    <ResponseBadge lead={lead} />
-                  </td>
-                  <td className="px-5 py-3 text-ink-400">
+                  <td className="px-4 py-3 text-ink-400">
                     {canAssign ? (
                       <select
                         aria-label={`Owner of ${lead.name}`}
@@ -369,40 +385,30 @@ export default function LeadsPage() {
                             alert(err instanceof ApiError ? err.message : 'Could not reassign.');
                           }
                         }}
-                        className="w-full max-w-[140px] rounded border border-transparent bg-transparent px-1 py-0.5 text-[12px] text-ink-300 hover:border-ink-700 focus:border-signal-500 focus:outline-none"
+                        className={
+                          'w-full truncate rounded border border-transparent bg-transparent px-1 py-0.5 text-[12px] hover:border-ink-700 focus:border-signal-500 focus:outline-none ' +
+                          (lead.assignedTo ? 'text-ink-300' : 'text-warn-400')
+                        }
                       >
                         <option value="">Unassigned</option>
                         {staff.map((u) => (
                           <option key={u.id} value={u.id}>{u.name}</option>
                         ))}
                       </select>
+                    ) : lead.assignedTo ? (
+                      <span className="block truncate" title={lead.assignedTo.name}>{lead.assignedTo.name}</span>
                     ) : (
-                      lead.assignedTo?.name ?? <span className="text-warn-400">Unassigned</span>
+                      <span className="text-warn-400">Unassigned</span>
                     )}
                   </td>
-                  <td className="px-5 py-3">
-                    <div className="flex items-center gap-2">
-                      <ScoreMeter score={lead.score} />
-                      {lead.score >= 75 ? (
-                        <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                          🔥 Hot
-                        </span>
-                      ) : lead.score >= 50 ? (
-                        <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-signal-500/15 text-signal-400 border border-signal-500/30">
-                          ⚡ Warm
-                        </span>
-                      ) : lead.score >= 30 ? (
-                        <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-ink-800 text-ink-300 border border-ink-700">
-                          ❄️ Cool
-                        </span>
-                      ) : null}
-                    </div>
+                  <td className="px-4 py-3">
+                    <ScoreChip score={lead.score} />
                   </td>
-                  <td className="tabular px-5 py-3 text-right text-[12px] text-ink-500">
+                  <td className="tabular whitespace-nowrap px-4 py-3 text-right text-[12px] text-ink-500">
                     {relativeDate(lead.createdAt)}
                   </td>
                   <td className="px-3 py-3">
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex items-center justify-end gap-1 opacity-60 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
                       {canClose && (
                         <CloseLeadDialog leadId={lead.id} leadName={lead.name} onClosed={load} />
                       )}
@@ -457,6 +463,38 @@ function TableSkeleton() {
           <div className="ml-auto h-3 w-16 animate-pulse rounded bg-ink-850" />
         </div>
       ))}
+    </div>
+  );
+}
+
+/**
+ * Lead score in one place: the number, the band it falls in, and a bar.
+ * Previously a meter, a number and a coloured pill sat side by side in a
+ * narrow cell and collided.
+ */
+function ScoreChip({ score }: { score: number }) {
+  const value = Math.max(0, Math.min(100, score));
+  const band =
+    value >= 75
+      ? { label: 'Hot', text: 'text-emerald-400', dot: 'bg-emerald-400', bar: 'bg-emerald-400/70' }
+      : value >= 50
+        ? { label: 'Warm', text: 'text-signal-400', dot: 'bg-signal-400', bar: 'bg-signal-400/70' }
+        : value >= 30
+          ? { label: 'Cool', text: 'text-ink-300', dot: 'bg-ink-400', bar: 'bg-ink-400/70' }
+          : { label: 'Cold', text: 'text-ink-500', dot: 'bg-ink-600', bar: 'bg-ink-600' };
+
+  return (
+    <div title={`Lead score ${value} of 100`}>
+      <div className="flex items-baseline gap-1.5">
+        <span className={`tabular text-[13px] font-semibold ${band.text}`}>{value}</span>
+        <span className="text-[11px] uppercase tracking-[0.06em] text-ink-500">{band.label}</span>
+      </div>
+      <div className="mt-1 h-0.5 w-full max-w-[72px] overflow-hidden rounded-full bg-ink-800">
+        <div
+          className={`h-full rounded-full transition-[width] duration-500 ease-out ${band.bar}`}
+          style={{ width: `${value}%` }}
+        />
+      </div>
     </div>
   );
 }
