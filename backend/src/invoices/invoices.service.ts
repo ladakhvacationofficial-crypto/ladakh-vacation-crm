@@ -5,7 +5,6 @@ import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { Actor, canSeeAllLeads } from '../common/access';
 import { InvoiceStatus } from '@prisma/client';
 import { gstBreakdown } from '../common/pricing';
-import { withNumberRetry } from '../common/sequence';
 
 @Injectable()
 export class InvoicesService {
