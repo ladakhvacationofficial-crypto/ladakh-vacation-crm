@@ -2,39 +2,20 @@
 
 import { VisitTracker } from '@/components/visit-tracker';
 import { usePathname } from 'next/navigation';
+import { isCrmPath } from '@/lib/crm-routes';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { WhatsAppFloat } from '@/components/wa-float';
 
 /**
  * Conditionally renders public site chrome (header, footer, WhatsApp float).
- * Automatically suppresses them on CRM and Auth routes so that the CRM
- * remains dedicated, clean, and distraction-free.
+ * Suppresses them on every staff route listed in `lib/crm-routes`, which the
+ * middleware reads too, so the two can never disagree about what is CRM.
  */
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || '';
 
-  const isCrmRoute =
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/forgot-password') ||
-    pathname.startsWith('/reset-password') ||
-    pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/reports') ||
-    pathname.startsWith('/follow-ups') ||
-    pathname.startsWith('/leads') ||
-    pathname.startsWith('/itineraries') ||
-    pathname.startsWith('/bookings') ||
-    pathname.startsWith('/finance') ||
-    pathname.startsWith('/vendors') ||
-    pathname.startsWith('/people') ||
-    pathname.startsWith('/marketing') ||
-    pathname.startsWith('/seo') ||
-    pathname.startsWith('/settings') ||
-    pathname.startsWith('/users') ||
-    pathname.startsWith('/b2b-partners') ||
-    pathname.startsWith('/invoices') ||
-    pathname.startsWith('/interviews') ||
-    pathname.startsWith('/attribution');
+  const isCrmRoute = isCrmPath(pathname);
 
   if (isCrmRoute) {
     return <>{children}</>;

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { isCrmPath } from '@/lib/crm-routes';
 
 /**
  * Host-based Router for Unified Vercel Deployment.
@@ -35,10 +36,9 @@ export function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-  const staffRoots = ['login', 'forgot-password', 'reset-password', 'dashboard', 'leads',
-    'itineraries', 'bookings', 'finance', 'vendors', 'people', 'marketing', 'seo',
-    'settings', 'users', 'b2b-partners', 'invoices', 'interviews', 'attribution', 'reports', 'follow-ups'];
-  if (staffRoots.includes(pathname.split('/')[1])) {
+  // Staff screens must never be indexed. The list lives in lib/crm-routes so
+  // this and SiteChrome always agree.
+  if (isCrmPath(pathname)) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
   }
   return response;

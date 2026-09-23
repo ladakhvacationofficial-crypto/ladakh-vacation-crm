@@ -76,4 +76,26 @@ if (fs.existsSync(frontendCss)) {
   console.log('[sync-crm] Saved CRM theme as crm-theme.css');
 }
 
+// 6. Guard: every CRM route folder must be listed in src/lib/crm-routes.ts.
+// A missing entry ships that screen with the public header and footer around
+// it, and indexable. That happened to /follow-ups, /reports and /integrations.
+const routesFile = path.join(webRoot, 'src', 'lib', 'crm-routes.ts');
+const appGroup = path.join(webRoot, 'src', 'app', '(app)');
+if (fs.existsSync(routesFile) && fs.existsSync(appGroup)) {
+  const listed = fs.readFileSync(routesFile, 'utf8');
+  const missing = fs
+    .readdirSync(appGroup, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .filter((name) => !listed.includes(`'${name}'`));
+  if (missing.length) {
+    console.error(
+      `[sync-crm] ${missing.join(', ')} missing from src/lib/crm-routes.ts.\n` +
+        '           Add them, or the public header and footer wrap the CRM screen.',
+    );
+    process.exit(1);
+  }
+  console.log('[sync-crm] CRM route list checked.');
+}
+
 console.log('[sync-crm] CRM bridge complete!');
