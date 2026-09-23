@@ -378,21 +378,41 @@ export default function LeadsPage() {
                     )}
                   </td>
                   <td className="px-5 py-3">
-                    <div className="flex items-center gap-2">
-                      <ScoreMeter score={lead.score} />
-                      {lead.score >= 75 ? (
-                        <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                          🔥 Hot
-                        </span>
-                      ) : lead.score >= 50 ? (
-                        <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-signal-500/15 text-signal-400 border border-signal-500/30">
-                          ⚡ Warm
-                        </span>
-                      ) : lead.score >= 30 ? (
-                        <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-ink-800 text-ink-300 border border-ink-700">
-                          ❄️ Cool
-                        </span>
-                      ) : null}
+                    <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2">
+                        <ScoreMeter score={lead.score} />
+                        {lead.score >= 75 ? (
+                          <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                            🔥 Hot
+                          </span>
+                        ) : lead.score >= 50 ? (
+                          <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-signal-500/15 text-signal-400 border border-signal-500/30">
+                            ⚡ Warm
+                          </span>
+                        ) : lead.score >= 30 ? (
+                          <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[10px] font-semibold bg-ink-800 text-ink-300 border border-ink-700">
+                            ❄️ Cool
+                          </span>
+                        ) : null}
+                      </div>
+                      {lead.urgency && (
+                        <div className="flex items-center">
+                          <span
+                            title={lead.urgency.reason}
+                            className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold ${
+                              lead.urgency.tier === 'P1'
+                                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse'
+                                : lead.urgency.tier === 'P2'
+                                ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                                : lead.urgency.tier === 'P3'
+                                ? 'bg-blue-500/15 text-blue-300 border border-blue-500/30'
+                                : 'bg-ink-800/80 text-ink-400 border border-ink-700'
+                            }`}
+                          >
+                            {lead.urgency.tier === 'P1' ? '⚡ ' : ''}{lead.urgency.tier} · {lead.urgency.label}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </td>
                   <td className="tabular px-5 py-3 text-right text-[12px] text-ink-500">

@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import { Role, Season } from '@prisma/client';
 import { VendorsService } from './vendors.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
@@ -71,6 +71,15 @@ export class VendorsController {
   search(@Query('q') q: string) {
     if (!q || q.trim().length < 2) return [];
     return this.vendors.search(q.trim());
+  }
+
+  /**
+   * Baseline package cost floor derived dynamically from supplier hotel and transport rates.
+   * Used to validate client budgets and calibrate lead scoring without manual configuration popups.
+   */
+  @Get('cost-floor')
+  getCostFloor(@Query('season') season?: Season) {
+    return this.vendors.getCostFloor(season);
   }
 
   @Get(':id')

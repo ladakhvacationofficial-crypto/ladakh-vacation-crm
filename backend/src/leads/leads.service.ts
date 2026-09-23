@@ -1,6 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException, Inject, forwardRef, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ActivityType, LeadSource, LeadStatus, Prisma } from '@prisma/client';
+import { ActivityType, LeadSource, LeadStatus, Prisma, Season } from '@prisma/client';
 import * as Papa from 'papaparse';
 import { IntegrationsService } from '../integrations/integrations.service';
 import { WhatsAppService } from '../integrations/whatsapp.service';
@@ -12,7 +12,7 @@ import { QueryLeadsDto } from './dto/query-leads.dto';
 import { scoreLead } from './lead-scoring';
 import { computeNextFollowUp, isBreached } from './follow-up-cadence';
 import { Actor, canAssignLeads, canSeeAllLeads } from '../common/access';
-import { toDateOrNull } from '../common/dates';
+import { toDateOrNull, parseTravelDate, LadakhSeason } from '../common/dates';
 import { AttributionService } from '../attribution/attribution.service';
 import { AssignmentService } from './assignment.service';
 import { LeadNurturingService } from './lead-nurturing.service';
@@ -101,6 +101,52 @@ export class LeadsService {
       .join(' ');
   }
 
+  /**
+   * Helper to derive the current per-pax/night budget floor from entered supplier rates (hotels + cabs)
+   * and company pricing settings. Falls back gracefully to standard Ladakh baselines if rates are not yet configured.
+   */
+  async getEstimatedBudgetFloor(season?: LadakhSeason): Promise<number> {
+    try {
+      const dbSeason = season === 'PRIME' ? Season.PEAK : season === 'SHOULDER' ? Season.SHOULDER : season === 'WINTER' ? Season.OFF : undefined;
+      const [hotelRate, transportRate, settings] = await Promise.all([
+        this.prisma.vendorRate.findFirst({
+          where: {
+            isActive: true,
+            vendor: { type: { in: ['HOTEL', 'CAMP', 'HOUSEBOAT'] }, isActive: true },
+            ...(dbSeason ? { season: dbSeason } : {}),
+          },
+          orderBy: [{ netRate: 'asc' }],
+          select: { netRate: true },
+        }),
+        this.prisma.vendorRate.findFirst({
+          where: {
+            isActive: true,
+            vendor: { type: 'TRANSPORT', isActive: true },
+            ...(dbSeason ? { season: dbSeason } : {}),
+          },
+          orderBy: [{ netRate: 'asc' }],
+          select: { netRate: true },
+        }),
+        this.prisma.pricingSettings.findUnique({
+          where: { id: 'default' },
+          select: { defaultMarkupPercent: true },
+        }),
+      ]);
+
+      const markup = (settings?.defaultMarkupPercent ?? 20) / 100;
+      const defaultHotelNet = season === 'WINTER' ? 1500 : season === 'SHOULDER' ? 2000 : 2500;
+      const defaultTransportNet = season === 'WINTER' ? 2500 : season === 'SHOULDER' ? 3000 : 3500;
+
+      const minHotelRate = hotelRate?.netRate ?? defaultHotelNet;
+      const minTransportRate = transportRate?.netRate ?? defaultTransportNet;
+
+      const netPerPaxNight = Math.round((minHotelRate / 2) + (minTransportRate / 2));
+      return Math.round(netPerPaxNight * (1 + markup));
+    } catch {
+      return season === 'PRIME' ? 2500 : season === 'SHOULDER' ? 2000 : 1600;
+    }
+  }
+
   async capture(dto: CaptureLeadDto, ctx: CaptureContext) {
     // Load the visit early so its stored attribution wins over anything the
     // form fields might carry — the URL had ground truth, form values can be
@@ -132,17 +178,23 @@ export class LeadsService {
 
     if (existing) {
       const enquiryCount = existing.enquiryCount + 1;
+      const effTravelDate = existing.travelDate ?? (dto.travelDate ? parseTravelDate(dto.travelDate).date : null);
+      const effSeason = effTravelDate ? parseTravelDate(effTravelDate).season : undefined;
+      const floor = await this.getEstimatedBudgetFloor(effSeason);
       const { score, notes } = scoreLead({
         source: existing.source,
         email: dto.email ?? existing.email,
         message: dto.message ?? existing.message,
         destination: dto.destination ?? existing.destination,
-        travelDate: existing.travelDate,
+        travelDate: effTravelDate,
+        season: effSeason,
         budget: dto.budget ?? existing.budget,
+        nights: dto.nights ?? existing.nights,
         adults: dto.adults ?? existing.adults,
         gclid: dto.gclid ?? existing.gclid,
         fbclid: dto.fbclid ?? existing.fbclid,
         enquiryCount,
+        minBudgetPerPaxNight: floor,
       });
 
       const updated = await this.prisma.lead.update({
@@ -173,7 +225,8 @@ export class LeadsService {
     }
 
     // --- new lead
-    const parsedTravelDate = toDateOrNull(dto.travelDate);
+    const { date: parsedTravelDate, season } = parseTravelDate(dto.travelDate);
+    const minBudgetPerPaxNight = await this.getEstimatedBudgetFloor(season);
     let leadMessage = dto.message ?? null;
     if (dto.travelDate && !parsedTravelDate) {
       leadMessage = leadMessage ? `${leadMessage} | Preferred Time: ${dto.travelDate}` : `Preferred Time: ${dto.travelDate}`;
@@ -182,14 +235,17 @@ export class LeadsService {
     const { score, notes } = scoreLead({
       source: dto.source,
       email: dto.email,
-      message: leadMessage ?? undefined,
+      message: dto.message ?? undefined,
       destination: dto.destination,
       travelDate: parsedTravelDate,
+      season,
       budget: dto.budget,
+      nights: dto.nights,
       adults: dto.adults,
       gclid: dto.gclid,
       fbclid: dto.fbclid,
       enquiryCount: 1,
+      minBudgetPerPaxNight,
     });
 
     const lead = await this.prisma.lead.create({
@@ -350,7 +406,7 @@ export class LeadsService {
       ];
     }
 
-    const [total, data] = await Promise.all([
+    const [total, rawData] = await Promise.all([
       this.prisma.lead.count({ where }),
       this.prisma.lead.findMany({
         where,
@@ -362,6 +418,11 @@ export class LeadsService {
         },
       }),
     ]);
+
+    const data = rawData.map((lead) => ({
+      ...lead,
+      urgency: this.deriveUrgency(lead),
+    }));
 
     return { total, page, limit, pages: Math.ceil(total / limit), data };
   }
@@ -379,7 +440,103 @@ export class LeadsService {
     });
     if (!lead) throw new NotFoundException('Lead not found');
     this.assertCanTouch(lead, actor);
-    return lead;
+    return {
+      ...lead,
+      urgency: this.deriveUrgency(lead),
+    };
+  }
+
+  /**
+   * Pure read-time urgency derivation.
+   * Dynamically evaluates priority (P1 to P4) based on age, ad channel,
+   * travel date proximity, and qualification score without requiring background cron updates.
+   */
+  deriveUrgency(lead: {
+    createdAt: Date | string;
+    firstContactAt?: Date | string | null;
+    travelDate?: Date | string | null;
+    source?: string | null;
+    score: number;
+    status: string;
+  }) {
+    const isClosed = ['LOST', 'CANCELLED', 'CONFIRMED'].includes(lead.status);
+    if (isClosed) {
+      return {
+        tier: 'P4' as const,
+        label: 'Resolved',
+        badgeColor: 'slate' as const,
+        reason: `Lead is ${lead.status.toLowerCase()}`,
+      };
+    }
+
+    const createdTime = new Date(lead.createdAt).getTime();
+    const ageMinutes = (Date.now() - createdTime) / 60000;
+    const travelTime = lead.travelDate ? new Date(lead.travelDate).getTime() : null;
+    const daysToDeparture = travelTime ? (travelTime - Date.now()) / (1000 * 60 * 60 * 24) : null;
+    const isPaidAd = ['GOOGLE_ADS', 'META_ADS', 'LANDING_PAGE'].includes(lead.source ?? '');
+    const uncontacted = !lead.firstContactAt;
+
+    // P1: Critical / Immediate action (< 15-30m SLA or departure inside 21 days)
+    if (uncontacted && isPaidAd && ageMinutes < 30) {
+      return {
+        tier: 'P1' as const,
+        label: 'Call Now',
+        badgeColor: 'rose' as const,
+        reason: 'Fresh paid ad lead (<30m)',
+      };
+    }
+    if (uncontacted && daysToDeparture !== null && daysToDeparture >= 0 && daysToDeparture <= 21) {
+      return {
+        tier: 'P1' as const,
+        label: 'Urgent Trip',
+        badgeColor: 'rose' as const,
+        reason: 'Departure in < 21 days',
+      };
+    }
+
+    // P2: High Priority (< 2h SLA or departure inside 45 days or high qualification)
+    if (uncontacted && ageMinutes < 120) {
+      return {
+        tier: 'P2' as const,
+        label: 'High Priority',
+        badgeColor: 'amber' as const,
+        reason: 'Inquiry under 2h old',
+      };
+    }
+    if (daysToDeparture !== null && daysToDeparture > 21 && daysToDeparture <= 45) {
+      return {
+        tier: 'P2' as const,
+        label: 'Approaching',
+        badgeColor: 'amber' as const,
+        reason: 'Departure in 3-6 weeks',
+      };
+    }
+    if (lead.score >= 70 && lead.status === 'NEW') {
+      return {
+        tier: 'P2' as const,
+        label: 'High Fit',
+        badgeColor: 'amber' as const,
+        reason: 'High qualification score',
+      };
+    }
+
+    // P3: Standard active queue
+    if (daysToDeparture === null || daysToDeparture > 45) {
+      return {
+        tier: 'P3' as const,
+        label: 'Standard',
+        badgeColor: 'blue' as const,
+        reason: 'Standard active queue',
+      };
+    }
+
+    // P4: Nurture / Low priority
+    return {
+      tier: 'P4' as const,
+      label: 'Nurture',
+      badgeColor: 'slate' as const,
+      reason: 'Low urgency / distant travel',
+    };
   }
 
   async update(id: string, dto: UpdateLeadDto, actor: Actor) {
@@ -405,7 +562,7 @@ export class LeadsService {
     if (dto.budget !== undefined) data.budget = dto.budget;
     if (dto.lostReason !== undefined) data.lostReason = dto.lostReason;
     if (dto.travelDate !== undefined)
-      data.travelDate = toDateOrNull(dto.travelDate);
+      data.travelDate = parseTravelDate(dto.travelDate).date;
     // Human picked a date -> mark manual so the cadence scheduler leaves it
     // alone. Clearing the date reverts to auto-cadence.
     if (dto.nextFollowUp !== undefined) {
@@ -430,6 +587,34 @@ export class LeadsService {
       data.assignedTo = dto.assignedToId
         ? { connect: { id: dto.assignedToId } }
         : { disconnect: true };
+    }
+
+    const qualificationUpdated =
+      dto.budget !== undefined ||
+      dto.travelDate !== undefined ||
+      dto.nights !== undefined ||
+      dto.adults !== undefined ||
+      dto.destination !== undefined;
+
+    if (qualificationUpdated) {
+      const effTravelDate = dto.travelDate !== undefined ? parseTravelDate(dto.travelDate).date : lead.travelDate;
+      const effSeason = effTravelDate ? parseTravelDate(effTravelDate).season : undefined;
+      const floor = await this.getEstimatedBudgetFloor(effSeason);
+      const { score, notes } = scoreLead({
+        source: lead.source,
+        email: dto.email ?? lead.email,
+        message: lead.message,
+        destination: dto.destination !== undefined ? this.normaliseDestination(dto.destination) : lead.destination,
+        travelDate: effTravelDate,
+        season: effSeason,
+        budget: dto.budget !== undefined ? dto.budget : lead.budget,
+        nights: dto.nights !== undefined ? dto.nights : lead.nights,
+        adults: dto.adults !== undefined ? dto.adults : lead.adults,
+        enquiryCount: lead.enquiryCount,
+        minBudgetPerPaxNight: floor,
+      });
+      data.score = score;
+      data.scoreNotes = notes;
     }
 
     const updated = await this.prisma.lead.update({ where: { id }, data });

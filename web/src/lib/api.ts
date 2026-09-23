@@ -310,6 +310,13 @@ export interface IntegrationTestResponse extends IntegrationRow {
   testResult: { ok: boolean; message: string };
 }
 
+export interface UrgencyInfo {
+  tier: 'P1' | 'P2' | 'P3' | 'P4';
+  label: string;
+  badgeColor: 'rose' | 'amber' | 'blue' | 'slate';
+  reason: string;
+}
+
 export interface LeadRow {
   id: string;
   name: string;
@@ -321,6 +328,8 @@ export interface LeadRow {
   utmSource?: string | null;
   utmCampaign?: string | null;
   score: number;
+  scoreNotes?: string | null;
+  urgency?: UrgencyInfo;
   createdAt: string;
   firstContactAt: string | null;
   assignedTo?: { id: string; name: string } | null;

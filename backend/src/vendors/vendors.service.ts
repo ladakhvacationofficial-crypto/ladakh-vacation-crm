@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma, Role } from '@prisma/client';
+import { Prisma, Role, Season } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
@@ -353,5 +353,62 @@ export class VendorsService {
       ...r,
       vendor: this.redact(r.vendor, role),
     }));
+  }
+
+  /**
+   * Dynamically derives the minimum baseline cost floor per person per night for packages,
+   * calculated directly from active entered hotel and transport supplier rates + markup settings.
+   */
+  async getCostFloor(season?: Season) {
+    const [hotelRate, transportRate, settings] = await Promise.all([
+      this.prisma.vendorRate.findFirst({
+        where: {
+          isActive: true,
+          vendor: { type: { in: ['HOTEL', 'CAMP', 'HOUSEBOAT'] }, isActive: true },
+          ...(season ? { season } : {}),
+        },
+        orderBy: [{ netRate: 'asc' }],
+        select: { netRate: true },
+      }),
+      this.prisma.vendorRate.findFirst({
+        where: {
+          isActive: true,
+          vendor: { type: 'TRANSPORT', isActive: true },
+          ...(season ? { season } : {}),
+        },
+        orderBy: [{ netRate: 'asc' }],
+        select: { netRate: true },
+      }),
+      this.prisma.pricingSettings.findUnique({
+        where: { id: 'default' },
+        select: { defaultMarkupPercent: true, minMarginPercent: true },
+      }),
+    ]);
+
+    const markup = (settings?.defaultMarkupPercent ?? 20) / 100;
+    const hasHotelRate = Boolean(hotelRate?.netRate);
+    const hasTransportRate = Boolean(transportRate?.netRate);
+
+    // Baseline fallbacks if no rates are entered yet:
+    // Peak season: Hotel ~₹2500, Cab ~₹3500; Shoulder: ~₹2000/₹3000; Off/Winter: ~₹1500/₹2500.
+    const defaultHotelNet = season === 'OFF' ? 1500 : season === 'SHOULDER' ? 2000 : 2500;
+    const defaultTransportNet = season === 'OFF' ? 2500 : season === 'SHOULDER' ? 3000 : 3500;
+
+    const minHotelRate = hotelRate?.netRate ?? defaultHotelNet;
+    const minTransportRate = transportRate?.netRate ?? defaultTransportNet;
+
+    // Standard double-occupancy room (2 pax) + vehicle (2 pax):
+    const netPerPaxNight = Math.round((minHotelRate / 2) + (minTransportRate / 2));
+    const minBudgetPerPaxNight = Math.round(netPerPaxNight * (1 + markup));
+
+    return {
+      season: season ?? null,
+      minHotelRate,
+      minTransportRate,
+      netPerPaxNight,
+      minBudgetPerPaxNight,
+      hasRealRates: hasHotelRate || hasTransportRate,
+      markupPercent: Math.round(markup * 100),
+    };
   }
 }

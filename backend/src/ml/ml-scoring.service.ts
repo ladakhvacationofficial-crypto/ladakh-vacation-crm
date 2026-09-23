@@ -72,12 +72,17 @@ export class MlScoringService {
       status: lead.status,
     });
 
-    // Persist score & notes back to Lead table
+    // Do not overwrite the deterministic capture-time score.
+    // Append advisory win probability to scoreNotes while preserving the original breakdown.
+    const advisoryNote = `[Advisory Win Prob: ${(result.winProbability * 100).toFixed(0)}% (${result.grade})]`;
+    const updatedNotes = lead.scoreNotes && !lead.scoreNotes.includes('Advisory Win Prob')
+      ? `${lead.scoreNotes} | ${advisoryNote}`
+      : (lead.scoreNotes || advisoryNote);
+
     await this.prisma.lead.update({
       where: { id },
       data: {
-        score: result.score,
-        scoreNotes: `ML Win Prob: ${(result.winProbability * 100).toFixed(0)}% [${result.grade}]. ${result.recommendedAction}`,
+        scoreNotes: updatedNotes,
       },
     });
 
@@ -125,11 +130,15 @@ export class MlScoringService {
 
       totalScore += res.score;
 
+      const advisoryNote = `[Advisory Win Prob: ${(res.winProbability * 100).toFixed(0)}% (${res.grade})]`;
+      const updatedNotes = lead.scoreNotes && !lead.scoreNotes.includes('Advisory Win Prob')
+        ? `${lead.scoreNotes} | ${advisoryNote}`
+        : (lead.scoreNotes || advisoryNote);
+
       await this.prisma.lead.update({
         where: { id: lead.id },
         data: {
-          score: res.score,
-          scoreNotes: `ML Win Prob: ${(res.winProbability * 100).toFixed(0)}% [${res.grade}]. ${res.recommendedAction}`,
+          scoreNotes: updatedNotes,
         },
       });
     }
