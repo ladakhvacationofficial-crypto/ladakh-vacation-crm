@@ -10,6 +10,22 @@
  * the CRM in the first place.
  */
 
+/**
+ * Public NAP. The website's site.ts is the other copy; these two must stay
+ * the same. There is no GSTIN in the repo, so tax invoices name the business
+ * and stop there rather than inventing a registration number.
+ */
+export const COMPANY = {
+  name: 'Ladakh Vacation',
+  street: 'Main Bazaar',
+  city: 'Leh',
+  region: 'Ladakh',
+  postalCode: '194101',
+  phoneDisplay: '+91 96229 55386',
+  email: 'ladakhvacation@gmail.com',
+  website: 'www.ladakhvacation.in',
+} as const;
+
 /** Public marketing site (Next.js on Vercel). */
 export const SITE_DOMAIN = 'https://ladakhvacation.in';
 

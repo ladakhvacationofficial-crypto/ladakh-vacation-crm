@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 
 /**
- * Race-safe sequential number generator ("GLZ-2026-0001" style).
+ * Race-safe sequential number generator ("LV-B-2026-0001" style).
  *
  * The read-then-write pattern (find highest, add one, insert) races when two
  * requests fire simultaneously — both read N, both write N+1, one commit
@@ -13,8 +13,8 @@ import { Prisma } from '@prisma/client';
  * the exception (which itself signals contention worth investigating).
  *
  * Using a Postgres sequence would be even cleaner, but sequences don't
- * partition by prefix (we want "GLZ-Q-2026-*" to be independent from
- * "GLZ-B-2026-*"). A retry loop is the simpler, correct-enough answer.
+ * partition by prefix (we want "LV-ITI-2026-*" to be independent from
+ * "LV-B-2026-*"). A retry loop is the simpler, correct-enough answer.
  */
 export async function withNumberRetry<T>(
   fn: () => Promise<T>,

@@ -1,5 +1,6 @@
 'use client';
 
+import { EntityDocuments } from '@/components/entity-documents';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
@@ -153,6 +154,7 @@ export default function PersonDetailPage() {
           }}
         />
       </header>
+      <EntityDocuments entityType="employee" entityId={id} />
 
       {error && (
         <p

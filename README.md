@@ -112,3 +112,38 @@ landers' own content (`build/pages.js` in the landers folder), so both sites
 sell the same eleven trips at the same prices. After adding or renaming a
 website page, run `node seo/generate-manifest.mjs` so the CRM's SEO dashboard
 audits the new URL.
+
+## Audit fixes and deployment checks (23 September 2026)
+
+Email and social delivery now fail explicitly when a provider is unavailable.
+Planning charts use recorded data and labelled assumptions, not invented history.
+New operational attachments are encrypted before storage and downloaded through
+authenticated API routes. Public website media still uses public object URLs.
+Legacy public attachments require a separate migration before they are protected.
+
+Before deploying these changes:
+
+1. Back up the existing `INTEGRATION_KEY`. Keep it unchanged. Operational documents
+   use it unless a dedicated `STORAGE_ENCRYPTION_KEY` is configured. Do not rotate
+   either key without migrating the data encrypted with it.
+2. Apply additive Prisma migrations with `npx prisma migrate deploy` from `backend`.
+   Never use `migrate reset` against the existing database.
+3. Set `APP_URL` to the actual HTTPS backend origin (without `/api`) for campaign
+   unsubscribe links. Set `CRM_BASE_URL` to the actual CRM origin for reset links.
+4. Add `BREVO_API_KEY` and an approved sender before sending emails. For Meta lead
+   webhooks, set `META_APP_SECRET` and `META_VERIFY_TOKEN`; missing verification
+   configuration now rejects requests.
+5. Build and redeploy both Vercel apps after setting their public API variables.
+   Use `web/.env.local.example` for the website and `frontend/.env.local.example`
+   for the CRM. These variables are different.
+6. Verify `/api/health` and `/api/health/db`, then check login, an enquiry, its visit
+   attribution, a document upload/download, and a booking payment in the real UI.
+   A successful local build does not establish that production is working.
+
+Campaign sending still runs inside a single backend process. Interrupted campaigns
+are marked failed at startup rather than silently resent; an operator must review
+recipient outcomes. Sleeping or restarting hosting is not a durable job queue.
+
+Dedicated traveller/permit management, altitude validation, generated white-label
+B2B quotes, and a mobile app remain outside the implemented modules. Provider
+delivery and hosting must be checked with the actual Ladakh accounts.

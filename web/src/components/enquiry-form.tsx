@@ -1,5 +1,6 @@
 'use client';
 
+import { captureContext } from '@/lib/attribution';
 import { useState } from 'react';
 import { Loader2, Check, Phone } from 'lucide-react';
 import { SITE, whatsAppLink } from '@/lib/site';
@@ -54,10 +55,11 @@ export function EnquiryForm({
     };
 
     try {
+      if (!SITE.leadCaptureUrl) throw new Error('Enquiries are temporarily unavailable. Please call or WhatsApp us.');
       const res = await fetch(SITE.leadCaptureUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, ...await captureContext() }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setStatus('sent');

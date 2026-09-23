@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     .reduce((min, p) => (p.priceFrom < min ? p.priceFrom : min), Infinity);
 
   const title = `Ladakh Tour Packages from ${c.name}`;
-  const description = `Ladakh tour packages from ${c.name}. Land packages from ${inr(cheapest)} per person with hotels, all Inner Line Permits, a private 4×4 and 24×7 support from Leh. Honest advice on ${c.name} flights and timing.`;
+  const description = `Ladakh tour packages from ${c.name}. Land packages from ${inr(cheapest)} per person with hotels, the environmental fee and permits handled, a private 4×4 and 24×7 support from Leh. Honest advice on ${c.name} flights and timing.`;
 
   return {
     title,

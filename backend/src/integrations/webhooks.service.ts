@@ -82,7 +82,7 @@ export class WebhooksService {
 
     // Check if lead already exists in CRM
     const existingLead = await this.prisma.lead.findFirst({
-      where: { phone: { endsWith: phoneKey } },
+      where: { phoneKey },
       orderBy: { createdAt: 'desc' },
     });
 

@@ -32,11 +32,17 @@ export class MarketingService {
     private readonly brevo: BrevoEmailService,
   ) {}
 
+  async onModuleInit() {
+    await this.prisma.campaign.updateMany({
+      where: { status: CampaignStatus.SENDING }, data: { status: CampaignStatus.FAILED },
+    });
+  }
+
   /**
    * Evaluates audience criteria and returns lead reachability, frequency-capped exclusions,
    * opt-outs, and cost preview.
    */
-  async previewAudience(filter: AudienceFilterDto, channel: CampaignChannel = CampaignChannel.WHATSAPP) {
+  private async selectAudience(filter: AudienceFilterDto, channel: CampaignChannel = CampaignChannel.WHATSAPP) {
     const where: Prisma.LeadWhereInput = {};
 
     if (filter.statuses && filter.statuses.length > 0) {
@@ -124,6 +130,7 @@ export class MarketingService {
         : 0.0;
 
     return {
+      eligibleLeads,
       totalMatched,
       optOutCount,
       frequencyCappedCount,
@@ -137,6 +144,11 @@ export class MarketingService {
         destination: l.destination,
       })),
     };
+  }
+
+  async previewAudience(filter: AudienceFilterDto, channel: CampaignChannel = CampaignChannel.WHATSAPP) {
+    const { eligibleLeads, ...preview } = await this.selectAudience(filter, channel);
+    return preview;
   }
 
   /**
@@ -247,26 +259,22 @@ export class MarketingService {
 
     // Resolve active audience
     const filter = campaign.audienceFilter as AudienceFilterDto;
-    const preview = await this.previewAudience(filter, campaign.channel);
-
-    // Fetch matching eligible leads
-    const where: Prisma.LeadWhereInput = {};
-    if (filter.statuses && filter.statuses.length > 0) where.status = { in: filter.statuses };
-    if (filter.sources && filter.sources.length > 0) where.source = { in: filter.sources };
-    if (filter.tags && filter.tags.length > 0) where.tags = { hasSome: filter.tags };
-    if (filter.destination) where.destination = { contains: filter.destination, mode: 'insensitive' };
-    if (campaign.channel === CampaignChannel.WHATSAPP) where.phone = { not: '' };
-    if (campaign.channel === CampaignChannel.EMAIL) where.email = { not: null };
-
-    const leads = await this.prisma.lead.findMany({
-      where,
-      select: { id: true, name: true, phone: true, email: true, tags: true, destination: true },
+    if (campaign.status === CampaignStatus.CANCELLED || campaign.status === CampaignStatus.FAILED) {
+      throw new BadRequestException('Create a new campaign after cancellation or failure; do not resend an uncertain delivery.');
+    }
+    if (campaign.channel === CampaignChannel.EMAIL) {
+      if (!this.brevo.isConfigured) throw new BadRequestException('Email delivery is not configured.');
+      const base = process.env.APP_URL;
+      if (!base || !/^https:\/\//.test(base)) throw new BadRequestException('Set APP_URL to the public HTTPS backend address for unsubscribe links.');
+    }
+    const { eligibleLeads } = await this.selectAudience(filter, campaign.channel);
+    const claim = await this.prisma.campaign.updateMany({
+      where: { id, status: { in: [CampaignStatus.DRAFT, CampaignStatus.SCHEDULED] } },
+      data: { status: CampaignStatus.SENDING, startedAt: new Date() },
     });
+    if (claim.count !== 1) throw new BadRequestException('Campaign has already been claimed or cancelled.');
 
-    const eligibleLeads = leads.filter(
-      (l) => !l.tags || !l.tags.includes('MARKETING_OPT_OUT'),
-    );
-
+    try {
     // Create recipient records
     await this.prisma.campaignRecipient.deleteMany({ where: { campaignId: id } });
 
@@ -286,8 +294,8 @@ export class MarketingService {
     }
 
     // Mark as SENDING
-    await this.prisma.campaign.update({
-      where: { id },
+    await this.prisma.campaign.updateMany({
+      where: { id, status: CampaignStatus.SENDING },
       data: {
         status: CampaignStatus.SENDING,
         startedAt: new Date(),
@@ -296,14 +304,19 @@ export class MarketingService {
     });
 
     // Execute in background
-    this.executeBroadcast(id, campaign, eligibleLeads).catch((err) => {
+    this.executeBroadcast(id, campaign, eligibleLeads).catch(async (err) => {
       this.logger.error(`Broadcast execution error for campaign ${id}: ${err.message}`, err.stack);
+      await this.prisma.campaign.updateMany({ where: { id, status: CampaignStatus.SENDING }, data: { status: CampaignStatus.FAILED } });
     });
 
     return {
       message: `Broadcast started for ${recipientData.length} recipients.`,
       campaignId: id,
     };
+    } catch (error) {
+      await this.prisma.campaign.updateMany({ where: { id, status: CampaignStatus.SENDING }, data: { status: CampaignStatus.FAILED } });
+      throw error;
+    }
   }
 
   /**
@@ -320,6 +333,15 @@ export class MarketingService {
     const leadMap = new Map(leads.map((l) => [l.id, l]));
 
     for (const recipient of recipients) {
+      const current = await this.prisma.campaign.findUnique({ where: { id: campaignId }, select: { status: true } });
+      if (current?.status !== CampaignStatus.SENDING) return;
+      if (recipient.leadId) {
+        const latest = await this.prisma.lead.findUnique({ where: { id: recipient.leadId }, select: { tags: true } });
+        if (!latest || latest.tags.includes('MARKETING_OPT_OUT')) {
+          await this.prisma.campaignRecipient.update({ where: { id: recipient.id }, data: { status: CampaignRecipientStatus.UNSUBSCRIBED } });
+          continue;
+        }
+      }
       const lead = recipient.leadId ? leadMap.get(recipient.leadId) : null;
       const leadName = recipient.name || 'Traveler';
       const destination = lead?.destination || 'Ladakh';
@@ -348,8 +370,9 @@ export class MarketingService {
             },
           });
           sentCount++;
+          await this.prisma.campaign.update({ where: { id: campaignId }, data: { totalSent: { increment: 1 } } });
         } else if (campaign.channel === CampaignChannel.EMAIL && recipient.email) {
-          const unsubscribeUrl = `${process.env.APP_URL || 'http://localhost:3000'}/api/marketing/unsubscribe/${recipient.unsubscribeToken}`;
+          const unsubscribeUrl = `${process.env.APP_URL!.replace(/\/$/, '')}/api/marketing/unsubscribe/${recipient.unsubscribeToken}`;
 
           const res = await this.brevo.sendEmail({
             toEmail: recipient.email,
@@ -368,6 +391,7 @@ export class MarketingService {
             },
           });
           sentCount++;
+          await this.prisma.campaign.update({ where: { id: campaignId }, data: { totalSent: { increment: 1 } } });
         }
       } catch (err: any) {
         this.logger.warn(`Failed sending to recipient ${recipient.id}: ${err.message}`);
@@ -379,6 +403,7 @@ export class MarketingService {
           },
         });
         failedCount++;
+        await this.prisma.campaign.update({ where: { id: campaignId }, data: { totalFailed: { increment: 1 } } });
       }
 
       // Small throttling delay to adhere to rate limits (50ms per item)
@@ -386,13 +411,12 @@ export class MarketingService {
     }
 
     // Complete campaign
-    await this.prisma.campaign.update({
-      where: { id: campaignId },
+    await this.prisma.campaign.updateMany({
+      where: { id: campaignId, status: CampaignStatus.SENDING },
       data: {
-        status: CampaignStatus.SENT,
+        status: failedCount > 0 ? CampaignStatus.FAILED : CampaignStatus.SENT,
         completedAt: new Date(),
-        totalSent: sentCount,
-        totalFailed: failedCount,
+
       },
     });
 

@@ -38,7 +38,7 @@ describe('OfflineConversionsService', () => {
     expect(mockPrisma.activity.create).not.toHaveBeenCalled();
   });
 
-  it('uploads offline conversion for Google Ads when gclid is present', async () => {
+  it('reports unconfigured conversion for Google Ads when gclid is present', async () => {
     const res = await service.uploadBookingConversion({
       bookingId: 'b-2',
       bookingNumber: 'GLZ-B-2026-0002',
@@ -51,7 +51,7 @@ describe('OfflineConversionsService', () => {
       },
     });
 
-    expect(res.googleUploaded).toBe(true);
+    expect(res.googleUploaded).toBe(false);
     expect(res.metaUploaded).toBe(false);
     expect(res.summary).toContain('Google Ads');
     expect(mockPrisma.activity.create).toHaveBeenCalledWith(
@@ -64,7 +64,7 @@ describe('OfflineConversionsService', () => {
     );
   });
 
-  it('uploads offline conversion for Meta CAPI when fbclid is present', async () => {
+  it('reports unconfigured conversion for Meta CAPI when fbclid is present', async () => {
     const res = await service.uploadBookingConversion({
       bookingId: 'b-3',
       bookingNumber: 'GLZ-B-2026-0003',
@@ -79,7 +79,7 @@ describe('OfflineConversionsService', () => {
     });
 
     expect(res.googleUploaded).toBe(false);
-    expect(res.metaUploaded).toBe(true);
+    expect(res.metaUploaded).toBe(false);
     expect(res.summary).toContain('Meta CAPI');
     expect(mockPrisma.activity.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -91,7 +91,7 @@ describe('OfflineConversionsService', () => {
     );
   });
 
-  it('uploads to both platforms when both gclid and fbclid are present', async () => {
+  it('does not claim either platform accepted an unconfigured upload', async () => {
     const res = await service.uploadBookingConversion({
       bookingId: 'b-4',
       bookingNumber: 'GLZ-B-2026-0004',
@@ -105,8 +105,8 @@ describe('OfflineConversionsService', () => {
       },
     });
 
-    expect(res.googleUploaded).toBe(true);
-    expect(res.metaUploaded).toBe(true);
+    expect(res.googleUploaded).toBe(false);
+    expect(res.metaUploaded).toBe(false);
     expect(res.summary).toContain('Google Ads');
     expect(res.summary).toContain('Meta CAPI');
   });

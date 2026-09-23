@@ -333,7 +333,7 @@ export default function NewSocialPostPage() {
                   <div className="flex items-center gap-2 px-3 py-2 border-b">
                     <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
                     <div>
-                      <p className="font-semibold text-[11px] text-gray-900">glitz.holidays</p>
+                      <p className="font-semibold text-[11px] text-gray-900">ladakhvacation</p>
                       <p className="text-[9px] text-gray-400">Ladakh, India</p>
                     </div>
                   </div>

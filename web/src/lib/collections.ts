@@ -157,7 +157,7 @@ export const COLLECTIONS: Collection[] = [
       },
       {
         q: 'Do I need permits for Hanle?',
-        a: 'Yes. Hanle, Tso Moriri and Umling La need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive.',
+        a: 'Indian guests pay the Ladakh environmental fee for Hanle, Tso Moriri and Umling La. Foreign nationals need a Protected Area Permit. We pay and print these before you arrive.',
       },
       {
         q: 'Is Hanle too high for a first trip to Ladakh?',

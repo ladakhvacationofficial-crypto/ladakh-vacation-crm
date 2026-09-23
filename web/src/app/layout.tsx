@@ -1,3 +1,4 @@
+import { VisitTracker } from '@/components/visit-tracker';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from 'next/font/google';
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description:
-    'Ladakh tour packages from a Leh-based team. Leh, Nubra, Pangong and Hanle, sequenced by altitude, with all Inner Line Permits, a private 4×4, oxygen on board and 24×7 support. WhatsApp +91 96229 55386.',
+    'Ladakh tour packages from a Leh-based team. Leh, Nubra, Pangong and Hanle, sequenced by altitude, with the environmental fee and permits handled, a private 4×4, oxygen on board and 24×7 support. WhatsApp +91 96229 55386.',
   applicationName: SITE.name,
   authors: [{ name: SITE.name, url: SITE.domain }],
   creator: SITE.name,
@@ -192,6 +193,7 @@ export default function RootLayout({
           </>
         )}
 
+        <VisitTracker />
         <ScrollProgress />
         <RevealProvider />
 
@@ -205,9 +207,9 @@ export default function RootLayout({
           every page load so a visitor submitting an enquiry never waits out a
           30-second cold start.
         */}
-        <Script id="backend-wake" strategy="afterInteractive">{`
-          (function(){var i=new Image();i.src='${SITE.wakePingUrl}?t='+Date.now();})();
-        `}</Script>
+        {SITE.wakePingUrl && <Script id="backend-wake" strategy="afterInteractive">{`
+          (function(){var i=new Image();i.src=${JSON.stringify(SITE.wakePingUrl)}+'?t='+Date.now();})();
+        `}</Script>}
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, Text } from '@react-pdf/renderer';
 import { pdfStyles, brand } from './theme';
+import { COMPANY } from '../../common/site';
 
 /**
  * Indian numbering — lakh/crore grouping matches how the client already
@@ -53,6 +54,23 @@ export function BrandHeader({
         <Text style={pdfStyles.docDate}>Issued {shortDate(issuedOn)}</Text>
       </View>
     </View>
+  );
+}
+
+/** Name, street and phone on every client document. */
+export function SellerIdentity() {
+  return (
+    <>
+      <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
+        {COMPANY.name}
+      </Text>
+      <Text style={pdfStyles.small}>
+        {COMPANY.street}, {COMPANY.city}, {COMPANY.region} {COMPANY.postalCode}
+      </Text>
+      <Text style={pdfStyles.small}>{COMPANY.phoneDisplay}</Text>
+      <Text style={pdfStyles.small}>{COMPANY.email}</Text>
+      <Text style={pdfStyles.small}>{COMPANY.website}</Text>
+    </>
   );
 }
 

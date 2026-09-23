@@ -48,6 +48,7 @@ export class SocialService {
   async listAccounts() {
     return this.prisma.socialAccount.findMany({
       orderBy: { platform: 'asc' },
+      select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true },
     });
   }
 
@@ -63,6 +64,7 @@ export class SocialService {
     const encryptedToken = encryptSecret(data.accessToken);
 
     return this.prisma.socialAccount.upsert({
+      select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true },
       where: { platform_externalId: { platform: data.platform, externalId: data.externalId } },
       update: {
         accountName: data.accountName,
@@ -106,7 +108,7 @@ export class SocialService {
         createdById,
         status: dto.scheduledAt ? SocialPostStatus.SCHEDULED : SocialPostStatus.DRAFT,
       },
-      include: { account: true },
+      include: { account: { select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true } } },
     });
   }
 
@@ -129,7 +131,7 @@ export class SocialService {
         orderBy: [{ scheduledAt: 'asc' }, { createdAt: 'desc' }],
         skip: (page - 1) * limit,
         take: limit,
-        include: { account: true, createdBy: { select: { id: true, name: true } } },
+        include: { account: { select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true } }, createdBy: { select: { id: true, name: true } } },
       }),
       this.prisma.socialPost.count({ where }),
     ]);
@@ -141,7 +143,7 @@ export class SocialService {
     const post = await this.prisma.socialPost.findUnique({
       where: { id },
       include: {
-        account: true,
+        account: { select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true } },
         createdBy: { select: { id: true, name: true } },
       },
     });
@@ -151,9 +153,11 @@ export class SocialService {
 
   async updatePost(id: string, dto: UpdateSocialPostDto) {
     const existing = await this.getPost(id);
-    if (existing.status === SocialPostStatus.PUBLISHED) {
+    if ([SocialPostStatus.PUBLISHED, SocialPostStatus.PUBLISHING].includes(existing.status as any)) {
       throw new ForbiddenException('Cannot edit a published post');
     }
+
+    if (dto.status && ![SocialPostStatus.DRAFT, SocialPostStatus.SCHEDULED].includes(dto.status as any)) throw new ForbiddenException('Publication status is controlled by the publisher.');
 
     return this.prisma.socialPost.update({
       where: { id },
@@ -165,13 +169,13 @@ export class SocialService {
         ...(dto.accountId !== undefined && { accountId: dto.accountId }),
         ...(dto.packageId !== undefined && { packageId: dto.packageId }),
       },
-      include: { account: true },
+      include: { account: { select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true } } },
     });
   }
 
   async deletePost(id: string) {
     const post = await this.getPost(id);
-    if (post.status === SocialPostStatus.PUBLISHED) {
+    if ([SocialPostStatus.PUBLISHED, SocialPostStatus.PUBLISHING].includes(post.status as any)) {
       throw new ForbiddenException('Cannot delete a published post');
     }
     await this.prisma.socialPost.delete({ where: { id } });
@@ -187,22 +191,29 @@ export class SocialService {
       throw new ForbiddenException('Post is already published');
     }
 
-    await this.prisma.socialPost.update({
-      where: { id },
+    const claim = await this.prisma.socialPost.updateMany({
+      where: { id, status: { in: [SocialPostStatus.DRAFT, SocialPostStatus.SCHEDULED, SocialPostStatus.FAILED] } },
       data: { status: SocialPostStatus.PUBLISHING },
     });
+    if (claim.count !== 1) throw new ForbiddenException('Post is already publishing or published.');
 
     const account = post.accountId
       ? await this.prisma.socialAccount.findUnique({ where: { id: post.accountId } })
       : null;
 
-    const result = await this.publisher.publishPost(post, account);
+    let result;
+    try {
+      result = account && account.platform !== post.platform
+        ? { ok: false, errorMessage: 'The selected account belongs to a different platform.' }
+        : await this.publisher.publishPost(post, account);
+    }
+    catch { result = { ok: false, errorMessage: 'Publishing failed; check the provider before retrying.' }; }
 
     await this.prisma.socialPost.update({
       where: { id },
       data: {
-        status: result.ok ? SocialPostStatus.PUBLISHED : SocialPostStatus.FAILED,
-        publishedAt: result.ok ? new Date() : null,
+        status: result.ok && !result.simulated ? SocialPostStatus.PUBLISHED : SocialPostStatus.FAILED,
+        publishedAt: result.ok && !result.simulated ? new Date() : null,
         externalPostId: result.externalPostId,
         errorMessage: result.errorMessage,
       },
@@ -232,8 +243,8 @@ export class SocialService {
         await this.publishNow(post.id);
       } catch (err: any) {
         this.logger.error(`Cron publish failed for post ${post.id}: ${err.message}`);
-        await this.prisma.socialPost.update({
-          where: { id: post.id },
+        await this.prisma.socialPost.updateMany({
+          where: { id: post.id, status: SocialPostStatus.SCHEDULED },
           data: { status: SocialPostStatus.FAILED, errorMessage: err.message },
         });
       }
@@ -253,7 +264,7 @@ export class SocialService {
           { publishedAt: { gte: start, lte: end } },
         ],
       },
-      include: { account: true },
+      include: { account: { select: { id: true, platform: true, accountName: true, handle: true, externalId: true, expiresAt: true, avatarUrl: true, isActive: true } } },
       orderBy: { scheduledAt: 'asc' },
     });
 

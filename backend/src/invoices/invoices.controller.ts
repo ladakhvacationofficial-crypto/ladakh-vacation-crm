@@ -37,8 +37,8 @@ export class InvoicesController {
 
   @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS, Role.SALES_EXEC)
   @Get('lead/:leadId')
-  findByLead(@Param('leadId') leadId: string) {
-    return this.invoicesService.findByLead(leadId);
+  findByLead(@Param('leadId') leadId: string, @CurrentUser() actor: Actor) {
+    return this.invoicesService.findByLead(leadId, actor);
   }
 
   @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS)
@@ -57,8 +57,9 @@ export class InvoicesController {
   async downloadPdf(
     @Param('id') id: string,
     @Res() res: Response,
+    @CurrentUser() actor: Actor,
   ) {
-    const invoice = await this.invoicesService.findOne(id);
+    const invoice = await this.invoicesService.findOne(id, actor);
     const buf = await this.pdf.renderFormalInvoice({
       invoiceNumber: invoice.invoiceNumber,
       createdAt: invoice.createdAt,

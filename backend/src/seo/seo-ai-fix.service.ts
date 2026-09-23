@@ -150,7 +150,7 @@ While ${destination} is one of the most striking places in the Himalaya, we want
 
       case 'meta-description': {
         const desc1 = `${destination} tour packages from a Leh-based team: altitude-first itineraries, private 4×4 with a Ladakhi driver, all permits and oxygen on board.`;
-        const desc2 = `Book ${destination} with Ladakh Vacation from ₹14,500. Hotels and camps, Inner Line Permits, private cab and 24×7 support from Leh. WhatsApp us.`;
+        const desc2 = `Book ${destination} with Ladakh Vacation from ₹14,500. Hotels and camps, environmental fee and permits handled, private cab and 24×7 support from Leh. WhatsApp us.`;
         const desc3 = `Plan ${destination} with local experts in Leh. Itemised quotes, custom itineraries sequenced by altitude, and no-cost EMI. Get your itinerary today.`;
 
         return {
@@ -241,7 +241,7 @@ When planning ${destination}, the order of the days matters more than the list o
 
 #### What to know before you go:
 - **Best months:** May, June and September are the prime months; September and October bring the clearest skies. From November to March most high roads close.
-- **Permits:** Nubra, Pangong, Hanle, Tso Moriri and Umling La need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print them before you land.
+- **Permits:** Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee. Foreign nationals need a Protected Area Permit, which we arrange before you land.
 - **Getting around:** A private Innova Crysta or Xylo with a Ladakhi driver, carrying oxygen, an oximeter and a first-aid kit.
 
 Every itinerary is a starting point, reshaped around your dates, your group and your pace.`,
@@ -459,7 +459,7 @@ Every itinerary is a starting point, reshaped around your dates, your group and 
   }
 
   private buildAiPrompt(dto: GenerateSeoFixDto, pageTitle: string, keyword: string): string {
-    return `You are a world-class Technical SEO & Helpful Content specialist for Ladakh Vacation, a Leh-based Ladakh tour operator (Leh, Nubra, Pangong, Hanle, Tso Moriri, and the Manali and Srinagar roads into Ladakh). Its itineraries are sequenced by altitude, include all Inner Line Permits, a private 4×4 with a Ladakhi driver and oxygen on board. Never invent prices, awards, statistics or staff names.
+    return `You are a world-class Technical SEO & Helpful Content specialist for Ladakh Vacation, a Leh-based Ladakh tour operator (Leh, Nubra, Pangong, Hanle, Tso Moriri, and the Manali and Srinagar roads into Ladakh). Its itineraries are sequenced by altitude. Indian guests pay the Ladakh environmental fee (there is no Inner Line Permit for Indian tourists). Foreign nationals need a Protected Area Permit, which the operator arranges. Every vehicle is a private 4×4 with a Ladakhi driver and oxygen on board. Never invent prices, awards, statistics or staff names.
 
 A page audit flagged an SEO issue that needs an immediate, actionable fix:
 - Check ID: "${dto.checkId}" (${dto.label || ''})

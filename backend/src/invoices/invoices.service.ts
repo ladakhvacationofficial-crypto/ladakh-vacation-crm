@@ -1,7 +1,8 @@
+import { withNumberRetry } from '../common/sequence';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
-import { Actor } from '../common/access';
+import { Actor, canSeeAllLeads } from '../common/access';
 import { InvoiceStatus } from '@prisma/client';
 import { gstBreakdown } from '../common/pricing';
 
@@ -9,10 +10,21 @@ import { gstBreakdown } from '../common/pricing';
 export class InvoicesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private generateInvoiceNumber(): string {
-    const random = Math.floor(1000 + Math.random() * 9000);
-    const dateStr = new Date().toISOString().slice(2, 7).replace('-', ''); // YYMM
-    return `INV-${dateStr}-${random}`;
+  private async generateInvoiceNumber(): Promise<string> {
+    const prefix = `LV-INV-${new Date().getUTCFullYear()}-`;
+    const last = await this.prisma.invoice.findFirst({
+      where: { invoiceNumber: { startsWith: prefix } },
+      orderBy: { invoiceNumber: 'desc' }, select: { invoiceNumber: true },
+    });
+    const next = last ? Number(last.invoiceNumber.slice(prefix.length)) + 1 : 1;
+    return `${prefix}${String(next).padStart(6, '0')}`;
+  }
+
+  private async assertLeadAccess(leadId: string, actor: Actor) {
+    const lead = await this.prisma.lead.findUnique({ where: { id: leadId } });
+    if (!lead || (!canSeeAllLeads(actor.role) && lead.assignedToId !== actor.id)) {
+      throw new NotFoundException('Lead not found');
+    }
   }
 
   async create(dto: CreateInvoiceDto, actor: Actor) {
@@ -23,6 +35,7 @@ export class InvoicesService {
       throw new NotFoundException('Lead not found');
     }
 
+    await this.assertLeadAccess(dto.leadId, actor);
     const settings = await this.prisma.pricingSettings.findFirst();
     const effectiveGstRate = dto.gstRate !== undefined ? dto.gstRate : (settings?.gstPercent ?? 5.0);
 
@@ -44,9 +57,9 @@ export class InvoicesService {
     const gstAmount = split.gstAmount;
     const total = split.total;
 
-    return this.prisma.invoice.create({
+    return withNumberRetry(async () => this.prisma.invoice.create({
       data: {
-        invoiceNumber: this.generateInvoiceNumber(),
+        invoiceNumber: await this.generateInvoiceNumber(),
         leadId: dto.leadId,
         subtotal,
         gstRate: effectiveGstRate,
@@ -62,10 +75,10 @@ export class InvoicesService {
       include: {
         lineItems: true,
       }
-    });
+    }));
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, actor: Actor) {
     const invoice = await this.prisma.invoice.findUnique({
       where: { id },
       include: {
@@ -74,6 +87,7 @@ export class InvoicesService {
       },
     });
     if (!invoice) throw new NotFoundException('Invoice not found');
+    await this.assertLeadAccess(invoice.leadId, actor);
     return invoice;
   }
 
@@ -86,7 +100,8 @@ export class InvoicesService {
     });
   }
 
-  async findByLead(leadId: string) {
+  async findByLead(leadId: string, actor: Actor) {
+    await this.assertLeadAccess(leadId, actor);
     return this.prisma.invoice.findMany({
       where: { leadId },
       orderBy: { createdAt: 'desc' },

@@ -102,7 +102,7 @@ export default function MlIntelligencePage() {
       setForecast(f);
       setClusters(c);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : 'Failed to load ML analytics.');
+      setError(e instanceof ApiError ? e.message : 'Failed to load planning insights.');
     } finally {
       setLoading(false);
     }
@@ -143,7 +143,7 @@ export default function MlIntelligencePage() {
               Leads
             </Link>
             <span>/</span>
-            <span className="text-signal-400">ML Tourism Intelligence</span>
+            <span className="text-signal-400">Sales Planning Insights</span>
           </div>
           <h1 className="display text-2xl sm:text-3xl font-bold tracking-tight text-ink-100 flex items-center gap-2.5">
             <span className="flex size-8 items-center justify-center rounded-lg bg-signal-500/20 text-signal-400">
@@ -152,7 +152,7 @@ export default function MlIntelligencePage() {
             <span>Machine Learning & Tourism Intelligence</span>
           </h1>
           <p className="mt-1 text-sm text-ink-400 max-w-2xl">
-            Real-time demand forecasting, triple exponential smoothing, dynamic margin optimization, and K-Means traveller segmentation for Ladakh.
+            Estimates from recorded history with heuristic seasonality. Customer segments describe actual enquiries; these are not trained predictions.
           </p>
         </div>
 
@@ -221,7 +221,7 @@ export default function MlIntelligencePage() {
               90-Day Demand & Dynamic Margin Forecast
             </h2>
           </div>
-          <span className="text-xs text-ink-500">Holt-Winters Triple Exponential Smoothing</span>
+          <span className="text-xs text-ink-500">Historical average with seasonal assumptions</span>
         </div>
 
         {forecast && (
@@ -363,7 +363,7 @@ export default function MlIntelligencePage() {
           <div className="flex items-center gap-2">
             <Users className="size-4 text-signal-400" />
             <h2 className="text-base font-semibold text-ink-100">
-              Traveler Cohort Segmentation (K-Means Clustering)
+              Traveller segments (rule-based)
             </h2>
           </div>
           <span className="text-xs text-ink-500">

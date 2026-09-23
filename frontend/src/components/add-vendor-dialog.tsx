@@ -148,7 +148,7 @@ export function AddVendorDialog({
               <Input
                 id="v-name" autoFocus required
                 value={name} onChange={(e) => setName(e.target.value)}
-                placeholder="Hotel Grand Mumtaz"
+                placeholder="Camp at Hunder"
               />
             </div>
 
@@ -185,7 +185,7 @@ export function AddVendorDialog({
               <Input
                 id="v-area" value={area}
                 onChange={(e) => setArea(e.target.value)}
-                placeholder="Dal Gate, Boulevard…"
+                placeholder="Changspa Road, Leh"
               />
             </div>
 

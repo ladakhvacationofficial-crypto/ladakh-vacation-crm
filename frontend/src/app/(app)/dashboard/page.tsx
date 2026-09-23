@@ -65,15 +65,12 @@ export default function DashboardPage() {
     (async () => {
       try {
         const [o, l, r, tm, wp] = await Promise.all([
-          api.get<OpsStats>('/leads/stats/ops').catch(() => null),
-          api.get<LeadStats>('/leads/stats').catch(() => null),
+          api.get<OpsStats>('/leads/stats/ops'),
+          api.get<LeadStats>('/leads/stats'),
           api
-            .get<Paged<LeadRow>>('/leads?limit=6')
-            .catch((): Paged<LeadRow> => ({
-              total: 0, page: 1, limit: 6, pages: 0, data: [],
-            })),
-          isOwner ? api.get<TeamScorecardRow[]>('/leads/stats/team-scorecard').catch(() => null) : Promise.resolve(null),
-          isOwner ? api.get<WeeklyPulse>('/bookings/stats/weekly-pulse').catch(() => null) : Promise.resolve(null),
+            .get<Paged<LeadRow>>('/leads?limit=6'),
+          isOwner ? api.get<TeamScorecardRow[]>('/leads/stats/team-scorecard') : Promise.resolve(null),
+          isOwner ? api.get<WeeklyPulse>('/bookings/stats/weekly-pulse') : Promise.resolve(null),
         ]);
         if (cancelled) return;
         setOps(o);
@@ -162,6 +159,10 @@ export default function DashboardPage() {
     day: 'numeric',
     month: 'long',
   }).format(new Date());
+
+  if (error) return <div role="alert" className="m-6 rounded-lg border border-red-300 p-6">
+    <p>{error}</p><button className="mt-3 underline" onClick={() => window.location.reload()}>Retry loading data</button>
+  </div>;
 
   return (
     <div className="relative min-h-screen">

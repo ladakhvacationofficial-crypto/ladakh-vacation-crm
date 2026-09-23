@@ -1,5 +1,6 @@
 'use client';
 
+import { EntityDocuments } from '@/components/entity-documents';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -190,6 +191,7 @@ export default function BookingDetailPage() {
           />
         </div>
       </header>
+      <EntityDocuments entityType="booking" entityId={id} />
 
       {error && (
         <p
@@ -622,7 +624,7 @@ function AddCost({
           id="cost-desc"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Hotel Grand Mumtaz — 3 rooms 4N"
+          placeholder="Nubra camp — 2 tents, 1 night"
           onKeyDown={(e) => e.key === 'Enter' && submit()}
         />
       </div>

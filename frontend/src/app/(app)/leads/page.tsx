@@ -41,7 +41,10 @@ export default function LeadsPage() {
   const [staff, setStaff] = useState<UserRow[]>([]);
   const [bulkTarget, setBulkTarget] = useState<string>('');
   const [bulkBusy, setBulkBusy] = useState(false);
-  const canAssign = useMemo(() => CAN_ASSIGN_ROLES.has(tokenStore.user()?.role ?? ''), []);
+  const role = tokenStore.user()?.role ?? '';
+  const canAssign = useMemo(() => CAN_ASSIGN_ROLES.has(role), [role]);
+  const canDelete = role === 'OWNER' || role === 'SUPER_ADMIN';
+  const canClose = canDelete || role === 'SALES_MANAGER';
 
   useEffect(() => {
     if (!canAssign) return;
@@ -400,8 +403,12 @@ export default function LeadsPage() {
                   </td>
                   <td className="px-3 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <CloseLeadDialog leadId={lead.id} leadName={lead.name} onClosed={load} />
-                      <DeleteLeadDialog leadId={lead.id} leadName={lead.name} onDeleted={load} />
+                      {canClose && (
+                        <CloseLeadDialog leadId={lead.id} leadName={lead.name} onClosed={load} />
+                      )}
+                      {canDelete && (
+                        <DeleteLeadDialog leadId={lead.id} leadName={lead.name} onDeleted={load} />
+                      )}
                     </div>
                   </td>
                 </tr>

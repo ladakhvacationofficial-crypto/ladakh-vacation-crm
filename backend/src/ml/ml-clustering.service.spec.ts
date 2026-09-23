@@ -27,7 +27,9 @@ describe('MlClusteringService', () => {
     expect(res.clusters.some((c) => c.id === 'value-explorers')).toBe(true);
 
     const luxury = res.clusters.find((c) => c.id === 'luxury-couples');
-    expect(luxury?.conversionRate).toBeGreaterThan(0.3);
+    expect(luxury?.conversionRate).toBe(0);
+    expect(res.totalLeadsAnalyzed).toBe(0);
+    expect(res.clusters.every(c => c.size === 0)).toBe(true);
     expect(luxury?.sampleWhatsAppPitch).toContain('{name}');
   });
 });
