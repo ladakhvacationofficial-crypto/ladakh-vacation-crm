@@ -41,4 +41,16 @@ export class SettingsController {
   updateRouting(@Body() dto: UpdateRoutingSettingsDto) {
     return this.assignment.updateRoutingSettings(dto);
   }
+
+  /** Company profile for invoices, receipts, and vouchers. */
+  @Get('company-profile')
+  getCompanyProfile() {
+    return this.settings.getCompanyProfile();
+  }
+
+  @Roles(Role.OWNER, Role.SUPER_ADMIN, Role.ACCOUNTS)
+  @Patch('company-profile')
+  updateCompanyProfile(@Body() dto: any) {
+    return this.settings.updateCompanyProfile(dto);
+  }
 }

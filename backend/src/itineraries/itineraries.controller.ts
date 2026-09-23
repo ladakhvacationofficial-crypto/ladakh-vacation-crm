@@ -23,6 +23,7 @@ import { UpsertPricingDto } from './dto/upsert-pricing.dto';
 import { ReorderDto } from './dto/reorder.dto';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
+import { Public } from '../common/decorators/public.decorator';
 import { Actor, LEAD_MODULE_ROLES } from '../common/access';
 import { ItineraryDocument } from './templates/itinerary';
 import { SettingsService } from '../settings/settings.service';
@@ -40,7 +41,24 @@ export class ItinerariesController {
     private readonly settings: SettingsService,
   ) {}
 
-  // ---- itineraries -------------------------------------------------------
+  // ---- public client-facing routes ---------------------------------------
+
+  @Public()
+  @Get('public/:token')
+  getPublicView(@Param('token') token: string) {
+    return this.svc.getPublicView(token);
+  }
+
+  @Public()
+  @Post('public/:token/accept')
+  acceptProposal(
+    @Param('token') token: string,
+    @Body() body: { optionId: string; clientNotes?: string },
+  ) {
+    return this.svc.acceptOption(token, body?.optionId, body?.clientNotes);
+  }
+
+  // ---- internal staff routes ---------------------------------------------
 
   @Post()
   create(@Body() dto: CreateItineraryDto, @CurrentUser() actor: Actor) {

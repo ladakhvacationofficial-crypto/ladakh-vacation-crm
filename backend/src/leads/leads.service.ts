@@ -1312,10 +1312,53 @@ export class LeadsService {
     };
   }
 
-  async generateAiDraft
-(id: string, actor: Actor) {
+  async generateAiDraft(id: string, actor: Actor) {
     const lead = await this.findOne(id, actor);
     return { draft: `Hi ${lead.name.split(' ')[0]}, just following up on your travel inquiry. Do you have a moment to chat?` };
   }
 
+  async rescoreAllActiveLeads(actor: Actor): Promise<{ updatedCount: number; message: string }> {
+    const leads = await this.prisma.lead.findMany({
+      where: {
+        status: {
+          notIn: [LeadStatus.CANCELLED, LeadStatus.LOST],
+        },
+      },
+    });
+
+    let updatedCount = 0;
+    for (const lead of leads) {
+      const effTravelDate = lead.travelDate ? parseTravelDate(lead.travelDate).date : null;
+      const effSeason = effTravelDate ? parseTravelDate(effTravelDate).season : undefined;
+      const floor = await this.getEstimatedBudgetFloor(effSeason);
+
+      const { score, notes } = scoreLead({
+        source: lead.source,
+        email: lead.email,
+        message: lead.message,
+        destination: lead.destination ? this.normaliseDestination(lead.destination) : undefined,
+        travelDate: effTravelDate,
+        season: effSeason,
+        budget: lead.budget,
+        nights: lead.nights,
+        adults: lead.adults,
+        enquiryCount: lead.enquiryCount,
+        minBudgetPerPaxNight: floor,
+      });
+
+      await this.prisma.lead.update({
+        where: { id: lead.id },
+        data: {
+          score,
+          scoreNotes: notes,
+        },
+      });
+      updatedCount++;
+    }
+
+    return {
+      updatedCount,
+      message: `Successfully rescored ${updatedCount} active lead(s) with the Category-Ceiling algorithm.`,
+    };
+  }
 }

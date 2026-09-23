@@ -24,6 +24,7 @@ import {
   Plug,
   Megaphone,
   Receipt,
+  Sparkles,
 } from 'lucide-react';
 import { tokenStore, type SessionUser } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -80,6 +81,8 @@ const NAV_GROUPS: NavGroup[] = [
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','MARKETING'] },
       { href: '/seo',              label: 'SEO',           icon: Globe,
         roles: ['OWNER','SUPER_ADMIN','MARKETING'] },
+      { href: '/reports/ml',       label: 'ML Forecast',   icon: Sparkles,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','MARKETING'] },
     ],
   },
   {
@@ -96,6 +99,8 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Operations',
     items: [
+      { href: '/bookings/movement', label: 'Daily Movement', icon: Map,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','OPERATIONS'] },
       { href: '/vendors',    label: 'Suppliers',  icon: Building2,
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','ACCOUNTS','OPERATIONS'] },
       { href: '/people',     label: 'People',     icon: UserCog,

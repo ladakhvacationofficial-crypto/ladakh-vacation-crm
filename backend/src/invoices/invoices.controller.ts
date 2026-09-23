@@ -10,6 +10,7 @@ import {
 import type { Response } from 'express';
 import { InvoicesService } from './invoices.service';
 import { PdfService } from '../pdf/pdf.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -21,6 +22,7 @@ export class InvoicesController {
   constructor(
     private readonly invoicesService: InvoicesService,
     private readonly pdf: PdfService,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS, Role.SALES_EXEC)
@@ -41,6 +43,21 @@ export class InvoicesController {
     return this.invoicesService.findByLead(leadId);
   }
 
+  @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS, Role.SALES_EXEC)
+  @Post('booking/:bookingId')
+  createFromBooking(
+    @Param('bookingId') bookingId: string,
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.invoicesService.createFromBooking(bookingId, actor);
+  }
+
+  @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS, Role.SALES_EXEC)
+  @Get('booking/:bookingId')
+  findByBooking(@Param('bookingId') bookingId: string) {
+    return this.invoicesService.findByBooking(bookingId);
+  }
+
   @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS)
   @Post(':id/paid')
   markAsPaid(@Param('id') id: string) {
@@ -58,7 +75,10 @@ export class InvoicesController {
     @Param('id') id: string,
     @Res() res: Response,
   ) {
-    const invoice = await this.invoicesService.findOne(id);
+    const [invoice, comp] = await Promise.all([
+      this.invoicesService.findOne(id),
+      this.prisma.companyProfile.findUnique({ where: { id: 'default' } }),
+    ]);
     const buf = await this.pdf.renderFormalInvoice({
       invoiceNumber: invoice.invoiceNumber,
       createdAt: invoice.createdAt,
@@ -69,6 +89,7 @@ export class InvoicesController {
       gstAmount: invoice.gstAmount,
       total: invoice.total,
       status: invoice.status,
+      companyProfile: comp,
       lead: {
         name: invoice.lead.name,
         email: invoice.lead.email,

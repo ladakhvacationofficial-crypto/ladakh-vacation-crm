@@ -117,4 +117,60 @@ export class InvoicesService {
       data: { status: InvoiceStatus.PAID },
     });
   }
+
+  async createFromBooking(bookingId: string, actor: Actor) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: {
+        lead: true,
+      },
+    });
+    if (!booking) throw new NotFoundException('Booking not found');
+
+    const settings = await this.prisma.pricingSettings.findFirst();
+    const effectiveGstRate = settings?.gstPercent ?? 5.0;
+
+    const totalSell = booking.totalSell || 0;
+    const split = gstBreakdown(totalSell, effectiveGstRate);
+
+    const description = `${booking.packageName || 'Ladakh Tour Package'} (${booking.bookingNumber}) - ${booking.adults || 2} Adults${booking.children ? `, ${booking.children} Children` : ''} - ${booking.nights || 5} Nights`;
+
+    return withNumberRetry(async () => {
+      const invoiceNumber = await this.nextInvoiceNumber();
+      return this.prisma.invoice.create({
+        data: {
+          invoiceNumber,
+          leadId: booking.leadId,
+          bookingId: booking.id,
+          subtotal: split.baseAmount,
+          gstRate: effectiveGstRate,
+          gstAmount: split.gstAmount,
+          total: split.total,
+          notes: booking.notes,
+          createdById: actor.id,
+          lineItems: {
+            create: [
+              {
+                description,
+                quantity: 1,
+                unitPrice: totalSell,
+                total: totalSell,
+              },
+            ],
+          },
+        },
+        include: {
+          lineItems: true,
+        },
+      });
+    });
+  }
+
+  async findByBooking(bookingId: string) {
+    return this.prisma.invoice.findMany({
+      where: { bookingId },
+      include: { lineItems: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }

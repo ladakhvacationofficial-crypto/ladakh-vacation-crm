@@ -1,13 +1,14 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Save, Sliders, TrendingUp, ShieldCheck, Calculator, Users } from 'lucide-react';
+import { Save, Sliders, TrendingUp, ShieldCheck, Calculator, Users, Building2 } from 'lucide-react';
 import { api, ApiError, type PricingSettings } from '@/lib/api';
 import { Panel, PanelBody, PanelHeader, PanelTitle } from '@/components/ui/panel';
 import { Button } from '@/components/ui/button';
 import { Input, Label } from '@/components/ui/input';
 import { money, percent } from '@/lib/format';
 import { RoutingSettingsPanel } from './routing-settings-panel';
+import { CompanyProfilePanel } from './company-profile-panel';
 
 /**
  * Commercial policy — the numbers that shape every quotation. Split into
@@ -40,7 +41,7 @@ const SERVICES: { key: keyof Draft; label: string }[] = [
 ];
 
 export default function SettingsPage() {
-  const [tab, setTab] = useState<'commercial' | 'routing'>('commercial');
+  const [tab, setTab] = useState<'commercial' | 'routing' | 'company'>('commercial');
   const [server, setServer] = useState<Draft | null>(null);
   const [draft, setDraft] = useState<Draft | null>(null);
   const [loading, setLoading] = useState(true);
@@ -162,6 +163,18 @@ export default function SettingsPage() {
           <Users className="size-4" />
           Lead Auto-Assignment & Routing
         </button>
+
+        <button
+          onClick={() => setTab('company')}
+          className={`pb-3 font-semibold transition border-b-2 flex items-center gap-2 ${
+            tab === 'company'
+              ? 'border-signal-500 text-signal-400'
+              : 'border-transparent text-ink-400 hover:text-ink-200'
+          }`}
+        >
+          <Building2 className="size-4" />
+          Company Profile & Billing
+        </button>
       </div>
 
       {error && (
@@ -172,6 +185,8 @@ export default function SettingsPage() {
 
       {tab === 'routing' ? (
         <RoutingSettingsPanel />
+      ) : tab === 'company' ? (
+        <CompanyProfilePanel />
       ) : (
         <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
           <div className="space-y-4">

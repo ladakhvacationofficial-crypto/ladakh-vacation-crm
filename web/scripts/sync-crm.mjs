@@ -60,9 +60,9 @@ copyRecursive(
   false
 );
 
-// 4. Copy CRM routes: (app), login, forgot-password, reset-password
+// 4. Copy CRM routes: (app), login, forgot-password, reset-password, view
 console.log('[sync-crm] Copying CRM app routes...');
-for (const route of ['(app)', 'login', 'forgot-password', 'reset-password']) {
+for (const route of ['(app)', 'login', 'forgot-password', 'reset-password', 'view']) {
   const srcRoute = path.join(frontendRoot, 'src', 'app', route);
   const destRoute = path.join(webRoot, 'src', 'app', route);
   copyRecursive(srcRoute, destRoute, true);

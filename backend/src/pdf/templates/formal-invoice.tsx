@@ -31,6 +31,23 @@ export interface FormalInvoiceInput {
     unitPrice: number;
     total: number;
   }[];
+
+  companyProfile?: {
+    legalName?: string;
+    brandName?: string;
+    gstin?: string | null;
+    pan?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    pincode?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    bankName?: string | null;
+    accountNumber?: string | null;
+    ifscCode?: string | null;
+    accountHolder?: string | null;
+  } | null;
 }
 
 /**
@@ -39,6 +56,15 @@ export interface FormalInvoiceInput {
  * with quantity × unit price breakdowns.
  */
 export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
+  const comp = inv.companyProfile;
+  const brandName = comp?.brandName ?? 'Ladakh Vacation';
+  const address = comp?.address
+    ? `${comp.address}, ${comp.city ?? 'Leh'}, ${comp.state ?? 'Ladakh'} - ${comp.pincode ?? '194101'}`
+    : 'Main Bazaar, Leh, UT of Ladakh — 194101';
+  const email = comp?.email ?? 'bookings@ladakhvacation.com';
+  const gstin = comp?.gstin ?? '38AABCL1234F1Z5';
+  const pan = comp?.pan ?? 'AABCL1234F';
+
   return (
     <Document
       title={`Invoice ${inv.invoiceNumber}`}
@@ -65,13 +91,18 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
           <View style={pdfStyles.partyBox}>
             <Text style={pdfStyles.sectionLabel}>Billed from</Text>
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
-              Ladakh Vacation
+              {brandName}
             </Text>
-            <Text style={pdfStyles.small}>Main Bazaar, Leh, UT of Ladakh — 194101</Text>
-            <Text style={pdfStyles.small}>Email: bookings@ladakhvacation.com</Text>
-            <Text style={pdfStyles.small}>GSTIN: 38AABCL1234F1Z5  |  PAN: AABCL1234F</Text>
+            <Text style={pdfStyles.small}>{address}</Text>
+            <Text style={pdfStyles.small}>Email: {email}</Text>
+            <Text style={pdfStyles.small}>GSTIN: {gstin}  |  PAN: {pan}</Text>
             <Text style={pdfStyles.small}>SAC Code: 998555 (Tour Operator Services)</Text>
             <Text style={pdfStyles.small}>Place of Supply: UT of Ladakh (Code: 38)</Text>
+            {comp?.bankName && comp?.accountNumber && (
+              <Text style={{ ...pdfStyles.small, marginTop: 4, fontFamily: 'Helvetica-Bold' }}>
+                Bank: {comp.bankName} | A/C: {comp.accountNumber} | IFSC: {comp.ifscCode}
+              </Text>
+            )}
           </View>
         </View>
 

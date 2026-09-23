@@ -137,6 +137,12 @@ export class LeadsController {
     return this.leads.importCsv(file.buffer, actor);
   }
 
+  @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER)
+  @Post('rescore-all')
+  rescoreAll(@CurrentUser() actor: Actor) {
+    return this.leads.rescoreAllActiveLeads(actor);
+  }
+
   @Roles(...LEAD_DELETE_ACCESS)
   @Get('approvals/pending')
   getPendingCloseRequests() {

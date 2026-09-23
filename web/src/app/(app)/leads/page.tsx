@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, X, Inbox, Flame, Clock, Trash2, Users, Sparkles } from 'lucide-react';
+import { Search, X, Inbox, Flame, Clock, Trash2, Users, Sparkles, RefreshCw } from 'lucide-react';
 import { api, ApiError, tokenStore, type LeadRow, type Paged, type UserRow } from '@/lib/api';
 import { Panel } from '@/components/ui/panel';
 import { Input } from '@/components/ui/input';
@@ -77,6 +77,22 @@ export default function LeadsPage() {
     }
   }
 
+  const [rescoring, setRescoring] = useState(false);
+
+  async function handleRescoreAll() {
+    if (!confirm('Recalculate lead scores for all active leads using the Category-Ceiling algorithm?')) return;
+    setRescoring(true);
+    try {
+      const res = await api.post<{ updatedCount: number; message: string }>('/leads/rescore-all');
+      alert(res.message);
+      load();
+    } catch (e) {
+      alert(e instanceof ApiError ? e.message : 'Failed to rescore leads.');
+    } finally {
+      setRescoring(false);
+    }
+  }
+
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -131,6 +147,17 @@ export default function LeadsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={rescoring}
+            onClick={handleRescoreAll}
+            className="gap-1.5 border-ink-700/50 text-ink-300 hover:text-ink-100"
+            title="Recalculate all active lead scores using the Category-Ceiling algorithm"
+          >
+            <RefreshCw className={`size-3.5 ${rescoring ? 'animate-spin' : ''}`} />
+            {rescoring ? 'Scoring...' : 'Recalculate Scores'}
+          </Button>
           <Button asChild variant="secondary" size="sm" className="gap-1.5 border-signal-500/30 text-signal-400 hover:text-signal-300">
             <Link href="/reports/ml">
               <Sparkles className="size-3.5" />

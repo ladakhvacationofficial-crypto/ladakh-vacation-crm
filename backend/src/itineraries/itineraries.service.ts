@@ -627,4 +627,167 @@ export class ItinerariesService {
     });
     for (const o of options) await this.recalcOption(o.id, itineraryId);
   }
+
+  async getPublicView(token: string) {
+    if (!token) throw new NotFoundException('Itinerary token is required');
+
+    const itinerary = await this.prisma.itinerary.findFirst({
+      where: {
+        OR: [{ shareToken: token }, { code: token }, { id: token }],
+      },
+      include: {
+        lead: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+            destination: true,
+            travelDate: true,
+            nights: true,
+            adults: true,
+            children: true,
+          },
+        },
+        options: {
+          orderBy: { sortOrder: 'asc' },
+          select: {
+            id: true,
+            name: true,
+            isRecommended: true,
+            perPersonSell: true,
+            totalSell: true,
+            sortOrder: true,
+          },
+        },
+        days: {
+          orderBy: { dayNumber: 'asc' },
+          include: {
+            items: {
+              orderBy: { sortOrder: 'asc' },
+              select: {
+                id: true,
+                kind: true,
+                time: true,
+                title: true,
+                description: true,
+                location: true,
+                vendor: { select: { name: true, city: true, type: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!itinerary) {
+      throw new NotFoundException('Itinerary not found or link has expired');
+    }
+
+    if (!itinerary.shareToken) {
+      const generated = `lv-${itinerary.code.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+      await this.prisma.itinerary.update({
+        where: { id: itinerary.id },
+        data: { shareToken: generated },
+      });
+      itinerary.shareToken = generated;
+    }
+
+    const booking = await this.prisma.booking.findFirst({
+      where: {
+        OR: [{ itineraryId: itinerary.id }, { leadId: itinerary.leadId }],
+      },
+      select: {
+        id: true,
+        bookingNumber: true,
+        status: true,
+      },
+    });
+
+    const company = await this.prisma.companyProfile.findUnique({
+      where: { id: 'default' },
+    });
+
+    return {
+      id: itinerary.id,
+      code: itinerary.code,
+      shareToken: itinerary.shareToken,
+      title: itinerary.title,
+      headline: itinerary.headline,
+      intro: itinerary.intro,
+      totalPax: itinerary.totalPax,
+      inclusions: itinerary.inclusions,
+      exclusions: itinerary.exclusions,
+      clientName: itinerary.lead.name,
+      destination: itinerary.lead.destination ?? 'Ladakh',
+      travelStartDate: itinerary.lead.travelDate,
+      options: itinerary.options,
+      days: itinerary.days.map((d) => ({
+        id: d.id,
+        dayNumber: d.dayNumber,
+        date: d.date,
+        city: d.city,
+        headline: d.headline,
+        summary: d.summary,
+        items: d.items.map((i) => ({
+          id: i.id,
+          kind: i.kind,
+          time: i.time,
+          title: i.title,
+          description: i.description,
+          location: i.location,
+          hotelName: i.vendor?.name,
+          hotelCity: i.vendor?.city,
+        })),
+      })),
+      booking: booking
+        ? {
+            id: booking.id,
+            bookingNumber: booking.bookingNumber,
+            status: booking.status,
+          }
+        : null,
+      company: {
+        brandName: company?.brandName ?? 'Ladakh Vacation',
+        phone: company?.phone ?? '+91 94191 78901',
+        email: company?.email ?? 'reservations@ladakhvacation.in',
+        website: company?.website ?? 'https://ladakhvacation.com',
+      },
+    };
+  }
+
+  async acceptOption(token: string, optionId: string, clientNotes?: string) {
+    const itinerary = await this.prisma.itinerary.findFirst({
+      where: {
+        OR: [{ shareToken: token }, { code: token }, { id: token }],
+      },
+      include: {
+        options: true,
+        lead: true,
+      },
+    });
+    if (!itinerary) throw new NotFoundException('Itinerary not found');
+
+    const option = itinerary.options.find((o) => o.id === optionId);
+    if (!option) throw new NotFoundException('Selected option not found');
+
+    await this.prisma.activity.create({
+      data: {
+        leadId: itinerary.leadId,
+        type: 'NOTE',
+        content: `Traveler accepted "${option.name}" proposal (₹${option.totalSell.toLocaleString('en-IN')}) via Web Portal.${clientNotes ? ` Note: "${clientNotes}"` : ''}`,
+      },
+    });
+
+    await this.prisma.lead.update({
+      where: { id: itinerary.leadId },
+      data: {
+        status: 'INTERESTED',
+      },
+    });
+
+    return {
+      success: true,
+      message: `Thank you! You have accepted the "${option.name}" package. Our Ladakh travel expert will contact you shortly with your confirmation and payment link.`,
+    };
+  }
 }

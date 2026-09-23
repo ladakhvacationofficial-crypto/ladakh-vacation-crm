@@ -74,7 +74,8 @@ model Itinerary {
   id   String @id @default(cuid())
   /// Sequential per year — GLZ-ITI-2026-0001. Same convention as quotes and
   /// bookings; race-safe via withNumberRetry.
-  code String @unique
+  code       String  @unique
+  shareToken String? @unique
 
   leadId String
   lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
@@ -714,9 +715,10 @@ model Lead {
   id String @id @default(cuid())
 
   // --- who ---
-  name    String
-  phone   String
-  email   String?
+  name     String
+  phone    String
+  phoneKey String?
+  email    String?
   address String?
   state   String?
   city    String?
@@ -1242,6 +1244,7 @@ model Booking {
 
   payments BookingPayment[]
   costs    BookingCost[]
+  invoices Invoice[]
 
   @@index([leadId])
   @@index([status])
@@ -1284,6 +1287,9 @@ model BookingCost {
   paidAt     DateTime?
   reference  String?
   notes      String?
+
+  confirmationStatus String  @default("DRAFT")
+  confirmationRef    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1374,6 +1380,9 @@ model Invoice {
   leadId        String
   lead          Lead   @relation(fields: [leadId], references: [id])
 
+  bookingId String?
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
   subtotal  Float
   gstRate   Float @default(18.0)
   gstAmount Float
@@ -1390,6 +1399,9 @@ model Invoice {
   updatedAt DateTime @updatedAt
 
   lineItems InvoiceLineItem[]
+
+  @@index([bookingId])
+  @@index([leadId])
 }
 
 model InvoiceLineItem {
@@ -1691,3 +1703,28 @@ model MediaAsset {
   @@index([pageSlug])
   @@index([uploadedById])
 }
+
+model CompanyProfile {
+  id            String   @id @default("default")
+  legalName     String   @default("Ladakh Vacation Private Limited")
+  brandName     String   @default("Ladakh Vacation")
+  gstin         String?
+  pan           String?
+  address       String   @default("Main Bazaar Road, Near SBI Bank")
+  city          String   @default("Leh")
+  state         String   @default("Ladakh (UT)")
+  stateCode     String   @default("38")
+  pincode       String   @default("194101")
+  phone         String   @default("+91 94191 78901")
+  email         String   @default("reservations@ladakhvacation.in")
+  website       String   @default("https://ladakhvacation.com")
+  bankName      String?
+  accountNumber String?
+  ifscCode      String?
+  accountHolder String?
+  upiId         String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+

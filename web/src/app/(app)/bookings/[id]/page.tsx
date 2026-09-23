@@ -68,6 +68,20 @@ export default function BookingDetailPage() {
     }
   }
 
+  const [generatingTaxInv, setGeneratingTaxInv] = useState(false);
+
+  async function handleCreateTaxInvoice() {
+    setGeneratingTaxInv(true);
+    try {
+      const inv = await api.post<any>(`/invoices/booking/${id}`);
+      await openBinary(`/invoices/${inv.id}/pdf`, `${inv.invoiceNumber}.pdf`);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : 'Could not generate tax invoice.');
+    } finally {
+      setGeneratingTaxInv(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -156,6 +170,16 @@ export default function BookingDetailPage() {
           >
             <FileDown className="size-4" strokeWidth={1.75} />
             Invoice PDF
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={busy || generatingTaxInv}
+            onClick={handleCreateTaxInvoice}
+            title="Generate and download official GST Tax Invoice"
+          >
+            <Receipt className="size-4" strokeWidth={1.75} />
+            {generatingTaxInv ? 'Generating...' : 'GST Invoice'}
           </Button>
           <Button
             variant="secondary"
