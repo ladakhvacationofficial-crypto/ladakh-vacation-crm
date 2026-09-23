@@ -23,6 +23,7 @@ import {
   Search,
   Plug,
   Megaphone,
+  Receipt,
 } from 'lucide-react';
 import { tokenStore, type SessionUser } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -84,18 +85,22 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: 'Finance',
     items: [
-      { href: '/finance', label: 'Finance', icon: Wallet,
+      { href: '/finance',  label: 'Finance',  icon: Wallet,
         roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
-      { href: '/reports', label: 'Reports', icon: BarChart3,
+      { href: '/invoices', label: 'Invoices', icon: Receipt,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','ACCOUNTS'] },
+      { href: '/reports',  label: 'Reports',  icon: BarChart3,
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','ACCOUNTS','MARKETING','OPERATIONS'] },
     ],
   },
   {
     label: 'Operations',
     items: [
-      { href: '/vendors', label: 'Suppliers', icon: Building2,
+      { href: '/vendors',    label: 'Suppliers',  icon: Building2,
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','ACCOUNTS','OPERATIONS'] },
-      { href: '/people',  label: 'People',    icon: UserCog,
+      { href: '/people',     label: 'People',     icon: UserCog,
+        roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
+      { href: '/interviews', label: 'Interviews', icon: Users,
         roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
     ],
   },

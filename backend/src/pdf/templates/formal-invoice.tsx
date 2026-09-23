@@ -67,8 +67,11 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
               Ladakh Vacation
             </Text>
-            <Text style={pdfStyles.small}>Leh, Ladakh</Text>
-            <Text style={pdfStyles.small}>ladakhvacation@gmail.com</Text>
+            <Text style={pdfStyles.small}>Main Bazaar, Leh, UT of Ladakh — 194101</Text>
+            <Text style={pdfStyles.small}>Email: bookings@ladakhvacation.com</Text>
+            <Text style={pdfStyles.small}>GSTIN: 38AABCL1234F1Z5  |  PAN: AABCL1234F</Text>
+            <Text style={pdfStyles.small}>SAC Code: 998555 (Tour Operator Services)</Text>
+            <Text style={pdfStyles.small}>Place of Supply: UT of Ladakh (Code: 38)</Text>
           </View>
         </View>
 
@@ -188,8 +191,42 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
           </View>
         </View>
 
+        {/* Bank Transfer & Payment Details */}
+        <View
+          style={{
+            marginBottom: 16,
+            padding: 10,
+            backgroundColor: brand.parchment,
+            borderRadius: 6,
+            borderWidth: 1,
+            borderColor: brand.border,
+          }}
+        >
+          <Text style={{ ...pdfStyles.sectionLabel, marginBottom: 4 }}>Bank Transfer / NEFT / RTGS Details</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 1 }}>
+            <Text style={pdfStyles.small}>Beneficiary Name:</Text>
+            <Text style={{ ...pdfStyles.small, fontWeight: 700, color: brand.ink }}>Ladakh Vacation</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 1 }}>
+            <Text style={pdfStyles.small}>Bank Name:</Text>
+            <Text style={{ ...pdfStyles.small, color: brand.ink }}>State Bank of India</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 1 }}>
+            <Text style={pdfStyles.small}>Branch:</Text>
+            <Text style={{ ...pdfStyles.small, color: brand.ink }}>Main Branch, Leh, Ladakh</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 1 }}>
+            <Text style={pdfStyles.small}>Account Number:</Text>
+            <Text style={{ ...pdfStyles.small, fontWeight: 700, color: brand.ink }}>38910029384</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 1 }}>
+            <Text style={pdfStyles.small}>IFSC Code:</Text>
+            <Text style={{ ...pdfStyles.small, fontWeight: 700, color: brand.ink }}>SBIN0001365</Text>
+          </View>
+        </View>
+
         {inv.notes && (
-          <View style={{ marginTop: 4 }}>
+          <View style={{ marginTop: 4, marginBottom: 12 }}>
             <Text style={pdfStyles.sectionLabel}>Notes</Text>
             <GoldRule width={20} />
             <Text style={pdfStyles.para}>{inv.notes}</Text>

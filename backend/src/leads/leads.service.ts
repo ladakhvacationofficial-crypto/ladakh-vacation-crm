@@ -480,19 +480,13 @@ export class LeadsService {
     });
     if (!lead) throw new NotFoundException('Lead not found');
 
-    const isAdminOrOwner = ['SUPER_ADMIN', 'OWNER', 'SALES_MANAGER'].includes(actor.role);
-    if (!isAdminOrOwner && lead.assignedToId !== actor.id) {
-      throw new ForbiddenException('You can only delete leads assigned to yourself.');
+    const isAdminOrOwner = ['SUPER_ADMIN', 'OWNER'].includes(actor.role);
+    if (!isAdminOrOwner) {
+      throw new ForbiddenException('Only administrators can delete or archive leads.');
     }
 
-    if (lead.bookings.length > 0 || lead.invoices.length > 0) {
-      throw new BadRequestException(
-        'Cannot permanently delete a lead with linked bookings or invoices. Mark as Lost instead.'
-      );
-    }
-
-    await this.prisma.lead.delete({ where: { id } });
-    return { id, deleted: true };
+    // Soft-delete to preserve business attribution, bookings, and financial audit history
+    return this.deactivate(id, actor, 'Archived via administrative deletion');
   }
 
   /**

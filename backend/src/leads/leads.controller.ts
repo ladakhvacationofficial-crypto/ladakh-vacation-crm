@@ -179,7 +179,7 @@ export class LeadsController {
    * Soft-delete: parks the lead in LOST with a system reason. History,
    * bookings and activities are preserved — we never destroy a client record.
    */
-  @Roles(...LEAD_MODULE_ROLES)
+  @Roles(...LEAD_DELETE_ACCESS)
   @Delete(':id')
   deleteLead(@Param('id') id: string, @CurrentUser() actor: Actor) {
     return this.leads.deleteLead(id, actor);

@@ -89,7 +89,7 @@ export class ItinerariesService {
 
   private async nextItineraryCode(): Promise<string> {
     const year = new Date().getFullYear();
-    const prefix = `GLZ-ITI-${year}-`;
+    const prefix = `LV-ITI-${year}-`;
     const last = await this.prisma.itinerary.findFirst({
       where: { code: { startsWith: prefix } },
       orderBy: { code: 'desc' },

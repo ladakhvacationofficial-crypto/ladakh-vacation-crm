@@ -4,15 +4,24 @@ import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { Actor } from '../common/access';
 import { InvoiceStatus } from '@prisma/client';
 import { gstBreakdown } from '../common/pricing';
+import { withNumberRetry } from '../common/sequence';
 
 @Injectable()
 export class InvoicesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private generateInvoiceNumber(): string {
-    const random = Math.floor(1000 + Math.random() * 9000);
-    const dateStr = new Date().toISOString().slice(2, 7).replace('-', ''); // YYMM
-    return `INV-${dateStr}-${random}`;
+  private async nextInvoiceNumber(): Promise<string> {
+    const year = new Date().getFullYear();
+    const prefix = `LV-INV-${year}-`;
+    const last = await this.prisma.invoice.findFirst({
+      where: { invoiceNumber: { startsWith: prefix } },
+      orderBy: { invoiceNumber: 'desc' },
+      select: { invoiceNumber: true },
+    });
+    const n = last
+      ? parseInt(last.invoiceNumber.slice(prefix.length), 10) + 1
+      : 1;
+    return `${prefix}${String(n).padStart(4, '0')}`;
   }
 
   async create(dto: CreateInvoiceDto, actor: Actor) {
@@ -44,24 +53,27 @@ export class InvoicesService {
     const gstAmount = split.gstAmount;
     const total = split.total;
 
-    return this.prisma.invoice.create({
-      data: {
-        invoiceNumber: this.generateInvoiceNumber(),
-        leadId: dto.leadId,
-        subtotal,
-        gstRate: effectiveGstRate,
-        gstAmount,
-        total,
-        dueDate: dto.dueDate ? new Date(dto.dueDate) : null,
-        notes: dto.notes,
-        createdById: actor.id,
-        lineItems: {
-          create: items,
+    return withNumberRetry(async () => {
+      const invoiceNumber = await this.nextInvoiceNumber();
+      return this.prisma.invoice.create({
+        data: {
+          invoiceNumber,
+          leadId: dto.leadId,
+          subtotal,
+          gstRate: effectiveGstRate,
+          gstAmount,
+          total,
+          dueDate: dto.dueDate ? new Date(dto.dueDate) : null,
+          notes: dto.notes,
+          createdById: actor.id,
+          lineItems: {
+            create: items,
+          },
         },
-      },
-      include: {
-        lineItems: true,
-      }
+        include: {
+          lineItems: true,
+        },
+      });
     });
   }
 

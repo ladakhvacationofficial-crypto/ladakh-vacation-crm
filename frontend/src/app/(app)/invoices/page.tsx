@@ -1,16 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { api } from '@/lib/api';
+import { api, openBinary } from '@/lib/api';
 const formatCurrency = (val: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val);
-import { FileText, CheckCircle } from 'lucide-react';
+import { FileText, CheckCircle, Download } from 'lucide-react';
 import Link from 'next/link';
 
 export default function InvoicesDashboard() {
-    const [invoices, setInvoices] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<any[]>([]);
 
   useEffect(() => {
-    api.get('/invoices').then((res: any) => setInvoices(res.data)).catch(console.error);
+    api
+      .get<any[]>('/invoices')
+      .then((res: any) => setInvoices(Array.isArray(res) ? res : res?.data || []))
+      .catch(console.error);
   }, []);
 
   const handleMarkPaid = async (id: string) => {
@@ -67,7 +70,14 @@ export default function InvoicesDashboard() {
                     {invoice.status}
                   </span>
                 </td>
-                <td className="p-3 text-right">
+                <td className="p-3 text-right flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => openBinary(`/invoices/${invoice.id}/pdf`, `${invoice.invoiceNumber}.pdf`)}
+                    className="text-xs inline-flex items-center gap-1 text-ink-400 hover:text-ink-100 transition-colors"
+                    title="Download Tax Invoice PDF"
+                  >
+                    <Download className="w-3.5 h-3.5" /> PDF
+                  </button>
                   {invoice.status !== 'PAID' && (
                     <button 
                       onClick={() => handleMarkPaid(invoice.id)}

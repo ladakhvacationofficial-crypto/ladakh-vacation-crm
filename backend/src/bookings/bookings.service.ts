@@ -68,7 +68,7 @@ export class BookingsService {
 
   private async nextBookingNumber(): Promise<string> {
     const year = new Date().getFullYear();
-    const prefix = `GLZ-B-${year}-`;
+    const prefix = `LV-B-${year}-`;
     const last = await this.prisma.booking.findFirst({
       where: { bookingNumber: { startsWith: prefix } },
       orderBy: { bookingNumber: 'desc' },

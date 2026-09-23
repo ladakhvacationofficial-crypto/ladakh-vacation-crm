@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { api } from '@/lib/api';
+import { api, openBinary } from '@/lib/api';
 const formatCurrency = (val: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val);
 import { Panel, PanelHeader, PanelTitle, PanelBody } from '@/components/ui/panel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
-import { Trash2, Plus } from 'lucide-react';
+import { Trash2, Plus, Download } from 'lucide-react';
 
 export function InvoicesPanel({ leadId }: { leadId: string }) {
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -25,9 +25,10 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
   const loadInvoices = async () => {
     try {
       const res: any = await api.get(`/invoices/lead/${leadId}`);
-      setInvoices(res.data);
+      setInvoices(Array.isArray(res) ? res : res?.data || []);
     } catch (e) {
       console.error(e);
+      setInvoices([]);
     } finally {
       setLoading(false);
     }
@@ -162,11 +163,20 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
                   <p className="font-medium text-sm">{inv.invoiceNumber}</p>
                   <p className="text-xs text-muted-foreground">{new Date(inv.createdAt).toLocaleDateString()}</p>
                 </div>
-                <div className="text-right">
-                  <p className="font-bold text-sm">{formatCurrency(inv.total)}</p>
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${inv.status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
-                    {inv.status}
-                  </span>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <p className="font-bold text-sm">{formatCurrency(inv.total)}</p>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${inv.status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                      {inv.status}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => openBinary(`/invoices/${inv.id}/pdf`, `${inv.invoiceNumber}.pdf`)}
+                    className="p-1 text-muted-foreground hover:text-foreground transition-colors"
+                    title="Download Tax Invoice PDF"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             ))}

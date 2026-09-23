@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Check, Compass, Calendar, Users, Hotel, ArrowRight, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { PageHero } from '@/components/page-hero';
 import { SITE, whatsAppLink } from '@/lib/site';
+import { captureAttribution, getAttributionPayload } from '@/lib/attribution';
 
 const DESTINATIONS = [
   { id: 'Leh & Sham Valley', name: 'Leh & Sham Valley', sub: 'Leh, the monasteries, Sham Valley. No high passes', emoji: '🏔️' },
@@ -44,11 +45,16 @@ export default function PlanMyTripPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    captureAttribution();
+  }, []);
+
   async function handleFinalSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
 
+    const attr = getAttributionPayload();
     const payload = {
       name: name.trim(),
       phone: phone.trim(),
@@ -58,10 +64,11 @@ export default function PlanMyTripPage() {
       children: parseInt(children, 10) || 0,
       travelDate: month,
       message: `[Custom Planner] Duration: ${duration} | Hotel: ${hotelTier} | Travel Window: ${month}. Notes: ${notes}`,
-      source: 'WEBSITE',
-      campaign: 'PLAN_MY_TRIP_WIZARD',
-      landingPage: '/plan-my-trip',
+      source: (attr.gclid ? 'GOOGLE_ADS' : attr.fbclid ? 'META_ADS' : 'WEBSITE') as any,
+      campaign: attr.utmCampaign || 'PLAN_MY_TRIP_WIZARD',
+      landingPage: typeof window !== 'undefined' ? window.location.pathname : '/plan-my-trip',
       tags: ['CUSTOM_PLANNER', destination, hotelTier],
+      ...attr,
     };
 
     try {

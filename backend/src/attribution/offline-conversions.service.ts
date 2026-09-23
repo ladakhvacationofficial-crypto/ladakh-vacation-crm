@@ -87,20 +87,21 @@ export class OfflineConversionsService {
             } else {
               const errBody = await res.text();
               this.logger.warn(`Google Ads conversion upload returned status ${res.status}: ${errBody}`);
+              actionsTaken.push(`Google Ads failed (HTTP ${res.status})`);
             }
+          } else {
+            this.logger.warn('Google Ads integration missing required credentials');
+            actionsTaken.push('Google Ads skipped (incomplete credentials)');
           }
-        }
-
-        if (!googleUploaded) {
-          // Development / simulated pipeline logging
+        } else {
           this.logger.log(
-            `[Offline Conversion Simulator] Google Ads conversion registered for GCLID=${lead.gclid}, Value=₹${totalSell}, Order=${bookingNumber}`,
+            `Google Ads integration unconfigured; skipping offline conversion for GCLID=${lead.gclid}`,
           );
-          googleUploaded = true;
-          actionsTaken.push(`Google Ads Simulated (GCLID: ${lead.gclid.slice(0, 8)}...)`);
+          actionsTaken.push(`Google Ads unconfigured (GCLID: ${lead.gclid.slice(0, 8)}...)`);
         }
       } catch (err: any) {
         this.logger.warn(`Google Ads conversion error: ${err?.message || err}`);
+        actionsTaken.push('Google Ads error');
       }
     }
 
@@ -151,20 +152,21 @@ export class OfflineConversionsService {
             } else {
               const errBody = await res.text();
               this.logger.warn(`Meta CAPI upload returned status ${res.status}: ${errBody}`);
+              actionsTaken.push(`Meta CAPI failed (HTTP ${res.status})`);
             }
+          } else {
+            this.logger.warn('Meta Ads integration missing required credentials');
+            actionsTaken.push('Meta CAPI skipped (incomplete credentials)');
           }
-        }
-
-        if (!metaUploaded) {
-          // Development / simulated pipeline logging
+        } else {
           this.logger.log(
-            `[Offline Conversion Simulator] Meta CAPI conversion registered for FBCLID=${lead.fbclid}, Value=₹${totalSell}, Order=${bookingNumber}`,
+            `Meta Ads integration unconfigured; skipping offline conversion for FBCLID=${lead.fbclid}`,
           );
-          metaUploaded = true;
-          actionsTaken.push(`Meta CAPI Simulated (FBCLID: ${lead.fbclid.slice(0, 8)}...)`);
+          actionsTaken.push(`Meta CAPI unconfigured (FBCLID: ${lead.fbclid.slice(0, 8)}...)`);
         }
       } catch (err: any) {
         this.logger.warn(`Meta CAPI conversion error: ${err?.message || err}`);
+        actionsTaken.push('Meta CAPI error');
       }
     }
 

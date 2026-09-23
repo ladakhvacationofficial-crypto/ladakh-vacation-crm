@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader2, Check, Phone } from 'lucide-react';
 import { SITE, whatsAppLink } from '@/lib/site';
 import { DESTINATIONS } from '@/lib/destinations';
+import { captureAttribution, getAttributionPayload } from '@/lib/attribution';
 
 type Props = {
   /** Which page this form sits on — sent to the CRM as `campaign`. */
@@ -31,6 +32,10 @@ export function EnquiryForm({
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    captureAttribution();
+  }, []);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus('sending');
@@ -38,6 +43,7 @@ export function EnquiryForm({
 
     const form = e.currentTarget;
     const data = new FormData(form);
+    const attr = getAttributionPayload();
 
     const payload = {
       name: String(data.get('name') ?? '').trim(),
@@ -47,10 +53,11 @@ export function EnquiryForm({
       adults: Number(data.get('adults')) || undefined,
       travelDate: String(data.get('travelDate') ?? '').trim() || undefined,
       message: String(data.get('message') ?? '').trim() || undefined,
-      source: 'WEBSITE',
-      campaign: source,
+      source: (attr.gclid ? 'GOOGLE_ADS' : attr.fbclid ? 'META_ADS' : 'WEBSITE') as any,
+      campaign: attr.utmCampaign || source,
       landingPage: typeof window !== 'undefined' ? window.location.pathname : source,
       tags: packageName ? [packageName] : undefined,
+      ...attr,
     };
 
     try {

@@ -13,7 +13,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from './storage.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { Actor } from '../common/access';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Actor, INTERNAL_STAFF } from '../common/access';
 
 /**
  * Generic file-upload endpoint. Any module that needs file storage
@@ -29,6 +30,7 @@ import { Actor } from '../common/access';
  * DELETE /uploads/:id
  *   → soft-deletes (nulls the URL) — actual S3 cleanup is a future cron.
  */
+@Roles(...INTERNAL_STAFF)
 @Controller('uploads')
 export class StorageController {
   constructor(

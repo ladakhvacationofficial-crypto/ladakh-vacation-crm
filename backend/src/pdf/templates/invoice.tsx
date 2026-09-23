@@ -93,8 +93,10 @@ export function InvoiceDocument({ b }: { b: InvoiceInput }) {
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
               Ladakh Vacation
             </Text>
-            <Text style={pdfStyles.small}>Leh, Ladakh</Text>
-            <Text style={pdfStyles.small}>ladakhvacation@gmail.com</Text>
+            <Text style={pdfStyles.small}>Main Bazaar, Leh, UT of Ladakh — 194101</Text>
+            <Text style={pdfStyles.small}>Email: bookings@ladakhvacation.com</Text>
+            <Text style={pdfStyles.small}>GSTIN: 38AABCL1234F1Z5  |  PAN: AABCL1234F</Text>
+            <Text style={pdfStyles.small}>SAC Code: 998555</Text>
           </View>
         </View>
 

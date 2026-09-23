@@ -48,4 +48,31 @@ export class B2bPartnersService {
     if (!partner) throw new NotFoundException('Partner not found');
     return partner;
   }
+
+  async update(id: string, dto: Partial<CreateB2bPartnerDto>) {
+    await this.findOne(id);
+    if (dto.phone) {
+      const existing = await this.prisma.b2bPartner.findUnique({
+        where: { phone: dto.phone },
+      });
+      if (existing && existing.id !== id) {
+        throw new ConflictException('Another partner with this phone number already exists.');
+      }
+    }
+    return this.prisma.b2bPartner.update({
+      where: { id },
+      data: dto,
+    });
+  }
+
+  async remove(id: string) {
+    const partner = await this.findOne(id);
+    const leadCount = await this.prisma.lead.count({ where: { b2bPartnerId: id } });
+    if (leadCount > 0) {
+      throw new ConflictException(`Cannot delete partner with ${leadCount} associated leads. Reassign leads before deleting.`);
+    }
+    return this.prisma.b2bPartner.delete({
+      where: { id },
+    });
+  }
 }
