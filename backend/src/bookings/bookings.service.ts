@@ -22,6 +22,8 @@ import { Actor, canSeeAllLeads } from '../common/access';
 import { toDateOrNull } from '../common/dates';
 import { withNumberRetry } from '../common/sequence';
 import { OfflineConversionsService } from '../attribution/offline-conversions.service';
+import type { HotelVoucherInput } from '../pdf/templates/hotel-voucher';
+import type { DriverVoucherInput } from '../pdf/templates/driver-voucher';
 
 @Injectable()
 export class BookingsService {
@@ -834,6 +836,507 @@ export class BookingsService {
         total: payables.d0_30 + payables.d30_60 + payables.d60_plus,
         rows: payableRows.slice(0, 25),
       },
+    };
+  }
+
+  // --- vouchers & movement --------------------------------------------------
+
+  async getHotelVoucherData(id: string, actor: Actor): Promise<HotelVoucherInput> {
+    await this.assertBookingAccess(id, actor);
+    const booking = await this.prisma.booking.findUnique({
+      where: { id },
+      include: {
+        lead: true,
+        costs: true,
+      },
+    });
+    if (!booking) throw new NotFoundException('Booking not found');
+
+    const vendorIds = booking.costs
+      .map((c) => c.vendorId)
+      .filter(Boolean) as string[];
+    const vendors =
+      vendorIds.length > 0
+        ? await this.prisma.vendor.findMany({
+            where: { id: { in: vendorIds } },
+          })
+        : [];
+    const vendorMap = new Map(vendors.map((v) => [v.id, v]));
+
+    let itineraryDays: any[] = [];
+    if (booking.itineraryId) {
+      const it = await this.prisma.itinerary.findUnique({
+        where: { id: booking.itineraryId },
+        include: {
+          days: {
+            include: { items: { include: { vendor: true } } },
+            orderBy: { dayNumber: 'asc' },
+          },
+        },
+      });
+      if (it?.days) itineraryDays = it.days;
+    }
+
+    const hotelCost = booking.costs.find((c) => {
+      const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+      return (
+        v?.type === 'HOTEL' ||
+        v?.type === 'CAMP' ||
+        v?.type === 'HOUSEBOAT' ||
+        c.description?.toLowerCase().includes('hotel') ||
+        c.description?.toLowerCase().includes('camp')
+      );
+    });
+    const hotelVendor = hotelCost?.vendorId
+      ? vendorMap.get(hotelCost.vendorId)
+      : null;
+
+    const stayItem = itineraryDays
+      .flatMap((d) => d.items)
+      .find((i) => i.kind === 'STAY' && i.vendor);
+
+    const hotelName =
+      hotelVendor?.name ??
+      stayItem?.vendor?.name ??
+      stayItem?.title ??
+      'Grand Dragon / Partner Deluxe Hotel';
+    const hotelCity =
+      hotelVendor?.city ??
+      stayItem?.vendor?.city ??
+      stayItem?.location ??
+      'Leh, Ladakh';
+    const hotelAddress =
+      hotelVendor?.address ?? stayItem?.vendor?.address ?? null;
+    const hotelPhone =
+      hotelVendor?.phone ?? stayItem?.vendor?.phone ?? null;
+    const hotelContact =
+      hotelVendor?.contactPerson ?? stayItem?.vendor?.contactPerson ?? null;
+
+    const checkIn = booking.travelStartDate ?? new Date();
+    const checkOut =
+      booking.travelEndDate ??
+      new Date(new Date(checkIn).getTime() + (booking.nights || 5) * 86400000);
+    const nights =
+      booking.nights ||
+      Math.max(
+        1,
+        Math.round(
+          (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
+            86400000,
+        ),
+      );
+
+    const totalPax = (booking.adults || 2) + (booking.children || 0);
+    const roomCount = Math.max(1, Math.ceil((booking.adults || 2) / 2));
+
+    return {
+      voucherNumber: `VCH-HTL-${booking.bookingNumber}`,
+      bookingNumber: booking.bookingNumber,
+      createdAt: new Date(),
+      guestName: booking.lead.name,
+      guestPhone: booking.lead.phone,
+      guestEmail: booking.lead.email,
+      totalPax,
+      adults: booking.adults || 2,
+      children: booking.children || 0,
+      hotelName,
+      hotelCity,
+      hotelAddress,
+      hotelPhone,
+      hotelContactPerson: hotelContact,
+      checkIn,
+      checkOut,
+      nights,
+      roomVariant: stayItem?.description ?? 'Deluxe Room',
+      roomCount,
+      mealPlan: 'MAP (Breakfast & Dinner)',
+      specialRequests: booking.notes,
+    };
+  }
+
+  async getDriverVoucherData(id: string, actor: Actor): Promise<DriverVoucherInput> {
+    await this.assertBookingAccess(id, actor);
+    const booking = await this.prisma.booking.findUnique({
+      where: { id },
+      include: {
+        lead: true,
+        costs: true,
+      },
+    });
+    if (!booking) throw new NotFoundException('Booking not found');
+
+    const vendorIds = booking.costs
+      .map((c) => c.vendorId)
+      .filter(Boolean) as string[];
+    const vendors =
+      vendorIds.length > 0
+        ? await this.prisma.vendor.findMany({
+            where: { id: { in: vendorIds } },
+          })
+        : [];
+    const vendorMap = new Map(vendors.map((v) => [v.id, v]));
+
+    let itineraryDays: any[] = [];
+    if (booking.itineraryId) {
+      const it = await this.prisma.itinerary.findUnique({
+        where: { id: booking.itineraryId },
+        include: {
+          days: {
+            include: { items: { include: { vendor: true } } },
+            orderBy: { dayNumber: 'asc' },
+          },
+        },
+      });
+      if (it?.days) itineraryDays = it.days;
+    }
+
+    const transportCost = booking.costs.find((c) => {
+      const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+      return (
+        v?.type === 'TRANSPORT' ||
+        c.description?.toLowerCase().includes('transport') ||
+        c.description?.toLowerCase().includes('innova') ||
+        c.description?.toLowerCase().includes('cab')
+      );
+    });
+    const transportVendor = transportCost?.vendorId
+      ? vendorMap.get(transportCost.vendorId)
+      : null;
+
+    const totalPax = (booking.adults || 2) + (booking.children || 0);
+    const vehicleType =
+      transportCost?.description?.includes('Innova') ||
+      booking.packageName?.includes('Innova')
+        ? 'Toyota Innova Crysta (AC / 4x2)'
+        : transportCost?.description?.includes('Tempo') || totalPax > 6
+        ? 'Force Tempo Traveller (12+1 Seater)'
+        : 'Toyota Innova Crysta / 4x4 SUV';
+
+    const startDate = booking.travelStartDate
+      ? new Date(booking.travelStartDate)
+      : new Date();
+
+    let circuitDays: any[] = [];
+    if (itineraryDays.length > 0) {
+      circuitDays = itineraryDays.map((d) => {
+        const dayDate = d.date
+          ? new Date(d.date)
+          : new Date(startDate.getTime() + (d.dayNumber - 1) * 86400000);
+        const sightseeing = d.items.map((i: any) => i.title).join(' · ');
+        return {
+          dayNumber: d.dayNumber,
+          date: dayDate,
+          routeTitle: d.headline ?? d.city ?? `Day ${d.dayNumber} Sightseeing`,
+          nightHalt: d.city ?? 'Leh',
+          sightseeing: sightseeing || d.summary || undefined,
+        };
+      });
+    } else {
+      const totalDays = Math.max(2, (booking.nights || 5) + 1);
+      const standardCircuit = [
+        {
+          title: 'Airport Pickup & Leh Acclimatization',
+          halt: 'Leh',
+          sights: 'Leh Main Market, Shanti Stupa, Leh Palace',
+        },
+        {
+          title: 'Leh - Sham Valley Sightseeing',
+          halt: 'Leh',
+          sights:
+            'Hall of Fame, Magnetic Hill, Gurudwara Pathar Sahib, Sangam (Indus & Zanskar)',
+        },
+        {
+          title: 'Leh to Nubra Valley via Khardung La (18,380 ft)',
+          halt: 'Nubra (Hunder)',
+          sights:
+            'Khardung La Top, Diskit Monastery, Hunder Sand Dunes & Bactrian Camel',
+        },
+        {
+          title: 'Nubra to Pangong Lake via Shyok Route',
+          halt: 'Pangong Lake',
+          sights:
+            'Shyok River Valley, Durbuk, Tangtse, Spangmik, 3-Idiots Shooting Point',
+        },
+        {
+          title: 'Pangong Lake to Leh via Chang La (17,586 ft)',
+          halt: 'Leh',
+          sights:
+            'Sunrise at Pangong, Chang La summit, Thiksey Monastery, Shey Palace',
+        },
+        {
+          title: 'Leh Hotel to Airport Drop',
+          halt: 'Departure',
+          sights: 'Kushok Bakula Rimpochee Airport (IXL) Transfer',
+        },
+      ];
+
+      for (let i = 0; i < totalDays; i++) {
+        const item = standardCircuit[Math.min(i, standardCircuit.length - 1)];
+        circuitDays.push({
+          dayNumber: i + 1,
+          date: new Date(startDate.getTime() + i * 86400000),
+          routeTitle: item.title,
+          nightHalt: item.halt,
+          sightseeing: item.sights,
+        });
+      }
+    }
+
+    return {
+      voucherNumber: `VCH-DRV-${booking.bookingNumber}`,
+      bookingNumber: booking.bookingNumber,
+      createdAt: new Date(),
+      guestName: booking.lead.name,
+      guestPhone: booking.lead.phone,
+      guestEmail: booking.lead.email,
+      totalPax,
+      adults: booking.adults || 2,
+      children: booking.children || 0,
+      vehicleType,
+      transporterName:
+        transportVendor?.name ?? 'Ladakh Tour Operators Fleet',
+      reportingDate: startDate,
+      reportingTime: 'Flight Arrival Time (Morning)',
+      reportingLocation: 'Kushok Bakula Rimpochee Airport (IXL), Leh',
+      circuitDays,
+      specialInstructions: booking.notes,
+    };
+  }
+
+  async getDailyMovement(dateStr?: string, actor?: Actor) {
+    const target = dateStr ? new Date(dateStr) : new Date();
+    const startOfDay = new Date(target);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(target);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const activeBookings = await this.prisma.booking.findMany({
+      where: {
+        status: {
+          in: [
+            BookingStatus.CONFIRMED,
+            BookingStatus.IN_PROGRESS,
+            BookingStatus.PARTIALLY_PAID,
+            BookingStatus.PAID,
+          ],
+        },
+        travelStartDate: { lte: endOfDay },
+        travelEndDate: { gte: startOfDay },
+        ...(actor ? this.leadScope(actor) : {}),
+      },
+      include: {
+        lead: { select: { id: true, name: true, phone: true, email: true } },
+        costs: true,
+      },
+      orderBy: { travelStartDate: 'asc' },
+    });
+
+    const allVendorIds = Array.from(
+      new Set(
+        activeBookings
+          .flatMap((b) => b.costs)
+          .map((c) => c.vendorId)
+          .filter(Boolean) as string[],
+      ),
+    );
+    const vendors =
+      allVendorIds.length > 0
+        ? await this.prisma.vendor.findMany({
+            where: { id: { in: allVendorIds } },
+            select: { id: true, name: true, type: true, city: true },
+          })
+        : [];
+    const vendorMap = new Map(vendors.map((v) => [v.id, v]));
+
+    const arrivals: any[] = [];
+    const departures: any[] = [];
+    const inTransit: any[] = [];
+    const valleyDistribution = {
+      leh: [] as any[],
+      nubra: [] as any[],
+      pangong: [] as any[],
+      other: [] as any[],
+    };
+
+    let totalPaxInDestination = 0;
+    let highPassCrossingsCount = 0;
+
+    const targetYmd = (dateStr ? new Date(dateStr) : new Date())
+      .toISOString()
+      .slice(0, 10);
+    const toYmd = (d: Date | string) => new Date(d).toISOString().slice(0, 10);
+    const toUtcDayNumber = (ymd: string) => {
+      const [y, m, d] = ymd.split('-').map(Number);
+      return Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+    };
+    const targetDayNumber = toUtcDayNumber(targetYmd);
+
+    for (const b of activeBookings) {
+      const bStartYmd = b.travelStartDate ? toYmd(b.travelStartDate) : null;
+      const bEndYmd = b.travelEndDate ? toYmd(b.travelEndDate) : null;
+      const pax = (b.adults || 2) + (b.children || 0);
+      totalPaxInDestination += pax;
+
+      const isArrival = Boolean(bStartYmd && bStartYmd === targetYmd);
+      const isDeparture = Boolean(bEndYmd && bEndYmd === targetYmd);
+
+      const daysSinceStart = bStartYmd
+        ? targetDayNumber - toUtcDayNumber(bStartYmd) + 1
+        : 1;
+
+      let currentValley = 'Leh';
+      let currentHotel = 'Leh Partner Hotel';
+
+      const hotelCosts = b.costs.filter((c) => {
+        const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+        return (
+          v?.type === 'HOTEL' ||
+          v?.type === 'CAMP' ||
+          c.description?.toLowerCase().includes('hotel') ||
+          c.description?.toLowerCase().includes('camp')
+        );
+      });
+
+      if (isDeparture) {
+        currentValley = 'Leh';
+        const lehCost = hotelCosts.find((c) => {
+          const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+          return (
+            v?.city?.toLowerCase().includes('leh') ||
+            c.description?.toLowerCase().includes('leh')
+          );
+        });
+        currentHotel =
+          (lehCost?.vendorId ? vendorMap.get(lehCost.vendorId)?.name : null) ??
+          lehCost?.description ??
+          'Airport Departure';
+      } else if (daysSinceStart === 3) {
+        currentValley = 'Nubra Valley';
+        const nubraCost = hotelCosts.find((c) => {
+          const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+          return (
+            v?.city?.toLowerCase().includes('nubra') ||
+            v?.name?.toLowerCase().includes('camp') ||
+            c.description?.toLowerCase().includes('nubra')
+          );
+        });
+        currentHotel =
+          (nubraCost?.vendorId ? vendorMap.get(nubraCost.vendorId)?.name : null) ??
+          nubraCost?.description ??
+          'Nubra Luxury Camp';
+
+        highPassCrossingsCount += pax;
+        inTransit.push({
+          bookingId: b.id,
+          bookingNumber: b.bookingNumber,
+          guestName: b.lead.name,
+          phone: b.lead.phone,
+          pax,
+          sector: 'Leh → Nubra Valley via Khardung La (18,380 ft)',
+        });
+      } else if (daysSinceStart === 4) {
+        currentValley = 'Pangong Lake';
+        const pangongCost = hotelCosts.find((c) => {
+          const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+          return (
+            v?.city?.toLowerCase().includes('pangong') ||
+            c.description?.toLowerCase().includes('pangong')
+          );
+        });
+        currentHotel =
+          (pangongCost?.vendorId ? vendorMap.get(pangongCost.vendorId)?.name : null) ??
+          pangongCost?.description ??
+          'Pangong Lake Camp';
+
+        inTransit.push({
+          bookingId: b.id,
+          bookingNumber: b.bookingNumber,
+          guestName: b.lead.name,
+          phone: b.lead.phone,
+          pax,
+          sector: 'Nubra Valley → Pangong Lake via Shyok Route',
+        });
+      } else if (daysSinceStart === 5) {
+        currentValley = 'Leh';
+        const lehCost = hotelCosts.find((c) => {
+          const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+          return (
+            v?.city?.toLowerCase().includes('leh') ||
+            c.description?.toLowerCase().includes('leh')
+          );
+        });
+        currentHotel =
+          (lehCost?.vendorId ? vendorMap.get(lehCost.vendorId)?.name : null) ??
+          lehCost?.description ??
+          'Leh Grand Hotel';
+
+        highPassCrossingsCount += pax;
+        inTransit.push({
+          bookingId: b.id,
+          bookingNumber: b.bookingNumber,
+          guestName: b.lead.name,
+          phone: b.lead.phone,
+          pax,
+          sector: 'Pangong Lake → Leh via Chang La (17,586 ft)',
+        });
+      } else {
+        currentValley = 'Leh';
+        const lehCost = hotelCosts.find((c) => {
+          const v = c.vendorId ? vendorMap.get(c.vendorId) : null;
+          return (
+            v?.city?.toLowerCase().includes('leh') ||
+            c.description?.toLowerCase().includes('leh')
+          );
+        });
+        currentHotel =
+          (lehCost?.vendorId ? vendorMap.get(lehCost.vendorId)?.name : null) ??
+          lehCost?.description ??
+          'Leh Partner Hotel';
+      }
+
+      const guestCard = {
+        bookingId: b.id,
+        bookingNumber: b.bookingNumber,
+        guestName: b.lead.name,
+        phone: b.lead.phone,
+        email: b.lead.email,
+        pax,
+        adults: b.adults,
+        children: b.children,
+        packageName: b.packageName,
+        dayOfTrip: daysSinceStart,
+        totalNights: b.nights,
+        currentValley,
+        currentHotel,
+        travelStartDate: b.travelStartDate,
+        travelEndDate: b.travelEndDate,
+      };
+
+      if (isArrival) arrivals.push(guestCard);
+      if (isDeparture) departures.push(guestCard);
+
+      if (currentValley.toLowerCase().includes('nubra')) {
+        valleyDistribution.nubra.push(guestCard);
+      } else if (currentValley.toLowerCase().includes('pangong')) {
+        valleyDistribution.pangong.push(guestCard);
+      } else {
+        valleyDistribution.leh.push(guestCard);
+      }
+    }
+
+    return {
+      date: target.toISOString().slice(0, 10),
+      summary: {
+        totalGuestsInDestination: totalPaxInDestination,
+        activeBookingsCount: activeBookings.length,
+        arrivalsToday: arrivals.length,
+        departuresToday: departures.length,
+        highPassCrossingsToday: highPassCrossingsCount,
+      },
+      arrivals,
+      departures,
+      inTransit,
+      valleyDistribution,
     };
   }
 }

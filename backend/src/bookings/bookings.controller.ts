@@ -88,6 +88,15 @@ export class BookingsController {
     return this.bookings.search(q.trim());
   }
 
+  /** Operations Daily Movement Chart — tracks guest arrivals, departures, pass crossings, and stay distribution. */
+  @Get('movement')
+  getDailyMovement(
+    @Query('date') date?: string,
+    @CurrentUser() actor?: Actor,
+  ) {
+    return this.bookings.getDailyMovement(date, actor);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string, @CurrentUser() actor: Actor) {
     return this.bookings.findOne(id, actor);
@@ -142,6 +151,40 @@ export class BookingsController {
     res.setHeader(
       'Content-Disposition',
       `inline; filename="Invoice-${b.bookingNumber}.pdf"`,
+    );
+    res.send(buf);
+  }
+
+  /** Supplier-facing Hotel Confirmation Voucher PDF. */
+  @Get(':id/hotel-voucher.pdf')
+  @Header('Content-Type', 'application/pdf')
+  async downloadHotelVoucher(
+    @Param('id') id: string,
+    @CurrentUser() actor: Actor,
+    @Res() res: Response,
+  ) {
+    const voucherData = await this.bookings.getHotelVoucherData(id, actor);
+    const buf = await this.pdf.renderHotelVoucher(voucherData);
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename="Hotel-Voucher-${voucherData.bookingNumber}.pdf"`,
+    );
+    res.send(buf);
+  }
+
+  /** Driver Duty Slip & Transport Circuit Voucher PDF. */
+  @Get(':id/driver-voucher.pdf')
+  @Header('Content-Type', 'application/pdf')
+  async downloadDriverVoucher(
+    @Param('id') id: string,
+    @CurrentUser() actor: Actor,
+    @Res() res: Response,
+  ) {
+    const voucherData = await this.bookings.getDriverVoucherData(id, actor);
+    const buf = await this.pdf.renderDriverVoucher(voucherData);
+    res.setHeader(
+      'Content-Disposition',
+      `inline; filename="Driver-Duty-Slip-${voucherData.bookingNumber}.pdf"`,
     );
     res.send(buf);
   }

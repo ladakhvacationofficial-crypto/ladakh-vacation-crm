@@ -39,7 +39,7 @@ export default function BookingsPage() {
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <header className="mb-6 flex items-end justify-between gap-4">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="display text-[26px] font-semibold tracking-tight text-ink-100">
             Bookings
@@ -47,6 +47,16 @@ export default function BookingsPage() {
           <p className="mt-0.5 text-[13px] text-ink-400">
             {rows.length} booking{rows.length === 1 ? '' : 's'}
           </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Link
+            href="/bookings/movement"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-signal-500/30 bg-signal-500/10 px-3 py-1.5 text-xs font-semibold text-signal-400 hover:bg-signal-500/20 transition-colors shadow-sm"
+          >
+            <span>🗺️</span>
+            Operations Movement Chart
+          </Link>
         </div>
       </header>
 

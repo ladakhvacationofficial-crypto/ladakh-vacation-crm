@@ -157,6 +157,42 @@ export default function BookingDetailPage() {
             <FileDown className="size-4" strokeWidth={1.75} />
             Invoice PDF
           </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={busy}
+            onClick={() =>
+              openBinary(
+                `/bookings/${id}/hotel-voucher.pdf`,
+                `Hotel-Voucher-${booking.bookingNumber}.pdf`,
+              ).catch((e) =>
+                setError(
+                  e instanceof ApiError ? e.message : 'Hotel voucher download failed.',
+                ),
+              )
+            }
+          >
+            <FileDown className="size-4" strokeWidth={1.75} />
+            Hotel Voucher
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={busy}
+            onClick={() =>
+              openBinary(
+                `/bookings/${id}/driver-voucher.pdf`,
+                `Driver-Duty-Slip-${booking.bookingNumber}.pdf`,
+              ).catch((e) =>
+                setError(
+                  e instanceof ApiError ? e.message : 'Driver voucher download failed.',
+                ),
+              )
+            }
+          >
+            <FileDown className="size-4" strokeWidth={1.75} />
+            Driver Voucher
+          </Button>
           <div className="w-[170px]">
             <Select
               value={booking.status}

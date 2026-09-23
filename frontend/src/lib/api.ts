@@ -1272,3 +1272,50 @@ export interface AudiencePreviewResult {
   sampleLeads: { id: string; name: string; phone: string; email: string | null; destination: string | null }[];
 }
 
+export interface MovementGuestCard {
+  bookingId: string;
+  bookingNumber: string;
+  guestName: string;
+  phone: string;
+  email?: string | null;
+  pax: number;
+  adults: number;
+  children: number;
+  packageName?: string | null;
+  dayOfTrip: number;
+  totalNights: number;
+  currentValley: string;
+  currentHotel: string;
+  travelStartDate?: string | null;
+  travelEndDate?: string | null;
+}
+
+export interface InTransitMovement {
+  bookingId: string;
+  bookingNumber: string;
+  guestName: string;
+  phone: string;
+  pax: number;
+  sector: string;
+}
+
+export interface DailyMovementResponse {
+  date: string;
+  summary: {
+    totalGuestsInDestination: number;
+    activeBookingsCount: number;
+    arrivalsToday: number;
+    departuresToday: number;
+    highPassCrossingsToday: number;
+  };
+  arrivals: MovementGuestCard[];
+  departures: MovementGuestCard[];
+  inTransit: InTransitMovement[];
+  valleyDistribution: {
+    leh: MovementGuestCard[];
+    nubra: MovementGuestCard[];
+    pangong: MovementGuestCard[];
+    other: MovementGuestCard[];
+  };
+}
+
