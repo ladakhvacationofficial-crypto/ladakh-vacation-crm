@@ -70,7 +70,7 @@ export const SITE = {
   /** Backend endpoint that accepts public lead captures. */
   leadCaptureUrl:
     process.env.NEXT_PUBLIC_LEAD_CAPTURE_URL ??
-    (process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api/leads/capture' : ''),
+    'https://ladakhvacationecosystem.onrender.com/api/leads/capture',
 
   /**
    * Cheap health endpoint used to wake the Render free-tier backend.
@@ -79,7 +79,7 @@ export const SITE = {
    */
   wakePingUrl:
     process.env.NEXT_PUBLIC_WAKE_PING_URL === 'off' ? '' :
-      (process.env.NEXT_PUBLIC_WAKE_PING_URL || process.env.NEXT_PUBLIC_LEAD_CAPTURE_URL?.replace(/\/leads\/capture\/?$/, '/health') || ''),
+      (process.env.NEXT_PUBLIC_WAKE_PING_URL || process.env.NEXT_PUBLIC_LEAD_CAPTURE_URL?.replace(/\/leads\/capture\/?$/, '/health') || 'https://ladakhvacationecosystem.onrender.com/api/health'),
 } as const;
 
 /**

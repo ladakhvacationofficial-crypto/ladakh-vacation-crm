@@ -18,9 +18,10 @@
   --color-paper-400: #c9c1b0;
   --color-paper-500: #a39a87;
 
-  /* --- Ink: warm-black text ramp */
+  /* --- Ink: warm-black text ramp --- */
   --color-ink-950: #070f1f;
   --color-ink-900: #0d1b30;
+  --color-ink-850: #14233c;
   --color-ink-800: #1c2a42;
   --color-ink-700: #2c3a53;
   --color-ink-600: #43506a;
@@ -28,6 +29,30 @@
   --color-ink-400: #8792a6;
   --color-ink-300: #b4bccb;
   --color-ink-200: #d9dee7;
+  --color-ink-100: #edf0f5;
+  --color-ink-50: #f8fafc;
+
+  /* --- Signal / Royal Sapphire Blue --- */
+  --color-signal-600: #173f86;
+  --color-signal-500: #1e4fa8;
+  --color-signal-400: #3670d8;
+  --color-signal-300: #6fa0f5;
+  --color-signal-200: #d9e5fb;
+
+  /* --- Brand / Himalayan Gold --- */
+  --color-brand-600: #a8842f;
+  --color-brand-500: #c9a961;
+  --color-brand-400: #d8bf80;
+  --color-brand-300: #e8d5a0;
+  --color-brand-200: #f4ecd6;
+
+  /* --- Operational & Financial Verdicts --- */
+  --color-healthy-500: #16a34a;
+  --color-healthy-400: #22c55e;
+  --color-warn-500: #ea580c;
+  --color-warn-400: #f97316;
+  --color-loss-500: #dc2626;
+  --color-loss-400: #ef4444;
 
   /* --- Pine: the logo's deep green. Primary dark surface. */
   --color-pine-50:  #eef3fd;
@@ -80,6 +105,53 @@
   --shadow-lg: 0 18px 44px -12px rgba(7, 15, 31, 0.18), 0 6px 16px -6px rgba(7, 15, 31, 0.08);
   --shadow-xl: 0 32px 72px -20px rgba(7, 15, 31, 0.26), 0 12px 28px -12px rgba(7, 15, 31, 0.12);
   --shadow-gold: 0 12px 32px -10px rgba(201, 169, 97, 0.45);
+}
+
+/* ============================================================================
+   CRM THEME SCOPE (.crm-theme)
+   Applied to (app) routes, /login, /forgot-password, /reset-password
+   Crisp, modern, high-contrast luxury executive operations suite.
+   ========================================================================= */
+
+.crm-theme {
+  /* Surfaces: Pure white cards on crisp neutral slate canvas */
+  --color-ink-950: #f8fafc; /* Crisp modern page background (Slate 50) */
+  --color-ink-900: #ffffff; /* Pure white card & sidebar panel surface */
+  --color-ink-850: #f1f5f9; /* Subtle hover & chip surface (Slate 100) */
+  --color-ink-800: #e2e8f0; /* Crisp hairline border & divider (Slate 200) */
+  --color-ink-700: #cbd5e1; /* Active input border (Slate 300) */
+  --color-ink-600: #94a3b8; /* Muted line (Slate 400) */
+  --color-ink-500: #64748b; /* Secondary labels & helper text (Slate 500) */
+  --color-ink-400: #475569; /* Secondary text (Slate 600) */
+  --color-ink-300: #334155; /* Body copy (Slate 700) */
+  --color-ink-200: #1e293b; /* Strong text (Slate 800) */
+  --color-ink-100: #0f172a; /* High-contrast headings & KPI numbers (Slate 900) */
+  --color-ink-50:  #020617; /* Deepest black (Slate 950) */
+
+  /* Signal / Royal Sapphire Blue */
+  --color-signal-600: #1d4ed8;
+  --color-signal-500: #2563eb;
+  --color-signal-400: #3b82f6;
+  --color-signal-300: #60a5fa;
+  --color-signal-200: #dbeafe;
+
+  /* Brand / Himalayan Gold */
+  --color-brand-600: #b45309;
+  --color-brand-500: #d97706;
+  --color-brand-400: #f59e0b;
+  --color-brand-300: #fcd34d;
+  --color-brand-200: #fef3c7;
+
+  /* Semantic Status Verdicts */
+  --color-healthy-500: #16a34a;
+  --color-healthy-400: #22c55e;
+  --color-warn-500:    #ea580c;
+  --color-warn-400:    #f97316;
+  --color-loss-500:    #dc2626;
+  --color-loss-400:    #ef4444;
+
+  background-color: var(--color-ink-950);
+  color: var(--color-ink-300);
 }
 
 /* ============================================================================
