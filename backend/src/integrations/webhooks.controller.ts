@@ -16,10 +16,10 @@ export class WebhooksController {
     @Query('hub.challenge') challenge: string,
     @Query('hub.verify_token') token: string,
   ) {
-    if (mode === 'subscribe' && challenge) {
+    if (process.env.META_VERIFY_TOKEN && token === process.env.META_VERIFY_TOKEN && mode === 'subscribe' && challenge) {
       return challenge;
     }
-    return 'Invalid request';
+    throw new UnauthorizedException('Invalid verification token');
   }
 
   @Post('meta')
@@ -29,10 +29,11 @@ export class WebhooksController {
     @Req() req: RawBodyRequest<Request>
   ) {
     const secret = process.env.META_APP_SECRET;
+    if (!secret || !req.rawBody || !signature) throw new UnauthorizedException('Webhook verification is unavailable');
     if (secret && req.rawBody) {
       const hmac = crypto.createHmac('sha256', secret);
       const digest = 'sha256=' + hmac.update(req.rawBody).digest('hex');
-      if (signature !== digest) {
+      if (Buffer.byteLength(signature) !== Buffer.byteLength(digest) || !crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest))) {
         throw new UnauthorizedException('Invalid signature');
       }
     } else if (secret) {

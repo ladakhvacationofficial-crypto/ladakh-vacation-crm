@@ -64,7 +64,7 @@ export default function InvoicesDashboard() {
                 <td className="p-3 font-medium">{formatCurrency(invoice.total)}</td>
                 <td className="p-3">
                   <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                    invoice.status === 'PAID' ? 'bg-green-100 text-green-700' : 
+                    invoice.status === 'PAID' ? 'bg-green-100 text-green-700' :
                     invoice.status === 'DRAFT' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
                   }`}>
                     {invoice.status}
@@ -79,7 +79,7 @@ export default function InvoicesDashboard() {
                     <Download className="w-3.5 h-3.5" /> PDF
                   </button>
                   {invoice.status !== 'PAID' && (
-                    <button 
+                    <button
                       onClick={() => handleMarkPaid(invoice.id)}
                       className="text-xs inline-flex items-center gap-1 text-green-600 hover:text-green-700"
                     >

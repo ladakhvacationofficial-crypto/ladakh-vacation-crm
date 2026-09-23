@@ -83,9 +83,9 @@ export class BookingsController {
 
   /** Global search — ⌘K palette. */
   @Get('search')
-  search(@Query('q') q: string) {
+  search(@Query('q') q: string, @CurrentUser() actor: Actor) {
     if (!q || q.trim().length < 2) return [];
-    return this.bookings.search(q.trim());
+    return this.bookings.search(q.trim(), actor);
   }
 
   /** Operations Daily Movement Chart — tracks guest arrivals, departures, pass crossings, and stay distribution. */

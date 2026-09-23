@@ -40,7 +40,7 @@ describe('LeadNurturingService', () => {
     expect(res2.dispatched).toBe(false);
   });
 
-  it('records simulated acknowledgment when WhatsApp integration is inactive', async () => {
+  it('reports no dispatch when WhatsApp integration is inactive', async () => {
     const res = await service.dispatchInstantAcknowledgment({
       id: 'l-3',
       name: 'Aamir Khan',
@@ -49,7 +49,7 @@ describe('LeadNurturingService', () => {
       score: 85,
     });
 
-    expect(res.dispatched).toBe(true);
+    expect(res.dispatched).toBe(false);
     expect(mockPrisma.activity.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({

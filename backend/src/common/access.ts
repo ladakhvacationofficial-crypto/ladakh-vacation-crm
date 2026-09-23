@@ -22,10 +22,9 @@ export const LEAD_MODULE_ROLES: Role[] = [
 ];
 
 /**
- * Roles allowed to DIRECTLY close a lead — no approval needed.
- * OWNER + SUPER_ADMIN only. SALES_MANAGER can request a close via the
- * approval workflow but cannot execute one themselves; SALES_EXEC cannot
- * even request.
+ * Roles allowed to permanently delete a lead, or mark it Lost with no
+ * approval. OWNER + SUPER_ADMIN only. SALES_MANAGER can request a close.
+ * SALES_EXEC cannot close or delete.
  */
 export const LEAD_DELETE_ACCESS: Role[] = [
   Role.SUPER_ADMIN,

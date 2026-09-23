@@ -32,7 +32,7 @@ export const metadata = {
 const TRUST = [
   'Leh-based, not a reseller',
   `${SITE.stats.guests} travellers hosted`,
-  'All Inner Line Permits handled',
+  'Environmental fee and permits handled',
   'Oxygen in every vehicle',
   'Stays we have slept in',
   '24×7 support from Leh',
@@ -184,7 +184,7 @@ export default function HomePage() {
         </div>
         <p className="sr-only">
           Leh-based Ladakh tour operator since {SITE.founded}. {SITE.stats.guests} travellers
-          hosted. All Inner Line Permits handled. Oxygen in every vehicle. 24×7
+          hosted. Environmental fee and permits handled. Oxygen in every vehicle. 24×7
           on-ground support from Leh.
         </p>
       </section>

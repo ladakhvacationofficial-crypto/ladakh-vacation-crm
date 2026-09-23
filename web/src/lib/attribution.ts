@@ -1,11 +1,4 @@
-/**
- * Attribution helper for Ladakh Vacation.
- *
- * Captures paid advertising click parameters (Google Ads gclid, Meta Ads fbclid)
- * and Google Analytics standard UTM tags (source, medium, campaign, term, content)
- * on first pageview, caching them in sessionStorage so multi-page journeys preserve
- * campaign origin through to conversion.
- */
+import { SITE } from './site';
 
 const STORAGE_KEY = 'lv.attribution';
 
@@ -20,64 +13,105 @@ export interface AttributionData {
   landingPage?: string;
   referrer?: string;
   visitId?: string;
+  source?: string;
 }
 
-/**
- * Initializes and captures query parameters from the active window URL.
- * Call this on page mount or in the root layout.
- */
+type Attribution = Record<string, string>;
+let pending: Promise<string | undefined> | undefined;
+let first: Attribution | undefined;
+
+function storageGet(key: string) { try { return sessionStorage.getItem(key); } catch { return null; } }
+function storageSet(key: string, value: string) { try { sessionStorage.setItem(key, value); } catch {} }
+
+function context(): Attribution {
+  if (first) return first;
+  const stored = storageGet(STORAGE_KEY);
+  if (stored) { try { first = JSON.parse(stored); if (first) return first; } catch {} }
+  const params = new URLSearchParams(window.location.search);
+  first = { landingPage: window.location.pathname, referrer: document.referrer ? document.referrer.slice(0, 500) : '' };
+  for (const [key, query] of Object.entries({
+    utmSource: 'utm_source',
+    utmMedium: 'utm_medium',
+    utmCampaign: 'utm_campaign',
+    utmTerm: 'utm_term',
+    utmContent: 'utm_content',
+    gclid: 'gclid',
+    fbclid: 'fbclid',
+  })) {
+    const value = params.get(query);
+    if (value) first[key] = value.slice(0, key.endsWith('clid') ? 300 : 200);
+  }
+  storageSet(STORAGE_KEY, JSON.stringify(first));
+  return first;
+}
+
 export function captureAttribution(): AttributionData {
   if (typeof window === 'undefined') return {};
-
   try {
-    const params = new URLSearchParams(window.location.search);
-    const existingRaw = window.sessionStorage.getItem(STORAGE_KEY);
-    const existing: AttributionData = existingRaw ? JSON.parse(existingRaw) : {};
-
-    const updated: AttributionData = {
-      ...existing,
-      utmSource: params.get('utm_source') || existing.utmSource,
-      utmMedium: params.get('utm_medium') || existing.utmMedium,
-      utmCampaign: params.get('utm_campaign') || existing.utmCampaign,
-      utmTerm: params.get('utm_term') || existing.utmTerm,
-      utmContent: params.get('utm_content') || existing.utmContent,
-      gclid: params.get('gclid') || existing.gclid,
-      fbclid: params.get('fbclid') || existing.fbclid,
-      landingPage: existing.landingPage || window.location.pathname,
-      referrer: existing.referrer || (document.referrer ? document.referrer.slice(0, 500) : undefined),
-    };
-
-    // Clean undefined keys
-    const cleaned = Object.fromEntries(
-      Object.entries(updated).filter(([_, v]) => v !== undefined && v !== ''),
-    );
-
-    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned));
-    return cleaned;
+    return context();
   } catch {
     return {};
   }
 }
 
-/**
- * Returns current attribution payload to attach to lead capture requests.
- */
 export function getAttributionPayload(): AttributionData {
   if (typeof window === 'undefined') return {};
-
   try {
-    // Re-check URL first in case user navigated directly with params
-    const fresh = captureAttribution();
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
-    const stored: AttributionData = raw ? JSON.parse(raw) : fresh;
-
-    const visitId = window.sessionStorage.getItem('lv.visitId');
+    const data = { ...context() };
+    const visitId = storageGet('lv.visitId');
     if (visitId) {
-      stored.visitId = visitId;
+      data.visitId = visitId;
     }
-
-    return stored;
+    return data;
   } catch {
     return {};
   }
+}
+
+export function trackVisit(): Promise<string | undefined> {
+  if (typeof window === 'undefined') return Promise.resolve(undefined);
+  if (!SITE.leadCaptureUrl) return Promise.resolve(undefined);
+  if (pending) return pending;
+  const existing = storageGet('lv.visitId');
+  if (existing) return Promise.resolve(existing);
+  const attribution = context();
+  const sessionId = storageGet('lv.sessionId') || crypto.randomUUID();
+  storageSet('lv.sessionId', sessionId);
+  let visitorId = sessionId;
+  try {
+    visitorId = localStorage.getItem('lv.visitorId') || crypto.randomUUID();
+    localStorage.setItem('lv.visitorId', visitorId);
+  } catch {}
+  const { landingPage, ...fields } = attribution;
+  pending = fetch(SITE.leadCaptureUrl.replace(/\/leads\/capture\/?$/, '/visits'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    signal: AbortSignal.timeout(8000),
+    body: JSON.stringify({ visitorId, sessionId, pagePath: landingPage, ...fields }),
+  })
+    .then(async response => {
+      if (!response.ok) return undefined;
+      const body = await response.json();
+      if (typeof body.visitId === 'string') {
+        storageSet('lv.visitId', body.visitId);
+        return body.visitId;
+      }
+      return undefined;
+    })
+    .catch(() => undefined);
+  return pending;
+}
+
+export async function captureContext() {
+  const fields = context();
+  // Do not make a slow beacon prevent an enquiry from being submitted.
+  const visitId = await Promise.race([
+    trackVisit(),
+    new Promise<undefined>(resolve => setTimeout(resolve, 800)),
+  ]);
+  return {
+    ...fields,
+    ...(visitId ? { visitId } : {}),
+    source: fields.gclid ? 'GOOGLE_ADS' : fields.fbclid ? 'META_ADS' : 'WEBSITE',
+  };
 }

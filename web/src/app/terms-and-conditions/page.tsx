@@ -70,7 +70,7 @@ export default function TermsPage() {
             <div className="border-t border-paper-300 pt-8">
               <h2 className="display d3 text-ink-950">4. Identification & Permits</h2>
               <p className="mt-3 text-[15px] leading-relaxed text-ink-700">
-                All Indian guests must carry original government-issued photo IDs (Aadhaar / Voter ID / Passport / Driving License). For protected areas (Nubra, Pangong, Hanle, Tso Moriri and Umling La), Ladakh Vacation applies for, pays for and prints every required Inner Line Permit (ILP) before you arrive. Foreign nationals need a Protected Area Permit, which we also arrange, and must hold a valid Indian visa or e-visa.
+                All Indian guests must carry original government-issued photo IDs (Aadhaar / Voter ID / Passport / Driving License). Indian travellers do not need an Inner Line Permit. For protected areas (Nubra, Pangong, Hanle, Tso Moriri and Umling La), Ladakh Vacation pays the Ladakh environmental fee and the daily wildlife fee and prints the receipt before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange, and must hold a valid Indian visa or e-visa. Leh town and the Sham Valley need neither.
               </p>
             </div>
 

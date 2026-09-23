@@ -172,7 +172,7 @@ export class LeadsService {
 
     // --- dedupe: same phone inside the window is a RE-ENQUIRY, not a new lead
     const existing = await this.prisma.lead.findFirst({
-      where: { phone: { endsWith: phoneKey }, createdAt: { gte: since } },
+      where: { phoneKey, createdAt: { gte: since } },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -252,6 +252,7 @@ export class LeadsService {
       data: {
         name: dto.name,
         phone: dto.phone,
+        phoneKey,
         email: dto.email ?? null,
         city: dto.city ?? null,
         country: dto.country ?? null,
@@ -360,6 +361,12 @@ export class LeadsService {
         where: { id: result.leadId },
         data: { assignedToId: target },
       });
+      const [creator, assignee] = await Promise.all([
+        this.prisma.user.findUnique({ where: { id: actor.id }, select: { name: true } }),
+        target === actor.id
+          ? Promise.resolve(null)
+          : this.prisma.user.findUnique({ where: { id: target }, select: { name: true } }),
+      ]);
       await this.prisma.activity.create({
         data: {
           leadId: result.leadId,
@@ -367,8 +374,8 @@ export class LeadsService {
           type: 'SYSTEM' as any,
           content:
             target === actor.id
-              ? 'Added manually, auto-assigned to creator'
-              : `Added manually by ${actor.id}, assigned to ${target}`,
+              ? `Added manually by ${creator?.name ?? 'staff'}, assigned to them`
+              : `Added manually by ${creator?.name ?? 'staff'}, assigned to ${assignee?.name ?? 'a teammate'}`,
         },
       });
     }
@@ -553,7 +560,7 @@ export class LeadsService {
 
     const data: Prisma.LeadUpdateInput = {};
     if (dto.name !== undefined) data.name = dto.name;
-    if (dto.phone !== undefined) data.phone = dto.phone;
+    if (dto.phone !== undefined) { data.phone = dto.phone; data.phoneKey = this.normalisePhone(dto.phone); }
     if (dto.email !== undefined) data.email = dto.email;
     if (dto.destination !== undefined) data.destination = this.normaliseDestination(dto.destination);
     if (dto.nights !== undefined) data.nights = dto.nights;
@@ -636,14 +643,18 @@ export class LeadsService {
       dto.assignedToId !== undefined &&
       dto.assignedToId !== lead.assignedToId
     ) {
+      const assignee = dto.assignedToId
+        ? await this.prisma.user.findUnique({
+            where: { id: dto.assignedToId },
+            select: { name: true },
+          })
+        : null;
       await this.prisma.activity.create({
         data: {
           leadId: id,
           userId: actorId ?? null,
           type: ActivityType.ASSIGNMENT,
-          content: dto.assignedToId
-            ? `Assigned to user ${dto.assignedToId}`
-            : 'Unassigned',
+          content: assignee ? `Assigned to ${assignee.name}` : 'Unassigned',
         },
       });
     }
@@ -665,9 +676,8 @@ export class LeadsService {
     });
     if (!lead) throw new NotFoundException('Lead not found');
 
-    const isAdminOrOwner = ['SUPER_ADMIN', 'OWNER'].includes(actor.role);
-    if (!isAdminOrOwner) {
-      throw new ForbiddenException('Only administrators can delete or archive leads.');
+    if (actor.role !== 'SUPER_ADMIN' && actor.role !== 'OWNER') {
+      throw new ForbiddenException('Only the owner can permanently delete a lead.');
     }
 
     // Soft-delete to preserve business attribution, bookings, and financial audit history
@@ -1135,6 +1145,7 @@ export class LeadsService {
         name: data.name,
         email: data.email ?? null,
         phone: data.phone,
+        phoneKey: this.normalisePhone(data.phone),
         message: data.message ?? null,
         source: leadSource,
         status: LeadStatus.NEW,
@@ -1201,7 +1212,7 @@ export class LeadsService {
       
       const phoneKey = this.normalisePhone(String(row.phone));
       const existing = await this.prisma.lead.findFirst({
-        where: { phone: { endsWith: phoneKey } },
+        where: { phoneKey },
       });
       
       if (!existing) {
@@ -1210,6 +1221,7 @@ export class LeadsService {
             name: row.name || 'Unknown',
             email: row.email || null,
             phone: String(row.phone),
+            phoneKey,
             status: 'NEW',
             source: 'WALK_IN',
             score: 50,
@@ -1240,6 +1252,12 @@ export class LeadsService {
     if (!req) throw new NotFoundException();
     if (req.status !== 'PENDING') throw new BadRequestException('Request already processed');
 
+    const reviewer = await this.prisma.user.findUnique({
+      where: { id: actor.id },
+      select: { name: true },
+    });
+    const reviewerName = reviewer?.name ?? 'a manager';
+
     return this.prisma.$transaction(async (tx) => {
       await tx.leadApprovalRequest.update({
         where: { id: requestId },
@@ -1260,7 +1278,9 @@ export class LeadsService {
         data: {
           leadId: req.leadId,
           type: 'NOTE',
-          content: approve ? `Close request approved by ${actor.id}` : `Close request rejected by ${actor.id}`,
+          content: approve
+            ? `Close request approved by ${reviewerName}`
+            : `Close request rejected by ${reviewerName}`,
         },
       });
 
@@ -1312,9 +1332,45 @@ export class LeadsService {
     };
   }
 
+  /**
+   * A follow-up the exec can paste into WhatsApp. Built from the lead's own
+   * fields. It is a template, not a model call: the button used to claim
+   * "AI" and return one generic sentence.
+   */
   async generateAiDraft(id: string, actor: Actor) {
     const lead = await this.findOne(id, actor);
-    return { draft: `Hi ${lead.name.split(' ')[0]}, just following up on your travel inquiry. Do you have a moment to chat?` };
+    const first = (lead.name || 'there').split(' ')[0];
+    const dest = lead.destination?.trim() || 'Ladakh';
+    const nights = lead.nights
+      ? `${lead.nights} night${lead.nights === 1 ? '' : 's'}`
+      : null;
+    const pax = [
+      lead.adults ? `${lead.adults} adult${lead.adults === 1 ? '' : 's'}` : null,
+      lead.children ? `${lead.children} ${lead.children === 1 ? 'child' : 'children'}` : null,
+    ]
+      .filter(Boolean)
+      .join(' and ');
+    const when = lead.travelDate
+      ? new Date(lead.travelDate).toLocaleDateString('en-IN', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          timeZone: 'Asia/Kolkata',
+        })
+      : null;
+    const trip = [dest, nights, pax].filter(Boolean).join(', ');
+
+    const draft = [
+      `Julley ${first}, this is Ladakh Vacation from Leh.`,
+      when
+        ? `I have your enquiry for ${trip}, travelling around ${when}.`
+        : `I have your enquiry for ${trip}.`,
+      `Two things before I price it: are the dates still open, and are you flying into Leh or driving in via Manali or Srinagar?`,
+      `We keep the first two nights around Leh. High passes come after that. Indian guests pay the Ladakh environmental fee for Nubra, Pangong, Hanle and the other restricted areas; foreign nationals need a Protected Area Permit, which we arrange before you land.`,
+      `Reply here and I will send a day-by-day plan with the price on it.`,
+    ].join('\n\n');
+
+    return { draft, source: 'template' as const };
   }
 
   async rescoreAllActiveLeads(actor: Actor): Promise<{ updatedCount: number; message: string }> {

@@ -91,26 +91,29 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
         {showForm && (
           <div className="bg-muted/30 p-4 rounded-md border mb-4 space-y-4">
             <h4 className="font-semibold text-sm">Generate GST Invoice</h4>
+            <p className="text-xs text-ink-500">
+              Enter the GST-inclusive amount the guest pays. GST is split out of that total. It is not added on top. Select the applicable rate for this invoice.
+            </p>
             <div className="space-y-3">
               {lineItems.map((item, i) => (
                 <div key={i} className="flex gap-2 items-start">
                   <div className="flex-1">
-                    <Input 
-                      placeholder="Description (e.g., Flight Tickets)" 
+                    <Input
+                      placeholder="Leh hotel, 2 rooms × 3 nights"
                       value={item.description}
                       onChange={(e) => updateLine(i, 'description', e.target.value)}
                     />
                   </div>
                   <div className="w-20">
-                    <Input 
-                      type="number" min="1" 
+                    <Input
+                      type="number" min="1"
                       value={item.quantity}
                       onChange={(e) => updateLine(i, 'quantity', parseInt(e.target.value) || 0)}
                     />
                   </div>
                   <div className="w-28">
-                    <Input 
-                      type="number" min="0" 
+                    <Input
+                      type="number" min="0"
                       value={item.unitPrice}
                       onChange={(e) => updateLine(i, 'unitPrice', parseFloat(e.target.value) || 0)}
                     />
@@ -124,9 +127,9 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
                 <Plus className="w-3 h-3 mr-1" /> Add Line
               </Button>
             </div>
-            
+
             <div className="flex items-center gap-4 mt-4">
-              <div className="w-32">
+              <div className="w-48">
                 <label className="text-sm font-medium">GST Slab (%)</label>
                 <Select
                   value={gstRate === null ? '' : gstRate.toString()}
@@ -137,9 +140,7 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
                   </option>
                   <option value="0">0%</option>
                   <option value="5">5%</option>
-                  <option value="12">12%</option>
                   <option value="18">18%</option>
-                  <option value="28">28%</option>
                 </Select>
               </div>
               <div className="flex-1 flex justify-end items-end pb-1">

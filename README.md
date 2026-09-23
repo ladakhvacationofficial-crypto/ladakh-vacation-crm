@@ -2,12 +2,14 @@
 
 The Ladakh Vacation CRM, its backend and the public website, in one repo.
 Built from the Glitz Holidays stack and laid out the same way: three apps,
-each deployed on its own, with no custom subdomains for the CRM or the API.
+with one combined Vercel deployment from `web` and the API on Render.
+The `frontend` folder remains the CRM source; `web/scripts/sync-crm.mjs` copies
+its routes and utilities into the combined app before each build.
 
 ```
 backend/    NestJS 11 + Prisma 6 API           -> Render   <service>.onrender.com
-frontend/   Next.js CRM (staff only)           -> Vercel   ladakh-vacation-crm.vercel.app/login
-web/        Next.js public website             -> Vercel   ladakhvacation.in
+frontend/   Next.js CRM source (staff only)    -> copied into web before build
+web/        Website + CRM                      -> Vercel   ladakhvacation.in and /login
 mobile/     reserved (Capacitor wrap of the CRM, later)
 packages/   reserved (shared TS types)
 seo/        generate-manifest.mjs (pages the CRM's SEO dashboard audits)
@@ -76,21 +78,26 @@ The free plan sleeps after 15 idle minutes and takes about a minute to wake,
 and its 750 monthly hours are shared with the other free service in the same
 Render workspace.
 
-### CRM and website (Vercel)
+### Website and CRM together (Vercel)
 
-Two Vercel projects from this same repo, as on Glitz. Import the repo twice
-and set a different Root Directory each time.
+Use one Vercel project, Root Directory `web`. The public website is at `/`;
+staff sign in at `/login` on the same domain. No CRM subdomain is required.
+The source folder `frontend` is retained for CRM development. The prebuild
+script syncs it into `web`; committed copies also support scoped Vercel builds.
 
-- **CRM**: project name `ladakh-vacation-crm`, Root Directory `frontend`.
-  One variable: `NEXT_PUBLIC_API_URL=https://<service>.onrender.com/api`.
-  No custom domain; it is used at `https://ladakh-vacation-crm.vercel.app/login`.
-- **Website**: Root Directory `web`. Variables:
-  `NEXT_PUBLIC_LEAD_CAPTURE_URL=https://<service>.onrender.com/api/leads/capture`
-  and, optionally, `NEXT_PUBLIC_WAKE_PING_URL` (`off` disables the wake ping).
-  Domains: `ladakhvacation.in` and `www.ladakhvacation.in`.
+Set both variables in this Vercel project:
 
-`NEXT_PUBLIC_*` values are built into the bundle, so changing one needs a
-redeploy.
+- `NEXT_PUBLIC_API_URL=https://<actual-render-service>/api`
+- `NEXT_PUBLIC_LEAD_CAPTURE_URL=https://<actual-render-service>/api/leads/capture`
+
+Optional `NEXT_PUBLIC_WAKE_PING_URL=off` disables the wake request. Changing any
+`NEXT_PUBLIC_*` variable requires a new build. Set Render `CRM_BASE_URL` to the
+same website origin so password-reset links lead to its `/reset-password` page.
+
+The newer GitHub configuration names `ladakhvacationecosystem.onrender.com` as
+the backend. Both `/api/health` and `/api/health/db` responded successfully on 23 September
+2026. This does not verify that the new audit fixes have deployed, or establish
+which Neon database its environment selects.
 
 ### DNS (Cloudflare)
 
@@ -112,3 +119,38 @@ landers' own content (`build/pages.js` in the landers folder), so both sites
 sell the same eleven trips at the same prices. After adding or renaming a
 website page, run `node seo/generate-manifest.mjs` so the CRM's SEO dashboard
 audits the new URL.
+
+## Audit fixes and deployment checks (23 September 2026)
+
+Email and social delivery now fail explicitly when a provider is unavailable.
+Planning charts use recorded data and labelled assumptions, not invented history.
+New operational attachments are encrypted before storage and downloaded through
+authenticated API routes. Public website media still uses public object URLs.
+Legacy public attachments require a separate migration before they are protected.
+
+Before deploying these changes:
+
+1. Back up the existing `INTEGRATION_KEY`. Keep it unchanged. Operational documents
+   use it unless a dedicated `STORAGE_ENCRYPTION_KEY` is configured. Do not rotate
+   either key without migrating the data encrypted with it.
+2. Apply additive Prisma migrations with `npx prisma migrate deploy` from `backend`.
+   Never use `migrate reset` against the existing database.
+3. Set `APP_URL` to the actual HTTPS backend origin (without `/api`) for campaign
+   unsubscribe links. Set `CRM_BASE_URL` to the actual CRM origin for reset links.
+4. Add `BREVO_API_KEY` and an approved sender before sending emails. For Meta lead
+   webhooks, set `META_APP_SECRET` and `META_VERIFY_TOKEN`; missing verification
+   configuration now rejects requests.
+5. Build and redeploy the combined Vercel app after setting its public API variables.
+   Use `web/.env.local.example` for the website and `frontend/.env.local.example`
+   for the CRM. These variables are different.
+6. Verify `/api/health` and `/api/health/db`, then check login, an enquiry, its visit
+   attribution, a document upload/download, and a booking payment in the real UI.
+   A successful local build does not establish that production is working.
+
+Campaign sending still runs inside a single backend process. Interrupted campaigns
+are marked failed at startup rather than silently resent; an operator must review
+recipient outcomes. Sleeping or restarting hosting is not a durable job queue.
+
+Dedicated traveller/permit management, altitude validation, generated white-label
+B2B quotes, and a mobile app remain outside the implemented modules. Provider
+delivery and hosting must be checked with the actual Ladakh accounts.

@@ -1,3 +1,5 @@
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { Actor } from '../common/access';
 import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { MlScoringService } from './ml-scoring.service';
 import { MlForecastingService } from './ml-forecasting.service';
@@ -21,8 +23,8 @@ export class MlController {
    */
   @Roles(...INTERNAL_STAFF)
   @Get('leads/:id/score')
-  scoreLead(@Param('id') id: string) {
-    return this.scoring.scoreLeadById(id);
+  scoreLead(@Param('id') id: string, @CurrentUser() actor: Actor) {
+    return this.scoring.scoreLeadById(id, actor);
   }
 
   /**

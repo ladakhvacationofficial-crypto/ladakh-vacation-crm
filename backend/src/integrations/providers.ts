@@ -203,6 +203,8 @@ const ads: ProviderSpec[] = [
       { key: 'clientId', label: 'OAuth Client ID', type: 'text', required: true },
       { key: 'clientSecret', label: 'OAuth Client Secret', type: 'password', required: true },
       { key: 'refreshToken', label: 'Refresh Token', type: 'password', required: true },
+      { key: 'customerId', label: 'Conversion Customer ID', type: 'text', help: 'Optional: account receiving eligible legacy offline conversions.' },
+      { key: 'conversionActionId', label: 'Conversion Action ID', type: 'text', help: 'Optional: upload conversion action. New accounts may require Google Data Manager instead.' },
       { key: 'loginCustomerId', label: 'Manager Customer ID', type: 'text', placeholder: '123-456-7890', help: 'Only needed when the credentials belong to a manager (MCC) account.' },
     ],
     hasTest: true,
@@ -212,6 +214,7 @@ const ads: ProviderSpec[] = [
     docsUrl: 'https://developers.facebook.com/docs/marketing-api/',
     fields: [
       { key: 'accessToken', label: 'Long-Lived Access Token', type: 'password', required: true },
+      { key: 'pixelId', label: 'Pixel / Dataset ID', type: 'text', help: 'Required for server-side purchase conversions.' },
       { key: 'adAccountId', label: 'Ad Account ID', type: 'text', required: true, placeholder: 'act_...' },
     ],
     hasTest: true,

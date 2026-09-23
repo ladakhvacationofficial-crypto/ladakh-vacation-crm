@@ -78,7 +78,7 @@ export class ItinerariesService {
   private async assertItemAccess(itemId: string, actor: Actor) {
     const item = await this.prisma.itineraryItem.findUnique({
       where: { id: itemId },
-      select: { day: { select: { itineraryId: true } } },
+      select: { day: { select: { itineraryId: true, date: true } } },
     });
     if (!item) throw new NotFoundException('Item not found');
     await this.assertItineraryAccess(item.day.itineraryId, actor);
@@ -526,9 +526,13 @@ export class ItinerariesService {
     if (dto.vendorRateId) {
       const rate = await this.prisma.vendorRate.findUnique({
         where: { id: dto.vendorRateId },
-        select: { netRate: true, vendorId: true, isActive: true },
+        select: { netRate: true, vendorId: true, isActive: true, validFrom: true, validTo: true, vendor: { select: { isActive: true } } },
       });
       if (!rate) throw new NotFoundException('Vendor rate not found');
+      const today = item.day.date ?? new Date();
+      if (!rate.isActive || !rate.vendor.isActive || (rate.validFrom && rate.validFrom > today) || (rate.validTo && rate.validTo < today)) {
+        throw new BadRequestException('This supplier rate is inactive or outside its validity period. Confirm a current rate before quoting.');
+      }
       unitNet = rate.netRate;
       vendorId = rate.vendorId;
     }

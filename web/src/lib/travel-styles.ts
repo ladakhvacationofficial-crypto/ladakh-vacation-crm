@@ -163,7 +163,7 @@ export const TRAVEL_STYLES: TravelStyle[] = [
       'Khardung La, the Shyok river road, Manali to Leh over five passes, and Umling La at 5,798 m. Trips for people whose idea of a holiday involves altitude and a little discomfort.',
     body: [
       'Adventure in Ladakh is mostly a logistics problem disguised as a fitness problem. The mountain does not care how fit you are if the pass is shut, the permit is not printed, or you gained two thousand metres in a day.',
-      'We handle the boring parts: Inner Line Permits applied for and printed before you land, oxygen in every vehicle, drivers who have run these passes for years, and an acclimatisation profile we do not negotiate on. What is left is the part you came for.',
+      'We handle the boring parts: the Ladakh environmental fee for Indian guests and Protected Area Permits for foreign nationals, paid and printed before you land, oxygen in every vehicle, drivers who have run these passes for years, and an acclimatisation profile we do not negotiate on. What is left is the part you came for.',
       'For riders, the Manali to Leh bike trip runs on Royal Enfield Himalayans with fuel and a mechanic included, and a support vehicle carrying luggage, spares and oxygen behind the group every day.',
     ],
     promises: [

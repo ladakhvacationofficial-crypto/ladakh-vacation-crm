@@ -1271,7 +1271,6 @@ export interface AudiencePreviewResult {
   estimatedCost: number;
   sampleLeads: { id: string; name: string; phone: string; email: string | null; destination: string | null }[];
 }
-
 export interface MovementGuestCard {
   bookingId: string;
   bookingNumber: string;
@@ -1318,4 +1317,3 @@ export interface DailyMovementResponse {
     other: MovementGuestCard[];
   };
 }
-

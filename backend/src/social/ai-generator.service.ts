@@ -110,7 +110,7 @@ export class AiGeneratorService {
       : `Ladakh, planned by Ladakhis. 🏔️\n\nOld Town lanes in Leh, Shanti Stupa at dusk, monasteries older than most countries, and a first afternoon deliberately left empty, because the altitude comes first.\n\nPermits handled, a private 4×4 with a Ladakhi driver, and oxygen in every vehicle.\n\n📍 ${pkg}\n📩 DM us or tap the link in bio for your itinerary.`;
 
     // ── Variant 2: Promotional ──────────────────────────────────────────────
-    const promoCaption = `${pkg.toUpperCase()} | ${season} 🏔️\n\nPlan ${dest} with a Leh-based team, not a call centre.\n\n✨ Every Ladakh Vacation trip includes:\n✔️ Handpicked 3★/4★ hotels in Leh and deluxe camps at Nubra and Pangong\n✔️ Private Innova Crysta or Xylo with a Ladakhi driver\n✔️ Oxygen, oximeter and first aid in every vehicle\n✔️ All Inner Line Permits, printed before you land\n✔️ Daily breakfast and dinner\n✔️ 24×7 support from a named coordinator in Leh\n\n💳 25% deposit confirms your dates. No-cost EMI on cards.\n\n👉 DM us or WhatsApp +91 96229 55386 for a day-by-day itinerary and an itemised quote.`;
+    const promoCaption = `${pkg.toUpperCase()} | ${season} 🏔️\n\nPlan ${dest} with a Leh-based team, not a call centre.\n\n✨ Every Ladakh Vacation trip includes:\n✔️ Handpicked 3★/4★ hotels in Leh and deluxe camps at Nubra and Pangong\n✔️ Private Innova Crysta or Xylo with a Ladakhi driver\n✔️ Oxygen, oximeter and first aid in every vehicle\n✔️ Environmental fee for Indian guests and Protected Area Permits for foreign nationals, printed before you land\n✔️ Daily breakfast and dinner\n✔️ 24×7 support from a named coordinator in Leh\n\n💳 25% deposit confirms your dates. No-cost EMI on cards.\n\n👉 DM us or WhatsApp +91 96229 55386 for a day-by-day itinerary and an itemised quote.`;
 
     // ── Variant 3: Punchy Reel Hook / Short Form ────────────────────────────
     const reelCaption = `This is your sign to finally do ${dest}. ✈️🏔️\n\n3 things you cannot miss:\n1️⃣ Crossing Khardung La at 5,359 m\n2️⃣ Sunrise on Pangong Tso from a shoreline camp\n3️⃣ The Milky Way over Hanle\n\nSave this for your next trip and send it to your travel partner. 📲\n\nTag @ladakhvacation on your adventures ✨`;
@@ -176,7 +176,7 @@ export class AiGeneratorService {
 Write 3 Instagram/Facebook captions for destination "${dest}", package "${pkg}", season "${season}".
 Tone 1: Evocative storytelling.
 Tone 2: High-converting promotional with package perks and clear CTA.
-Only promise what the business actually offers: private 4×4 with a Ladakhi driver, oxygen and first aid in every vehicle, all Inner Line Permits handled, altitude-first itineraries (never Pangong on day two), 24×7 support from Leh, WhatsApp +91 96229 55386. Do not invent prices, discounts or deadlines.
+Only promise what the business actually offers: private 4×4 with a Ladakhi driver, oxygen and first aid in every vehicle, the Ladakh environmental fee for Indian guests and a Protected Area Permit for foreign nationals, altitude-first itineraries (never Pangong on day two), 24×7 support from Leh, WhatsApp +91 96229 55386. Do not invent prices, discounts or deadlines. Indian travellers do not need an Inner Line Permit.
 Tone 3: Short punchy reel hook.
 Include emojis and 10 relevant hashtags.
 Return strictly a JSON array of 3 objects with keys: { "tone": "STORYTELLING"|"PROMOTIONAL"|"PUNCHY_REEL", "title": string, "hook": string, "caption": string, "cta": string, "hashtags": string[] }`;
@@ -220,7 +220,7 @@ Tone 1 (STORYTELLING): Immersive, evocative, sensory — high passes, prayer fla
 Tone 2 (PROMOTIONAL): High-converting with package highlights and a clear WhatsApp CTA.
 Tone 3 (PUNCHY_REEL): Ultra-short viral hook (1–2 lines), 3 bullet highlights, shareable energy.
 
-Only promise what the business actually offers: private 4×4 with a Ladakhi driver, oxygen and first aid in every vehicle, all Inner Line Permits handled, altitude-first itineraries (never Pangong on day two), 24×7 support from Leh, WhatsApp +91 96229 55386. Do not invent prices, discounts or deadlines.
+Only promise what the business actually offers: private 4×4 with a Ladakhi driver, oxygen and first aid in every vehicle, the Ladakh environmental fee for Indian guests and a Protected Area Permit for foreign nationals, altitude-first itineraries (never Pangong on day two), 24×7 support from Leh, WhatsApp +91 96229 55386. Do not invent prices, discounts or deadlines. Indian travellers do not need an Inner Line Permit.
 Include authentic emojis. Add 10 destination-specific hashtags (e.g. #LadakhTourism #PangongTso).
 
 Return ONLY a valid JSON array — no markdown, no code fences:
@@ -283,7 +283,7 @@ Tone 1 (STORYTELLING): Immersive, evocative, sensory — high passes, prayer fla
 Tone 2 (PROMOTIONAL): High-converting with package highlights and a clear WhatsApp CTA.
 Tone 3 (PUNCHY_REEL): Ultra-short viral hook (1–2 lines), 3 bullet highlights, shareable energy.
 
-Only promise what the business actually offers: private 4×4 with a Ladakhi driver, oxygen and first aid in every vehicle, all Inner Line Permits handled, altitude-first itineraries (never Pangong on day two), 24×7 support from Leh, WhatsApp +91 96229 55386. Do not invent prices, discounts or deadlines.
+Only promise what the business actually offers: private 4×4 with a Ladakhi driver, oxygen and first aid in every vehicle, the Ladakh environmental fee for Indian guests and a Protected Area Permit for foreign nationals, altitude-first itineraries (never Pangong on day two), 24×7 support from Leh, WhatsApp +91 96229 55386. Do not invent prices, discounts or deadlines. Indian travellers do not need an Inner Line Permit.
 Include authentic emojis. Add 10 destination-specific hashtags.
 
 Return ONLY a valid JSON array — no markdown, no code fences:

@@ -22,7 +22,7 @@ export class BrevoEmailService {
     this.senderName = this.config.get<string>('BREVO_SENDER_NAME') || 'Ladakh Vacation';
 
     if (!this.apiKey) {
-      this.logger.warn('BREVO_API_KEY not configured — outbound email broadcast will run in simulated test mode.');
+      this.logger.warn('BREVO_API_KEY not configured — outbound email is disabled.');
     }
   }
 
@@ -32,7 +32,7 @@ export class BrevoEmailService {
 
   /**
    * Sends a transactional / broadcast HTML email via Brevo REST API.
-   * If not configured, logs to console and returns simulated messageId.
+   * If not configured, rejects without claiming delivery.
    */
   async sendEmail(opts: SendEmailOptions): Promise<{ messageId: string }> {
     let finalHtml = opts.htmlContent;
@@ -46,8 +46,7 @@ export class BrevoEmailService {
     }
 
     if (!this.apiKey) {
-      this.logger.log(`[SIMULATED EMAIL] To: ${opts.toEmail} | Subject: ${opts.subject}`);
-      return { messageId: `mock-brevo-${Date.now()}-${Math.random().toString(36).substring(7)}` };
+      throw new Error('Email is not configured. Set BREVO_API_KEY and a verified sender.');
     }
 
     const res = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -79,6 +78,7 @@ export class BrevoEmailService {
       throw new Error(`Brevo API Error: ${data.message || res.statusText}`);
     }
 
-    return { messageId: data.messageId || '' };
+    if (!data.messageId) throw new Error('Email provider returned no message ID.');
+    return { messageId: data.messageId };
   }
 }

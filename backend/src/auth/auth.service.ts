@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
@@ -10,6 +10,7 @@ import { crmBaseUrl } from '../common/site';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
@@ -62,7 +63,7 @@ export class AuthService {
       try {
         const base = crmBaseUrl(this.config.get<string>('CRM_BASE_URL'));
         const resetUrl = `${base}/reset-password?token=${token}`;
-        await fetch('https://api.brevo.com/v3/smtp/email', {
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
           method: 'POST',
           headers: {
             'api-key': brevoKey,
@@ -79,7 +80,7 @@ export class AuthService {
             htmlContent: `
               <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
                 <h2>Password Reset Request</h2>
-                <p>Hello ${user.name},</p>
+                <p>Hello,</p>
                 <p>A password reset was requested for your Ladakh Vacation CRM account. Click the button below to reset your password. This link expires in 15 minutes.</p>
                 <p style="margin: 24px 0;">
                   <a href="${resetUrl}" style="background: #1e4fa8; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
@@ -89,8 +90,10 @@ export class AuthService {
             `,
           }),
         });
+        if (!response.ok) this.logger.error(`Password-reset provider rejected delivery (HTTP ${response.status}).`);
       } catch {
-        // Suppress email dispatch errors to prevent timing attacks
+        this.logger.error('Password-reset delivery failed.');
+        // Keep the public response identical to avoid account enumeration.
       }
     }
 

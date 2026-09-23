@@ -39,8 +39,8 @@ export class InvoicesController {
 
   @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS, Role.SALES_EXEC)
   @Get('lead/:leadId')
-  findByLead(@Param('leadId') leadId: string) {
-    return this.invoicesService.findByLead(leadId);
+  findByLead(@Param('leadId') leadId: string, @CurrentUser() actor: Actor) {
+    return this.invoicesService.findByLead(leadId, actor);
   }
 
   @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.SALES_MANAGER, Role.ACCOUNTS, Role.SALES_EXEC)
@@ -74,9 +74,10 @@ export class InvoicesController {
   async downloadPdf(
     @Param('id') id: string,
     @Res() res: Response,
+    @CurrentUser() actor: Actor,
   ) {
     const [invoice, comp] = await Promise.all([
-      this.invoicesService.findOne(id),
+      this.invoicesService.findOne(id, actor),
       this.prisma.companyProfile.findUnique({ where: { id: 'default' } }),
     ]);
     const buf = await this.pdf.renderFormalInvoice({

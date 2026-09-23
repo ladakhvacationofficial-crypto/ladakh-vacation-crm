@@ -8,7 +8,7 @@ import { SITE } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Travel Agent Partners — Ground Operations in Ladakh',
   description:
-    'Partner with Ladakh Vacation for ground operations in Ladakh: a Leh-based team with direct relationships with drivers, camps and hotels, all Inner Line Permits handled, and 24×7 on-ground support.',
+    'Partner with Ladakh Vacation for ground operations in Ladakh: a Leh-based team with direct relationships with drivers, camps and hotels, environmental fees and permits handled, and 24×7 on-ground support.',
   alternates: { canonical: '/partner-with-us' },
 };
 
@@ -36,7 +36,7 @@ export default function PartnerWithUsPage() {
     {
       icon: ShieldCheck,
       title: 'Permits, handled',
-      desc: 'Inner Line Permits for Nubra, Pangong, Hanle, Tso Moriri and Umling La applied for, paid and printed before your clients arrive.',
+      desc: 'The Ladakh environmental fee for Indian guests, and Protected Area Permits for foreign nationals, for Nubra, Pangong, Hanle, Tso Moriri and Umling La, paid and printed before your clients arrive.',
     },
     {
       icon: Headphones,

@@ -95,7 +95,7 @@ export class LeadNurturingService {
           content: `[Automated Speed-to-Lead] Welcome acknowledgment prepared for ${dest} inquiry (+${cleanPhone}). WhatsApp Cloud integration inactive.`,
         },
       });
-      return { dispatched: true, reason: 'Recorded in simulated speed-to-lead pipeline' };
+      return { dispatched: false, reason: 'WhatsApp integration is not configured; no message was sent.' };
     }
   }
 }

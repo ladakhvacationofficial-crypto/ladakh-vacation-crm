@@ -69,7 +69,8 @@ export default function AboutPage() {
               <p className="text-[15.5px] leading-[1.8] text-ink-600">
                 {SITE.stats.guests} travellers later, the principle has not changed.
                 Every route is sequenced by altitude rather than by how many sights
-                fit into a day. Every permit is applied for, paid and printed before
+                fit into a day. The environmental fee for Indian guests, and any
+                Protected Area Permit for foreign nationals, is paid and printed before
                 you land. Every vehicle carries oxygen, and every stay we sell has
                 been personally inspected.
               </p>

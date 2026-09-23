@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Check, Compass, Calendar, Users, Hotel, ArrowRight, ArrowLeft, Loader2, Sparkles } from 'lucide-react';
 import { PageHero } from '@/components/page-hero';
@@ -72,10 +72,11 @@ export default function PlanMyTripPage() {
     };
 
     try {
+      if (!SITE.leadCaptureUrl) throw new Error('Enquiries are temporarily unavailable. Please call or WhatsApp us.');
       const res = await fetch(SITE.leadCaptureUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, ...await captureContext() }),
       });
       if (!res.ok) throw new Error('Submission failed');
       setSubmitted(true);

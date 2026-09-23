@@ -68,10 +68,10 @@ export class BookingsService {
     }
   }
 
-  private async nextBookingNumber(): Promise<string> {
+  private async nextBookingNumber(db: Prisma.TransactionClient = this.prisma): Promise<string> {
     const year = new Date().getFullYear();
     const prefix = `LV-B-${year}-`;
-    const last = await this.prisma.booking.findFirst({
+    const last = await db.booking.findFirst({
       where: { bookingNumber: { startsWith: prefix } },
       orderBy: { bookingNumber: 'desc' },
       select: { bookingNumber: true },
@@ -83,8 +83,8 @@ export class BookingsService {
   }
 
   /** Recompute stored totals from the child rows, then re-derive status. */
-  private async refresh(bookingId: string) {
-    const booking = await this.prisma.booking.findUnique({
+  private async refresh(bookingId: string, db: Prisma.TransactionClient = this.prisma) {
+    const booking = await db.booking.findUnique({
       where: { id: bookingId },
       include: { payments: true, costs: true },
     });
@@ -103,7 +103,7 @@ export class BookingsService {
       fin.totalReceived,
     ) as BookingStatus;
 
-    return this.prisma.booking.update({
+    return db.booking.update({
       where: { id: bookingId },
       data: {
         totalReceived: fin.totalReceived,
@@ -169,9 +169,9 @@ export class BookingsService {
     await this.assertLeadAccess(leadId, actor);
 
     // Race-safe number + insert. See src/common/sequence.ts.
-    const booking = await withNumberRetry(async () => {
-      const bookingNumber = await this.nextBookingNumber();
-      return this.prisma.booking.create({
+    const booking = await withNumberRetry(() => this.prisma.$transaction(async (tx) => {
+      const bookingNumber = await this.nextBookingNumber(tx);
+      const created = await tx.booking.create({
         data: {
           bookingNumber,
           leadId,
@@ -190,21 +190,23 @@ export class BookingsService {
           notes: dto.notes ?? null,
         },
       });
-    });
 
     // pipeline side-effects
-    await this.prisma.lead.update({
+    await tx.lead.update({
       where: { id: leadId },
       data: { status: LeadStatus.CONFIRMED },
     });
-    await this.prisma.activity.create({
+    await tx.activity.create({
       data: {
         leadId,
         userId: userId ?? null,
         type: ActivityType.SYSTEM,
-        content: `Booking ${booking.bookingNumber} confirmed — sell ${totalSell}, est. cost ${totalNet}`,
+        content: `Booking ${created.bookingNumber} confirmed — sell ${totalSell}, est. cost ${totalNet}`,
       },
     });
+
+      return created;
+    }));
 
     // Closed-loop offline conversion upload for ad algorithms (Google Ads & Meta CAPI)
     try {
@@ -330,24 +332,31 @@ export class BookingsService {
     if (dto.travelEndDate !== undefined)
       data.travelEndDate = toDateOrNull(dto.travelEndDate);
 
-    await this.prisma.booking.update({ where: { id }, data });
+    await this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM "Booking" WHERE id = ${id} FOR UPDATE`;
+      const current = await tx.booking.findUnique({ where: { id } });
+      if (!current) throw new NotFoundException('Booking not found');
+    await tx.booking.update({ where: { id }, data });
 
-    if (dto.status && dto.status !== booking.status) {
-      await this.prisma.activity.create({
+    if (dto.status && dto.status !== current.status) {
+      await tx.activity.create({
         data: {
-          leadId: booking.leadId,
+          leadId: current.leadId,
           userId: userId ?? null,
           type: ActivityType.SYSTEM,
-          content: `Booking ${booking.bookingNumber}: ${booking.status} -> ${dto.status}`,
+          content: `Booking ${current.bookingNumber}: ${current.status} -> ${dto.status}`,
         },
       });
       if (dto.status === BookingStatus.CANCELLED) {
-        await this.prisma.lead.update({
-          where: { id: booking.leadId },
+        await tx.lead.update({
+          where: { id: current.leadId },
           data: { status: LeadStatus.CANCELLED },
         });
       }
     }
+
+      if (dto.totalSell !== undefined) await this.refresh(id, tx);
+    });
 
     return this.detail(id);
   }
@@ -383,15 +392,17 @@ export class BookingsService {
     dto: CreatePaymentDto,
     userId?: string,
   ) {
-    const booking = await this.prisma.booking.findUnique({
+    const updatedId = await this.prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findUnique({
       where: { id: bookingId },
     });
     if (!booking) throw new NotFoundException('Booking not found');
+    await tx.$queryRaw`SELECT "id" FROM "Booking" WHERE "id" = ${bookingId} FOR UPDATE`;
 
     // a refund is stored as a negative amount so totals stay a simple sum
     const signed = dto.isRefund ? -Math.abs(dto.amount) : Math.abs(dto.amount);
 
-    await this.prisma.bookingPayment.create({
+    await tx.bookingPayment.create({
       data: {
         bookingId,
         amount: signed,
@@ -404,7 +415,7 @@ export class BookingsService {
       },
     });
 
-    await this.prisma.activity.create({
+    await tx.activity.create({
       data: {
         leadId: booking.leadId,
         userId: userId ?? null,
@@ -415,29 +426,37 @@ export class BookingsService {
       },
     });
 
-    await this.refresh(bookingId);
-    return this.detail(bookingId);
+    await this.refresh(bookingId, tx);
+    return bookingId;
+    });
+    return this.detail(updatedId);
   }
 
   async removePayment(paymentId: string) {
-    const payment = await this.prisma.bookingPayment.findUnique({
+    const updatedId = await this.prisma.$transaction(async (tx) => {
+    const payment = await tx.bookingPayment.findUnique({
       where: { id: paymentId },
     });
     if (!payment) throw new NotFoundException('Payment not found');
-    await this.prisma.bookingPayment.delete({ where: { id: paymentId } });
-    await this.refresh(payment.bookingId);
-    return this.detail(payment.bookingId);
+    await tx.$queryRaw`SELECT "id" FROM "Booking" WHERE "id" = ${payment.bookingId} FOR UPDATE`;
+    await tx.bookingPayment.delete({ where: { id: paymentId } });
+    await this.refresh(payment.bookingId, tx);
+    return payment.bookingId;
+    });
+    return this.detail(updatedId);
   }
 
   // --- costs (money out) ---------------------------------------------------
 
   async addCost(bookingId: string, dto: CreateCostDto) {
-    const booking = await this.prisma.booking.findUnique({
+    const updatedId = await this.prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findUnique({
       where: { id: bookingId },
     });
     if (!booking) throw new NotFoundException('Booking not found');
+    await tx.$queryRaw`SELECT "id" FROM "Booking" WHERE "id" = ${bookingId} FOR UPDATE`;
 
-    await this.prisma.bookingCost.create({
+    await tx.bookingCost.create({
       data: {
         bookingId,
         vendorId: dto.vendorId ?? null,
@@ -450,33 +469,43 @@ export class BookingsService {
       },
     });
 
-    await this.refresh(bookingId);
-    return this.detail(bookingId);
+    await this.refresh(bookingId, tx);
+    return bookingId;
+    });
+    return this.detail(updatedId);
   }
 
   async updateCost(costId: string, dto: UpdateCostDto) {
-    const cost = await this.prisma.bookingCost.findUnique({
+    const updatedId = await this.prisma.$transaction(async (tx) => {
+    const cost = await tx.bookingCost.findUnique({
       where: { id: costId },
     });
     if (!cost) throw new NotFoundException('Cost not found');
+    await tx.$queryRaw`SELECT "id" FROM "Booking" WHERE "id" = ${cost.bookingId} FOR UPDATE`;
 
     const data: Record<string, any> = { ...dto };
     if (dto.paidAt !== undefined)
       data.paidAt = dto.paidAt ? new Date(dto.paidAt) : null;
 
-    await this.prisma.bookingCost.update({ where: { id: costId }, data });
-    await this.refresh(cost.bookingId);
-    return this.detail(cost.bookingId);
+    await tx.bookingCost.update({ where: { id: costId }, data });
+    await this.refresh(cost.bookingId, tx);
+    return cost.bookingId;
+    });
+    return this.detail(updatedId);
   }
 
   async removeCost(costId: string) {
-    const cost = await this.prisma.bookingCost.findUnique({
+    const updatedId = await this.prisma.$transaction(async (tx) => {
+    const cost = await tx.bookingCost.findUnique({
       where: { id: costId },
     });
     if (!cost) throw new NotFoundException('Cost not found');
-    await this.prisma.bookingCost.delete({ where: { id: costId } });
-    await this.refresh(cost.bookingId);
-    return this.detail(cost.bookingId);
+    await tx.$queryRaw`SELECT "id" FROM "Booking" WHERE "id" = ${cost.bookingId} FOR UPDATE`;
+    await tx.bookingCost.delete({ where: { id: costId } });
+    await this.refresh(cost.bookingId, tx);
+    return cost.bookingId;
+    });
+    return this.detail(updatedId);
   }
 
   /**
@@ -493,11 +522,13 @@ export class BookingsService {
    * would be wrong.
    */
   async seedCostsFromItinerary(bookingId: string) {
-    const booking = await this.prisma.booking.findUnique({
+    const updatedId = await this.prisma.$transaction(async (tx) => {
+    const booking = await tx.booking.findUnique({
       where: { id: bookingId },
       include: { costs: true },
     });
     if (!booking) throw new NotFoundException('Booking not found');
+    await tx.$queryRaw`SELECT "id" FROM "Booking" WHERE "id" = ${bookingId} FOR UPDATE`;
     if (!booking.itineraryOptionId) {
       throw new BadRequestException(
         'This booking was not created from an itinerary tier.',
@@ -509,7 +540,7 @@ export class BookingsService {
       );
     }
 
-    const pricings = await this.prisma.itineraryItemPricing.findMany({
+    const pricings = await tx.itineraryItemPricing.findMany({
       where: { optionId: booking.itineraryOptionId },
       include: {
         item: { select: { title: true } },
@@ -535,12 +566,12 @@ export class BookingsService {
     }
 
     // Look up vendor names for the grouped rows so the payable description
-    // reads "Grand Mumtaz Deluxe (2 items)" instead of "Item 1 + Item 2".
+    // reads "Camp at Hunder (2 items)" instead of "Item 1 + Item 2".
     const vendorIds = Array.from(grouped.values())
       .map((b) => b.vendorId)
       .filter((v): v is string => v !== null);
     const vendors = vendorIds.length
-      ? await this.prisma.vendor.findMany({
+      ? await tx.vendor.findMany({
           where: { id: { in: vendorIds } },
           select: { id: true, name: true },
         })
@@ -555,7 +586,7 @@ export class BookingsService {
         bucket.titles.length === 1
           ? label
           : `${label} (${bucket.titles.length} items)`;
-      await this.prisma.bookingCost.create({
+      await tx.bookingCost.create({
         data: {
           bookingId,
           vendorId: bucket.vendorId,
@@ -566,8 +597,10 @@ export class BookingsService {
       });
     }
 
-    await this.refresh(bookingId);
-    return this.detail(bookingId);
+    await this.refresh(bookingId, tx);
+    return bookingId;
+    });
+    return this.detail(updatedId);
   }
 
   // --- reporting -----------------------------------------------------------
@@ -706,9 +739,10 @@ export class BookingsService {
   }
 
   /** Free-text search over booking number, package name, and client name. */
-  async search(q: string) {
+  async search(q: string, actor: Actor) {
     return this.prisma.booking.findMany({
       where: {
+        ...this.leadScope(actor),
         OR: [
           { bookingNumber: { contains: q, mode: 'insensitive' } },
           { packageName: { contains: q, mode: 'insensitive' } },

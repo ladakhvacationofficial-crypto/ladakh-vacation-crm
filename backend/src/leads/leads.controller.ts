@@ -182,8 +182,8 @@ export class LeadsController {
   }
 
   /**
-   * Soft-delete: parks the lead in LOST with a system reason. History,
-   * bookings and activities are preserved — we never destroy a client record.
+   * Permanent delete. Owner and super-admin only. A lead that already has
+   * a booking or an invoice cannot be destroyed; mark it Lost instead.
    */
   @Roles(...LEAD_DELETE_ACCESS)
   @Delete(':id')

@@ -44,9 +44,10 @@ export default function LeadDetailPage() {
   const [noteType, setNoteType] = useState<string>('CALL');
   const [note, setNote] = useState('');
 
-  const canAssign = ['OWNER', 'SUPER_ADMIN'].includes(
-    tokenStore.user()?.role ?? '',
-  );
+  const role = tokenStore.user()?.role ?? '';
+  const canAssign = role === 'OWNER' || role === 'SUPER_ADMIN';
+  const canDelete = canAssign;
+  const canClose = canDelete || role === 'SALES_MANAGER';
 
   const load = useCallback(async () => {
     try {
@@ -240,6 +241,7 @@ export default function LeadDetailPage() {
           >
             Build itinerary
           </Button>
+          {canClose && (
           <CloseLeadDialog
             leadId={lead.id}
             leadName={lead.name}
@@ -257,6 +259,8 @@ export default function LeadDetailPage() {
               Mark as Lost
             </button>
           </CloseLeadDialog>
+          )}
+          {canDelete && (
           <DeleteLeadDialog
             leadId={lead.id}
             leadName={lead.name}
@@ -274,6 +278,7 @@ export default function LeadDetailPage() {
               Delete
             </button>
           </DeleteLeadDialog>
+          )}
         </div>
       </header>
 
@@ -325,7 +330,7 @@ export default function LeadDetailPage() {
               />
               <div className="flex justify-end gap-2 mt-2">
                 <Button variant="secondary" onClick={generateAiDraft} disabled={generating}>
-                  {generating ? 'Drafting...' : 'AI Draft Message'}
+                  {generating ? 'Drafting...' : 'Draft follow-up'}
                 </Button>
                 <Button onClick={logActivity} disabled={saving || !note.trim()}>
                   {saving ? 'Saving...' : 'Save entry'}

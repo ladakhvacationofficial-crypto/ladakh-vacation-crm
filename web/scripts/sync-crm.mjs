@@ -36,12 +36,12 @@ function copyRecursive(src, dest, overwrite = false) {
   }
 }
 
-// 1. Copy CRM components (without overwriting web components)
+// 1. Refresh CRM-owned components. Public website components have distinct names.
 console.log('[sync-crm] Copying CRM components...');
 copyRecursive(
   path.join(frontendRoot, 'src', 'components'),
   path.join(webRoot, 'src', 'components'),
-  false
+  true
 );
 
 // 2. Copy CRM lib files (api.ts, constants.ts, format.ts, etc.)
@@ -49,7 +49,7 @@ console.log('[sync-crm] Copying CRM lib utilities...');
 copyRecursive(
   path.join(frontendRoot, 'src', 'lib'),
   path.join(webRoot, 'src', 'lib'),
-  false
+  true
 );
 
 // 3. Copy CRM public assets (lv-track.js, etc.)
@@ -57,7 +57,7 @@ console.log('[sync-crm] Copying CRM public assets...');
 copyRecursive(
   path.join(frontendRoot, 'public'),
   path.join(webRoot, 'public'),
-  false
+  true
 );
 
 // 4. Copy CRM routes: (app), login, forgot-password, reset-password, view
@@ -74,6 +74,28 @@ const destCrmCss = path.join(webRoot, 'src', 'app', 'crm-theme.css');
 if (fs.existsSync(frontendCss)) {
   fs.copyFileSync(frontendCss, destCrmCss);
   console.log('[sync-crm] Saved CRM theme as crm-theme.css');
+}
+
+// 6. Guard: every CRM route folder must be listed in src/lib/crm-routes.ts.
+// A missing entry ships that screen with the public header and footer around
+// it, and indexable. That happened to /follow-ups, /reports and /integrations.
+const routesFile = path.join(webRoot, 'src', 'lib', 'crm-routes.ts');
+const appGroup = path.join(webRoot, 'src', 'app', '(app)');
+if (fs.existsSync(routesFile) && fs.existsSync(appGroup)) {
+  const listed = fs.readFileSync(routesFile, 'utf8');
+  const missing = fs
+    .readdirSync(appGroup, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .filter((name) => !listed.includes(`'${name}'`));
+  if (missing.length) {
+    console.error(
+      `[sync-crm] ${missing.join(', ')} missing from src/lib/crm-routes.ts.\n` +
+        '           Add them, or the public header and footer wrap the CRM screen.',
+    );
+    process.exit(1);
+  }
+  console.log('[sync-crm] CRM route list checked.');
 }
 
 console.log('[sync-crm] CRM bridge complete!');

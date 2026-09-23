@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { isCrmPath } from '@/lib/crm-routes';
 
 /**
  * Host-based Router for Unified Vercel Deployment.
@@ -34,7 +35,13 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  // Staff screens must never be indexed. The list lives in lib/crm-routes so
+  // this and SiteChrome always agree.
+  if (isCrmPath(pathname)) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
+  return response;
 }
 
 export const config = {

@@ -37,8 +37,8 @@ export default function FinancePage() {
     (async () => {
       try {
         const [s, a] = await Promise.all([
-          api.get<BookingStats>('/bookings/stats').catch(() => null),
-          api.get<AgingReport>('/bookings/stats/aging').catch(() => null),
+          api.get<BookingStats>('/bookings/stats'),
+          api.get<AgingReport>('/bookings/stats/aging'),
         ]);
         if (cancelled) return;
         setStats(s);
@@ -56,6 +56,10 @@ export default function FinancePage() {
 
   const margin = stats?.averageMarginPercent ?? 0;
   const marginHealth = margin >= 15 ? 'healthy' : (stats && stats.bookings > 0 ? 'warn' : 'muted');
+
+  if (error) return <div role="alert" className="m-6 rounded-lg border border-red-300 p-6">
+    <p>{error}</p><button className="mt-3 underline" onClick={() => window.location.reload()}>Retry loading data</button>
+  </div>;
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">

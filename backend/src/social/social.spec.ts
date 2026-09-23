@@ -60,7 +60,7 @@ describe('Social Media Studio', () => {
       const mockDuplicatePost = {
         id: 'post-existing-1',
         platform: SocialPlatform.INSTAGRAM,
-        caption: 'Waking up to the gentle splash of oars on Dal Lake...',
+        caption: 'Sunrise on Pangong after two nights in Leh...',
         publishedAt: new Date(),
       };
 
@@ -76,7 +76,7 @@ describe('Social Media Studio', () => {
       const res = await publisher.publishPost({
         id: 'post-new-2',
         platform: SocialPlatform.INSTAGRAM,
-        caption: 'Waking up to the gentle splash of oars on Dal Lake...',
+        caption: 'Sunrise on Pangong after two nights in Leh...',
         mediaUrls: [],
         status: SocialPostStatus.DRAFT,
         scheduledAt: null,
@@ -108,7 +108,7 @@ describe('Social Media Studio', () => {
       const res = await publisher.publishPost({
         id: 'post-new-3',
         platform: SocialPlatform.INSTAGRAM,
-        caption: 'Unique new caption about Gulmarg ski slopes',
+        caption: 'Unique new caption about the Hunder dunes',
         mediaUrls: [],
         status: SocialPostStatus.DRAFT,
         scheduledAt: null,
@@ -127,7 +127,7 @@ describe('Social Media Studio', () => {
       expect(res.errorMessage).toContain('Daily rate limit reached for INSTAGRAM');
     });
 
-    it('simulates publish safely when no live credentials are provided', async () => {
+    it('refuses publication when no live credentials are provided', async () => {
       const prismaMock = {
         socialPost: {
           findFirst: jest.fn().mockResolvedValue(null),
@@ -140,8 +140,8 @@ describe('Social Media Studio', () => {
       const res = await publisher.publishPost({
         id: 'post-new-4',
         platform: SocialPlatform.INSTAGRAM,
-        caption: 'A breathtaking sunrise over Pahalgam valley',
-        mediaUrls: ['https://example.com/pahalgam.jpg'],
+        caption: 'A clear night over the Hanle Dark Sky Reserve',
+        mediaUrls: ['https://example.com/hanle.jpg'],
         status: SocialPostStatus.DRAFT,
         scheduledAt: null,
         publishedAt: null,
@@ -155,9 +155,9 @@ describe('Social Media Studio', () => {
         updatedAt: new Date(),
       });
 
-      expect(res.ok).toBe(true);
-      expect(res.simulated).toBe(true);
-      expect(res.externalPostId).toContain('instagram_post_');
+      expect(res.ok).toBe(false);
+      expect(res.simulated).not.toBe(true);
+      expect(res.externalPostId).toBeUndefined();
     });
   });
 });

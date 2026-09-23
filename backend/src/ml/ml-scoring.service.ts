@@ -1,3 +1,4 @@
+import { Actor, canSeeAllLeads } from '../common/access';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { LeadSource, LeadStatus } from '@prisma/client';
@@ -42,7 +43,7 @@ export class MlScoringService {
   /**
    * Score an existing lead by ID, persist the score to the database, and return detailed explainability.
    */
-  async scoreLeadById(id: string): Promise<LeadScoreResult> {
+  async scoreLeadById(id: string, actor: Actor): Promise<LeadScoreResult> {
     const lead = await this.prisma.lead.findUnique({
       where: { id },
       include: {
@@ -53,7 +54,7 @@ export class MlScoringService {
       },
     });
 
-    if (!lead) throw new NotFoundException(`Lead with id "${id}" not found`);
+    if (!lead || (!canSeeAllLeads(actor.role) && lead.assignedToId !== actor.id)) throw new NotFoundException(`Lead with id "${id}" not found`);
 
     const result = this.calculateLeadScore({
       id: lead.id,
@@ -325,16 +326,16 @@ export class MlScoringService {
     let recommendedAction: string;
     if (grade === 'HOT') {
       recommendedAction =
-        '🔥 Priority Lead: Call within 15 minutes, share custom Deluxe Itinerary PDF via WhatsApp, and offer Gondola Phase 1 booking assistance.';
+        '🔥 Priority Lead: Call within 15 minutes, share custom Deluxe Itinerary PDF via WhatsApp, and confirm flight arrival and acclimatisation time.';
     } else if (grade === 'WARM') {
       recommendedAction =
-        '⚡ High Potential: Send customized 5N/6D quotation and follow up with a quick phone call to finalize travel dates.';
+        'High potential: send a quotation for the dates and destination they actually asked for, then call to lock the travel window. Do not assume a 5-night trip.';
     } else if (grade === 'COOL') {
       recommendedAction =
         '❄️ Needs Nurturing: Qualify budget and dates via WhatsApp brochure before spending time on custom itinerary pricing.';
     } else {
       recommendedAction =
-        '🧊 Cold / Long-Term: Enroll in automated seasonal broadcast campaign (e.g. Autumn / Snow season teaser).';
+        'Cold or long-horizon: ask which season they mean. The roads into Nubra, Pangong and Hanle run roughly May to mid-October. Do not send a summer itinerary to a winter enquiry.';
     }
 
     return {

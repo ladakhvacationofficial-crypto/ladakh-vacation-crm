@@ -78,8 +78,8 @@ export const SITE = {
    * the time a visitor submits an enquiry (Render sleeps after 15min idle).
    */
   wakePingUrl:
-    process.env.NEXT_PUBLIC_WAKE_PING_URL ??
-    'https://ladakhvacationecosystem.onrender.com/api/health',
+    process.env.NEXT_PUBLIC_WAKE_PING_URL === 'off' ? '' :
+      (process.env.NEXT_PUBLIC_WAKE_PING_URL || process.env.NEXT_PUBLIC_LEAD_CAPTURE_URL?.replace(/\/leads\/capture\/?$/, '/health') || 'https://ladakhvacationecosystem.onrender.com/api/health'),
 } as const;
 
 /**

@@ -32,7 +32,7 @@ export function ImportLeadsDialog({ onImported }: { onImported: () => void }) {
       });
 
       if (!res.ok) throw new Error('Upload failed');
-      
+
       const json = await res.json();
       alert(`Successfully imported ${json.updated} leads.`);
       setOpen(false);
@@ -56,20 +56,20 @@ export function ImportLeadsDialog({ onImported }: { onImported: () => void }) {
       </DialogTrigger>
       <DialogContent title="Bulk Import Leads" description="Upload a CSV file with lead data.">
         <div className="p-5 flex flex-col items-center justify-center space-y-4">
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             onClick={() => fileInputRef.current?.click()}
             disabled={loading}
           >
             <FileUp className="mr-2 size-4" />
             {loading ? 'Uploading...' : 'Select CSV File'}
           </Button>
-          <input 
-            type="file" 
-            accept=".csv" 
-            className="hidden" 
-            ref={fileInputRef} 
-            onChange={handleUpload} 
+          <input
+            type="file"
+            accept=".csv"
+            className="hidden"
+            ref={fileInputRef}
+            onChange={handleUpload}
           />
         </div>
       </DialogContent>

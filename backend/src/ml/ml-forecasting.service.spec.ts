@@ -6,9 +6,8 @@ describe('MlForecastingService', () => {
 
   beforeEach(() => {
     mockPrisma = {
-      booking: {
-        count: jest.fn().mockResolvedValue(45),
-      },
+      lead: { count: jest.fn().mockResolvedValue(90) },
+      booking: { aggregate: jest.fn().mockResolvedValue({ _count: 45, _avg: {totalSell: 30000} }) },
     };
     service = new MlForecastingService(mockPrisma);
   });
@@ -22,7 +21,7 @@ describe('MlForecastingService', () => {
 
     expect(forecast.horizonDays).toBe(90);
     expect(forecast.monthlyProjections.length).toBe(3);
-    expect(forecast.destinationBreakdown.length).toBeGreaterThanOrEqual(4);
+    expect(forecast.destinationBreakdown).toEqual([]);
     expect(forecast.operationalAlerts.length).toBeGreaterThan(0);
 
     // Verify first month structure

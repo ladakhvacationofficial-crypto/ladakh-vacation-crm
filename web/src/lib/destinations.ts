@@ -73,7 +73,7 @@ export const DESTINATIONS: Destination[] = [
     ],
     knowBefore: [
       { label: 'Altitude', value: 'Leh is at 3,500 m. Rest on day one, drink plenty of water, and keep the first 48 hours low-effort.' },
-      { label: 'Permits', value: 'None needed for Leh and the Sham Valley. Nubra, Pangong and Hanle need Inner Line Permits, which we arrange.' },
+      { label: 'Permits', value: 'None for Leh town and the Sham Valley. For Nubra, Pangong and Hanle, Indian guests pay the Ladakh environmental fee and foreign nationals need a Protected Area Permit. We arrange both.' },
       { label: 'Connectivity', value: 'Postpaid mobile connections work in Leh. Prepaid SIMs from other states generally do not.' },
       { label: 'Clothing', value: 'Layers in every month. Days are bright and warm, and nights drop sharply even in summer.' },
     ],
@@ -190,7 +190,7 @@ export const DESTINATIONS: Destination[] = [
       'Back over Chang La, with a stop at Thiksey on the way down',
     ],
     knowBefore: [
-      { label: 'Permits', value: 'Nubra, Turtuk and Pangong need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print them before you arrive.' },
+      { label: 'Permits', value: 'Indian guests pay the Ladakh environmental fee for Nubra, Turtuk and Pangong. Foreign nationals need a Protected Area Permit for the same areas. We pay and print these before you arrive.' },
       { label: 'Altitude', value: 'Pangong is at 4,350 m. On all our routes it comes after two nights around Leh and a night in Nubra, which do the acclimatisation work.' },
       { label: 'Camps', value: 'Seasonal, roughly May to September. Ours have attached bathrooms, heating and hot water.' },
       { label: 'Oxygen', value: 'Every vehicle carries a cylinder, an oximeter and a first-aid kit, and drivers are trained to recognise AMS.' },
@@ -249,7 +249,7 @@ export const DESTINATIONS: Destination[] = [
       'The Chumathang hot springs on the Indus',
     ],
     knowBefore: [
-      { label: 'Permits', value: 'Hanle, Tso Moriri and Umling La need an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print them before you arrive.' },
+      { label: 'Permits', value: 'Indian guests pay the Ladakh environmental fee for Hanle, Tso Moriri and Umling La. Foreign nationals need a Protected Area Permit. We pay and print these before you arrive.' },
       { label: 'Altitude', value: 'Hanle is at 4,500 m and Umling La at 5,798 m. This region always comes after at least two nights around Leh.' },
       { label: 'Light', value: 'The reserve depends on darkness. Use red torches at night and keep phone screens dim.' },
       { label: 'Moon', value: 'Skies are darkest around the new moon. Tell us your flexibility and we will suggest dates.' },

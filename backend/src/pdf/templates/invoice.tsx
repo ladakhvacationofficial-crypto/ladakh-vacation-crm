@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Document, Page, View, Text } from '@react-pdf/renderer';
 import { pdfStyles, pdfFonts, brand } from './theme';
-import { BrandHeader, BrandFooter, GoldRule, inr, shortDate } from './primitives';
+import { BrandHeader, BrandFooter, GoldRule, SellerIdentity, inr, shortDate } from './primitives';
 
 export interface InvoiceInput {
   bookingNumber: string;
@@ -90,13 +90,7 @@ export function InvoiceDocument({ b }: { b: InvoiceInput }) {
           </View>
           <View style={pdfStyles.partyBox}>
             <Text style={pdfStyles.sectionLabel}>Billed from</Text>
-            <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>
-              Ladakh Vacation
-            </Text>
-            <Text style={pdfStyles.small}>Main Bazaar, Leh, UT of Ladakh — 194101</Text>
-            <Text style={pdfStyles.small}>Email: bookings@ladakhvacation.com</Text>
-            <Text style={pdfStyles.small}>GSTIN: 38AABCL1234F1Z5  |  PAN: AABCL1234F</Text>
-            <Text style={pdfStyles.small}>SAC Code: 998555</Text>
+            <SellerIdentity />
           </View>
         </View>
 

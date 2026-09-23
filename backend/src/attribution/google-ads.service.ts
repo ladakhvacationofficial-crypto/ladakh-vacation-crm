@@ -48,6 +48,8 @@ export interface GoogleAdsCredentials {
   clientSecret: string;
   refreshToken: string;
   loginCustomerId?: string;
+  customerId?: string;
+  conversionActionId?: string;
 }
 
 export interface SyncResult {
@@ -167,6 +169,32 @@ export class GoogleAdsService {
     const login = normaliseCustomerId(creds.loginCustomerId ?? '');
     if (login) h['login-customer-id'] = login;
     return h;
+  }
+
+  /** Legacy offline uploads, for accounts that are eligible for this endpoint.
+   * https://developers.google.com/google-ads/api/samples/upload-offline-conversion
+   * Provider acceptance is checked independently from HTTP status.
+   */
+  async uploadClickConversion(input: { gclid: string; value: number; orderId: string }) {
+    const { id, creds } = await this.resolveCredentials();
+    const customerId = normaliseCustomerId(creds.customerId ?? '');
+    if (!customerId || !creds.conversionActionId || !/^\d+$/.test(creds.conversionActionId)) {
+      throw new BadRequestException('Set the conversion customer ID and conversion action ID in Google Ads integration settings.');
+    }
+    const token = await this.getAccessToken(id, creds);
+    const response = await fetch(`${BASE}/${VERSION}/customers/${customerId}:uploadClickConversions`, {
+      method: 'POST', headers: this.headers(token, creds), signal: AbortSignal.timeout(15000),
+      body: JSON.stringify({ partialFailure: true, conversions: [{
+        gclid: input.gclid, conversionAction: `customers/${customerId}/conversionActions/${creds.conversionActionId}`,
+        conversionDateTime: new Date().toISOString().slice(0,19).replace('T',' ') + '+00:00',
+        conversionValue: input.value, currencyCode: 'INR', orderId: input.orderId,
+      }] }),
+    });
+    const body = await response.json();
+    if (!response.ok || body.partialFailureError || !body.results?.some((r: any) => r.gclid === input.gclid)) {
+      throw new BadRequestException('Google Ads did not accept the conversion. Check conversion action, account eligibility and provider diagnostics.');
+    }
+    return { accepted: true };
   }
 
   /** Run a GAQL query and return the flattened rows. */

@@ -1,3 +1,4 @@
+import { GoogleAdsService } from './google-ads.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { ActivityType } from '@prisma/client';
@@ -22,7 +23,7 @@ export interface BookingConversionPayload {
 export class OfflineConversionsService {
   private readonly logger = new Logger(OfflineConversionsService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly googleAds: GoogleAdsService = new GoogleAdsService(prisma)) {}
 
   private hashSha256(val: string): string {
     return createHash('sha256').update(val.trim().toLowerCase()).digest('hex');
@@ -45,63 +46,12 @@ export class OfflineConversionsService {
     // 1. Google Ads Click Conversion Upload (via GCLID)
     if (lead.gclid) {
       try {
-        const googleAdsIntegration = await this.prisma.integration.findFirst({
-          where: { provider: 'google_ads', isActive: true },
-        });
-
-        if (googleAdsIntegration) {
-          const creds = JSON.parse(decryptSecret(googleAdsIntegration.credentials));
-          if (creds.customerId && creds.developerToken && creds.accessToken) {
-            const customerId = creds.customerId.replace(/-/g, '');
-            const url = `https://googleads.googleapis.com/v16/customers/${customerId}:uploadClickConversions`;
-            
-            const conversionPayload = {
-              conversions: [
-                {
-                  gclid: lead.gclid,
-                  conversionAction: creds.conversionActionId
-                    ? `customers/${customerId}/conversionActions/${creds.conversionActionId}`
-                    : undefined,
-                  conversionDateTime: new Date().toISOString().replace('T', ' ').substring(0, 19) + '+05:30',
-                  conversionValue: totalSell,
-                  currencyCode: 'INR',
-                  orderId: bookingNumber,
-                },
-              ],
-              partialFailure: true,
-            };
-
-            const res = await fetch(url, {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${creds.accessToken}`,
-                'developer-token': creds.developerToken,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(conversionPayload),
-            });
-
-            if (res.ok) {
-              googleUploaded = true;
-              actionsTaken.push(`Google Ads (GCLID: ${lead.gclid.slice(0, 8)}...)`);
-            } else {
-              const errBody = await res.text();
-              this.logger.warn(`Google Ads conversion upload returned status ${res.status}: ${errBody}`);
-              actionsTaken.push(`Google Ads failed (HTTP ${res.status})`);
-            }
-          } else {
-            this.logger.warn('Google Ads integration missing required credentials');
-            actionsTaken.push('Google Ads skipped (incomplete credentials)');
-          }
-        } else {
-          this.logger.log(
-            `Google Ads integration unconfigured; skipping offline conversion for GCLID=${lead.gclid}`,
-          );
-          actionsTaken.push(`Google Ads unconfigured (GCLID: ${lead.gclid.slice(0, 8)}...)`);
-        }
+        await this.googleAds.uploadClickConversion({gclid:lead.gclid,value:totalSell,orderId:bookingNumber});
+        googleUploaded = true;
+        actionsTaken.push('Google Ads: accepted');
       } catch (err: any) {
-        this.logger.warn(`Google Ads conversion error: ${err?.message || err}`);
-        actionsTaken.push('Google Ads error');
+        actionsTaken.push('Google Ads: not uploaded (check integration settings and provider diagnostics)');
+        this.logger.warn('Google Ads conversion was not accepted.');
       }
     }
 
@@ -120,6 +70,7 @@ export class OfflineConversionsService {
               data: [
                 {
                   event_name: 'Purchase',
+                  event_id: payload.bookingId,
                   event_time: Math.floor(Date.now() / 1000),
                   event_source_url: 'https://ladakhvacation.in',
                   action_source: 'website',
@@ -139,6 +90,7 @@ export class OfflineConversionsService {
 
             const res = await fetch(url, {
               method: 'POST',
+              signal: AbortSignal.timeout(15000),
               headers: {
                 'Authorization': `Bearer ${creds.accessToken}`,
                 'Content-Type': 'application/json',
@@ -147,32 +99,29 @@ export class OfflineConversionsService {
             });
 
             if (res.ok) {
+              const result = await res.json();
+              if (result.events_received !== 1) throw new Error('Meta did not acknowledge the conversion.');
               metaUploaded = true;
               actionsTaken.push(`Meta CAPI (FBCLID: ${lead.fbclid.slice(0, 8)}...)`);
             } else {
               const errBody = await res.text();
               this.logger.warn(`Meta CAPI upload returned status ${res.status}: ${errBody}`);
-              actionsTaken.push(`Meta CAPI failed (HTTP ${res.status})`);
             }
-          } else {
-            this.logger.warn('Meta Ads integration missing required credentials');
-            actionsTaken.push('Meta CAPI skipped (incomplete credentials)');
           }
-        } else {
-          this.logger.log(
-            `Meta Ads integration unconfigured; skipping offline conversion for FBCLID=${lead.fbclid}`,
-          );
-          actionsTaken.push(`Meta CAPI unconfigured (FBCLID: ${lead.fbclid.slice(0, 8)}...)`);
+        }
+
+        if (!metaUploaded) {
+          actionsTaken.push('Meta CAPI: not uploaded (unconfigured or rejected by provider)');
         }
       } catch (err: any) {
-        this.logger.warn(`Meta CAPI conversion error: ${err?.message || err}`);
-        actionsTaken.push('Meta CAPI error');
+        actionsTaken.push('Meta CAPI: not uploaded (provider failure)');
+        this.logger.warn('Meta conversion was not accepted.');
       }
     }
 
     const summary =
       actionsTaken.length > 0
-        ? `Offline conversion posted to ${actionsTaken.join(' & ')} for ₹${totalSell.toLocaleString('en-IN')}`
+        ? `Offline conversion outcome: ${actionsTaken.join(' & ')} for ₹${totalSell.toLocaleString('en-IN')}`
         : 'No ad click identifiers (gclid/fbclid) associated with this lead';
 
     // Record activity on the lead timeline

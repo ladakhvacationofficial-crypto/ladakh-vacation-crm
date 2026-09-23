@@ -33,7 +33,7 @@ export class MediaController {
 
   @Roles(...MEDIA_WRITE)
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 12 * 1024 * 1024, files: 1 } }))
   upload(
     @UploadedFile() file: Express.Multer.File,
     @Body() dto: CreateMediaDto,

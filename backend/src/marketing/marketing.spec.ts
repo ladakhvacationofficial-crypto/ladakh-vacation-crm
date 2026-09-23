@@ -11,13 +11,13 @@ import { BrevoEmailService } from './brevo-email.service';
 
 describe('Marketing Module', () => {
   describe('BrevoEmailService', () => {
-    it('generates email payload with unsubscribe footer in test mode', async () => {
+    it('rejects email delivery when no provider is configured', async () => {
       const configServiceMock = {
         get: jest.fn().mockReturnValue(''), // no API key -> test mode
       };
       const brevo = new BrevoEmailService(configServiceMock as any);
 
-      const res = await brevo.sendEmail({
+      const delivery = brevo.sendEmail({
         toEmail: 'traveler@example.com',
         toName: 'Rohan Sharma',
         subject: 'Autumn in Kashmir Promo',
@@ -25,7 +25,7 @@ describe('Marketing Module', () => {
         unsubscribeUrl: 'https://ladakh-vacation-crm.vercel.app/api/marketing/unsubscribe/token-123',
       });
 
-      expect(res.messageId).toContain('mock-brevo-');
+      await expect(delivery).rejects.toThrow('Email is not configured');
     });
   });
 

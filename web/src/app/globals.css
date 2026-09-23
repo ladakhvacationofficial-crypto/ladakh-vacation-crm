@@ -21,7 +21,7 @@
   /* --- Ink: warm-black text ramp --- */
   --color-ink-950: #070f1f;
   --color-ink-900: #0d1b30;
-  --color-ink-850: var(--color-ink-850, #14233c);
+  --color-ink-850: #14233c;
   --color-ink-800: #1c2a42;
   --color-ink-700: #2c3a53;
   --color-ink-600: #43506a;
@@ -29,30 +29,30 @@
   --color-ink-400: #8792a6;
   --color-ink-300: #b4bccb;
   --color-ink-200: #d9dee7;
-  --color-ink-100: var(--color-ink-100, #edf0f5);
-  --color-ink-50:  var(--color-ink-50, #f8fafc);
+  --color-ink-100: #edf0f5;
+  --color-ink-50: #f8fafc;
 
   /* --- Signal / Royal Sapphire Blue --- */
-  --color-signal-600: var(--color-signal-600, #173f86);
-  --color-signal-500: var(--color-signal-500, #1e4fa8);
-  --color-signal-400: var(--color-signal-400, #3670d8);
-  --color-signal-300: var(--color-signal-300, #6fa0f5);
-  --color-signal-200: var(--color-signal-200, #d9e5fb);
+  --color-signal-600: #173f86;
+  --color-signal-500: #1e4fa8;
+  --color-signal-400: #3670d8;
+  --color-signal-300: #6fa0f5;
+  --color-signal-200: #d9e5fb;
 
   /* --- Brand / Himalayan Gold --- */
-  --color-brand-600: var(--color-brand-600, #a8842f);
-  --color-brand-500: var(--color-brand-500, #c9a961);
-  --color-brand-400: var(--color-brand-400, #d8bf80);
-  --color-brand-300: var(--color-brand-300, #e8d5a0);
-  --color-brand-200: var(--color-brand-200, #f4ecd6);
+  --color-brand-600: #a8842f;
+  --color-brand-500: #c9a961;
+  --color-brand-400: #d8bf80;
+  --color-brand-300: #e8d5a0;
+  --color-brand-200: #f4ecd6;
 
   /* --- Operational & Financial Verdicts --- */
-  --color-healthy-500: var(--color-healthy-500, #16a34a);
-  --color-healthy-400: var(--color-healthy-400, #22c55e);
-  --color-warn-500:    var(--color-warn-500, #ea580c);
-  --color-warn-400:    var(--color-warn-400, #f97316);
-  --color-loss-500:    var(--color-loss-500, #dc2626);
-  --color-loss-400:    var(--color-loss-400, #ef4444);
+  --color-healthy-500: #16a34a;
+  --color-healthy-400: #22c55e;
+  --color-warn-500: #ea580c;
+  --color-warn-400: #f97316;
+  --color-loss-500: #dc2626;
+  --color-loss-400: #ef4444;
 
   /* --- Pine: the logo's deep green. Primary dark surface. */
   --color-pine-50:  #eef3fd;

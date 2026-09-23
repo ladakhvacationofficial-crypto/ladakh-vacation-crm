@@ -55,24 +55,25 @@ enum LeadStatus {
 // ============================================================================
 //
 // A quotation shows the PRICE the client will pay. An itinerary shows the
-// day-by-day PLAN — pickup at the airport, hotel for two nights, shikara
-// ride, gondola in Gulmarg. They're two separate artefacts that get sent
-// together. The itinerary lives on the Lead (same as quotations) so both
-// can be produced before the lead is confirmed as a booking.
+// day-by-day PLAN — pickup at Kushok Bakula Rimpochee Airport, two nights
+// in Leh, then Nubra or Pangong only after the body has adjusted. They're
+// two separate artefacts that get sent together. The itinerary lives on the
+// Lead (same as quotations) so both can be produced before the lead is
+// confirmed as a booking.
 
 enum ItineraryItemKind {
-  STAY // hotel / houseboat night
-  TRANSFER // pickup, drop, inter-city drive
-  SIGHTSEEING // gardens, monuments, viewpoints
+  STAY // hotel, camp or homestay. Houseboat only for a Srinagar night on the Srinagar–Leh road.
+  TRANSFER // airport pickup, inter-valley drive, drop
+  SIGHTSEEING // monasteries, lakes, passes, viewpoints
   MEAL // breakfast, lunch, dinner
-  ACTIVITY // shikara, skiing, trekking
+  ACTIVITY // Hunder camel ride, rafting, astro session at Hanle, trekking
   FREE_TIME
   NOTE
 }
 
 model Itinerary {
   id   String @id @default(cuid())
-  /// Sequential per year — GLZ-ITI-2026-0001. Same convention as quotes and
+  /// Sequential per year — LV-ITI-2026-0001. Same convention as quotes and
   /// bookings; race-safe via withNumberRetry.
   code       String  @unique
   shareToken String? @unique
@@ -273,7 +274,7 @@ enum InterviewOutcome {
 model Employee {
   id String @id @default(cuid())
 
-  /// Human-friendly code, e.g. GLZ-EMP-0001. Sequential per year — same
+  /// Human-friendly code, e.g. LV-EMP-2026-0001. Sequential per year — same
   /// pattern as quoteNumber / bookingNumber so ops recognise it on sight.
   code String @unique
 
@@ -717,7 +718,7 @@ model Lead {
   // --- who ---
   name     String
   phone    String
-  phoneKey String?
+  phoneKey String?  @db.VarChar(20)
   email    String?
   address String?
   state   String?
@@ -818,6 +819,7 @@ model Lead {
   @@index([createdAt])
   @@index([visitId])
   @@index([externalSource])
+  @@index([phoneKey])
 }
 
 // ============================================================================
@@ -839,7 +841,7 @@ model Lead {
 
 model LandingPage {
   id   String  @id @default(cuid())
-  /// URL slug, e.g. "kashmir-honeymoon-2026". Not the full URL — the page can
+  /// URL slug, e.g. "leh-pangong-2026". Not the full URL — the page can
   /// live under multiple hostnames (staging, prod, apex, www) and still be
   /// the same funnel.
   slug String  @unique
@@ -1384,7 +1386,9 @@ model Invoice {
   booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
 
   subtotal  Float
-  gstRate   Float @default(18.0)
+  /// Match the application fallback. Invoice creation uses pricing settings
+  /// or an explicit rate; existing issued invoices retain their recorded rate.
+  gstRate   Float @default(5)
   gstAmount Float
   total     Float
 
@@ -1651,8 +1655,8 @@ model SocialPost {
 
 model ContentIdea {
   id                String      @id @default(uuid())
-  destination       String      // e.g. "Kashmir", "Ladakh", "Gulmarg"
-  topic             String      // e.g. "Autumn Chinar Leaves at Nishat Bagh"
+  destination       String      // e.g. "Leh", "Nubra", "Pangong", "Hanle"
+  topic             String      // e.g. "Milky Way over Hanle"
   tone              ContentTone @default(STORYTELLING)
   promptSeed        String?
   generatedVariants Json        // Array of { title, caption, hashtags, tone }

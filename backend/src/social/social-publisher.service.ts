@@ -65,7 +65,7 @@ export class SocialPublisherService {
       case SocialPlatform.LINKEDIN:
       case SocialPlatform.X:
       default:
-        return this.simulatePublish(post, account);
+        return this.unavailable(post);
     }
   }
 
@@ -73,8 +73,8 @@ export class SocialPublisherService {
     post: SocialPost,
     account?: SocialAccount | null,
   ): Promise<PublishResult> {
-    if (!account || !account.accessToken || !account.externalId) {
-      return this.simulatePublish(post, account);
+    if (!account || !account.isActive || (account.expiresAt && account.expiresAt <= new Date()) || !account.accessToken || !account.externalId) {
+      return this.unavailable(post);
     }
 
     try {
@@ -120,7 +120,7 @@ export class SocialPublisherService {
       }
 
       const pubData = await pubRes.json();
-      return { ok: true, externalPostId: pubData.id };
+      return pubData.id ? { ok: true, externalPostId: pubData.id } : { ok: false, errorMessage: 'Instagram returned no published post ID.' };
     } catch (e: any) {
       return { ok: false, errorMessage: e.message || 'Instagram publishing failed' };
     }
@@ -130,8 +130,8 @@ export class SocialPublisherService {
     post: SocialPost,
     account?: SocialAccount | null,
   ): Promise<PublishResult> {
-    if (!account || !account.accessToken || !account.externalId) {
-      return this.simulatePublish(post, account);
+    if (!account || !account.isActive || (account.expiresAt && account.expiresAt <= new Date()) || !account.accessToken || !account.externalId) {
+      return this.unavailable(post);
     }
 
     try {
@@ -159,7 +159,7 @@ export class SocialPublisherService {
       }
 
       const data = await res.json();
-      return { ok: true, externalPostId: data.id || data.post_id };
+      return data.id || data.post_id ? { ok: true, externalPostId: data.id || data.post_id } : { ok: false, errorMessage: 'Facebook returned no post ID.' };
     } catch (e: any) {
       return { ok: false, errorMessage: e.message || 'Facebook publishing failed' };
     }
@@ -169,8 +169,8 @@ export class SocialPublisherService {
     post: SocialPost,
     account?: SocialAccount | null,
   ): Promise<PublishResult> {
-    if (!account || !account.accessToken) {
-      return this.simulatePublish(post, account);
+    if (!account || !account.isActive || (account.expiresAt && account.expiresAt <= new Date()) || !account.accessToken) {
+      return this.unavailable(post);
     }
 
     try {
@@ -182,6 +182,7 @@ export class SocialPublisherService {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          board_id: account.externalId,
           title: post.caption.slice(0, 80),
           description: post.caption,
           media_source: {
@@ -197,31 +198,14 @@ export class SocialPublisherService {
       }
 
       const data = await res.json();
-      return { ok: true, externalPostId: data.id };
+      return data.id ? { ok: true, externalPostId: data.id } : { ok: false, errorMessage: 'Pinterest returned no pin ID.' };
     } catch (e: any) {
       return { ok: false, errorMessage: e.message || 'Pinterest publishing failed' };
     }
   }
 
-  /**
-   * Simulated development mode when third-party OAuth app is not configured.
-   */
-  private simulatePublish(
-    post: SocialPost,
-    account?: SocialAccount | null,
-  ): PublishResult {
-    const mockId = `${post.platform.toLowerCase()}_post_${Date.now()}`;
-    this.logger.log(
-      `[SIMULATED SOCIAL PUBLISH] Platform: ${post.platform} | Account: ${
-        account?.accountName || 'Demo Account'
-      } | Caption: "${post.caption.slice(0, 60)}..."`,
-    );
-
-    return {
-      ok: true,
-      externalPostId: mockId,
-      simulated: true,
-    };
+  private unavailable(post: SocialPost): PublishResult {
+    return { ok: false, errorMessage: `Publishing to ${post.platform} is unavailable. Configure a supported, active account before publishing.` };
   }
 
   /**

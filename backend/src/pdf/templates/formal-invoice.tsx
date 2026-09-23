@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Document, Page, View, Text } from '@react-pdf/renderer';
 import { pdfStyles, pdfFonts, brand } from './theme';
-import { BrandHeader, BrandFooter, GoldRule, inr, shortDate } from './primitives';
+import { BrandHeader, BrandFooter, GoldRule, SellerIdentity, inr, shortDate } from './primitives';
 
 /**
  * Input shape for a formal GST invoice PDF. Mirrors the Invoice + InvoiceLineItem
@@ -162,7 +162,7 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
           }}
         >
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 2 }}>
-            <Text style={pdfStyles.small}>Subtotal</Text>
+            <Text style={pdfStyles.small}>Taxable value</Text>
             <Text style={{ ...pdfStyles.td, color: brand.text }}>{inr(inv.subtotal)}</Text>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 2 }}>
@@ -182,6 +182,9 @@ export function FormalInvoiceDocument({ inv }: { inv: FormalInvoiceInput }) {
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>Total</Text>
             <Text style={{ ...pdfStyles.para, fontWeight: 700, color: brand.ink }}>{inr(inv.total)}</Text>
           </View>
+          <Text style={{ ...pdfStyles.small, marginTop: 8 }}>
+            Line amounts are the GST-inclusive price the guest pays. Taxable value is that total with GST removed, so the lines add up to the amount payable, not to the taxable value.
+          </Text>
         </View>
 
         {/* Grand total banner */}

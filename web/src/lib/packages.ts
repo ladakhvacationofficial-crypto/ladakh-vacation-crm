@@ -108,7 +108,7 @@ export const PACKAGES: Pkg[] = [
       "Daily breakfast and dinner",
       "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -127,7 +127,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -217,7 +217,7 @@ export const PACKAGES: Pkg[] = [
       "Daily breakfast and dinner",
       "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -236,7 +236,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -334,7 +334,7 @@ export const PACKAGES: Pkg[] = [
       "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
       "A monastery guide on the monastery days",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -353,7 +353,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -458,7 +458,7 @@ export const PACKAGES: Pkg[] = [
       "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
       "An astro guide for the night at the Hanle Dark Sky Reserve",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -477,7 +477,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -590,7 +590,7 @@ export const PACKAGES: Pkg[] = [
       "Daily breakfast and dinner",
       "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -609,7 +609,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -733,7 +733,7 @@ export const PACKAGES: Pkg[] = [
       "Private Innova Crysta or Xylo with a Ladakhi driver for all transfers and sightseeing",
       "An astro guide for the night at the Hanle Dark Sky Reserve",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -752,7 +752,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -849,7 +849,7 @@ export const PACKAGES: Pkg[] = [
       "One private candlelight dinner in the Nubra dunes, weather permitting",
       "Daily breakfast and dinner",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -975,7 +975,7 @@ export const PACKAGES: Pkg[] = [
       "Daily breakfast and dinner",
       "Shared vehicles for the group with Ladakhi drivers",
       "Airport pickup and drop at Leh (Kushok Bakula Rimpochee Airport)",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -1113,7 +1113,7 @@ export const PACKAGES: Pkg[] = [
       "Backup vehicle carrying luggage, spares, fuel and oxygen, with a mechanic on board every day",
       "3★ hotels and a Swiss camp at Sarchu, on twin-sharing",
       "Daily breakfast and dinner",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
     "exclusions": [
@@ -1140,7 +1140,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "When should I actually visit?",
@@ -1261,7 +1261,7 @@ export const PACKAGES: Pkg[] = [
       "Daily breakfast and dinner",
       "Private vehicle with driver from Srinagar to Leh and for all Ladakh sightseeing",
       "Pickup at Srinagar airport, drop at Leh airport",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -1284,7 +1284,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",
@@ -1393,7 +1393,7 @@ export const PACKAGES: Pkg[] = [
       "Daily breakfast and dinner",
       "Private vehicle with driver from Manali to Leh and for all Ladakh sightseeing",
       "Pickup in Manali, drop at Leh airport",
-      "All Inner Line Permits the route needs, applied for, paid and printed before you land",
+      "Restricted-area paperwork for this route, paid and printed before you land: the Ladakh environmental fee for Indian guests, and a Protected Area Permit for foreign nationals",
       "Oxygen cylinder, oximeter and a stocked first-aid kit in every vehicle",
       "24×7 on-ground support from a named coordinator in Leh"
     ],
@@ -1416,7 +1416,7 @@ export const PACKAGES: Pkg[] = [
       },
       {
         "q": "Do I need permits, and do you arrange them?",
-        "a": "Yes — Nubra, Pangong, Hanle, Tso Moriri and Umling La all sit in protected or border zones requiring an Inner Line Permit (a Protected Area Permit for foreign nationals). We apply, pay and print every permit before you arrive; they are waiting at your hotel on day one. We only need a scan of your photo ID at booking."
+        "a": "Indian travellers do not need an Inner Line Permit. For Nubra, Pangong, Hanle, Tso Moriri and Umling La we pay the Ladakh environmental fee and the daily wildlife fee, and the receipt is with you before you arrive. Foreign nationals need a Protected Area Permit for those areas, which we arrange. Leh town and the Sham Valley need neither. We only need a scan of your photo ID at booking."
       },
       {
         "q": "What kind of hotels do you use?",

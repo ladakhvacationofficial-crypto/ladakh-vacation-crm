@@ -66,27 +66,15 @@ export class MlForecastingService {
   async getTourismDemandForecast(): Promise<TourismForecastResponse> {
     this.logger.log('Generating ML tourism demand forecast for upcoming 90 days');
 
-    // Fetch total active/confirmed bookings to establish real baseline volume
-    let baseMonthlyInquiries = 85;
-    let baseMonthlyBookings = 24;
-    let baseAvgBookingValue = 42000;
-
-    try {
-      const recentBookingsCount = await this.prisma.booking.count({
-        where: {
-          createdAt: {
-            gte: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000), // last 90 days
-          },
-        },
-      });
-
-      if (recentBookingsCount > 0) {
-        baseMonthlyBookings = Math.max(Math.round(recentBookingsCount / 3), 15);
-        baseMonthlyInquiries = Math.round(baseMonthlyBookings * 3.8);
-      }
-    } catch {
-      // Use calibrated baseline defaults if table is empty or error
-    }
+    // Estimates from observed volume, with explicit heuristic seasonality.
+    const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    const [leadCount, bookings] = await Promise.all([
+      this.prisma.lead.count({ where: { createdAt: { gte: since } } }),
+      this.prisma.booking.aggregate({ where: { createdAt: { gte: since }, status: { not: 'CANCELLED' } }, _count: true, _avg: { totalSell: true } }),
+    ]);
+    const baseMonthlyInquiries = leadCount / 3;
+    const baseMonthlyBookings = bookings._count / 3;
+    const baseAvgBookingValue = bookings._avg.totalSell ?? 0;
 
     const currentDate = new Date();
     const monthlyProjections: MonthlyForecastPoint[] = [];
@@ -101,7 +89,7 @@ export class MlForecastingService {
       const seasonal = this.LADAKH_SEASONALITY_WEIGHTS[monthIndex] || { factor: 1.0, tag: 'Standard Tourism Period' };
       const demandIndex = Math.round(seasonal.factor * 100) / 100;
 
-      // Holt-Winters level * seasonal factor
+      // Observed monthly average multiplied by a heuristic seasonal factor
       const projectedInquiries = Math.round(baseMonthlyInquiries * demandIndex);
       const projectedBookings = Math.round(baseMonthlyBookings * demandIndex);
       const expectedGrossRevenue = projectedBookings * baseAvgBookingValue;
@@ -147,43 +135,11 @@ export class MlForecastingService {
       });
     }
 
-    // Destination level breakdown
-    const destinationBreakdown: DestinationForecastBreakdown[] = [
-      {
-        destination: 'Leh & Sham Valley',
-        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.9),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.9),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.9),
-        trend: monthlyProjections[0].demandIndex >= 1.35 ? 'SURGING' : 'STABLE',
-        keyDriver: 'Every trip starts here: acclimatisation nights, Leh hotels, Sham Valley and the Indus monasteries',
-      },
-      {
-        destination: 'Nubra & Pangong',
-        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.65),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.65),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.65),
-        trend: monthlyProjections[1].demandIndex >= 1.35 ? 'SURGING' : 'STABLE',
-        keyDriver: 'Khardung La, Hunder and Turtuk, Pangong shoreline camps (seasonal, roughly May–Sep)',
-      },
-      {
-        destination: 'Hanle & Tso Moriri',
-        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.2),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.2),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.25),
-        trend: [9, 10].includes(monthlyProjections[0].monthIndex) ? 'SURGING' : 'STABLE',
-        keyDriver: 'Dark Sky Reserve stays, Umling La, Tso Moriri camps; clearest skies Sep–Oct',
-      },
-      {
-        destination: 'Manali & Srinagar roads',
-        next30DaysDemand: Math.round(monthlyProjections[0].projectedBookings * 0.15),
-        next60DaysDemand: Math.round(monthlyProjections[1].projectedBookings * 0.15),
-        next90DaysDemand: Math.round(monthlyProjections[2].projectedBookings * 0.15),
-        trend: monthlyProjections[0].monthIndex >= 6 && monthlyProjections[0].monthIndex <= 9 ? 'SURGING' : 'STABLE',
-        keyDriver: 'Overland and bike trips; Manali–Leh roughly late May to mid-October, Zoji La May to late October',
-      },
-    ];
+    // No destination allocation is inferred without destination booking data.
+    const destinationBreakdown: DestinationForecastBreakdown[] = [];
 
     const operationalAlerts: string[] = [
+      'Planning estimates use the last 90 days and heuristic seasonal factors, not a trained forecast. Zero history means zero projected volume.',
       `📈 Projected 90-day gross inquiry volume: ${monthlyProjections.reduce((a, b) => a + b.projectedInquiries, 0).toLocaleString()} inquiries.`,
       `💰 Expected gross booking pipeline: ₹${(monthlyProjections.reduce((a, b) => a + b.expectedGrossRevenue, 0) / 100000).toFixed(1)} Lakhs.`,
       `⚡ Dynamic Pricing Alert: ${monthlyProjections[0].marginAdvice.headline}. Implement ${monthlyProjections[0].marginAdvice.recommendedMarginPercent}% markup.`,

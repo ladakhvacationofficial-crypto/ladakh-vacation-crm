@@ -74,7 +74,7 @@ export default function SeoPage() {
   const [rankingsData, setRankingsData] = useState<SeoRankingsResponse | null>(null);
   const [mediaAssets, setMediaAssets] = useState<MediaAssetRow[]>([]);
   const [websitePages, setWebsitePages] = useState<PageManifestItem[]>([]);
-  
+
   const [loading, setLoading] = useState(true);
   const [rankingsLoading, setRankingsLoading] = useState(false);
   const [mediaLoading, setMediaLoading] = useState(false);
@@ -86,7 +86,7 @@ export default function SeoPage() {
   const [selectedPageForOffPage, setSelectedPageForOffPage] = useState<SeoRankedPage | null>(null);
   const [selectedPageForChecklist, setSelectedPageForChecklist] = useState<SeoRankedPage | null>(null);
 
-  // Default manifest pages list (guaranteed 270 pages even before DB audit)
+  // Default manifest pages list (current website pages before a live audit)
   const defaultManifestPages: SeoRankedPage[] = useMemo(() => {
     const baseSite = sites.find((s) => s.id === selectedSiteId)?.url || SITE_DOMAIN;
     return (MANIFEST_DATA as any[]).map((m) => {
@@ -308,7 +308,7 @@ export default function SeoPage() {
               SEO Command Center
             </h1>
             <span className="rounded-full bg-signal-500/10 px-2.5 py-0.5 text-[11px] font-medium text-signal-500 border border-signal-500/20">
-              270+ Pages Scored
+              {MANIFEST_DATA.length} Pages in Manifest
             </span>
           </div>
           <p className="mt-1 text-[13px] text-ink-400 max-w-2xl">
@@ -363,10 +363,10 @@ export default function SeoPage() {
             <Globe className="size-5 text-signal-500 shrink-0" />
             <div>
               <p className="text-[13px] font-semibold text-ink-100">
-                Tracking Ladakh Vacation (270 Programmatic Pages)
+                Tracking Ladakh Vacation ({MANIFEST_DATA.length} Pages)
               </p>
               <p className="text-[11.5px] text-ink-400">
-                All 270 pages are loaded from the manifest below. Connect the domain to run live crawling and store off-page backlinks.
+                All {MANIFEST_DATA.length} manifest pages are loaded from the manifest below. Connect the domain to run live crawling and store off-page backlinks.
               </p>
             </div>
           </div>
@@ -716,7 +716,7 @@ function RankingsLeaderboard({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search all 270 pages by keyword, slug, destination, city..."
+            placeholder="Search pages by keyword, slug, destination, city..."
             className="w-full bg-transparent text-[13px] text-ink-100 placeholder:text-ink-500 focus:outline-none"
           />
           {searchTerm && (
@@ -736,7 +736,7 @@ function RankingsLeaderboard({
             onChange={(e) => setTierFilter(e.target.value)}
             className="rounded-lg border border-ink-700 bg-ink-950 px-2.5 py-1.5 text-ink-200 focus:border-signal-500 focus:outline-none"
           >
-            <option value="all">All Tiers (270 Pages)</option>
+            <option value="all">All Tiers ({MANIFEST_DATA.length} Pages)</option>
             <option value="0">Tier 0 · Core Pillars (7)</option>
             <option value="1">Tier 1 · Origin Cities (47)</option>
             <option value="2">Tier 2 · Honeymoon & Family (22)</option>

@@ -152,7 +152,8 @@ export class MediaService {
   }
 
   async remove(id: string) {
-    await this.findOne(id);
+    const media = await this.findOne(id);
+    await this.storage.remove(media.url);
     return this.prisma.mediaAsset.delete({
       where: { id },
     });
