@@ -18,4 +18,6 @@ export class CreateCostDto {
   @IsOptional() @IsDateString() paidAt?: string;
   @IsOptional() @IsString() @MaxLength(200) reference?: string;
   @IsOptional() @IsString() @MaxLength(1000) notes?: string;
+  @IsOptional() @IsString() confirmationStatus?: string;
+  @IsOptional() @IsString() confirmationRef?: string;
 }

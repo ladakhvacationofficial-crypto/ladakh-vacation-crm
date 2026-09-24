@@ -734,6 +734,8 @@ export interface BookingCost {
   paidAt: string | null;
   reference: string | null;
   notes: string | null;
+  confirmationStatus?: string | null;
+  confirmationRef?: string | null;
 }
 
 // ---- attribution ----------------------------------------------------------
