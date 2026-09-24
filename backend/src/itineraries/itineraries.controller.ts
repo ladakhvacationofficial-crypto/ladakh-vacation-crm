@@ -284,4 +284,48 @@ export class ItinerariesController {
   ) {
     return this.svc.removePricing(itemId, optionId, actor);
   }
+
+  // ---- revisions & versioning --------------------------------------------
+
+  @Post(':id/revisions')
+  createRevision(
+    @Param('id') id: string,
+    @Body('changeSummary') changeSummary: string,
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.svc.createRevision(id, changeSummary, actor);
+  }
+
+  @Get(':id/revisions')
+  listRevisions(@Param('id') id: string, @CurrentUser() actor: Actor) {
+    return this.svc.listRevisions(id, actor);
+  }
+
+  @Get(':id/revisions/compare')
+  compareRevisions(
+    @Param('id') id: string,
+    @Query('revA') revA: string,
+    @Query('revB') revB: string,
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.svc.compareRevisions(id, revA, revB, actor);
+  }
+
+  @Get(':id/revisions/:revisionId')
+  getRevision(
+    @Param('id') id: string,
+    @Param('revisionId') revisionId: string,
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.svc.getRevision(id, revisionId, actor);
+  }
+
+  @Post(':id/revisions/:revisionId/restore')
+  restoreRevision(
+    @Param('id') id: string,
+    @Param('revisionId') revisionId: string,
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.svc.restoreRevision(id, revisionId, actor);
+  }
 }

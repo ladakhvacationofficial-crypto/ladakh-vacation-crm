@@ -5,6 +5,7 @@ import {
   computeOptionTotals,
   gstBreakdown,
   advise,
+  computeBedWiseOccupancy,
 } from './pricing';
 import { MarkupMode, ServiceType } from '@prisma/client';
 
@@ -101,5 +102,88 @@ describe('pricing', () => {
     expect(adv.ok).toBe(false);
     expect(adv.minSellForPolicy).toBe(1250);
     expect(adv.shortfall).toBe(150);
+  });
+
+  describe('computeBedWiseOccupancy', () => {
+    it('calculates bed-wise occupancy with markup, GST split, and zero rounding drift', () => {
+      // 5 nights Ladakh trip:
+      // Room cost per night: 4,000 (double sharing = 2,000 per adult per night -> 10,000 stay net)
+      // Extra bed adult per night: 1,500 (7,500 stay net)
+      // Extra bed child per night: 1,000 (5,000 stay net)
+      // Child no bed per night: 0
+      // Vehicle cost: 30,000 for Innova Crysta
+      // Activities: 2,000 per adult, 1,000 per child
+      // Permit: 600 per head (LAHDC + wildlife)
+      // Group: 2 adults double sharing + 1 adult AwEB + 1 child CwEB + 1 child CNB = 5 pax
+      // Shared transport per head = 30,000 / 5 = 6,000
+      const result = computeBedWiseOccupancy({
+        roomCostPerNight: 4000,
+        extraBedAdultPerNight: 1500,
+        extraBedChildPerNight: 1000,
+        childNoBedPerNight: 0,
+        nights: 5,
+        totalTransportCost: 30000,
+        adultActivityCostPerPerson: 2000,
+        childActivityCostPerPerson: 1000,
+        permitCostPerPerson: 600,
+        adultsDoubleSharing: 2,
+        adultsExtraBed: 1,
+        childrenExtraBed: 1,
+        childrenNoBed: 1,
+        markupPercent: 20,
+        gstPercent: 5,
+        roundToNearest: 100,
+      });
+
+      expect(result.totalPax).toBe(5);
+
+      // Verify category rates are rounded to nearest 100
+      expect(result.rateCard.perAdultDouble % 100).toBe(0);
+      expect(result.rateCard.perAwEB % 100).toBe(0);
+      expect(result.rateCard.perCwEB % 100).toBe(0);
+      expect(result.rateCard.perCNB % 100).toBe(0);
+
+      // Verify strict sum of category line items equals totalSell
+      const expectedTotalSell =
+        2 * result.rateCard.perAdultDouble +
+        1 * result.rateCard.perAwEB +
+        1 * result.rateCard.perCwEB +
+        1 * result.rateCard.perCNB;
+
+      expect(result.totalSell).toBe(expectedTotalSell);
+
+      // Adult double net = 10,000 (room) + 6,000 (transport) + 2,000 (activity) + 600 (permit) = 18,600
+      expect(result.pax.adultDouble.perPersonNet).toBe(18600);
+
+      // With 20% markup: 18,600 * 1.2 = 22,320 -> rounded to nearest 100 = 22,300
+      expect(result.rateCard.perAdultDouble).toBe(22300);
+
+      // Check GST split is computed on rounded sell
+      expect(result.pax.adultDouble.perPersonBase + result.pax.adultDouble.perPersonGst).toBe(22300);
+
+      // Check gross profit and effective margin
+      expect(result.totalMargin).toBe(result.totalSell - result.totalNet);
+      expect(result.marginPercent).toBeGreaterThan(15);
+    });
+
+    it('handles single room solo supplement correctly', () => {
+      const result = computeBedWiseOccupancy({
+        roomCostPerNight: 5000,
+        nights: 4,
+        totalTransportCost: 20000,
+        adultsDoubleSharing: 0,
+        singleRooms: 1,
+        markupPercent: 25,
+        roundToNearest: 100,
+      });
+
+      expect(result.totalPax).toBe(1);
+      expect(result.totalRooms).toBe(1);
+      // Single room pays full room cost (20,000) + full transport (20,000) = 40,000 net
+      expect(result.pax.single.perPersonNet).toBe(40000);
+      // 40,000 * 1.25 = 50,000 sell
+      expect(result.rateCard.perSingle).toBe(50000);
+      expect(result.totalSell).toBe(50000);
+    });
   });
 });

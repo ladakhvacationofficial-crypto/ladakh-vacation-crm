@@ -794,4 +794,234 @@ export class ItinerariesService {
       message: `Thank you! You have accepted the "${option.name}" package. Our Ladakh travel expert will contact you shortly with your confirmation and payment link.`,
     };
   }
+
+  // --- revisions & snapshotting --------------------------------------------
+
+  async createRevision(
+    itineraryId: string,
+    changeSummary: string | undefined,
+    actor: Actor,
+  ) {
+    await this.assertItineraryAccess(itineraryId, actor);
+
+    const it = await this.prisma.itinerary.findUnique({
+      where: { id: itineraryId },
+      include: {
+        lead: { select: { id: true, name: true } },
+        options: {
+          orderBy: { sortOrder: 'asc' },
+          include: {
+            pricing: true,
+          },
+        },
+        days: {
+          orderBy: { dayNumber: 'asc' },
+          include: {
+            items: {
+              orderBy: { sortOrder: 'asc' },
+              include: {
+                vendor: { select: { id: true, name: true, type: true } },
+                pricing: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!it) throw new NotFoundException('Itinerary not found');
+
+    const lastRev = await this.prisma.itineraryRevision.findFirst({
+      where: { itineraryId },
+      orderBy: { revisionNumber: 'desc' },
+      select: { revisionNumber: true },
+    });
+    const revisionNumber = (lastRev?.revisionNumber ?? 0) + 1;
+
+    // Pick recommended or primary option for snapshot summary totals
+    const primaryOption = it.options.find((o) => o.isRecommended) || it.options[0];
+    const totalNet = primaryOption?.totalNet ?? 0;
+    const totalSell = primaryOption?.totalSell ?? 0;
+    const perPersonSell = primaryOption?.perPersonSell ?? 0;
+
+    const snapshot = {
+      title: it.title,
+      headline: it.headline,
+      intro: it.intro,
+      totalPax: it.totalPax,
+      inclusions: it.inclusions,
+      exclusions: it.exclusions,
+      options: it.options,
+      days: it.days,
+    };
+
+    const revision = await this.prisma.itineraryRevision.create({
+      data: {
+        itineraryId,
+        revisionNumber,
+        title: `${it.code} (v${revisionNumber})`,
+        totalPax: it.totalPax,
+        snapshot: snapshot as any,
+        totalNet,
+        totalSell,
+        perPersonSell,
+        changeSummary: changeSummary ?? null,
+        createdById: actor.id,
+      },
+      include: {
+        createdBy: { select: { id: true, name: true, email: true } },
+      },
+    });
+
+    await this.prisma.activity.create({
+      data: {
+        leadId: it.leadId,
+        type: 'NOTE',
+        content: `Created quotation proposal version v${revisionNumber} (Total: ₹${totalSell.toLocaleString('en-IN')}${changeSummary ? ` - ${changeSummary}` : ''})`,
+      },
+    });
+
+    return revision;
+  }
+
+  async listRevisions(itineraryId: string, actor: Actor) {
+    await this.assertItineraryAccess(itineraryId, actor);
+    return this.prisma.itineraryRevision.findMany({
+      where: { itineraryId },
+      orderBy: { revisionNumber: 'desc' },
+      include: {
+        createdBy: { select: { id: true, name: true, email: true } },
+      },
+    });
+  }
+
+  async getRevision(itineraryId: string, revisionId: string, actor: Actor) {
+    await this.assertItineraryAccess(itineraryId, actor);
+    const rev = await this.prisma.itineraryRevision.findUnique({
+      where: { id: revisionId },
+      include: {
+        createdBy: { select: { id: true, name: true, email: true } },
+      },
+    });
+    if (!rev || rev.itineraryId !== itineraryId) {
+      throw new NotFoundException('Revision not found');
+    }
+    return rev;
+  }
+
+  async restoreRevision(itineraryId: string, revisionId: string, actor: Actor) {
+    await this.assertItineraryAccess(itineraryId, actor);
+    const rev = await this.getRevision(itineraryId, revisionId, actor);
+    const snapshot: any = rev.snapshot;
+    if (!snapshot) throw new BadRequestException('Revision snapshot is empty');
+
+    // 1. Update itinerary top-level fields
+    await this.prisma.itinerary.update({
+      where: { id: itineraryId },
+      data: {
+        title: snapshot.title,
+        headline: snapshot.headline ?? null,
+        intro: snapshot.intro ?? null,
+        totalPax: snapshot.totalPax ?? 2,
+        inclusions: snapshot.inclusions ?? null,
+        exclusions: snapshot.exclusions ?? null,
+      },
+    });
+
+    // 2. Clear current days (cascades to items and pricing)
+    await this.prisma.itineraryDay.deleteMany({
+      where: { itineraryId },
+    });
+
+    // 3. Recreate days and items from snapshot
+    if (Array.isArray(snapshot.days)) {
+      for (const d of snapshot.days) {
+        const createdDay = await this.prisma.itineraryDay.create({
+          data: {
+            itineraryId,
+            dayNumber: d.dayNumber,
+            date: d.date ? new Date(d.date) : null,
+            city: d.city ?? null,
+            headline: d.headline ?? null,
+            summary: d.summary ?? null,
+          },
+        });
+
+        if (Array.isArray(d.items)) {
+          for (const it of d.items) {
+            await this.prisma.itineraryItem.create({
+              data: {
+                dayId: createdDay.id,
+                kind: it.kind,
+                time: it.time ?? null,
+                title: it.title,
+                description: it.description ?? null,
+                location: it.location ?? null,
+                vendorId: it.vendorId ?? null,
+                quantity: it.quantity ?? 1,
+                units: it.units ?? 1,
+                priceable: it.priceable ?? false,
+                sortOrder: it.sortOrder ?? 0,
+              },
+            });
+          }
+        }
+      }
+    }
+
+    // 4. Recalculate options
+    await this.recalcAllOptions(itineraryId);
+
+    // 5. Create a new revision noting the restoration
+    await this.createRevision(
+      itineraryId,
+      `Restored state from historical version v${rev.revisionNumber}`,
+      actor,
+    );
+
+    return this.findOne(itineraryId, actor);
+  }
+
+  async compareRevisions(
+    itineraryId: string,
+    revIdA: string,
+    revIdB: string,
+    actor: Actor,
+  ) {
+    await this.assertItineraryAccess(itineraryId, actor);
+    const [revA, revB] = await Promise.all([
+      this.getRevision(itineraryId, revIdA, actor),
+      this.getRevision(itineraryId, revIdB, actor),
+    ]);
+
+    const snapA: any = revA.snapshot ?? {};
+    const snapB: any = revB.snapshot ?? {};
+
+    const daysA = Array.isArray(snapA.days) ? snapA.days.length : 0;
+    const daysB = Array.isArray(snapB.days) ? snapB.days.length : 0;
+
+    return {
+      revisionA: {
+        id: revA.id,
+        version: revA.revisionNumber,
+        totalSell: revA.totalSell,
+        totalNet: revA.totalNet,
+        totalPax: revA.totalPax,
+        daysCount: daysA,
+      },
+      revisionB: {
+        id: revB.id,
+        version: revB.revisionNumber,
+        totalSell: revB.totalSell,
+        totalNet: revB.totalNet,
+        totalPax: revB.totalPax,
+        daysCount: daysB,
+      },
+      delta: {
+        sellDiff: revB.totalSell - revA.totalSell,
+        netDiff: revB.totalNet - revA.totalNet,
+        marginDiff: (revB.totalSell - revB.totalNet) - (revA.totalSell - revA.totalNet),
+        daysDiff: daysB - daysA,
+      },
+    };
+  }
 }

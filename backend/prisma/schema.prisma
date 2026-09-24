@@ -97,8 +97,9 @@ model Itinerary {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  days    ItineraryDay[]
-  options ItineraryOption[]
+  days        ItineraryDay[]
+  options     ItineraryOption[]
+  revisions   ItineraryRevision[]
   socialPosts SocialPost[] @relation("SocialPostPackage")
 
   @@index([leadId])
@@ -344,6 +345,7 @@ model Employee {
 
   salarySlips SalarySlip[]
   interviews  Interview[]  @relation("InterviewInterviewer")
+  driver      Driver?
 
   @@index([status])
   @@index([department])
@@ -705,6 +707,9 @@ model User {
   createdItineraries Itinerary[]      @relation("ItineraryCreator")
   recordedPayments   BookingPayment[] @relation("PaymentRecorder")
   activities         Activity[]
+  itineraryRevisions ItineraryRevision[]
+  fleetAssignments   FleetAssignment[]
+  permitApplications PermitApplication[]
 
   /// Set when this login corresponds to a person on payroll.
   employee Employee? @relation("EmployeeUser")
@@ -718,7 +723,7 @@ model Lead {
   // --- who ---
   name     String
   phone    String
-  phoneKey String?  @db.VarChar(20)
+  phoneKey String?
   email    String?
   address String?
   state   String?
@@ -1074,6 +1079,8 @@ model Vendor {
 
   rates          VendorRate[]
   itineraryItems ItineraryItem[]
+  vehicles       Vehicle[]
+  drivers        Driver[]
 
   @@index([type])
   @@index([city])
@@ -1244,9 +1251,11 @@ model Booking {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  payments BookingPayment[]
-  costs    BookingCost[]
-  invoices Invoice[]
+  payments           BookingPayment[]
+  costs              BookingCost[]
+  invoices           Invoice[]
+  fleetAssignments   FleetAssignment[]
+  permitApplications PermitApplication[]
 
   @@index([leadId])
   @@index([status])
@@ -1730,5 +1739,224 @@ model CompanyProfile {
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+// ============================================================================
+// PHASE 28 — Quote Versioning & Revision History
+// ============================================================================
+
+model ItineraryRevision {
+  id             String    @id @default(cuid())
+  itineraryId    String
+  itinerary      Itinerary @relation(fields: [itineraryId], references: [id], onDelete: Cascade)
+  revisionNumber Int
+  title          String
+  totalPax       Int       @default(2)
+  snapshot       Json
+  totalNet       Int       @default(0)
+  totalSell      Int       @default(0)
+  perPersonSell  Int       @default(0)
+  changeSummary  String?
+  createdById    String?
+  createdBy      User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  isAccepted     Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+
+  @@unique([itineraryId, revisionNumber])
+  @@index([itineraryId])
+}
+
+// ============================================================================
+// PHASE 29 — Fleet & Cab Scheduling (Ladakh Taxi Union & Attached Vehicles)
+// ============================================================================
+
+enum VehicleType {
+  INNOVA
+  INNOVA_CRYSTA
+  FORTUNER
+  SCORPIO
+  XYLO
+  TEMPO_TRAVELLER_12
+  TEMPO_TRAVELLER_17
+  URBANIA
+  HATCHBACK
+  SEDAN
+  MOTORBIKE
+  OTHER
+}
+
+enum FleetOwnership {
+  COMPANY_OWNED
+  ATTACHED_TAXI_UNION
+  VENDOR_FLEET
+}
+
+enum FleetAssignmentStatus {
+  ASSIGNED
+  DISPATCHED
+  ON_TRIP
+  COMPLETED
+  CANCELLED
+}
+
+model Vehicle {
+  id              String         @id @default(cuid())
+  plateNumber     String         @unique
+  makeModel       String
+  vehicleType     VehicleType    @default(INNOVA_CRYSTA)
+  ownership       FleetOwnership @default(ATTACHED_TAXI_UNION)
+  capacity        Int            @default(6)
+  seatingConfig   String?
+  fuelType        String?
+  vendorId        String?
+  vendor          Vendor?        @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  defaultDriverId String?
+  defaultDriver   Driver?        @relation("VehicleDefaultDriver", fields: [defaultDriverId], references: [id], onDelete: SetNull)
+  insuranceExpiry DateTime?
+  fitnessExpiry   DateTime?
+  permitExpiry    DateTime?
+  pucExpiry       DateTime?
+  isActive        Boolean        @default(true)
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  assignments FleetAssignment[]
+
+  @@index([vehicleType])
+  @@index([ownership])
+  @@index([vendorId])
+}
+
+model Driver {
+  id             String    @id @default(cuid())
+  name           String
+  phone          String
+  altPhone       String?
+  licenseNumber  String    @unique
+  licenseExpiry  DateTime?
+  policeVerified Boolean   @default(true)
+  bloodGroup     String?
+  isLocalLadakhi Boolean   @default(true)
+  badgeNumber    String?
+  vendorId       String?
+  vendor         Vendor?   @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  employeeId     String?   @unique
+  employee       Employee? @relation(fields: [employeeId], references: [id], onDelete: SetNull)
+  rating         Float?
+  isActive       Boolean   @default(true)
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  defaultForVehicles Vehicle[]         @relation("VehicleDefaultDriver")
+  assignments        FleetAssignment[]
+
+  @@index([phone])
+  @@index([vendorId])
+}
+
+model FleetAssignment {
+  id              String                @id @default(cuid())
+  bookingId       String
+  booking         Booking               @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  vehicleId       String?
+  vehicle         Vehicle?              @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  driverId        String?
+  driver          Driver?               @relation(fields: [driverId], references: [id], onDelete: SetNull)
+  startDate       DateTime
+  endDate         DateTime
+  circuit         String
+  pickupLocation  String?
+  dropLocation    String?
+  status          FleetAssignmentStatus @default(ASSIGNED)
+  dutySlipNumber  String?
+  startKm         Int?
+  endKm           Int?
+  fuelAllowance   Int?                  @default(0)
+  driverBatta     Int?                  @default(0)
+  parkingTollPaid Int?                  @default(0)
+  notes           String?
+  assignedById    String?
+  assignedBy      User?                 @relation(fields: [assignedById], references: [id], onDelete: SetNull)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  @@index([bookingId])
+  @@index([vehicleId])
+  @@index([driverId])
+  @@index([startDate, endDate])
+}
+
+// ============================================================================
+// PHASE 30 — Ladakh Inner Line & Protected Area Permit Tracking
+// ============================================================================
+
+enum PermitType {
+  ILP_DOMESTIC
+  PAP_FOREIGN
+}
+
+enum PermitStatus {
+  DRAFT
+  PENDING_DOCS
+  DOCS_VERIFIED
+  APPLIED_DC_OFFICE
+  ISSUED
+  REJECTED
+}
+
+model PermitApplication {
+  id               String            @id @default(cuid())
+  bookingId        String
+  booking          Booking           @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  permitType       PermitType        @default(ILP_DOMESTIC)
+  status           PermitStatus      @default(PENDING_DOCS)
+  sectors          String[]
+  validFrom        DateTime
+  validTo          DateTime
+  dcOfficeRef      String?
+  permitNumber     String?
+  issuedAt         DateTime?
+  environmentalFee Int               @default(0)
+  wildlifeFee      Int               @default(0)
+  redCrossFee      Int               @default(0)
+  totalFee         Int               @default(0)
+  feeReceiptNumber String?
+  documentScanUrl  String?
+  rejectedReason   String?
+  notes            String?
+  createdById      String?
+  createdBy        User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  travellers       PermitTraveller[]
+
+  @@index([bookingId])
+  @@index([status])
+  @@index([validFrom, validTo])
+}
+
+model PermitTraveller {
+  id                  String            @id @default(cuid())
+  permitApplicationId String
+  permitApplication   PermitApplication @relation(fields: [permitApplicationId], references: [id], onDelete: Cascade)
+  fullName            String
+  age                 Int?
+  gender              String?
+  nationality         String            @default("Indian")
+  stateOrCountry      String?
+  idType              String            @default("AADHAAR")
+  idNumber            String
+  idDocumentUrl       String?
+  passportIssueDate   DateTime?
+  passportExpiryDate  DateTime?
+  visaNumber          String?
+  visaExpiryDate      DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([permitApplicationId])
 }
 

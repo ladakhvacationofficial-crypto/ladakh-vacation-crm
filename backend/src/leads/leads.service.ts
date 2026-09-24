@@ -1417,4 +1417,40 @@ export class LeadsService {
       message: `Successfully rescored ${updatedCount} active lead(s) with the Category-Ceiling algorithm.`,
     };
   }
+
+  async rescoreLead(id: string, actor: Actor) {
+    const lead = await this.findOne(id, actor);
+    const effTravelDate = lead.travelDate ? parseTravelDate(lead.travelDate).date : null;
+    const effSeason = effTravelDate ? parseTravelDate(effTravelDate).season : undefined;
+    const floor = await this.getEstimatedBudgetFloor(effSeason);
+
+    const { score, notes } = scoreLead({
+      source: lead.source,
+      email: lead.email,
+      message: lead.message,
+      destination: lead.destination ? this.normaliseDestination(lead.destination) : undefined,
+      travelDate: effTravelDate,
+      season: effSeason,
+      budget: lead.budget,
+      nights: lead.nights,
+      adults: lead.adults,
+      enquiryCount: lead.enquiryCount,
+      minBudgetPerPaxNight: floor,
+    });
+
+    const updated = await this.prisma.lead.update({
+      where: { id: lead.id },
+      data: {
+        score,
+        scoreNotes: notes,
+      },
+    });
+
+    return {
+      id: updated.id,
+      score: updated.score,
+      scoreNotes: updated.scoreNotes,
+      message: `Lead score recalculated to ${updated.score}`,
+    };
+  }
 }

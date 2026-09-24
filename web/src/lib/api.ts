@@ -1319,3 +1319,139 @@ export interface DailyMovementResponse {
     other: MovementGuestCard[];
   };
 }
+
+// ---- Revisions -----------------------------------------------------------
+
+export interface ItineraryRevisionRow {
+  id: string;
+  itineraryId: string;
+  revisionNumber: number;
+  title: string;
+  totalPax: number;
+  totalNet: number;
+  totalSell: number;
+  perPersonSell: number;
+  changeSummary: string | null;
+  isAccepted: boolean;
+  createdAt: string;
+  createdBy?: { id: string; name: string; email: string } | null;
+  snapshot?: any;
+}
+
+// ---- Fleet ---------------------------------------------------------------
+
+export interface VehicleRow {
+  id: string;
+  plateNumber: string;
+  makeModel: string;
+  vehicleType: string;
+  ownership: string;
+  capacity: number;
+  seatingConfig: string | null;
+  fuelType: string | null;
+  vendorId: string | null;
+  defaultDriverId: string | null;
+  insuranceExpiry: string | null;
+  fitnessExpiry: string | null;
+  permitExpiry: string | null;
+  pucExpiry: string | null;
+  isActive: boolean;
+  notes: string | null;
+  vendor?: { id: string; name: string; phone: string } | null;
+  defaultDriver?: { id: string; name: string; phone: string } | null;
+  _count?: { assignments: number };
+}
+
+export interface DriverRow {
+  id: string;
+  name: string;
+  phone: string;
+  altPhone: string | null;
+  licenseNumber: string;
+  licenseExpiry: string | null;
+  policeVerified: boolean;
+  bloodGroup: string | null;
+  isLocalLadakhi: boolean;
+  badgeNumber: string | null;
+  vendorId: string | null;
+  employeeId: string | null;
+  rating: number | null;
+  isActive: boolean;
+  notes: string | null;
+  vendor?: { id: string; name: string } | null;
+  employee?: { id: string; designation: string } | null;
+  _count?: { assignments: number };
+}
+
+export interface FleetAssignmentRow {
+  id: string;
+  bookingId: string;
+  vehicleId: string | null;
+  driverId: string | null;
+  startDate: string;
+  endDate: string;
+  circuit: string;
+  pickupLocation: string | null;
+  dropLocation: string | null;
+  status: string;
+  dutySlipNumber: string | null;
+  startKm: number | null;
+  endKm: number | null;
+  fuelAllowance: number;
+  driverBatta: number;
+  parkingTollPaid: number;
+  notes: string | null;
+  vehicle?: VehicleRow | null;
+  driver?: DriverRow | null;
+  booking?: { id: string; bookingNumber: string; packageName: string | null; adults?: number; children?: number } | null;
+  assignedBy?: { id: string; name: string } | null;
+}
+
+// ---- Permits -------------------------------------------------------------
+
+export interface PermitTravellerRow {
+  id: string;
+  permitApplicationId: string;
+  fullName: string;
+  age: number | null;
+  gender: string | null;
+  nationality: string;
+  stateOrCountry: string | null;
+  idType: string;
+  idNumber: string;
+  idDocumentUrl: string | null;
+  passportIssueDate: string | null;
+  passportExpiryDate: string | null;
+  visaNumber: string | null;
+  visaExpiryDate: string | null;
+}
+
+export interface PermitApplicationRow {
+  id: string;
+  bookingId: string;
+  permitType: 'ILP_DOMESTIC' | 'PAP_FOREIGN';
+  status: 'DRAFT' | 'PENDING_DOCS' | 'DOCS_VERIFIED' | 'APPLIED_DC_OFFICE' | 'ISSUED' | 'REJECTED';
+  sectors: string[];
+  validFrom: string;
+  validTo: string;
+  dcOfficeRef: string | null;
+  permitNumber: string | null;
+  issuedAt: string | null;
+  environmentalFee: number;
+  wildlifeFee: number;
+  redCrossFee: number;
+  totalFee: number;
+  feeReceiptNumber: string | null;
+  documentScanUrl: string | null;
+  rejectedReason: string | null;
+  notes: string | null;
+  booking?: {
+    id: string;
+    bookingNumber: string;
+    packageName: string | null;
+    lead?: { name: string; phone: string; email: string | null } | null;
+  } | null;
+  travellers: PermitTravellerRow[];
+  createdBy?: { id: string; name: string } | null;
+}
+

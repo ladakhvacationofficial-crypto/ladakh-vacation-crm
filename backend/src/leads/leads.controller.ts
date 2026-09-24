@@ -143,6 +143,12 @@ export class LeadsController {
     return this.leads.rescoreAllActiveLeads(actor);
   }
 
+  @Roles(...LEAD_MODULE_ROLES)
+  @Post(':id/rescore')
+  rescoreOne(@Param('id') id: string, @CurrentUser() actor: Actor) {
+    return this.leads.rescoreLead(id, actor);
+  }
+
   @Roles(...LEAD_DELETE_ACCESS)
   @Get('approvals/pending')
   getPendingCloseRequests() {

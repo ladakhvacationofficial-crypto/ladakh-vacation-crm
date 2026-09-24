@@ -240,3 +240,238 @@ export function advise(
     warnings,
   };
 }
+
+export interface OccupancyPricerInput {
+  /** Double/Twin sharing net room cost per night across hotels */
+  roomCostPerNight: number;
+  /** Net extra bed cost per night for an adult (/AwEB) */
+  extraBedAdultPerNight?: number;
+  /** Net extra bed cost per night for a child (/CwEB) */
+  extraBedChildPerNight?: number;
+  /** Net cost per night for child sharing bed (/CNB) - usually 0 */
+  childNoBedPerNight?: number;
+  /** Total nights of stay */
+  nights: number;
+  /** Total double/twin rooms required (defaults to ceil(adultsDoubleSharing / 2)) */
+  numberOfRooms?: number;
+
+  /** Total vehicle / transport net cost for the entire group */
+  totalTransportCost?: number;
+  /** Shared fixed costs (guide fees, oxygen cylinder rental, driver batta) */
+  sharedFixedCost?: number;
+
+  /** Activity / entry net cost per adult (monasteries, rafting, camel safari, etc.) */
+  adultActivityCostPerPerson?: number;
+  /** Activity / entry net cost per child */
+  childActivityCostPerPerson?: number;
+  /** Ladakh Inner Line Permit & environmental fee per person */
+  permitCostPerPerson?: number;
+
+  // --- Pax composition ---
+  /** Count of adults in standard double / twin sharing (e.g. 2, 4, 6) */
+  adultsDoubleSharing: number;
+  /** Count of adults on extra bed (/AwEB) */
+  adultsExtraBed?: number;
+  /** Count of children with extra bed (/CwEB) */
+  childrenExtraBed?: number;
+  /** Count of children without bed (/CNB) */
+  childrenNoBed?: number;
+  /** Count of single occupancy rooms / solo adults */
+  singleRooms?: number;
+
+  // --- Commercial rules ---
+  /** Target markup percentage (e.g. 20 for 20%) */
+  markupPercent: number;
+  /** Inclusive GST percentage (defaults to 5% for Indian tour packages) */
+  gstPercent?: number;
+  /** Nearest integer to round per-person prices to (defaults to 100 for clean client-facing quotes) */
+  roundToNearest?: number;
+}
+
+export interface OccupancyCategoryQuote {
+  paxCount: number;
+  perPersonNet: number;
+  perPersonSell: number;
+  perPersonBase: number;
+  perPersonGst: number;
+  categoryNet: number;
+  categorySell: number;
+}
+
+export interface BedWiseOccupancyResult {
+  pax: {
+    adultDouble: OccupancyCategoryQuote;
+    adultExtraBed: OccupancyCategoryQuote;
+    childExtraBed: OccupancyCategoryQuote;
+    childNoBed: OccupancyCategoryQuote;
+    single: OccupancyCategoryQuote;
+  };
+  totalPax: number;
+  totalRooms: number;
+  totalNet: number;
+  totalSell: number;
+  totalMargin: number;
+  marginPercent: number;
+  markupPercentEffective: number;
+  gstBreakdown: GstBreakdown;
+  rateCard: {
+    perAdultDouble: number;
+    perAwEB: number;
+    perCwEB: number;
+    perCNB: number;
+    perSingle: number;
+  };
+}
+
+/**
+ * Bed-wise occupancy pricing with strict order of operations:
+ *   1. Calculate base net cost per category (/Adult, /AwEB, /CwEB, /CNB, /Single).
+ *   2. Apply markup percentage to arrive at taxable unrounded sell.
+ *   3. If tax-inclusive (GST), calculate unrounded tax split.
+ *   4. Round per-person rates to the nearest ₹100 (or roundToNearest).
+ *   5. Recompute the package total as the EXACT sum of rounded category line items:
+ *      Total = (adults * rateAdult) + (aweb * rateAwEB) + (cweb * rateCwEB) + (cnb * rateCNB) + (single * rateSingle)
+ *
+ * This guarantees 0 penny-drift between the per-person rate sheet and the total invoice.
+ */
+export function computeBedWiseOccupancy(
+  input: OccupancyPricerInput,
+): BedWiseOccupancyResult {
+  const adultsDouble = Math.max(0, input.adultsDoubleSharing || 0);
+  const adultsExtra = Math.max(0, input.adultsExtraBed || 0);
+  const childrenExtra = Math.max(0, input.childrenExtraBed || 0);
+  const childrenNoBed = Math.max(0, input.childrenNoBed || 0);
+  const singleCount = Math.max(0, input.singleRooms || 0);
+
+  const totalPax = adultsDouble + adultsExtra + childrenExtra + childrenNoBed + singleCount;
+  const payingPax = Math.max(1, totalPax);
+
+  const nights = Math.max(1, input.nights || 1);
+  const totalRooms =
+    input.numberOfRooms !== undefined && input.numberOfRooms > 0
+      ? input.numberOfRooms
+      : Math.ceil(adultsDouble / 2) + singleCount;
+
+  // Shared costs per head
+  const totalTransport = input.totalTransportCost || 0;
+  const totalShared = input.sharedFixedCost || 0;
+  const sharedPerPerson = (totalTransport + totalShared) / payingPax;
+
+  const adultActivity = input.adultActivityCostPerPerson || 0;
+  const childActivity = input.childActivityCostPerPerson || 0;
+  const permit = input.permitCostPerPerson || 0;
+
+  const roundNearest = input.roundToNearest !== undefined ? input.roundToNearest : 100;
+  const markupPct = Math.max(0, input.markupPercent || 0);
+  const gstPct = input.gstPercent !== undefined ? input.gstPercent : 5;
+
+  // 1. Calculate Base Net Cost per Category
+  // Double sharing: 1 room is shared by 2 adults, so half room cost per adult per night
+  const doubleRoomPerPaxNet = (input.roomCostPerNight / 2) * nights;
+  const netDouble = Math.round(doubleRoomPerPaxNet + sharedPerPerson + adultActivity + permit);
+
+  // AwEB: Extra bed for adult
+  const awebExtraNet = (input.extraBedAdultPerNight || 0) * nights;
+  const netAwEB = Math.round(awebExtraNet + sharedPerPerson + adultActivity + permit);
+
+  // CwEB: Extra bed for child
+  const cwebExtraNet = (input.extraBedChildPerNight || 0) * nights;
+  const netCwEB = Math.round(cwebExtraNet + sharedPerPerson + childActivity + permit);
+
+  // CNB: Child No Bed (sharing parents' bed)
+  const cnbExtraNet = (input.childNoBedPerNight || 0) * nights;
+  const netCNB = Math.round(cnbExtraNet + sharedPerPerson + childActivity + permit);
+
+  // Single: 1 full room per adult
+  const singleRoomNet = input.roomCostPerNight * nights;
+  const netSingle = Math.round(singleRoomNet + sharedPerPerson + adultActivity + permit);
+
+  // Helper for step 2, 3, 4
+  function priceCategory(netCost: number, count: number): OccupancyCategoryQuote {
+    if (count <= 0) {
+      // Still compute quote rate card for 0 pax so sales exec can see the rate sheet
+      const unroundedSell = netCost * (1 + markupPct / 100);
+      const perPersonSell = roundTo(unroundedSell, roundNearest);
+      const gst = gstBreakdown(perPersonSell, gstPct);
+      return {
+        paxCount: 0,
+        perPersonNet: netCost,
+        perPersonSell,
+        perPersonBase: gst.baseAmount,
+        perPersonGst: gst.gstAmount,
+        categoryNet: 0,
+        categorySell: 0,
+      };
+    }
+
+    // Step 2: Apply markup
+    const unroundedSell = netCost * (1 + markupPct / 100);
+
+    // Step 4: Round per person to nearest ₹100
+    const perPersonSell = roundTo(unroundedSell, roundNearest);
+
+    // Step 3: GST split
+    const gst = gstBreakdown(perPersonSell, gstPct);
+
+    return {
+      paxCount: count,
+      perPersonNet: netCost,
+      perPersonSell,
+      perPersonBase: gst.baseAmount,
+      perPersonGst: gst.gstAmount,
+      categoryNet: netCost * count,
+      categorySell: perPersonSell * count,
+    };
+  }
+
+  const adultDoubleQuote = priceCategory(netDouble, adultsDouble);
+  const adultAwEBQuote = priceCategory(netAwEB, adultsExtra);
+  const childCwEBQuote = priceCategory(netCwEB, childrenExtra);
+  const childCNBQuote = priceCategory(netCNB, childrenNoBed);
+  const singleQuote = priceCategory(netSingle, singleCount);
+
+  // Step 5: Recompute package total as strict sum of category line items
+  const totalSell =
+    adultDoubleQuote.categorySell +
+    adultAwEBQuote.categorySell +
+    childCwEBQuote.categorySell +
+    childCNBQuote.categorySell +
+    singleQuote.categorySell;
+
+  const totalNet =
+    adultDoubleQuote.categoryNet +
+    adultAwEBQuote.categoryNet +
+    childCwEBQuote.categoryNet +
+    childCNBQuote.categoryNet +
+    singleQuote.categoryNet;
+
+  const totalMargin = totalSell - totalNet;
+  const marginPercent = totalSell > 0 ? (totalMargin / totalSell) * 100 : 0;
+  const markupPercentEffective = totalNet > 0 ? (totalMargin / totalNet) * 100 : 0;
+  const overallGst = gstBreakdown(totalSell, gstPct);
+
+  return {
+    pax: {
+      adultDouble: adultDoubleQuote,
+      adultExtraBed: adultAwEBQuote,
+      childExtraBed: childCwEBQuote,
+      childNoBed: childCNBQuote,
+      single: singleQuote,
+    },
+    totalPax,
+    totalRooms,
+    totalNet,
+    totalSell,
+    totalMargin,
+    marginPercent,
+    markupPercentEffective,
+    gstBreakdown: overallGst,
+    rateCard: {
+      perAdultDouble: adultDoubleQuote.perPersonSell,
+      perAwEB: adultAwEBQuote.perPersonSell,
+      perCwEB: childCwEBQuote.perPersonSell,
+      perCNB: childCNBQuote.perPersonSell,
+      perSingle: singleQuote.perPersonSell,
+    },
+  };
+}
