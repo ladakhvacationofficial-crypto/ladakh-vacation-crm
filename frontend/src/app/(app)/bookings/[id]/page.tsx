@@ -153,7 +153,7 @@ export default function BookingDetailPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="secondary"
             size="sm"
@@ -454,7 +454,7 @@ function PaymentsPanel({
                 }}
                 disabled={busy}
                 aria-label="Remove payment"
-                className="rounded p-1 text-ink-600 opacity-0 transition-[opacity,color,background-color] duration-150 group-hover:opacity-100 hover:bg-ink-800 hover:text-loss-400"
+                className="rounded p-1 text-ink-600 transition-[opacity,color,background-color] duration-150 hover:bg-ink-800 hover:text-loss-400 md:opacity-0 md:group-hover:opacity-100"
               >
                 <Trash2 className="size-3.5" strokeWidth={1.75} />
               </button>
@@ -636,7 +636,7 @@ function CostsPanel({
                   }}
                   disabled={busy}
                   aria-label={`Remove ${c.description}`}
-                  className="rounded p-1 text-ink-600 opacity-0 transition-[opacity,color,background-color] duration-150 group-hover:opacity-100 hover:bg-ink-800 hover:text-loss-400"
+                  className="rounded p-1 text-ink-600 transition-[opacity,color,background-color] duration-150 hover:bg-ink-800 hover:text-loss-400 md:opacity-0 md:group-hover:opacity-100"
                 >
                   <Trash2 className="size-3.5" strokeWidth={1.75} />
                 </button>

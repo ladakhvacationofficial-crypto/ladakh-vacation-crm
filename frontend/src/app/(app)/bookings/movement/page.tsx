@@ -84,7 +84,7 @@ export default function MovementChartPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 w-8 p-0"
+            className="h-10 w-10 md:h-8 md:w-8 p-0"
             onClick={() => shiftDay(-1)}
             title="Previous Day"
           >
@@ -102,7 +102,7 @@ export default function MovementChartPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 w-8 p-0"
+            className="h-10 w-10 md:h-8 md:w-8 p-0"
             onClick={() => shiftDay(1)}
             title="Next Day"
           >
@@ -111,7 +111,7 @@ export default function MovementChartPage() {
           <Button
             variant="secondary"
             size="sm"
-            className="h-7 text-xs ml-1"
+            className="h-9 md:h-7 text-xs ml-1"
             onClick={setToday}
           >
             Today

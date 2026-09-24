@@ -460,51 +460,53 @@ export default function DashboardPage() {
               />
             </PanelBody>
           ) : (
-            <table className="w-full min-w-[720px] text-left text-[13px]">
-              <thead>
-                <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
-                  <th className="px-5 py-2.5 font-medium">Name</th>
-                  <th className="px-5 py-2.5 font-medium">Destination</th>
-                  <th className="px-5 py-2.5 font-medium">Source</th>
-                  <th className="px-5 py-2.5 font-medium">Stage</th>
-                  <th className="px-5 py-2.5 text-right font-medium">Received</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    className="group border-b border-ink-800/60 transition-colors duration-150 last:border-0 hover:bg-ink-850/70"
-                  >
-                    <td className="px-5 py-3">
-                      <Link
-                        href={`/leads/${lead.id}`}
-                        className="font-medium text-ink-100 transition-colors group-hover:text-signal-600"
-                      >
-                        {lead.name}
-                      </Link>
-                      <span className="tabular ml-2 text-[11px] text-ink-500">
-                        {lead.phone}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-ink-300">
-                      {lead.destination ?? '—'}
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className="rounded-full border border-ink-800 bg-ink-850 px-2 py-0.5 text-[10.5px] uppercase tracking-[0.06em] text-ink-500">
-                        {lead.source.replace(/_/g, ' ').toLowerCase()}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3">
-                      <Stage value={lead.status} />
-                    </td>
-                    <td className="tabular px-5 py-3 text-right text-[12px] text-ink-500">
-                      {relativeDate(lead.createdAt)}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-[13px]">
+                <thead>
+                  <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
+                    <th className="px-5 py-2.5 font-medium">Name</th>
+                    <th className="px-5 py-2.5 font-medium">Destination</th>
+                    <th className="px-5 py-2.5 font-medium">Source</th>
+                    <th className="px-5 py-2.5 font-medium">Stage</th>
+                    <th className="px-5 py-2.5 text-right font-medium">Received</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recent.map((lead) => (
+                    <tr
+                      key={lead.id}
+                      className="group border-b border-ink-800/60 transition-colors duration-150 last:border-0 hover:bg-ink-850/70"
+                    >
+                      <td className="px-5 py-3">
+                        <Link
+                          href={`/leads/${lead.id}`}
+                          className="font-medium text-ink-100 transition-colors group-hover:text-signal-600"
+                        >
+                          {lead.name}
+                        </Link>
+                        <span className="tabular ml-2 text-[11px] text-ink-500">
+                          {lead.phone}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-ink-300">
+                        {lead.destination ?? '—'}
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className="rounded-full border border-ink-800 bg-ink-850 px-2 py-0.5 text-[10.5px] uppercase tracking-[0.06em] text-ink-500">
+                          {lead.source.replace(/_/g, ' ').toLowerCase()}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3">
+                        <Stage value={lead.status} />
+                      </td>
+                      <td className="tabular px-5 py-3 text-right text-[12px] text-ink-500">
+                        {relativeDate(lead.createdAt)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </Panel>
       </div>

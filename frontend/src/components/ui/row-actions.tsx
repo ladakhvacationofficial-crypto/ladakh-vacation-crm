@@ -45,7 +45,7 @@ export function RowActions({
         }
       }}
       className={cn(
-        'inline-flex size-7 items-center justify-center rounded-md text-ink-500',
+        'inline-flex size-9 md:size-7 items-center justify-center rounded-md text-ink-500',
         'transition-colors hover:bg-loss-500/12 hover:text-loss-500',
         'disabled:pointer-events-none disabled:opacity-40',
         className,

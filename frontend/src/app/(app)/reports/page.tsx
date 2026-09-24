@@ -149,7 +149,7 @@ export default function ReportsPage() {
               id="from" type="date"
               value={range.from}
               onChange={(e) => setRange((r) => ({ ...r, from: e.target.value }))}
-              className="h-8 w-[140px]"
+              className="h-8 w-full sm:w-[140px]"
             />
           </div>
           <div className="space-y-1">
@@ -158,7 +158,7 @@ export default function ReportsPage() {
               id="to" type="date"
               value={range.to}
               onChange={(e) => setRange((r) => ({ ...r, to: e.target.value }))}
-              className="h-8 w-[140px]"
+              className="h-8 w-full sm:w-[140px]"
             />
           </div>
         </div>
@@ -227,41 +227,43 @@ export default function ReportsPage() {
               Nothing to report yet.
             </PanelBody>
           ) : (
-            <table className="w-full min-w-[720px] text-left text-[13px]">
-              <thead>
-                <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
-                  <th className="px-5 py-2.5 font-medium">Name</th>
-                  <th className="px-2 py-2.5 text-right font-medium">Leads</th>
-                  <th className="px-2 py-2.5 text-right font-medium">Conv %</th>
-                  <th className="px-2 py-2.5 text-right font-medium">Books</th>
-                  <th className="px-5 py-2.5 text-right font-medium">Revenue</th>
-                </tr>
-              </thead>
-              <tbody>
-                {staff.map((s) => (
-                  <tr key={s.userId} className="border-b border-ink-800/60 last:border-0 hover:bg-ink-850/70">
-                    <td className="px-5 py-2.5">
-                      <p className="text-ink-100">{s.name}</p>
-                      <p className="text-[10.5px] uppercase tracking-[0.08em] text-ink-500">
-                        {humanise(s.role)}
-                      </p>
-                    </td>
-                    <td className="tabular px-2 py-2.5 text-right text-ink-300">
-                      {s.leadsAssigned}
-                    </td>
-                    <td className="tabular px-2 py-2.5 text-right text-ink-400">
-                      {s.leadsAssigned > 0 ? percent(s.conversionPercent) : '—'}
-                    </td>
-                    <td className="tabular px-2 py-2.5 text-right text-ink-300">
-                      {s.bookings}
-                    </td>
-                    <td className="tabular px-5 py-2.5 text-right text-ink-100">
-                      {moneyShort(s.revenue)}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-[13px]">
+                <thead>
+                  <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
+                    <th className="px-5 py-2.5 font-medium">Name</th>
+                    <th className="px-2 py-2.5 text-right font-medium">Leads</th>
+                    <th className="px-2 py-2.5 text-right font-medium">Conv %</th>
+                    <th className="px-2 py-2.5 text-right font-medium">Books</th>
+                    <th className="px-5 py-2.5 text-right font-medium">Revenue</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {staff.map((s) => (
+                    <tr key={s.userId} className="border-b border-ink-800/60 last:border-0 hover:bg-ink-850/70">
+                      <td className="px-5 py-2.5">
+                        <p className="text-ink-100">{s.name}</p>
+                        <p className="text-[10.5px] uppercase tracking-[0.08em] text-ink-500">
+                          {humanise(s.role)}
+                        </p>
+                      </td>
+                      <td className="tabular px-2 py-2.5 text-right text-ink-300">
+                        {s.leadsAssigned}
+                      </td>
+                      <td className="tabular px-2 py-2.5 text-right text-ink-400">
+                        {s.leadsAssigned > 0 ? percent(s.conversionPercent) : '—'}
+                      </td>
+                      <td className="tabular px-2 py-2.5 text-right text-ink-300">
+                        {s.bookings}
+                      </td>
+                      <td className="tabular px-5 py-2.5 text-right text-ink-100">
+                        {moneyShort(s.revenue)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </Panel>
 
@@ -317,42 +319,44 @@ export default function ReportsPage() {
               No vendor costs recorded in this range.
             </PanelBody>
           ) : (
-            <table className="w-full min-w-[720px] text-left text-[13px]">
-              <thead>
-                <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
-                  <th className="px-5 py-2.5 font-medium">Supplier</th>
-                  <th className="px-2 py-2.5 text-right font-medium">Lines</th>
-                  <th className="px-2 py-2.5 text-right font-medium">Owed</th>
-                  <th className="px-5 py-2.5 text-right font-medium">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {vendors.slice(0, 12).map((v) => (
-                  <tr key={v.vendorId} className="border-b border-ink-800/60 last:border-0 hover:bg-ink-850/70">
-                    <td className="px-5 py-2.5">
-                      <p className="text-ink-100">{v.name}</p>
-                      <p className="text-[10.5px] text-ink-500">
-                        <Chip>{humanise(v.type)}</Chip>
-                        {v.city && <span className="ml-1.5">· {v.city}</span>}
-                      </p>
-                    </td>
-                    <td className="tabular px-2 py-2.5 text-right text-ink-400">
-                      {v.lineCount}
-                    </td>
-                    <td className="tabular px-2 py-2.5 text-right">
-                      {v.outstanding > 0 ? (
-                        <span className="text-warn-500">{moneyShort(v.outstanding)}</span>
-                      ) : (
-                        <Chip>Clear</Chip>
-                      )}
-                    </td>
-                    <td className="tabular px-5 py-2.5 text-right text-ink-100">
-                      {moneyShort(v.amountDue)}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-[13px]">
+                <thead>
+                  <tr className="border-b border-ink-800 text-[10px] uppercase tracking-[0.09em] text-ink-500">
+                    <th className="px-5 py-2.5 font-medium">Supplier</th>
+                    <th className="px-2 py-2.5 text-right font-medium">Lines</th>
+                    <th className="px-2 py-2.5 text-right font-medium">Owed</th>
+                    <th className="px-5 py-2.5 text-right font-medium">Total</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {vendors.slice(0, 12).map((v) => (
+                    <tr key={v.vendorId} className="border-b border-ink-800/60 last:border-0 hover:bg-ink-850/70">
+                      <td className="px-5 py-2.5">
+                        <p className="text-ink-100">{v.name}</p>
+                        <p className="text-[10.5px] text-ink-500">
+                          <Chip>{humanise(v.type)}</Chip>
+                          {v.city && <span className="ml-1.5">· {v.city}</span>}
+                        </p>
+                      </td>
+                      <td className="tabular px-2 py-2.5 text-right text-ink-400">
+                        {v.lineCount}
+                      </td>
+                      <td className="tabular px-2 py-2.5 text-right">
+                        {v.outstanding > 0 ? (
+                          <span className="text-warn-500">{moneyShort(v.outstanding)}</span>
+                        ) : (
+                          <Chip>Clear</Chip>
+                        )}
+                      </td>
+                      <td className="tabular px-5 py-2.5 text-right text-ink-100">
+                        {moneyShort(v.amountDue)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </Panel>
 
