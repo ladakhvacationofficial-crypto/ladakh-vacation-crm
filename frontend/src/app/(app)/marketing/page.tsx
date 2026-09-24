@@ -159,7 +159,7 @@ export default function MarketingDashboardPage() {
             Audience Reach
           </p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-teal-400">{stats.totalSent}</span>
+            <span className="text-2xl font-bold text-healthy-500">{stats.totalSent}</span>
             <span className="text-[12px] text-ink-400">recipients</span>
           </div>
         </Panel>
@@ -175,7 +175,7 @@ export default function MarketingDashboardPage() {
             </div>
             {stats.readRate > 0 && (
               <div className="text-[12px] text-ink-400">
-                <span className="font-semibold text-sky-400">{stats.readRate}%</span> read
+                <span className="font-semibold text-signal-500">{stats.readRate}%</span> read
               </div>
             )}
           </div>
@@ -186,7 +186,7 @@ export default function MarketingDashboardPage() {
             Estimated Spend
           </p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-amber-400">{money(stats.totalSpend)}</span>
+            <span className="text-2xl font-bold text-warn-500">{money(stats.totalSpend)}</span>
             <span className="text-[11px] text-ink-500">WhatsApp fees</span>
           </div>
         </Panel>
@@ -221,22 +221,22 @@ export default function MarketingDashboardPage() {
                 onClick={() => setChannelFilter('WHATSAPP')}
                 className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 font-medium transition ${
                   channelFilter === 'WHATSAPP'
-                    ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 shadow-sm'
+                    ? 'bg-healthy-500/12 text-healthy-500 border border-healthy-500/35 shadow-sm'
                     : 'text-ink-400 hover:text-ink-200'
                 }`}
               >
-                <MessageSquare className="size-3 text-emerald-400" />
+                <MessageSquare className="size-3 text-healthy-500" />
                 WhatsApp
               </button>
               <button
                 onClick={() => setChannelFilter('EMAIL')}
                 className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 font-medium transition ${
                   channelFilter === 'EMAIL'
-                    ? 'bg-sky-950/80 text-sky-300 border border-sky-800/60 shadow-sm'
+                    ? 'bg-signal-500/12 text-signal-500 border border-signal-500/35 shadow-sm'
                     : 'text-ink-400 hover:text-ink-200'
                 }`}
               >
-                <Mail className="size-3 text-sky-400" />
+                <Mail className="size-3 text-signal-500" />
                 Email
               </button>
             </div>
@@ -307,7 +307,7 @@ export default function MarketingDashboardPage() {
                             {c.name}
                           </Link>
                           {c.scheduledAt && c.status === 'SCHEDULED' && (
-                            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-amber-400/90">
+                            <p className="mt-0.5 flex items-center gap-1 text-[11px] text-warn-500/90">
                               <Clock className="size-3" />
                               Scheduled for {shortDate(c.scheduledAt)}
                             </p>
@@ -316,13 +316,13 @@ export default function MarketingDashboardPage() {
 
                         <td className="px-4 py-4">
                           {c.channel === 'WHATSAPP' ? (
-                            <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-800/60 bg-emerald-950/40 px-2 py-0.5 text-[11px] font-medium text-emerald-300">
-                              <MessageSquare className="size-3 text-emerald-400" />
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-healthy-500/35 bg-healthy-500/12 px-2 py-0.5 text-[11px] font-medium text-healthy-500">
+                              <MessageSquare className="size-3 text-healthy-500" />
                               WhatsApp
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 rounded-md border border-sky-800/60 bg-sky-950/40 px-2 py-0.5 text-[11px] font-medium text-sky-300">
-                              <Mail className="size-3 text-sky-400" />
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-signal-500/35 bg-signal-500/12 px-2 py-0.5 text-[11px] font-medium text-signal-500">
+                              <Mail className="size-3 text-signal-500" />
                               Email
                             </span>
                           )}
@@ -379,7 +379,7 @@ export default function MarketingDashboardPage() {
                                 variant="secondary"
                                 onClick={() => handleSendNow(c.id, c.name)}
                                 disabled={isBusy}
-                                className="h-7 border-emerald-800/80 bg-emerald-950/40 text-[11px] text-emerald-300 hover:bg-emerald-900/60"
+                                className="h-7 border-healthy-500/35 bg-healthy-500/12 text-[11px] text-healthy-500 hover:bg-healthy-500/12"
                               >
                                 <Play className="size-3" />
                                 Send Now
@@ -428,9 +428,9 @@ function StatusBadge({ status }: { status: string }) {
     case 'DRAFT':
       return <Chip className="border-ink-700 bg-ink-800/60 text-ink-300">Draft</Chip>;
     case 'SCHEDULED':
-      return <Chip className="border-amber-800/60 bg-amber-950/40 text-amber-300">Scheduled</Chip>;
+      return <Chip className="border-warn-500/35 bg-warn-500/12 text-warn-500">Scheduled</Chip>;
     case 'SENDING':
-      return <Chip className="border-sky-800/60 bg-sky-950/40 text-sky-300 animate-pulse">Sending...</Chip>;
+      return <Chip className="border-signal-500/35 bg-signal-500/12 text-signal-500 animate-pulse">Sending...</Chip>;
     case 'SENT':
       return <Chip className="border-healthy-800/60 bg-healthy-950/40 text-healthy-300">Sent</Chip>;
     case 'CANCELLED':

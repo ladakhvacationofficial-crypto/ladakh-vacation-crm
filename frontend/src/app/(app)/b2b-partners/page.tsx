@@ -229,7 +229,7 @@ export default function B2bPartnersPage() {
                           type="button"
                           disabled={deletingId === p.id}
                           onClick={() => handleDelete(p)}
-                          className="p-1.5 rounded text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors disabled:opacity-50"
+                          className="p-1.5 rounded text-loss-500 hover:text-loss-500 hover:bg-loss-500/10 transition-colors disabled:opacity-50"
                           title="Delete Partner"
                         >
                           {deletingId === p.id ? (

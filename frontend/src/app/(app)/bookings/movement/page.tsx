@@ -135,41 +135,41 @@ export default function MovementChartPage() {
             </p>
           </div>
 
-          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 shadow-sm">
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-medium">
+          <div className="rounded-xl border border-healthy-500/20 bg-healthy-500/5 p-4 shadow-sm">
+            <div className="flex items-center gap-2 text-healthy-500 text-xs font-medium">
               <PlaneLanding className="size-4" />
               Today's Arrivals
             </div>
-            <div className="mt-2 text-2xl font-bold text-emerald-300 tabular">
+            <div className="mt-2 text-2xl font-bold text-healthy-500 tabular">
               {data.summary.arrivalsToday}
             </div>
-            <p className="text-[11px] text-emerald-500/80 mt-0.5">
+            <p className="text-[11px] text-healthy-500/80 mt-0.5">
               Airport IXL arrivals
             </p>
           </div>
 
-          <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-4 shadow-sm">
-            <div className="flex items-center gap-2 text-blue-400 text-xs font-medium">
+          <div className="rounded-xl border border-signal-500/20 bg-signal-500/5 p-4 shadow-sm">
+            <div className="flex items-center gap-2 text-signal-500 text-xs font-medium">
               <PlaneTakeoff className="size-4" />
               Today's Departures
             </div>
-            <div className="mt-2 text-2xl font-bold text-blue-300 tabular">
+            <div className="mt-2 text-2xl font-bold text-signal-500 tabular">
               {data.summary.departuresToday}
             </div>
-            <p className="text-[11px] text-blue-500/80 mt-0.5">
+            <p className="text-[11px] text-signal-500/80 mt-0.5">
               Flying home today
             </p>
           </div>
 
-          <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 shadow-sm">
-            <div className="flex items-center gap-2 text-amber-400 text-xs font-medium">
+          <div className="rounded-xl border border-warn-500/20 bg-warn-500/5 p-4 shadow-sm">
+            <div className="flex items-center gap-2 text-warn-500 text-xs font-medium">
               <Mountain className="size-4" />
               Pass Crossings
             </div>
-            <div className="mt-2 text-2xl font-bold text-amber-300 tabular">
+            <div className="mt-2 text-2xl font-bold text-warn-500 tabular">
               {data.summary.highPassCrossingsToday}
             </div>
-            <p className="text-[11px] text-amber-500/80 mt-0.5">
+            <p className="text-[11px] text-warn-500/80 mt-0.5">
               Khardung La / Chang La
             </p>
           </div>
@@ -190,10 +190,10 @@ export default function MovementChartPage() {
         <div className="space-y-6">
           {/* Section 1: In-Transit Movements (High Pass Crossings) */}
           {data.inTransit.length > 0 && (
-            <Panel className="border-amber-500/30 bg-amber-500/[0.02]">
-              <PanelHeader className="border-b border-amber-500/20">
-                <PanelTitle className="flex items-center gap-2 text-amber-300">
-                  <Mountain className="size-4 text-amber-400" />
+            <Panel className="border-warn-500/30 bg-warn-500/[0.02]">
+              <PanelHeader className="border-b border-warn-500/20">
+                <PanelTitle className="flex items-center gap-2 text-warn-500">
+                  <Mountain className="size-4 text-warn-500" />
                   Active Mountain Sector Transfers Today ({data.inTransit.length})
                 </PanelTitle>
               </PanelHeader>
@@ -211,7 +211,7 @@ export default function MovementChartPage() {
                         <Chip>{t.bookingNumber}</Chip>
                         <span className="text-xs text-ink-400">· {t.pax} Pax</span>
                       </div>
-                      <p className="text-xs text-amber-400/90 font-medium mt-1">
+                      <p className="text-xs text-warn-500/90 font-medium mt-1">
                         🏔️ {t.sector}
                       </p>
                     </div>
@@ -220,7 +220,7 @@ export default function MovementChartPage() {
                         href={`https://wa.me/${t.phone.replace(/[^0-9]/g, '')}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20"
+                        className="inline-flex items-center gap-1 rounded bg-healthy-500/10 px-2 py-1 text-xs font-medium text-healthy-500 hover:bg-healthy-500/20 border border-healthy-500/20"
                       >
                         <MessageCircle className="size-3.5" />
                         WhatsApp
@@ -279,7 +279,7 @@ export default function MovementChartPage() {
                           href={`https://wa.me/${g.phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-emerald-400 hover:underline"
+                          className="text-healthy-500 hover:underline"
                         >
                           WhatsApp
                         </a>
@@ -295,7 +295,7 @@ export default function MovementChartPage() {
               <PanelHeader className="border-b border-ink-800 bg-ink-900/40">
                 <PanelTitle className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-1.5 text-ink-200">
-                    <MapPin className="size-3.5 text-amber-400" />
+                    <MapPin className="size-3.5 text-warn-500" />
                     Nubra Valley ({data.valleyDistribution.nubra.length})
                   </span>
                   <span className="text-xs text-ink-400 font-normal">
@@ -312,7 +312,7 @@ export default function MovementChartPage() {
                       <div className="flex items-center justify-between gap-1">
                         <Link
                           href={`/bookings/${g.bookingId}`}
-                          className="text-xs font-semibold text-ink-200 hover:text-amber-300 truncate"
+                          className="text-xs font-semibold text-ink-200 hover:text-warn-500 truncate"
                         >
                           {g.guestName}
                         </Link>
@@ -328,7 +328,7 @@ export default function MovementChartPage() {
                           href={`https://wa.me/${g.phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-emerald-400 hover:underline"
+                          className="text-healthy-500 hover:underline"
                         >
                           WhatsApp
                         </a>
@@ -344,7 +344,7 @@ export default function MovementChartPage() {
               <PanelHeader className="border-b border-ink-800 bg-ink-900/40">
                 <PanelTitle className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-1.5 text-ink-200">
-                    <MapPin className="size-3.5 text-blue-400" />
+                    <MapPin className="size-3.5 text-signal-500" />
                     Pangong Lake ({data.valleyDistribution.pangong.length})
                   </span>
                   <span className="text-xs text-ink-400 font-normal">
@@ -361,7 +361,7 @@ export default function MovementChartPage() {
                       <div className="flex items-center justify-between gap-1">
                         <Link
                           href={`/bookings/${g.bookingId}`}
-                          className="text-xs font-semibold text-ink-200 hover:text-blue-300 truncate"
+                          className="text-xs font-semibold text-ink-200 hover:text-signal-500 truncate"
                         >
                           {g.guestName}
                         </Link>
@@ -377,7 +377,7 @@ export default function MovementChartPage() {
                           href={`https://wa.me/${g.phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-emerald-400 hover:underline"
+                          className="text-healthy-500 hover:underline"
                         >
                           WhatsApp
                         </a>
@@ -394,7 +394,7 @@ export default function MovementChartPage() {
             {/* Arrivals */}
             <Panel>
               <PanelHeader className="border-b border-ink-800">
-                <PanelTitle className="flex items-center gap-2 text-emerald-400 text-sm">
+                <PanelTitle className="flex items-center gap-2 text-healthy-500 text-sm">
                   <PlaneLanding className="size-4" />
                   Today's Arrivals at Leh Airport (IXL)
                 </PanelTitle>
@@ -422,7 +422,7 @@ export default function MovementChartPage() {
                           href={`https://wa.me/${a.phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[10px] text-emerald-400 hover:underline"
+                          className="text-[10px] text-healthy-500 hover:underline"
                         >
                           Send Welcome
                         </a>
@@ -436,7 +436,7 @@ export default function MovementChartPage() {
             {/* Departures */}
             <Panel>
               <PanelHeader className="border-b border-ink-800">
-                <PanelTitle className="flex items-center gap-2 text-blue-400 text-sm">
+                <PanelTitle className="flex items-center gap-2 text-signal-500 text-sm">
                   <PlaneTakeoff className="size-4" />
                   Today's Airport Drops / Departures
                 </PanelTitle>
@@ -464,7 +464,7 @@ export default function MovementChartPage() {
                           href={`https://wa.me/${d.phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-[10px] text-blue-400 hover:underline"
+                          className="text-[10px] text-signal-500 hover:underline"
                         >
                           Send Feedback
                         </a>

@@ -39,7 +39,7 @@ export function DeactivateButton({
       }}
       className={cn(
         'inline-flex h-8 items-center gap-2 rounded-md border border-ink-700 bg-transparent px-3 text-xs font-medium text-ink-400',
-        'transition-colors hover:border-loss-500/60 hover:bg-loss-500/8 hover:text-loss-500',
+        'transition-colors hover:border-loss-500/35 hover:bg-loss-500/8 hover:text-loss-500',
         'disabled:pointer-events-none disabled:opacity-45',
         className,
       )}

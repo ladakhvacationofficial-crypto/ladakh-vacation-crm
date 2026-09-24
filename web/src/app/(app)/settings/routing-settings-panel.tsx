@@ -191,16 +191,16 @@ export function RoutingSettingsPanel() {
                 onClick={() => setSettings({ ...settings, strategy: 'PERFORMANCE_WEIGHTED' })}
                 className={`cursor-pointer rounded-xl border p-4 transition ${
                   settings.strategy === 'PERFORMANCE_WEIGHTED'
-                    ? 'border-amber-500 bg-amber-950/40 ring-1 ring-amber-500'
+                    ? 'border-warn-500 bg-warn-500/12 ring-1 ring-warn-500'
                     : 'border-ink-800 bg-ink-900/30 hover:border-ink-700'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-amber-400 font-semibold text-[13px]">
+                  <div className="flex items-center gap-2 text-warn-500 font-semibold text-[13px]">
                     <Trophy className="size-4" />
                     Conversion-Weighted
                   </div>
-                  {settings.strategy === 'PERFORMANCE_WEIGHTED' && <Check className="size-4 text-amber-400" />}
+                  {settings.strategy === 'PERFORMANCE_WEIGHTED' && <Check className="size-4 text-warn-500" />}
                 </div>
                 <p className="mt-2 text-[12px] text-ink-400 leading-relaxed">
                   Routes high-intent leads to your highest-converting sales reps.
@@ -212,16 +212,16 @@ export function RoutingSettingsPanel() {
                 onClick={() => setSettings({ ...settings, strategy: 'LOAD_BALANCED' })}
                 className={`cursor-pointer rounded-xl border p-4 transition ${
                   settings.strategy === 'LOAD_BALANCED'
-                    ? 'border-teal-500 bg-teal-950/40 ring-1 ring-teal-500'
+                    ? 'border-healthy-500 bg-healthy-500/12 ring-1 ring-healthy-500'
                     : 'border-ink-800 bg-ink-900/30 hover:border-ink-700'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-teal-400 font-semibold text-[13px]">
+                  <div className="flex items-center gap-2 text-healthy-500 font-semibold text-[13px]">
                     <Scale className="size-4" />
                     Load-Balanced
                   </div>
-                  {settings.strategy === 'LOAD_BALANCED' && <Check className="size-4 text-teal-400" />}
+                  {settings.strategy === 'LOAD_BALANCED' && <Check className="size-4 text-healthy-500" />}
                 </div>
                 <p className="mt-2 text-[12px] text-ink-400 leading-relaxed">
                   Assigns to the sales rep with the lowest number of active open leads.
@@ -232,13 +232,13 @@ export function RoutingSettingsPanel() {
 
           {/* High Intent Threshold (Conditional) */}
           {settings.strategy === 'PERFORMANCE_WEIGHTED' && (
-            <div className="rounded-xl border border-amber-900/40 bg-amber-950/20 p-4 space-y-2">
+            <div className="rounded-xl border border-warn-500/40 bg-warn-500/20 p-4 space-y-2">
               <div className="flex items-center justify-between">
-                <Label className="text-[13px] text-amber-300 font-semibold flex items-center gap-1.5">
-                  <Trophy className="size-4 text-amber-400" />
+                <Label className="text-[13px] text-warn-500 font-semibold flex items-center gap-1.5">
+                  <Trophy className="size-4 text-warn-500" />
                   High-Intent Lead Score Threshold
                 </Label>
-                <span className="text-[13px] font-bold text-amber-400">
+                <span className="text-[13px] font-bold text-warn-500">
                   Score ≥ {settings.highScoreThreshold} pts
                 </span>
               </div>
@@ -252,7 +252,7 @@ export function RoutingSettingsPanel() {
                 step="5"
                 value={settings.highScoreThreshold}
                 onChange={(e) => setSettings({ ...settings, highScoreThreshold: parseInt(e.target.value) })}
-                className="mt-2 w-full accent-amber-500 cursor-pointer"
+                className="mt-2 w-full accent-warn-500 cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-ink-500">
                 <span>Medium Intent (30)</span>
@@ -311,8 +311,8 @@ export function RoutingSettingsPanel() {
                         <td className="px-4 py-3 font-medium text-ink-100 flex items-center gap-2">
                           {s.name}
                           {isTopPerformer && (
-                            <span className="inline-flex items-center gap-1 rounded bg-amber-950/80 border border-amber-800/60 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">
-                              <Trophy className="size-3 text-amber-400" />
+                            <span className="inline-flex items-center gap-1 rounded bg-warn-500/12 border border-warn-500/35 px-1.5 py-0.5 text-[10px] font-bold text-warn-500">
+                              <Trophy className="size-3 text-warn-500" />
                               Top Agent
                             </span>
                           )}
@@ -332,7 +332,7 @@ export function RoutingSettingsPanel() {
                               s.conversionRate >= 20
                                 ? 'text-healthy-400'
                                 : s.conversionRate >= 10
-                                ? 'text-amber-400'
+                                ? 'text-warn-500'
                                 : 'text-ink-400'
                             }`}
                           >

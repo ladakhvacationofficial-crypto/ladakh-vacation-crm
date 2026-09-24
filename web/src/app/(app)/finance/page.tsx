@@ -57,7 +57,7 @@ export default function FinancePage() {
   const margin = stats?.averageMarginPercent ?? 0;
   const marginHealth = margin >= 15 ? 'healthy' : (stats && stats.bookings > 0 ? 'warn' : 'muted');
 
-  if (error) return <div role="alert" className="m-6 rounded-lg border border-red-300 p-6">
+  if (error) return <div role="alert" className="m-6 rounded-lg border border-loss-400 p-6">
     <p>{error}</p><button className="mt-3 underline" onClick={() => window.location.reload()}>Retry loading data</button>
   </div>;
 

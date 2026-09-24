@@ -119,7 +119,7 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
                     />
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => removeLine(i)} disabled={lineItems.length === 1}>
-                    <Trash2 className="w-4 h-4 text-red-500" />
+                    <Trash2 className="w-4 h-4 text-loss-500" />
                   </Button>
                 </div>
               ))}
@@ -167,7 +167,7 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <p className="font-bold text-sm">{formatCurrency(inv.total)}</p>
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${inv.status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${inv.status === 'PAID' ? 'bg-healthy-500 text-healthy-500' : 'bg-ink-850 text-ink-300'}`}>
                       {inv.status}
                     </span>
                   </div>

@@ -253,7 +253,7 @@ export default function LeadDetailPage() {
               type="button"
               disabled={saving || lead.status === 'LOST'}
               title="Mark as Lost"
-              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-ink-700 bg-transparent px-3 text-xs font-medium text-ink-400 transition-colors hover:border-loss-500/60 hover:bg-loss-500/8 hover:text-loss-500 disabled:pointer-events-none disabled:opacity-45"
+              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-ink-700 bg-transparent px-3 text-xs font-medium text-ink-400 transition-colors hover:border-loss-500/35 hover:bg-loss-500/8 hover:text-loss-500 disabled:pointer-events-none disabled:opacity-45"
             >
               <UserX className="size-3.5" strokeWidth={1.75} />
               Mark as Lost
@@ -354,13 +354,7 @@ export default function LeadDetailPage() {
 
         {/* Right: the facts */}
         <div className="min-w-0 space-y-4">
-          <MlLeadScoreCard
-            leadId={lead.id}
-            initialScore={lead.score}
-            onScored={(newScore) => {
-              setLead((prev) => (prev ? { ...prev, score: newScore } : prev));
-            }}
-          />
+          <MlLeadScoreCard leadId={lead.id} initialScore={lead.score} />
 
           <Panel>
             <PanelHeader>
@@ -497,11 +491,14 @@ export default function LeadDetailPage() {
               <PanelTitle>Score</PanelTitle>
               <ScoreMeter score={lead.score} />
             </PanelHeader>
-            {lead.scoreNotes && (
-              <PanelBody className="pt-3">
-                <p className="text-[11px] leading-relaxed text-ink-500">
-                  {lead.scoreNotes}
-                </p>
+            {(lead.scoreNotes || lead.heuristicNotes) && (
+              <PanelBody className="space-y-2 pt-3">
+                {lead.scoreNotes && (
+                  <p className="text-[11px] leading-relaxed text-ink-500">{lead.scoreNotes}</p>
+                )}
+                {lead.heuristicNotes && (
+                  <p className="text-[11px] leading-relaxed text-ink-500">{lead.heuristicNotes}</p>
+                )}
               </PanelBody>
             )}
           </Panel>

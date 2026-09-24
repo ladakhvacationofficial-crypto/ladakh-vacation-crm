@@ -56,7 +56,7 @@ export default function InvoicesDashboard() {
               <tr key={invoice.id} className="hover:bg-muted/50">
                 <td className="p-3 font-medium">{invoice.invoiceNumber}</td>
                 <td className="p-3">
-                  <Link href={`/leads/${invoice.leadId}`} className="hover:underline text-blue-600">
+                  <Link href={`/leads/${invoice.leadId}`} className="hover:underline text-signal-500">
                     {invoice.lead?.name || 'Unknown'}
                   </Link>
                 </td>
@@ -64,8 +64,8 @@ export default function InvoicesDashboard() {
                 <td className="p-3 font-medium">{formatCurrency(invoice.total)}</td>
                 <td className="p-3">
                   <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                    invoice.status === 'PAID' ? 'bg-green-100 text-green-700' :
-                    invoice.status === 'DRAFT' ? 'bg-gray-100 text-gray-700' : 'bg-blue-100 text-blue-700'
+                    invoice.status === 'PAID' ? 'bg-healthy-500 text-healthy-500' :
+                    invoice.status === 'DRAFT' ? 'bg-ink-850 text-ink-300' : 'bg-signal-500 text-signal-500'
                   }`}>
                     {invoice.status}
                   </span>
@@ -81,7 +81,7 @@ export default function InvoicesDashboard() {
                   {invoice.status !== 'PAID' && (
                     <button
                       onClick={() => handleMarkPaid(invoice.id)}
-                      className="text-xs inline-flex items-center gap-1 text-green-600 hover:text-green-700"
+                      className="text-xs inline-flex items-center gap-1 text-healthy-500 hover:text-healthy-500"
                     >
                       <CheckCircle className="w-3 h-3" /> Mark Paid
                     </button>

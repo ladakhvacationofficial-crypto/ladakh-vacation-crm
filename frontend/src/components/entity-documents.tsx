@@ -22,7 +22,7 @@ export function EntityDocuments({entityType,entityId}:{entityType:'booking'|'emp
     <PanelHeader><PanelTitle>Protected documents</PanelTitle></PanelHeader>
     <PanelBody>
       <p className="mb-3 text-sm text-ink-400">Only authorised staff can download these files. Maximum 12 MB per file.</p>
-      {error && <p role="alert" className="mb-3 text-red-600">{error}</p>}
+      {error && <p role="alert" className="mb-3 text-loss-500">{error}</p>}
       <label className="block text-sm">Upload document
         <input type="file" disabled={busy} accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.csv" className="mt-2 block max-w-full" onChange={event=>{
           const file=event.target.files?.[0];event.target.value='';if(!file)return;
@@ -35,7 +35,7 @@ export function EntityDocuments({entityType,entityId}:{entityType:'booking'|'emp
         {files.map(file=><li key={file.id} className="flex flex-wrap justify-between gap-3 border-t border-ink-700 pt-3 text-sm">
           <span className="break-all">{file.filename} ({Math.ceil(file.sizeBytes/1024)} KB)</span>
           <span className="flex gap-4"><button disabled={busy} className="underline" onClick={()=>void action(()=>openBinary(`/uploads/${file.id}/content`,file.filename))}>Download</button>
-          {(file.uploadedById===user?.id || ['OWNER','SUPER_ADMIN'].includes(user?.role??'')) && <button disabled={busy} className="text-red-600 underline" onClick={()=>{if(window.confirm(`Delete ${file.filename} permanently?`))void action(()=>api.del(`/uploads/${file.id}`));}}>Delete</button>}</span>
+          {(file.uploadedById===user?.id || ['OWNER','SUPER_ADMIN'].includes(user?.role??'')) && <button disabled={busy} className="text-loss-500 underline" onClick={()=>{if(window.confirm(`Delete ${file.filename} permanently?`))void action(()=>api.del(`/uploads/${file.id}`));}}>Delete</button>}</span>
         </li>)}
         {!files.length && !error && <li className="text-ink-400">No documents uploaded.</li>}
       </ul>}

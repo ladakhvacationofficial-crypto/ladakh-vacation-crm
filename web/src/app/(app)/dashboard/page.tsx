@@ -160,7 +160,7 @@ export default function DashboardPage() {
     month: 'long',
   }).format(new Date());
 
-  if (error) return <div role="alert" className="m-6 rounded-lg border border-red-300 p-6">
+  if (error) return <div role="alert" className="m-6 rounded-lg border border-loss-400 p-6">
     <p>{error}</p><button className="mt-3 underline" onClick={() => window.location.reload()}>Retry loading data</button>
   </div>;
 

@@ -136,13 +136,13 @@ export default function CampaignDetailPage({
             <div className="flex items-center gap-2.5">
               <h1 className="text-xl font-bold tracking-tight text-ink-100">{campaign.name}</h1>
               {campaign.channel === 'WHATSAPP' ? (
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-800/60 bg-emerald-950/40 px-2 py-0.5 text-[11px] font-medium text-emerald-300">
-                  <MessageSquare className="size-3 text-emerald-400" />
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-healthy-500/35 bg-healthy-500/12 px-2 py-0.5 text-[11px] font-medium text-healthy-500">
+                  <MessageSquare className="size-3 text-healthy-500" />
                   WhatsApp
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 rounded-md border border-sky-800/60 bg-sky-950/40 px-2 py-0.5 text-[11px] font-medium text-sky-300">
-                  <Mail className="size-3 text-sky-400" />
+                <span className="inline-flex items-center gap-1.5 rounded-md border border-signal-500/35 bg-signal-500/12 px-2 py-0.5 text-[11px] font-medium text-signal-500">
+                  <Mail className="size-3 text-signal-500" />
                   Email
                 </span>
               )}
@@ -171,7 +171,7 @@ export default function CampaignDetailPage({
               size="sm"
               onClick={handleSendNow}
               disabled={actionBusy}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium gap-1.5 shadow-sm"
+              className="bg-healthy-500 hover:bg-healthy-500 text-white font-medium gap-1.5 shadow-sm"
             >
               <Play className="size-3.5" />
               Send Now
@@ -203,7 +203,7 @@ export default function CampaignDetailPage({
         <Panel className="border-ink-800/80 bg-ink-950 p-4">
           <p className="text-[11px] font-medium uppercase tracking-wider text-ink-500">Dispatched</p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-teal-400">{metrics.sent}</span>
+            <span className="text-2xl font-bold text-healthy-500">{metrics.sent}</span>
             <span className="text-[11px] text-ink-400">
               ({campaign.targetCount > 0 ? Math.round((metrics.sent / campaign.targetCount) * 100) : 0}%)
             </span>
@@ -221,8 +221,8 @@ export default function CampaignDetailPage({
         <Panel className="border-ink-800/80 bg-ink-950 p-4">
           <p className="text-[11px] font-medium uppercase tracking-wider text-ink-500">Read / Opened</p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-sky-400">{metrics.read}</span>
-            <span className="text-[11px] text-sky-500 font-medium">({readRate}%)</span>
+            <span className="text-2xl font-bold text-signal-500">{metrics.read}</span>
+            <span className="text-[11px] text-signal-500 font-medium">({readRate}%)</span>
           </div>
         </Panel>
 
@@ -251,7 +251,7 @@ export default function CampaignDetailPage({
 
             <div>
               <p className="text-[11px] text-ink-500">Estimated Cost</p>
-              <p className="font-semibold text-amber-400">
+              <p className="font-semibold text-warn-500">
                 {campaign.estimatedCost > 0 ? money(campaign.estimatedCost) : '₹0'}
               </p>
             </div>
@@ -336,9 +336,9 @@ function StatusBadge({ status }: { status: string }) {
     case 'DRAFT':
       return <Chip className="border-ink-700 bg-ink-800/60 text-ink-300">Draft</Chip>;
     case 'SCHEDULED':
-      return <Chip className="border-amber-800/60 bg-amber-950/40 text-amber-300">Scheduled</Chip>;
+      return <Chip className="border-warn-500/35 bg-warn-500/12 text-warn-500">Scheduled</Chip>;
     case 'SENDING':
-      return <Chip className="border-sky-800/60 bg-sky-950/40 text-sky-300 animate-pulse">Sending...</Chip>;
+      return <Chip className="border-signal-500/35 bg-signal-500/12 text-signal-500 animate-pulse">Sending...</Chip>;
     case 'SENT':
       return <Chip className="border-healthy-800/60 bg-healthy-950/40 text-healthy-300">Sent</Chip>;
     case 'CANCELLED':
@@ -355,11 +355,11 @@ function RecipientStatusBadge({ status, error }: { status: string; error?: strin
     case 'PENDING':
       return <span className="text-[11px] text-ink-500">Pending</span>;
     case 'SENT':
-      return <span className="text-[11px] text-teal-400 font-medium">✓ Sent</span>;
+      return <span className="text-[11px] text-healthy-500 font-medium">✓ Sent</span>;
     case 'DELIVERED':
       return <span className="text-[11px] text-healthy-400 font-medium">✓✓ Delivered</span>;
     case 'READ':
-      return <span className="text-[11px] text-sky-400 font-bold">✓✓ Read</span>;
+      return <span className="text-[11px] text-signal-500 font-bold">✓✓ Read</span>;
     case 'FAILED':
       return (
         <span className="text-[11px] text-loss-400 font-medium" title={error || ''}>
@@ -367,7 +367,7 @@ function RecipientStatusBadge({ status, error }: { status: string; error?: strin
         </span>
       );
     case 'UNSUBSCRIBED':
-      return <span className="text-[11px] text-amber-400">Opted Out</span>;
+      return <span className="text-[11px] text-warn-500">Opted Out</span>;
     default:
       return <span className="text-[11px] text-ink-400">{status}</span>;
   }

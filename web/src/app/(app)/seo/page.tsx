@@ -394,7 +394,7 @@ export default function SeoPage() {
                 onClick={() => setSelectedSiteId(s.id)}
                 className={`group flex items-center gap-2.5 rounded-lg border px-3.5 py-2 text-left transition-all duration-200 ${
                   selectedSiteId === s.id
-                    ? 'border-signal-500/60 bg-ink-900 text-ink-100 shadow-sm'
+                    ? 'border-signal-500/35 bg-ink-900 text-ink-100 shadow-sm'
                     : 'border-ink-800 bg-ink-950 text-ink-400 hover:border-ink-700 hover:text-ink-200'
                 }`}
               >
@@ -831,13 +831,13 @@ function PageRankRow({
     p.score >= 60 ? 'text-warn-500' : 'text-loss-500';
 
   const tierBadge =
-    p.tier === 0 ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
-    p.tier === 1 ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-    p.tier === 2 ? 'bg-pink-500/10 text-pink-400 border-pink-500/20' :
-    p.tier === 3 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-    p.tier === 4 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-    p.tier === 5 ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20' :
-    p.tier === 6 ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+    p.tier === 0 ? 'bg-signal-500/10 text-signal-500 border-signal-500/20' :
+    p.tier === 1 ? 'bg-signal-500/10 text-signal-500 border-signal-500/20' :
+    p.tier === 2 ? 'bg-brand-500/10 text-brand-500 border-brand-500/20' :
+    p.tier === 3 ? 'bg-warn-500/10 text-warn-500 border-warn-500/20' :
+    p.tier === 4 ? 'bg-healthy-500/10 text-healthy-500 border-healthy-500/20' :
+    p.tier === 5 ? 'bg-signal-500/10 text-signal-500 border-signal-500/20' :
+    p.tier === 6 ? 'bg-warn-500/10 text-warn-500 border-warn-500/20' :
     'bg-ink-800 text-ink-400 border-ink-700';
 
   const tierLabel =
@@ -899,7 +899,7 @@ function PageRankRow({
             <span>📈 {p.impr.toLocaleString()} impr</span>
           )}
           {p.conv !== null && p.conv !== undefined && (
-            <span className="text-emerald-400">🎯 {p.conv} conv</span>
+            <span className="text-healthy-500">🎯 {p.conv} conv</span>
           )}
           {p.words && <span>📝 {p.words} words</span>}
         </div>
@@ -1481,7 +1481,7 @@ function PageChecklistDialog({
               </div>
               <div>
                 <p className="text-ink-500 uppercase text-[9.5px]">Conversions</p>
-                <p className="font-semibold text-emerald-400">{page.conv ?? '0'}</p>
+                <p className="font-semibold text-healthy-500">{page.conv ?? '0'}</p>
               </div>
               <div>
                 <p className="text-ink-500 uppercase text-[9.5px]">Target Depth</p>
@@ -1641,17 +1641,17 @@ function CheckRow({ check: c, page }: { check: SeoCheck; page: SeoRankedPage }) 
                   type="button"
                   onClick={handleFixWithAi}
                   disabled={loading}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-medium bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/25 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-medium bg-warn-500/10 text-warn-500 hover:bg-warn-500/20 border border-warn-500/25 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
                   title="Generate instant resolution for this check using AI"
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="size-3 animate-spin text-amber-400" />
+                      <Loader2 className="size-3 animate-spin text-warn-500" />
                       <span>Generating…</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="size-3 text-amber-400" />
+                      <Sparkles className="size-3 text-warn-500" />
                       <span>{aiFix ? 'Hide AI Fix' : 'Fix with AI'}</span>
                     </>
                   )}
@@ -1673,13 +1673,13 @@ function CheckRow({ check: c, page }: { check: SeoCheck; page: SeoRankedPage }) 
       </div>
 
       {aiFix && (
-        <div className="ml-6.5 mt-2 rounded-lg border border-amber-500/30 bg-ink-900/90 p-3.5 space-y-2.5 text-left text-xs shadow-inner">
+        <div className="ml-6.5 mt-2 rounded-lg border border-warn-500/30 bg-ink-900/90 p-3.5 space-y-2.5 text-left text-xs shadow-inner">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="flex items-center justify-center size-5 rounded bg-amber-500/20 text-amber-400">
+              <span className="flex items-center justify-center size-5 rounded bg-warn-500/20 text-warn-500">
                 <Sparkles className="size-3" />
               </span>
-              <p className="font-semibold text-amber-300 text-[12px]">{aiFix.headline}</p>
+              <p className="font-semibold text-warn-500 text-[12px]">{aiFix.headline}</p>
             </div>
             <button
               type="button"
@@ -1703,13 +1703,13 @@ function CheckRow({ check: c, page }: { check: SeoCheck; page: SeoRankedPage }) 
               <button
                 type="button"
                 onClick={handleCopy}
-                className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 hover:bg-emerald-950/70 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] transition-colors"
+                className="inline-flex items-center gap-1 text-healthy-500 hover:text-healthy-500 bg-healthy-500/12 hover:bg-healthy-500/12 border border-healthy-500/30 px-2 py-0.5 rounded text-[10px] transition-colors"
               >
                 {copied ? <Check className="size-2.5" /> : <Copy className="size-2.5" />}
                 {copied ? 'Copied to Clipboard!' : 'Copy Code / Text'}
               </button>
             </div>
-            <pre className="whitespace-pre-wrap font-mono leading-relaxed text-emerald-300/90 text-[11.5px]">
+            <pre className="whitespace-pre-wrap font-mono leading-relaxed text-healthy-500/90 text-[11.5px]">
               {aiFix.suggestion}
             </pre>
           </div>

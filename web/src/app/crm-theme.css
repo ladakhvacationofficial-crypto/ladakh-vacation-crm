@@ -14,41 +14,41 @@
   Treat 50 as "the ink itself" and 950 as "the empty page".
 */
 @theme {
-  /* Surfaces: Pure white cards on crisp neutral slate canvas */
-  --color-ink-950: #f8fafc;  /* page background — clean slate canvas */
-  --color-ink-900: #ffffff;  /* panel surface — pure white */
-  --color-ink-850: #f1f5f9;  /* hover surface — subtle slate */
-  --color-ink-800: #e2e8f0;  /* subtle border / divider */
-  --color-ink-700: #cbd5e1;  /* border — visible on white */
-  --color-ink-600: #94a3b8;  /* muted line / low-contrast text */
-  --color-ink-500: #64748b;  /* helper text */
-  --color-ink-400: #475569;  /* secondary text */
-  --color-ink-300: #334155;  /* body text — deep navy/slate */
-  --color-ink-200: #1e293b;  /* strong text */
-  --color-ink-100: #0f172a;  /* near-black */
-  --color-ink-50:  #020617;  /* deepest — headings on hero */
+  /* Surfaces — the landers' paper, not a cold slate. White panels sit on it. */
+  --color-ink-950: #f7f5f0;  /* canvas: paper, as on go.ladakhvacation.in */
+  --color-ink-900: #ffffff;  /* panel surface */
+  --color-ink-850: #f1eee7;  /* hover / chip surface */
+  --color-ink-800: #e4dfd4;  /* hairline divider */
+  --color-ink-700: #cdc6b8;  /* border, visible on white */
+  --color-ink-600: #8d95a5;  /* low-contrast line */
+  --color-ink-500: #5b6880;  /* helper text — the logo's muted grey */
+  --color-ink-400: #43506a;  /* secondary text */
+  --color-ink-300: #1c2a42;  /* body copy */
+  --color-ink-200: #101f3d;  /* strong text — navy 700 */
+  --color-ink-100: #0a1428;  /* headings — navy 800 */
+  --color-ink-50:  #070f1f;  /* deepest — navy 900 */
 
-  /* Signal blue — royal sapphire blue */
-  --color-signal-600: #1d4ed8;
-  --color-signal-500: #2563eb;
-  --color-signal-400: #3b82f6;
-  --color-signal-300: #60a5fa;
-  --color-signal-200: #dbeafe;
+  /* Royal blue from the logo banner. 500 is the button, 600 carries text. */
+  --color-signal-600: #173f86;
+  --color-signal-500: #1e4fa8;
+  --color-signal-400: #2f63c9;
+  --color-signal-300: #6fa0f5;
+  --color-signal-200: #dbe6fb;
 
-  /* Brand gold — refined Himalayan gold */
-  --color-brand-600: #b45309;
-  --color-brand-500: #d97706;
-  --color-brand-400: #f59e0b;
-  --color-brand-300: #fcd34d;
-  --color-brand-200: #fef3c7;
+  /* Gold from the logo border: muted, never amber. 600/500 are readable. */
+  --color-brand-600: #8a6a22;
+  --color-brand-500: #a8842f;
+  --color-brand-400: #c9a961;
+  --color-brand-300: #e8d5a0;
+  --color-brand-200: #f3ead6;
 
-  /* Financial verdicts — deepened for contrast on light backgrounds. */
-  --color-healthy-500: #16a34a;
-  --color-healthy-400: #22c55e;
-  --color-warn-500:    #ea580c;
-  --color-warn-400:    #f97316;
-  --color-loss-500:    #dc2626;
-  --color-loss-400:    #ef4444;
+  /* Verdicts, deepened so they read on paper beside navy and gold. */
+  --color-healthy-500: #15803d;
+  --color-healthy-400: #1f9d55;
+  --color-warn-500:    #b45309;
+  --color-warn-400:    #d97706;
+  --color-loss-500:    #b91c1c;
+  --color-loss-400:    #dc2626;
 
   --font-sans:    var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-cormorant), 'Cormorant Garamond', ui-serif, Georgia, serif;

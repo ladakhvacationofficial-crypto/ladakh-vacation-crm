@@ -433,7 +433,7 @@ function DailyStrip({ data }: { data: DailyReportRow[] }) {
                   style={{ height: `${spendHeight}%`, minHeight: 1 }}
                 />
                 <div
-                  className="w-full rounded-sm bg-signal-500/70"
+                  className="w-full rounded-sm bg-signal-500/12"
                   style={{ height: `${barHeight}%`, minHeight: d.leads > 0 ? 2 : 0 }}
                 />
               </div>

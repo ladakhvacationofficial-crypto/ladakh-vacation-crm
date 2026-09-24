@@ -185,9 +185,9 @@ export default function MlIntelligencePage() {
       </div>
 
       {batchFeedback && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-950/40 px-4 py-2.5 text-xs text-emerald-300 font-medium flex items-center justify-between">
+        <div className="rounded-lg border border-healthy-500/30 bg-healthy-500/12 px-4 py-2.5 text-xs text-healthy-500 font-medium flex items-center justify-between">
           <span>{batchFeedback}</span>
-          <button onClick={() => setBatchFeedback(null)} className="text-emerald-500 hover:text-emerald-300">✕</button>
+          <button onClick={() => setBatchFeedback(null)} className="text-healthy-500 hover:text-healthy-500">✕</button>
         </div>
       )}
 
@@ -231,16 +231,16 @@ export default function MlIntelligencePage() {
               const isStandard = m.marginAdvice.pricingStrategy === 'OPTIMAL_STANDARD';
 
               const strategyBadge = isSurge
-                ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                ? 'bg-warn-500/15 text-warn-500 border-warn-500/30'
                 : isStandard
-                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                ? 'bg-healthy-500/15 text-healthy-500 border-healthy-500/30'
                 : 'bg-ink-800 text-ink-300 border-ink-700';
 
               return (
                 <Panel key={idx} className="border-ink-800 bg-ink-900/70 relative overflow-hidden">
                   <div
                     className={`absolute top-0 left-0 right-0 h-1 ${
-                      isSurge ? 'bg-amber-500' : isStandard ? 'bg-emerald-500' : 'bg-ink-700'
+                      isSurge ? 'bg-warn-500' : isStandard ? 'bg-healthy-500' : 'bg-ink-700'
                     }`}
                   />
                   <PanelBody className="p-5 space-y-4">
@@ -269,7 +269,7 @@ export default function MlIntelligencePage() {
                       </div>
                       <div>
                         <p className="text-ink-500 text-[11px]">Est. Bookings</p>
-                        <p className="text-base font-semibold text-emerald-400">{m.projectedBookings}</p>
+                        <p className="text-base font-semibold text-healthy-500">{m.projectedBookings}</p>
                       </div>
                       <div>
                         <p className="text-ink-500 text-[11px]">Expected Pipeline</p>
@@ -285,7 +285,7 @@ export default function MlIntelligencePage() {
                     <div className="rounded-lg border border-ink-800 bg-ink-950 p-3 text-xs space-y-1.5">
                       <div className="flex items-center justify-between">
                         <span className="text-[10.5px] uppercase tracking-wider text-ink-400 font-semibold">Recommended Margin</span>
-                        <span className="text-sm font-bold text-amber-400">{m.marginAdvice.recommendedMarginPercent}%</span>
+                        <span className="text-sm font-bold text-warn-500">{m.marginAdvice.recommendedMarginPercent}%</span>
                       </div>
                       <p className="text-ink-300 text-[11px] leading-relaxed">
                         {m.marginAdvice.actionableAdvice}
@@ -330,7 +330,7 @@ export default function MlIntelligencePage() {
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase ${
                           dest.trend === 'SURGING'
-                            ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                            ? 'bg-warn-500/15 text-warn-500 border border-warn-500/30'
                             : 'bg-ink-800 text-ink-400'
                         }`}
                       >
@@ -407,7 +407,7 @@ export default function MlIntelligencePage() {
                       </div>
                       <div>
                         <p className="text-ink-500 text-[10px] uppercase">Close Rate</p>
-                        <p className="font-semibold text-emerald-400 mt-0.5">{Math.round(c.conversionRate * 100)}%</p>
+                        <p className="font-semibold text-healthy-500 mt-0.5">{Math.round(c.conversionRate * 100)}%</p>
                       </div>
                     </div>
 
@@ -427,7 +427,7 @@ export default function MlIntelligencePage() {
                           <span>READY-TO-SEND WHATSAPP TEMPLATE</span>
                           <button
                             onClick={() => handleCopyPitch(c.id, c.sampleWhatsAppPitch)}
-                            className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-medium"
+                            className="inline-flex items-center gap-1 text-healthy-500 hover:text-healthy-500 font-medium"
                           >
                             {isCopied ? <Check className="size-3" /> : <Copy className="size-3" />}
                             <span>{isCopied ? 'Copied!' : 'Copy Template'}</span>

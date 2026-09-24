@@ -24,18 +24,18 @@ import {
 } from 'lucide-react';
 
 const PLATFORM_STYLE: Record<string, { label: string; cls: string }> = {
-  INSTAGRAM: { label: 'Instagram', cls: 'from-purple-600 to-pink-500' },
-  FACEBOOK: { label: 'Facebook', cls: 'from-blue-600 to-blue-800' },
-  PINTEREST: { label: 'Pinterest', cls: 'from-red-600 to-red-700' },
-  LINKEDIN: { label: 'LinkedIn', cls: 'from-blue-700 to-blue-900' },
-  X: { label: 'X / Twitter', cls: 'from-zinc-800 to-black' },
+  INSTAGRAM: { label: 'Instagram', cls: 'from-signal-500 to-brand-500' },
+  FACEBOOK: { label: 'Facebook', cls: 'from-signal-500 to-signal-500' },
+  PINTEREST: { label: 'Pinterest', cls: 'from-loss-500 to-loss-500' },
+  LINKEDIN: { label: 'LinkedIn', cls: 'from-signal-500 to-signal-500' },
+  X: { label: 'X / Twitter', cls: 'from-ink-200 to-black' },
 };
 
 const STATUS_STYLE: Record<string, string> = {
   DRAFT: 'text-ink-400 border-ink-700',
   SCHEDULED: 'text-signal-400 border-signal-700 bg-signal-950/40',
-  PUBLISHING: 'text-amber-400 border-amber-700 animate-pulse',
-  PUBLISHED: 'text-green-400 border-green-700 bg-green-950/30',
+  PUBLISHING: 'text-warn-500 border-warn-500/30 animate-pulse',
+  PUBLISHED: 'text-healthy-500 border-healthy-500/30 bg-healthy-500/12',
   FAILED: 'text-loss-400 border-loss-700 bg-loss-950/30',
 };
 
@@ -276,7 +276,7 @@ export default function SocialStudioPage() {
                   {dayPosts.map((p: any) => {
                     const cfg = PLATFORM_STYLE[p.platform];
                     return (
-                      <div key={p.id} className={`mt-0.5 bg-gradient-to-r ${cfg?.cls || 'from-gray-700 to-gray-800'} text-white rounded px-1 py-0.5 truncate text-[9px]`}>
+                      <div key={p.id} className={`mt-0.5 bg-gradient-to-r ${cfg?.cls || 'from-ink-300 to-ink-200'} text-white rounded px-1 py-0.5 truncate text-[9px]`}>
                         {p.caption.slice(0, 18)}…
                       </div>
                     );
@@ -355,7 +355,7 @@ export default function SocialStudioPage() {
                         <p className="text-sm font-medium text-ink-200">{acc.accountName}</p>
                         <p className="text-xs text-ink-500">{acc.handle} · {plat.label}</p>
                       </div>
-                      <Chip className={acc.isActive ? 'text-green-400 border-green-700' : ''}>{acc.isActive ? 'Connected' : 'Inactive'}</Chip>
+                      <Chip className={acc.isActive ? 'text-healthy-500 border-healthy-500/30' : ''}>{acc.isActive ? 'Connected' : 'Inactive'}</Chip>
                     </PanelBody>
                   </Panel>
                 );
@@ -375,7 +375,7 @@ export default function SocialStudioPage() {
                 <div key={i} className="flex items-center gap-3">
                   <span className="w-5 text-[10px] text-ink-600">#{i + 1}</span>
                   <span className="flex-1 text-sm text-ink-300">{kw.keyword}</span>
-                  <span className="text-[10px] text-green-400 bg-green-950/40 border border-green-800 px-1.5 py-0.5 rounded">{kw.trend}</span>
+                  <span className="text-[10px] text-healthy-500 bg-healthy-500/12 border border-healthy-500/30 px-1.5 py-0.5 rounded">{kw.trend}</span>
                   {kw.volume && <span className="text-[10px] text-ink-500">{kw.volume}</span>}
                 </div>
               ))}

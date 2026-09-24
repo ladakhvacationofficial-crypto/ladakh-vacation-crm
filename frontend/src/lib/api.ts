@@ -361,6 +361,8 @@ export interface LeadDetail extends LeadRow {
   budget: number | null;
   message: string | null;
   scoreNotes: string | null;
+  winProbability: number | null;
+  heuristicNotes: string | null;
   lostReason: string | null;
   enquiryCount: number;
   lastContact: string | null;

@@ -436,11 +436,11 @@ export default function LeadsPage() {
                           title={lead.urgency.reason}
                           className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold ${
                             lead.urgency.tier === 'P1'
-                              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 animate-pulse'
+                              ? 'bg-loss-500/20 text-loss-500 border border-loss-500/40 animate-pulse'
                               : lead.urgency.tier === 'P2'
-                              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                              ? 'bg-warn-500/15 text-warn-500 border border-warn-500/30'
                               : lead.urgency.tier === 'P3'
-                              ? 'bg-blue-500/15 text-blue-300 border border-blue-500/30'
+                              ? 'bg-signal-500/15 text-signal-500 border border-signal-500/30'
                               : 'bg-ink-800/80 text-ink-400 border border-ink-700'
                           }`}
                         >
@@ -521,7 +521,7 @@ function ScoreChip({ score }: { score: number }) {
   const value = Math.max(0, Math.min(100, score));
   const band =
     value >= 75
-      ? { label: 'Hot', text: 'text-emerald-400', dot: 'bg-emerald-400', bar: 'bg-emerald-400/70' }
+      ? { label: 'Hot', text: 'text-healthy-500', dot: 'bg-healthy-500', bar: 'bg-healthy-500/12' }
       : value >= 50
         ? { label: 'Warm', text: 'text-signal-400', dot: 'bg-signal-400', bar: 'bg-signal-400/70' }
         : value >= 30

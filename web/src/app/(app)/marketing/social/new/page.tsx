@@ -22,9 +22,9 @@ import {
 } from 'lucide-react';
 
 const PLATFORMS = [
-  { id: 'INSTAGRAM', label: 'Instagram', cls: 'from-purple-600 to-pink-500' },
-  { id: 'FACEBOOK', label: 'Facebook', cls: 'from-blue-600 to-blue-800' },
-  { id: 'PINTEREST', label: 'Pinterest', cls: 'from-red-500 to-red-700' },
+  { id: 'INSTAGRAM', label: 'Instagram', cls: 'from-signal-500 to-brand-500' },
+  { id: 'FACEBOOK', label: 'Facebook', cls: 'from-signal-500 to-signal-500' },
+  { id: 'PINTEREST', label: 'Pinterest', cls: 'from-loss-500 to-loss-500' },
 ] as const;
 
 const DESTINATIONS = [
@@ -184,7 +184,7 @@ export default function NewSocialPostPage() {
           <Panel>
             <PanelHeader>
               <PanelTitle className="flex items-center gap-2">
-                <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                <Sparkles className="h-3.5 w-3.5 text-signal-500" />
                 AI Caption Generator
               </PanelTitle>
             </PanelHeader>
@@ -293,9 +293,9 @@ export default function NewSocialPostPage() {
               </div>
 
               {/* Safety notice */}
-              <div className="flex items-start gap-2 bg-amber-950/40 border border-amber-800/60 rounded-lg p-3">
-                <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
-                <p className="text-[11px] text-amber-400 leading-relaxed">
+              <div className="flex items-start gap-2 bg-warn-500/12 border border-warn-500/35 rounded-lg p-3">
+                <AlertTriangle className="h-4 w-4 text-warn-500 flex-shrink-0 mt-0.5" />
+                <p className="text-[11px] text-warn-500 leading-relaxed">
                   Always review AI-generated content before publishing. Confirm that captions represent your brand voice accurately.
                 </p>
               </div>
@@ -313,7 +313,7 @@ export default function NewSocialPostPage() {
               </div>
 
               {saved && (
-                <div className="flex items-center justify-center gap-2 text-sm text-green-400">
+                <div className="flex items-center justify-center gap-2 text-sm text-healthy-500">
                   <CheckCircle className="h-4 w-4" />Saved! Redirecting…
                 </div>
               )}
@@ -331,18 +331,18 @@ export default function NewSocialPostPage() {
               {selectedPlatform === 'INSTAGRAM' && (
                 <div className="w-full max-w-[280px] bg-white rounded-xl shadow-2xl overflow-hidden text-sm">
                   <div className="flex items-center gap-2 px-3 py-2 border-b">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-signal-500 to-brand-500" />
                     <div>
-                      <p className="font-semibold text-[11px] text-gray-900">ladakhvacation</p>
-                      <p className="text-[9px] text-gray-400">Ladakh, India</p>
+                      <p className="font-semibold text-[11px] text-ink-100">ladakhvacation</p>
+                      <p className="text-[9px] text-ink-600">Ladakh, India</p>
                     </div>
                   </div>
                   {mediaUrl
                     ? <img src={mediaUrl} alt="" className="w-full h-44 object-cover" />
-                    : <div className="w-full h-44 bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center text-gray-400 text-xs">📸 Paste a photo URL</div>
+                    : <div className="w-full h-44 bg-gradient-to-br from-signal-500 to-brand-500 flex items-center justify-center text-ink-600 text-xs">📸 Paste a photo URL</div>
                   }
                   <div className="px-3 py-2">
-                    <p className="text-[11px] leading-relaxed text-gray-800 line-clamp-4 whitespace-pre-wrap">
+                    <p className="text-[11px] leading-relaxed text-ink-200 line-clamp-4 whitespace-pre-wrap">
                       {caption || 'Your caption will appear here…'}
                     </p>
                   </div>
@@ -351,17 +351,17 @@ export default function NewSocialPostPage() {
               {selectedPlatform === 'FACEBOOK' && (
                 <div className="w-full max-w-[300px] bg-white rounded-xl shadow-2xl overflow-hidden text-sm">
                   <div className="flex items-center gap-2 px-3 py-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">G</div>
+                    <div className="w-8 h-8 rounded-full bg-signal-500 flex items-center justify-center text-white text-xs font-bold">G</div>
                     <div>
-                      <p className="font-semibold text-[11px] text-gray-900">Ladakh Vacation</p>
-                      <p className="text-[9px] text-gray-400">Just now · 🌐</p>
+                      <p className="font-semibold text-[11px] text-ink-100">Ladakh Vacation</p>
+                      <p className="text-[9px] text-ink-600">Just now · 🌐</p>
                     </div>
                   </div>
-                  <p className="px-3 pb-2 text-[11px] text-gray-800 line-clamp-3 whitespace-pre-wrap">
+                  <p className="px-3 pb-2 text-[11px] text-ink-200 line-clamp-3 whitespace-pre-wrap">
                     {caption || 'Your caption will appear here…'}
                   </p>
                   {mediaUrl && <img src={mediaUrl} alt="" className="w-full h-40 object-cover" />}
-                  <div className="flex gap-4 px-3 py-2 border-t border-gray-100 text-[10px] text-gray-500">
+                  <div className="flex gap-4 px-3 py-2 border-t border-ink-850 text-[10px] text-ink-500">
                     <span>👍 Like</span><span>💬 Comment</span><span>↗️ Share</span>
                   </div>
                 </div>
@@ -370,11 +370,11 @@ export default function NewSocialPostPage() {
                 <div className="w-full max-w-[220px] bg-white rounded-2xl shadow-2xl overflow-hidden">
                   {mediaUrl
                     ? <img src={mediaUrl} alt="" className="w-full h-64 object-cover" />
-                    : <div className="w-full h-64 bg-gradient-to-br from-red-100 to-pink-100 flex items-center justify-center text-gray-400 text-xs">📌 Pin Image</div>
+                    : <div className="w-full h-64 bg-gradient-to-br from-loss-500 to-brand-500 flex items-center justify-center text-ink-600 text-xs">📌 Pin Image</div>
                   }
                   <div className="p-3">
-                    <p className="font-semibold text-[11px] text-gray-900 mb-1 line-clamp-2">{caption?.slice(0, 80) || 'Pin title'}</p>
-                    <p className="text-[10px] text-gray-500 line-clamp-2">{caption?.slice(80, 160) || 'Pin description…'}</p>
+                    <p className="font-semibold text-[11px] text-ink-100 mb-1 line-clamp-2">{caption?.slice(0, 80) || 'Pin title'}</p>
+                    <p className="text-[10px] text-ink-500 line-clamp-2">{caption?.slice(80, 160) || 'Pin description…'}</p>
                   </div>
                 </div>
               )}

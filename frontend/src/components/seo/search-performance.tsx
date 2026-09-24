@@ -686,7 +686,7 @@ function ShareList({ title, rows }: { title: string; rows: SearchEntityRow[] }) 
                   </span>
                 </div>
                 <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-ink-800">
-                  <div className="h-full rounded-full bg-signal-500/70" style={{ width: `${Math.max(1, share)}%` }} />
+                  <div className="h-full rounded-full bg-signal-500/12" style={{ width: `${Math.max(1, share)}%` }} />
                 </div>
               </div>
             );
@@ -714,7 +714,7 @@ function BrandSplit({ report }: { report: SearchReport }) {
         ) : (
           <>
             <div className="h-2 overflow-hidden rounded-full bg-ink-800">
-              <div className="h-full bg-signal-500/70" style={{ width: `${brandShare}%` }} />
+              <div className="h-full bg-signal-500/12" style={{ width: `${brandShare}%` }} />
             </div>
             <div className="grid grid-cols-2 gap-3 text-[12px]">
               <div>

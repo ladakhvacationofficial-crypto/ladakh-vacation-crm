@@ -262,21 +262,21 @@ export default function NewCampaignWizardPage() {
                   onClick={() => setChannel('WHATSAPP')}
                   className={`cursor-pointer rounded-xl border p-4 transition ${
                     channel === 'WHATSAPP'
-                      ? 'border-emerald-500 bg-emerald-950/30 ring-1 ring-emerald-500'
+                      ? 'border-healthy-500 bg-healthy-500/12 ring-1 ring-healthy-500'
                       : 'border-ink-800 bg-ink-900/40 hover:border-ink-700'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="rounded-lg bg-emerald-900/60 p-2 text-emerald-300">
-                        <MessageSquare className="size-5 text-emerald-400" />
+                      <div className="rounded-lg bg-healthy-500/12 p-2 text-healthy-500">
+                        <MessageSquare className="size-5 text-healthy-500" />
                       </div>
                       <div>
                         <p className="font-semibold text-ink-100">WhatsApp Cloud API</p>
-                        <p className="text-[11px] text-emerald-400 font-medium">98% Open Rate · High Intent</p>
+                        <p className="text-[11px] text-healthy-500 font-medium">98% Open Rate · High Intent</p>
                       </div>
                     </div>
-                    {channel === 'WHATSAPP' && <Check className="size-4 text-emerald-400" />}
+                    {channel === 'WHATSAPP' && <Check className="size-4 text-healthy-500" />}
                   </div>
                   <p className="mt-3 text-[12px] text-ink-400">
                     Sends official Meta-approved marketing templates directly to traveler WhatsApp chats. Cost: ~₹0.72 / contact.
@@ -288,21 +288,21 @@ export default function NewCampaignWizardPage() {
                   onClick={() => setChannel('EMAIL')}
                   className={`cursor-pointer rounded-xl border p-4 transition ${
                     channel === 'EMAIL'
-                      ? 'border-sky-500 bg-sky-950/30 ring-1 ring-sky-500'
+                      ? 'border-signal-500 bg-signal-500/12 ring-1 ring-signal-500'
                       : 'border-ink-800 bg-ink-900/40 hover:border-ink-700'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="rounded-lg bg-sky-900/60 p-2 text-sky-300">
-                        <Mail className="size-5 text-sky-400" />
+                      <div className="rounded-lg bg-signal-500/12 p-2 text-signal-500">
+                        <Mail className="size-5 text-signal-500" />
                       </div>
                       <div>
                         <p className="font-semibold text-ink-100">Brevo Email Broadcast</p>
-                        <p className="text-[11px] text-sky-400 font-medium">Rich HTML Itineraries · Zero Cost</p>
+                        <p className="text-[11px] text-signal-500 font-medium">Rich HTML Itineraries · Zero Cost</p>
                       </div>
                     </div>
-                    {channel === 'EMAIL' && <Check className="size-4 text-sky-400" />}
+                    {channel === 'EMAIL' && <Check className="size-4 text-signal-500" />}
                   </div>
                   <p className="mt-3 text-[12px] text-ink-400">
                     Dispatches branded HTML email newsletters and itinerary promos with automatic one-click unsubscribe links.
@@ -460,11 +460,11 @@ export default function NewCampaignWizardPage() {
 
               <div className="mt-4 rounded-xl border border-ink-800 bg-ink-900/60 p-4 text-center">
                 <p className="text-[11px] text-ink-400">Eligible Recipients</p>
-                <p className="mt-1 text-3xl font-black text-emerald-400">
+                <p className="mt-1 text-3xl font-black text-healthy-500">
                   {preview ? preview.eligibleCount : 0}
                 </p>
                 {channel === 'WHATSAPP' && (
-                  <p className="mt-2 text-[12px] font-medium text-amber-300/90">
+                  <p className="mt-2 text-[12px] font-medium text-warn-500/90">
                     Estimated Cost: {preview ? money(preview.estimatedCost) : '₹0'}
                   </p>
                 )}
@@ -481,8 +481,8 @@ export default function NewCampaignWizardPage() {
                 </div>
 
                 <div className="flex justify-between text-ink-400">
-                  <span className="flex items-center gap-1.5 text-amber-400/90">
-                    <ShieldCheck className="size-3.5 text-amber-400" />
+                  <span className="flex items-center gap-1.5 text-warn-500/90">
+                    <ShieldCheck className="size-3.5 text-warn-500" />
                     7-Day Frequency Capped
                   </span>
                   <span>-{preview?.frequencyCappedCount ?? 0}</span>
@@ -550,20 +550,20 @@ export default function NewCampaignWizardPage() {
                 {/* WhatsApp Chat Preview */}
                 <div>
                   <Label className="text-[13px] text-ink-300">Live WhatsApp Chat Bubble Preview</Label>
-                  <div className="mt-2 max-w-md rounded-2xl border border-emerald-900/60 bg-[#0B141A] p-4 font-sans text-white shadow-lg">
-                    <div className="flex items-center gap-2 border-b border-emerald-900/40 pb-2 text-[12px] font-semibold text-emerald-400">
+                  <div className="mt-2 max-w-md rounded-2xl border border-healthy-500/35 bg-[#0B141A] p-4 font-sans text-white shadow-lg">
+                    <div className="flex items-center gap-2 border-b border-healthy-500/40 pb-2 text-[12px] font-semibold text-healthy-500">
                       <MessageSquare className="size-4" />
                       Ladakh Vacation (Verified Business)
                     </div>
 
-                    <div className="mt-3 rounded-xl bg-[#202C33] p-3 text-[13px] leading-relaxed text-zinc-100">
+                    <div className="mt-3 rounded-xl bg-[#202C33] p-3 text-[13px] leading-relaxed text-ink-850">
                       {currentTemplateBody}
-                      <div className="mt-2 text-right text-[10px] text-zinc-400">12:30 PM ✓✓</div>
+                      <div className="mt-2 text-right text-[10px] text-ink-600">12:30 PM ✓✓</div>
                     </div>
 
-                    <div className="mt-2 flex items-center justify-between text-[11px] text-zinc-400">
+                    <div className="mt-2 flex items-center justify-between text-[11px] text-ink-600">
                       <span>Parameters:</span>
-                      <span className="text-emerald-400 font-mono">{'{{1}} = Traveler Name, {{2}} = Destination'}</span>
+                      <span className="text-healthy-500 font-mono">{'{{1}} = Traveler Name, {{2}} = Destination'}</span>
                     </div>
                   </div>
                 </div>
@@ -630,12 +630,12 @@ export default function NewCampaignWizardPage() {
 
               <div>
                 <p className="text-[11px] text-ink-500">Target Recipients</p>
-                <p className="text-xl font-bold text-emerald-400">{preview?.eligibleCount || 0}</p>
+                <p className="text-xl font-bold text-healthy-500">{preview?.eligibleCount || 0}</p>
               </div>
 
               <div>
                 <p className="text-[11px] text-ink-500">Estimated Cost</p>
-                <p className="text-xl font-bold text-amber-400">
+                <p className="text-xl font-bold text-warn-500">
                   {channel === 'WHATSAPP' ? money(preview?.estimatedCost || 0) : '₹0'}
                 </p>
               </div>
@@ -689,7 +689,7 @@ export default function NewCampaignWizardPage() {
                 <Button
                   disabled={submitting || (isScheduled && !scheduledAt)}
                   onClick={() => handleSubmit(true)}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-2 shadow-sm"
+                  className="bg-healthy-500 hover:bg-healthy-500 text-white font-semibold gap-2 shadow-sm"
                 >
                   {isScheduled ? <Clock className="size-4" /> : <Send className="size-4" />}
                   {isScheduled ? 'Schedule Campaign' : 'Send Immediately'}

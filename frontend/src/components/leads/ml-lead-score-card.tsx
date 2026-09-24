@@ -32,11 +32,9 @@ export interface LeadScoreResult {
 export function MlLeadScoreCard({
   leadId,
   initialScore,
-  onScored,
 }: {
   leadId: string;
   initialScore?: number;
-  onScored?: (newScore: number) => void;
 }) {
   const [data, setData] = useState<LeadScoreResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,13 +46,12 @@ export function MlLeadScoreCard({
     try {
       const res = await api.get<LeadScoreResult>(`/ml/leads/${leadId}/score`);
       setData(res);
-      if (onScored) onScored(res.score);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Could not fetch ML score.');
     } finally {
       setLoading(false);
     }
-  }, [leadId, onScored]);
+  }, [leadId]);
 
   useEffect(() => {
     fetchScore();
@@ -67,8 +64,8 @@ export function MlLeadScoreCard({
     HOT: {
       label: 'HOT LEAD',
       emoji: '🔥',
-      badgeClass: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-      ringColor: 'text-emerald-400',
+      badgeClass: 'bg-healthy-500/15 text-healthy-500 border-healthy-500/30',
+      ringColor: 'text-healthy-500',
       tagline: 'High conversion probability — call immediately',
     },
     WARM: {
@@ -103,7 +100,7 @@ export function MlLeadScoreCard({
           </span>
           <div>
             <PanelTitle className="text-[13px] font-semibold tracking-tight text-ink-100">
-              Predictive ML Intelligence
+              Heuristic read
             </PanelTitle>
           </div>
         </div>
@@ -165,13 +162,13 @@ export function MlLeadScoreCard({
         {/* Positive Win Signals */}
         {data && data.positiveSignals && data.positiveSignals.length > 0 && (
           <div className="space-y-1.5">
-            <p className="text-[10.5px] font-semibold uppercase tracking-wider text-emerald-400">
+            <p className="text-[10.5px] font-semibold uppercase tracking-wider text-healthy-500">
               High-Impact Win Signals
             </p>
             <ul className="space-y-1 text-[11px] text-ink-300">
               {data.positiveSignals.map((sig, i) => (
                 <li key={i} className="flex items-start gap-1.5 leading-snug">
-                  <CheckCircle2 className="mt-0.5 size-3 shrink-0 text-emerald-400" />
+                  <CheckCircle2 className="mt-0.5 size-3 shrink-0 text-healthy-500" />
                   <span>{sig}</span>
                 </li>
               ))}

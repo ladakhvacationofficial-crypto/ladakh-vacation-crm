@@ -297,7 +297,7 @@ export default function IntegrationsPage() {
                 trigger={
                   <button
                     type="button"
-                    className="group flex items-center gap-3 rounded-lg border border-ink-800 bg-ink-950 px-3 py-2.5 text-left transition-colors hover:border-signal-500/60 hover:bg-signal-500/5"
+                    className="group flex items-center gap-3 rounded-lg border border-ink-800 bg-ink-950 px-3 py-2.5 text-left transition-colors hover:border-signal-500/35 hover:bg-signal-500/5"
                   >
                     <span className="grid size-8 place-items-center rounded-md border border-ink-800 bg-ink-900 text-ink-400 group-hover:border-signal-500/40 group-hover:text-signal-600">
                       <Plus className="size-3.5" strokeWidth={1.75} />

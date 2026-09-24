@@ -1104,7 +1104,7 @@ function TiersStrip({
               onClick={() => !isRenaming && onSelect(o.id)}
               className={`group relative min-w-[180px] cursor-pointer rounded-xl border px-4 py-3 transition-all duration-200 ${
                 active
-                  ? 'border-signal-500/60 bg-ink-900 shadow-[0_2px_10px_-4px_rgba(11,74,90,0.2)]'
+                  ? 'border-signal-500/35 bg-ink-900 shadow-[0_2px_10px_-4px_rgba(11,74,90,0.2)]'
                   : 'border-ink-800 bg-ink-900/80 hover:-translate-y-px hover:border-ink-700'
               }`}
             >
@@ -1284,7 +1284,7 @@ function PriceCell({
         <button
           onClick={() => setEditing(true)}
           disabled={busy}
-          className="rounded border border-dashed border-ink-700 px-2 py-1 text-[11px] text-ink-500 hover:border-signal-500/50 hover:text-signal-600"
+          className="rounded border border-dashed border-ink-700 px-2 py-1 text-[11px] text-ink-500 hover:border-signal-500/35 hover:text-signal-600"
         >
           Set manually
         </button>
