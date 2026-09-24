@@ -25,6 +25,8 @@ import {
   Megaphone,
   Receipt,
   Sparkles,
+  Car,
+  FileCheck,
 } from 'lucide-react';
 import { tokenStore, type SessionUser } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -101,11 +103,15 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: '/bookings/movement', label: 'Daily Movement', icon: Map,
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','OPERATIONS'] },
-      { href: '/vendors',    label: 'Suppliers',  icon: Building2,
+      { href: '/fleet',             label: 'Fleet & Cabs',   icon: Car,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','OPERATIONS'] },
+      { href: '/permits',           label: 'Ladakh Permits', icon: FileCheck,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','OPERATIONS'] },
+      { href: '/vendors',           label: 'Suppliers',      icon: Building2,
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','ACCOUNTS','OPERATIONS'] },
-      { href: '/people',     label: 'People',     icon: UserCog,
+      { href: '/people',            label: 'People',         icon: UserCog,
         roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
-      { href: '/interviews', label: 'Interviews', icon: Users,
+      { href: '/interviews',        label: 'Interviews',     icon: Users,
         roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
     ],
   },
@@ -310,27 +316,25 @@ export default function AppLayout({
       </aside>
 
       {/* Mobile drawer — off-canvas, shows above the app */}
-      {drawerOpen && (
-        <div className="fixed inset-0 z-40 md:hidden">
-          <button
-            aria-label="Close menu"
-            className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm"
-            onClick={() => setDrawerOpen(false)}
-          />
-          <aside className="absolute inset-y-0 left-0 flex w-[260px] max-w-[85%] flex-col border-r border-ink-800/60 bg-ink-900 shadow-2xl">
-            <div className="absolute right-2 top-2">
-              <button
-                aria-label="Close menu"
-                onClick={() => setDrawerOpen(false)}
-                className="grid size-9 place-items-center rounded-md text-ink-400 hover:bg-ink-850 hover:text-ink-100"
-              >
-                <X className="size-5" strokeWidth={1.75} />
-              </button>
-            </div>
-            {sidebar}
-          </aside>
-        </div>
-      )}
+      <div className={cn('fixed inset-0 z-40 md:hidden transition-opacity duration-300', drawerOpen ? 'opacity-100' : 'opacity-0 pointer-events-none')}>
+        <button
+          aria-label="Close menu"
+          className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm"
+          onClick={() => setDrawerOpen(false)}
+        />
+        <aside className={cn('absolute inset-y-0 left-0 flex w-[260px] max-w-[85%] flex-col border-r border-ink-800/60 bg-ink-900 shadow-2xl transition-transform duration-300 ease-out', drawerOpen ? 'translate-x-0' : '-translate-x-full')}>
+          <div className="absolute right-2 top-2">
+            <button
+              aria-label="Close menu"
+              onClick={() => setDrawerOpen(false)}
+              className="grid size-9 place-items-center rounded-md text-ink-400 hover:bg-ink-850 hover:text-ink-100"
+            >
+              <X className="size-5" strokeWidth={1.75} />
+            </button>
+          </div>
+          {sidebar}
+        </aside>
+      </div>
 
       <main className="min-w-0 overflow-x-hidden bg-ink-950">{children}</main>
       <CommandPalette />

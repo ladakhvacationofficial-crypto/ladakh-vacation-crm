@@ -26,10 +26,10 @@ const buttonVariants = cva(
         link: 'text-signal-500 underline-offset-4 hover:underline hover:text-signal-400',
       },
       size: {
-        sm: 'h-8 px-3 text-xs',
+        sm: 'h-10 md:h-8 px-3 text-xs',
         md: 'h-9 px-4',
         lg: 'h-10 px-5',
-        icon: 'h-9 w-9',
+        icon: 'h-11 w-11 md:h-9 md:w-9',
       },
     },
     defaultVariants: { variant: 'primary', size: 'md' },

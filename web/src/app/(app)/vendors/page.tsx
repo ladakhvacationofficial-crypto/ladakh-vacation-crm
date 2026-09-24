@@ -117,7 +117,7 @@ export default function VendorsPage() {
           />
         </div>
 
-        <div className="w-[168px]">
+        <div className="w-full sm:w-[168px]">
           <Input
             value={city}
             onChange={(e) => { setCity(e.target.value); setPage(1); }}

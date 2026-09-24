@@ -18,7 +18,7 @@ export const Select = React.forwardRef<
       ref={ref}
       className={cn(
         'h-9 w-full appearance-none rounded-md border border-ink-700 bg-ink-950/60',
-        'pl-3 pr-8 text-sm text-ink-100',
+        'pl-3 pr-8 text-base md:text-sm text-ink-100',
         'transition-[border-color,box-shadow,background-color] duration-150 ease-out',
         'hover:border-ink-600',
         'focus:border-signal-500 focus:bg-ink-950 focus:outline-none',
@@ -46,7 +46,7 @@ export const Textarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      'w-full rounded-md border border-ink-700 bg-ink-950/60 px-3 py-2 text-sm text-ink-100',
+      'w-full rounded-md border border-ink-700 bg-ink-950/60 px-3 py-2 text-base md:text-sm text-ink-100',
       'placeholder:text-ink-500 resize-y min-h-[76px]',
       'transition-[border-color,box-shadow,background-color] duration-150 ease-out',
       'hover:border-ink-600',

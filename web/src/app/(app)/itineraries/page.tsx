@@ -29,7 +29,7 @@ export default function ItinerariesPage() {
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <header className="mb-6 flex items-end justify-between gap-4">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="display text-[26px] font-semibold tracking-tight text-ink-100">
             Itineraries

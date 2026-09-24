@@ -96,8 +96,8 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
             </p>
             <div className="space-y-3">
               {lineItems.map((item, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <div className="flex-1">
+                <div key={i} className="flex flex-wrap gap-2 items-start">
+                  <div className="w-full sm:flex-1">
                     <Input
                       placeholder="Leh hotel, 2 rooms × 3 nights"
                       value={item.description}
@@ -128,7 +128,7 @@ export function InvoicesPanel({ leadId }: { leadId: string }) {
               </Button>
             </div>
 
-            <div className="flex items-center gap-4 mt-4">
+            <div className="flex flex-wrap items-center gap-4 mt-4">
               <div className="w-48">
                 <label className="text-sm font-medium">GST Slab (%)</label>
                 <Select

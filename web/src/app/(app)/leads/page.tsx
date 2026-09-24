@@ -193,7 +193,7 @@ export default function LeadsPage() {
           />
         </div>
 
-        <div className="w-[168px]">
+        <div className="w-full sm:w-[168px]">
           <Select
             value={status}
             onChange={(e) => {
@@ -211,7 +211,7 @@ export default function LeadsPage() {
           </Select>
         </div>
 
-        <div className="w-[168px]">
+        <div className="w-full sm:w-[168px]">
           <Select
             value={source}
             onChange={(e) => {
