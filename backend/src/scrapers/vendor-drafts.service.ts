@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ScraperPoolService } from './scraper-pool.service';
 import { ExtractDraftDto } from './dto/extract-draft.dto';
 import { BatchExtractDto } from './dto/batch-extract.dto';
+import { DiscoverDraftsDto } from './dto/discover-drafts.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
 import { ScrapeDraftStatus, VendorType } from '@prisma/client';
 
@@ -138,6 +139,57 @@ export class VendorDraftsService {
 
     return {
       total: dto.urls.length,
+      succeeded: createdDrafts.length,
+      failed: errors.length,
+      drafts: createdDrafts,
+      errors,
+    };
+  }
+
+  async discoverByKeywordAndSave(dto: DiscoverDraftsDto, userId?: string) {
+    const results = await this.scraperPool.discoverByKeyword(dto.query, {
+      city: dto.city,
+      propertyType: dto.propertyType,
+      limit: dto.limit,
+    });
+
+    const createdDrafts: any[] = [];
+    const errors: Array<{ url: string; error: string }> = [];
+
+    for (const res of results) {
+      if (res.success && res.data) {
+        const d = res.data;
+        const draft = await this.prisma.vendorDraft.create({
+          data: {
+            sourceProvider: d.sourceProvider,
+            sourceUrl: d.sourceUrl,
+            name: d.name,
+            city: d.city,
+            propertyType: d.propertyType,
+            phone: d.phone,
+            email: d.email,
+            address: d.address,
+            starRating: d.starRating,
+            roomCount: d.roomCount,
+            checkInTime: d.checkInTime,
+            checkOutTime: d.checkOutTime,
+            roomCategories: (d.roomCategories as any) ?? [],
+            seasonalFrom: d.seasonalFrom,
+            seasonalTo: d.seasonalTo,
+            reportedAmenities: d.reportedAmenities,
+            rawPayload: (d.rawPayload as any) ?? {},
+            status: ScrapeDraftStatus.PENDING_REVIEW,
+          },
+        });
+        createdDrafts.push(draft);
+      } else {
+        errors.push({ url: res.url, error: res.error ?? 'Unknown extraction error' });
+      }
+    }
+
+    return {
+      query: dto.query,
+      totalDiscovered: results.length,
       succeeded: createdDrafts.length,
       failed: errors.length,
       drafts: createdDrafts,

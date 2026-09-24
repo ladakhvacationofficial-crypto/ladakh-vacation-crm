@@ -12,6 +12,7 @@ import { Role, ScrapeDraftStatus } from '@prisma/client';
 import { VendorDraftsService } from './vendor-drafts.service';
 import { ExtractDraftDto } from './dto/extract-draft.dto';
 import { BatchExtractDto } from './dto/batch-extract.dto';
+import { DiscoverDraftsDto } from './dto/discover-drafts.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -47,6 +48,12 @@ export class VendorDraftsController {
   @Post('batch-extract')
   batchExtract(@Body() dto: BatchExtractDto, @CurrentUser('id') userId: string) {
     return this.draftsService.batchExtractAndSave(dto, userId);
+  }
+
+  @Roles(...VENDOR_WRITE_ACCESS)
+  @Post('discover')
+  discover(@Body() dto: DiscoverDraftsDto, @CurrentUser('id') userId: string) {
+    return this.draftsService.discoverByKeywordAndSave(dto, userId);
   }
 
   @Roles(...VENDOR_WRITE_ACCESS)

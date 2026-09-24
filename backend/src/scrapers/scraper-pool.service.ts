@@ -125,6 +125,100 @@ export class ScraperPoolService {
     return results;
   }
 
+  /**
+   * Discovers property URLs matching a destination query (e.g. "Srinagar houseboats" or "Nubra luxury camps")
+   * and extracts their specifications using the scraper swarm into VendorDraft.
+   */
+  async discoverByKeyword(
+    query: string,
+    options?: { city?: string; propertyType?: string; limit?: number },
+  ): Promise<Array<{ url: string; success: boolean; data?: ExtractedPropertyResult; error?: string }>> {
+    const limit = Math.max(1, Math.min(options?.limit ?? 5, 15));
+    const discoveredUrls: string[] = [];
+    const activeScrapers = await this.integrations.listActiveScrapers();
+
+    // 1. Try Firecrawl search if configured
+    const firecrawl = activeScrapers.find((s) => s.provider === 'firecrawl');
+    if (firecrawl) {
+      try {
+        const apiKey = String(firecrawl.credentials?.apiKey ?? '').trim();
+        const base = String(firecrawl.credentials?.baseUrl ?? 'https://api.firecrawl.dev').trim().replace(/\/+$/, '');
+        const res = await fetch(`${base}/v1/search`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, limit }),
+        });
+        if (res.ok) {
+          const data: any = await res.json();
+          const items = data?.data || data?.results || [];
+          items.forEach((item: any) => {
+            if (item.url && !discoveredUrls.includes(item.url)) discoveredUrls.push(item.url);
+          });
+        }
+      } catch (err: any) {
+        this.logger.warn(`Firecrawl keyword search error: ${err?.message}`);
+      }
+    }
+
+    // 2. Try Jina Search (s.jina.ai/{query}) as free discovery fallback
+    if (discoveredUrls.length < limit) {
+      try {
+        const jina = activeScrapers.find((s) => s.provider === 'jina');
+        const headers: Record<string, string> = { Accept: 'text/plain' };
+        if (jina?.credentials?.apiKey) {
+          headers['Authorization'] = `Bearer ${String(jina.credentials.apiKey).trim()}`;
+        }
+        const res = await fetch(`https://s.jina.ai/${encodeURIComponent(query)}`, { headers });
+        if (res.ok) {
+          const markdown = await res.text();
+          const matches = markdown.matchAll(/\[(?:[^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g);
+          for (const m of matches) {
+            const u = m[1];
+            if (!/google\.|bing\.|duckduckgo\.|jina\.ai|wikipedia\.org/i.test(u) && !discoveredUrls.includes(u)) {
+              discoveredUrls.push(u);
+              if (discoveredUrls.length >= limit) break;
+            }
+          }
+        }
+      } catch (err: any) {
+        this.logger.warn(`Jina keyword search error: ${err?.message}`);
+      }
+    }
+
+    // 3. Fallback: scrape.do search proxy
+    if (discoveredUrls.length < limit) {
+      const scrapeDo = activeScrapers.find((s) => s.provider === 'scrape_do');
+      if (scrapeDo?.credentials?.token) {
+        try {
+          const token = String(scrapeDo.credentials.token).trim();
+          const base = String(scrapeDo.credentials.baseUrl ?? 'https://api.scrape.do').trim().replace(/\/+$/, '');
+          const target = `${base}/?token=${encodeURIComponent(token)}&url=${encodeURIComponent(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`)}`;
+          const res = await fetch(target);
+          if (res.ok) {
+            const html = await res.text();
+            const linkMatches = html.matchAll(/class="result__url"[^>]*href="([^"]+)"/g);
+            for (const lm of linkMatches) {
+              const u = lm[1];
+              if (u.startsWith('http') && !discoveredUrls.includes(u)) {
+                discoveredUrls.push(u);
+                if (discoveredUrls.length >= limit) break;
+              }
+            }
+          }
+        } catch (err: any) {
+          this.logger.warn(`scrape.do keyword discovery error: ${err?.message}`);
+        }
+      }
+    }
+
+    if (discoveredUrls.length === 0) {
+      throw new Error(`No property listings found for query "${query}". Try providing direct website URLs.`);
+    }
+
+    this.logger.log(`Discovered ${discoveredUrls.length} properties for query "${query}". Extracting via swarm...`);
+    return this.batchExtract(discoveredUrls.slice(0, limit), options);
+  }
+
   // ── Provider Execution Driver ──────────────────────────────────────────────
 
   private async executeProviderScrape(
