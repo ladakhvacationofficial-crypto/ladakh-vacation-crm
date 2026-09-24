@@ -58,6 +58,89 @@ export class VendorDraftsService {
     return draft;
   }
 
+  private async upsertDraftFromExtraction(d: any) {
+    if (!d || !d.name || d.name.trim().length < 2) return null;
+    if (
+      /instagram|facebook|youtube|twitter/i.test(d.name) ||
+      /instagram\.com|facebook\.com|youtube\.com/i.test(d.sourceUrl)
+    ) {
+      return null;
+    }
+
+    const trimmedName = d.name.trim();
+
+    // Check if an active supplier already exists on the books
+    const activeVendor = await this.prisma.vendor.findFirst({
+      where: { name: { equals: trimmedName, mode: 'insensitive' } },
+    });
+
+    const existing = await this.prisma.vendorDraft.findFirst({
+      where: {
+        OR: [
+          { sourceUrl: d.sourceUrl },
+          { name: { equals: trimmedName, mode: 'insensitive' } },
+        ],
+      },
+    });
+
+    if (existing) {
+      if (existing.status !== ScrapeDraftStatus.PENDING_REVIEW) {
+        return existing;
+      }
+      return this.prisma.vendorDraft.update({
+        where: { id: existing.id },
+        data: {
+          sourceProvider: d.sourceProvider,
+          sourceUrl: d.sourceUrl || existing.sourceUrl,
+          city: d.city || existing.city,
+          propertyType: d.propertyType || existing.propertyType,
+          phone: d.phone || existing.phone,
+          email: d.email || existing.email,
+          address: d.address || existing.address,
+          starRating: d.starRating ?? existing.starRating,
+          roomCount: d.roomCount ?? existing.roomCount,
+          checkInTime: d.checkInTime || existing.checkInTime,
+          checkOutTime: d.checkOutTime || existing.checkOutTime,
+          roomCategories:
+            d.roomCategories && d.roomCategories.length > 0
+              ? (d.roomCategories as any)
+              : (existing.roomCategories as any),
+          seasonalFrom: d.seasonalFrom || existing.seasonalFrom,
+          seasonalTo: d.seasonalTo || existing.seasonalTo,
+          reportedAmenities:
+            d.reportedAmenities && d.reportedAmenities.length > 0
+              ? d.reportedAmenities
+              : existing.reportedAmenities,
+          rawPayload: (d.rawPayload as any) ?? (existing.rawPayload as any),
+        },
+      });
+    }
+
+    return this.prisma.vendorDraft.create({
+      data: {
+        sourceProvider: d.sourceProvider,
+        sourceUrl: d.sourceUrl,
+        name: trimmedName,
+        city: d.city,
+        propertyType: d.propertyType,
+        phone: d.phone,
+        email: d.email,
+        address: d.address,
+        starRating: d.starRating,
+        roomCount: d.roomCount,
+        checkInTime: d.checkInTime,
+        checkOutTime: d.checkOutTime,
+        roomCategories: (d.roomCategories as any) ?? [],
+        seasonalFrom: d.seasonalFrom,
+        seasonalTo: d.seasonalTo,
+        reportedAmenities: d.reportedAmenities,
+        rawPayload: (d.rawPayload as any) ?? {},
+        status: activeVendor ? ScrapeDraftStatus.MERGED : ScrapeDraftStatus.PENDING_REVIEW,
+        createdVendorId: activeVendor?.id ?? null,
+      },
+    });
+  }
+
   async extractAndSave(dto: ExtractDraftDto, userId?: string) {
     const extracted = await this.scraperPool.extractProperty(dto.url, {
       preferredProvider: dto.preferredProvider,
@@ -65,31 +148,10 @@ export class VendorDraftsService {
       propertyType: dto.propertyType,
     });
 
-    const draft = await this.prisma.vendorDraft.create({
-      data: {
-        sourceProvider: extracted.sourceProvider,
-        sourceUrl: extracted.sourceUrl,
-        name: extracted.name,
-        city: extracted.city,
-        propertyType: extracted.propertyType,
-        phone: extracted.phone,
-        email: extracted.email,
-        address: extracted.address,
-        starRating: extracted.starRating,
-        roomCount: extracted.roomCount,
-        checkInTime: extracted.checkInTime,
-        checkOutTime: extracted.checkOutTime,
-        roomCategories: (extracted.roomCategories as any) ?? [],
-        seasonalFrom: extracted.seasonalFrom,
-        seasonalTo: extracted.seasonalTo,
-        reportedAmenities: extracted.reportedAmenities,
-        rawPayload: (extracted.rawPayload as any) ?? {},
-        status: ScrapeDraftStatus.PENDING_REVIEW,
-      },
-      include: {
-        reviewedBy: { select: { id: true, name: true, email: true } },
-      },
-    });
+    const draft = await this.upsertDraftFromExtraction(extracted);
+    if (!draft) {
+      throw new BadRequestException('Extracted URL is not a recognized property listing.');
+    }
 
     return {
       draft,
@@ -108,30 +170,10 @@ export class VendorDraftsService {
 
     for (const res of results) {
       if (res.success && res.data) {
-        const d = res.data;
-        const draft = await this.prisma.vendorDraft.create({
-          data: {
-            sourceProvider: d.sourceProvider,
-            sourceUrl: d.sourceUrl,
-            name: d.name,
-            city: d.city,
-            propertyType: d.propertyType,
-            phone: d.phone,
-            email: d.email,
-            address: d.address,
-            starRating: d.starRating,
-            roomCount: d.roomCount,
-            checkInTime: d.checkInTime,
-            checkOutTime: d.checkOutTime,
-            roomCategories: (d.roomCategories as any) ?? [],
-            seasonalFrom: d.seasonalFrom,
-            seasonalTo: d.seasonalTo,
-            reportedAmenities: d.reportedAmenities,
-            rawPayload: (d.rawPayload as any) ?? {},
-            status: ScrapeDraftStatus.PENDING_REVIEW,
-          },
-        });
-        createdDrafts.push(draft);
+        const draft = await this.upsertDraftFromExtraction(res.data);
+        if (draft) {
+          createdDrafts.push(draft);
+        }
       } else {
         errors.push({ url: res.url, error: res.error ?? 'Unknown extraction error' });
       }
@@ -158,30 +200,10 @@ export class VendorDraftsService {
 
     for (const res of results) {
       if (res.success && res.data) {
-        const d = res.data;
-        const draft = await this.prisma.vendorDraft.create({
-          data: {
-            sourceProvider: d.sourceProvider,
-            sourceUrl: d.sourceUrl,
-            name: d.name,
-            city: d.city,
-            propertyType: d.propertyType,
-            phone: d.phone,
-            email: d.email,
-            address: d.address,
-            starRating: d.starRating,
-            roomCount: d.roomCount,
-            checkInTime: d.checkInTime,
-            checkOutTime: d.checkOutTime,
-            roomCategories: (d.roomCategories as any) ?? [],
-            seasonalFrom: d.seasonalFrom,
-            seasonalTo: d.seasonalTo,
-            reportedAmenities: d.reportedAmenities,
-            rawPayload: (d.rawPayload as any) ?? {},
-            status: ScrapeDraftStatus.PENDING_REVIEW,
-          },
-        });
-        createdDrafts.push(draft);
+        const draft = await this.upsertDraftFromExtraction(res.data);
+        if (draft) {
+          createdDrafts.push(draft);
+        }
       } else {
         errors.push({ url: res.url, error: res.error ?? 'Unknown extraction error' });
       }
