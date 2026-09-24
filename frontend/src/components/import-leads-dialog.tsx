@@ -55,7 +55,7 @@ export function ImportLeadsDialog({ onImported }: { onImported: () => void }) {
         </Button>
       </DialogTrigger>
       <DialogContent title="Bulk Import Leads" description="Upload a CSV file with lead data.">
-        <div className="p-5 flex flex-col items-center justify-center space-y-4">
+        <div className="min-h-0 flex-1 overflow-y-auto p-5 flex flex-col items-center justify-center space-y-4">
           <Button
             variant="secondary"
             onClick={() => fileInputRef.current?.click()}

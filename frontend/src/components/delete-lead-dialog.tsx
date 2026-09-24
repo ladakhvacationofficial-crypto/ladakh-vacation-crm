@@ -59,7 +59,7 @@ export function DeleteLeadDialog({
         title={`Delete lead "${leadName}"?`}
         description="This will permanently delete this lead and all its timeline records. This action cannot be undone. If this is a real customer who chose not to book, use 'Mark as Lost' instead to preserve reporting analytics."
       >
-        <div className="p-5">
+        <div className="min-h-0 flex-1 overflow-y-auto p-5">
           {error && (
             <p
               role="alert"
@@ -69,7 +69,7 @@ export function DeleteLeadDialog({
             </p>
           )}
 
-          <div className="flex items-center justify-end gap-2 border-t border-ink-800 pt-4">
+          <div className="sticky bottom-0 z-10 -mx-5 -mb-5 mt-5 flex items-center justify-end gap-2 border-t border-ink-800 bg-ink-900 px-5 pb-5 pt-4">
             <DialogClose asChild>
               <Button type="button" variant="ghost" size="sm" disabled={busy}>
                 Cancel

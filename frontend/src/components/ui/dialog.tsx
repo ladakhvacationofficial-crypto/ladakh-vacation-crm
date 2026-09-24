@@ -23,7 +23,10 @@ export function DialogContent({
     <DialogPrimitive.Portal>
       <DialogPrimitive.Overlay
         className={cn(
-          'fixed inset-0 z-50 bg-ink-950/80 backdrop-blur-[2px]',
+          // A literal, not a token: the scrim renders outside .crm-theme,
+        // and the ink scale is inverted between the two themes, so
+        // ink-950 is navy on the public site and paper in the CRM.
+        'fixed inset-0 z-50 bg-[rgba(7,15,31,0.55)] backdrop-blur-[2px]',
           'data-[state=open]:animate-[fadeIn_160ms_ease-out]',
         )}
       />
@@ -33,7 +36,11 @@ export function DialogContent({
           // sheet on tablet+ desktop. We use w-full h-full on mobile instead
           // of right-0 bottom-0 to cleanly avoid any need for 'auto' resets
           // that can strand the dialog off-screen in Tailwind v4.
-          'fixed z-50 overflow-hidden bg-ink-900',
+          // `crm-theme` is repeated here because Radix portals this to
+          // document.body, outside the .crm-theme wrapper in the (app)
+          // layout. Without it the dialog picks up the public site's
+          // dark palette and renders navy on a light screen.
+          'crm-theme fixed z-50 flex flex-col overflow-hidden bg-ink-900',
           'top-0 left-0 w-full h-full',
           'sm:top-[50%] sm:left-[50%] sm:h-auto sm:w-[min(92vw,720px)]',
           'sm:-translate-x-[50%] sm:-translate-y-[50%]',
@@ -44,7 +51,7 @@ export function DialogContent({
         )}
         {...props}
       >
-        <div className="flex items-start justify-between border-b border-ink-800 px-5 py-3.5">
+        <div className="flex shrink-0 items-start justify-between border-b border-ink-800 px-5 py-3.5">
           <div>
             <DialogPrimitive.Title className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-200">
               {title}

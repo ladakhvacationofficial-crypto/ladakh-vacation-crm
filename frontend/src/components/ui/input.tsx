@@ -15,7 +15,7 @@ export const Input = React.forwardRef<
       'transition-[border-color,box-shadow,background-color] duration-150 ease-out',
       'hover:border-ink-600',
       'focus:border-signal-500 focus:bg-ink-950 focus:outline-none',
-      'focus:shadow-[0_0_0_3px_rgba(53,146,150,0.15)]',
+      'focus:shadow-[0_0_0_3px_rgba(30,79,168,0.18)]',
       'disabled:opacity-50',
       className,
     )}

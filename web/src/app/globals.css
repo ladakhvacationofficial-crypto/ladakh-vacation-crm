@@ -114,6 +114,11 @@
    ========================================================================= */
 
 .crm-theme {
+  /* Native popups, scrollbars and date pickers follow this, not the
+     tokens. Without it they inherit the public site's dark chrome and
+     a <select> drops open as a dark list beside a white field. */
+  color-scheme: light;
+
   /* Surfaces — the landers' paper, not a cold slate. White panels sit on it. */
   --color-ink-950: #f7f5f0;  /* canvas: paper, as on go.ladakhvacation.in */
   --color-ink-900: #ffffff;  /* panel surface */

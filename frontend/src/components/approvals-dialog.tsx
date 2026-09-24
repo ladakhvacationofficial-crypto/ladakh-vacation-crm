@@ -45,7 +45,7 @@ export function ApprovalsDialog({ onResolved }: { onResolved: () => void }) {
         </Button>
       </DialogTrigger>
       <DialogContent title="Pending Approvals" description="Review requests to close leads.">
-        <div className="p-5 space-y-4">
+        <div className="min-h-0 flex-1 overflow-y-auto p-5 space-y-4">
           {loading ? (
             <p className="text-ink-500 text-sm">Loading...</p>
           ) : requests.length === 0 ? (

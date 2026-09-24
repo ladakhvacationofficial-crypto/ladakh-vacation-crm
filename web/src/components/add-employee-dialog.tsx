@@ -94,7 +94,7 @@ export function AddEmployeeDialog({
         title="Add person"
         description="Onboard a new employee. Only the essentials — bank, salary components and documents can be filled in on the detail page."
       >
-        <form onSubmit={submit} className="max-h-[70vh] overflow-y-auto p-5">
+        <form onSubmit={submit} className="min-h-0 flex-1 overflow-y-auto p-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1 sm:col-span-2">
               <Label htmlFor="ae-name">Full name *</Label>
@@ -197,7 +197,7 @@ export function AddEmployeeDialog({
             </p>
           )}
 
-          <div className="mt-5 flex items-center justify-end gap-2 border-t border-ink-800 pt-4">
+          <div className="sticky bottom-0 z-10 -mx-5 -mb-5 mt-5 flex items-center justify-end gap-2 border-t border-ink-800 bg-ink-900 px-5 pb-5 pt-4">
             <DialogClose asChild>
               <Button type="button" variant="ghost" size="sm">
                 Cancel

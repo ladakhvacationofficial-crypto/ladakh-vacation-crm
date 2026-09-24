@@ -113,7 +113,7 @@ export function IntegrationDialog({
             : undefined
         }
       >
-        <form onSubmit={submit} className="max-h-[80vh] overflow-y-auto p-5">
+        <form onSubmit={submit} className="min-h-0 flex-1 overflow-y-auto p-5">
           <div className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="i-label">Nickname</Label>
@@ -241,7 +241,7 @@ export function IntegrationDialog({
             </p>
           )}
 
-          <div className="mt-5 flex items-center justify-end gap-2 border-t border-ink-800 pt-4">
+          <div className="sticky bottom-0 z-10 -mx-5 -mb-5 mt-5 flex items-center justify-end gap-2 border-t border-ink-800 bg-ink-900 px-5 pb-5 pt-4">
             <DialogClose asChild>
               <Button type="button" variant="ghost" size="sm">Cancel</Button>
             </DialogClose>
