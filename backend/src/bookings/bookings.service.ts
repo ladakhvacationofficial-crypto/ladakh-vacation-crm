@@ -296,6 +296,17 @@ export class BookingsService {
         lead: { select: { id: true, name: true, phone: true, email: true } },
         payments: { orderBy: { receivedAt: 'desc' } },
         costs: { orderBy: { createdAt: 'asc' } },
+        fleetAssignments: {
+          include: {
+            vehicle: true,
+            driver: true,
+          },
+        },
+        permitApplications: {
+          include: {
+            travellers: true,
+          },
+        },
       },
     });
     if (!booking) throw new NotFoundException('Booking not found');

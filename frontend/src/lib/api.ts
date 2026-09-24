@@ -1211,6 +1211,8 @@ export interface BookingDetail {
   payments: BookingPayment[];
   costs: BookingCost[];
   financials: BookingFinancials;
+  fleetAssignments?: FleetAssignmentRow[];
+  permitApplications?: PermitApplicationRow[];
 }
 
 export interface CampaignRow {

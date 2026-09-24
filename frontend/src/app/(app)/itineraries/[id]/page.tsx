@@ -14,7 +14,11 @@ import {
   CalendarCheck,
   Sparkles,
   TrendingUp,
+  History,
+  Calculator,
 } from 'lucide-react';
+import { RevisionsDialog } from '@/components/itineraries/revisions-dialog';
+import { BedWisePricerDialog } from '@/components/bed-wise-pricer-dialog';
 import {
   DndContext,
   closestCenter,
@@ -85,6 +89,8 @@ export default function ItineraryEditorPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [revisionsOpen, setRevisionsOpen] = useState(false);
+  const [bedWiseOpen, setBedWiseOpen] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -197,7 +203,27 @@ export default function ItineraryEditorPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setBedWiseOpen(true)}
+            title="Calculate bed-wise rates (Adult / AwEB / CwEB / CNB)"
+          >
+            <Calculator className="size-4" strokeWidth={1.75} />
+            Bed-Wise Calculator
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setRevisionsOpen(true)}
+            title="View quote version history and compare diffs"
+          >
+            <History className="size-4" strokeWidth={1.75} />
+            Quote Revisions
+          </Button>
+
           <Button
             variant="secondary" size="sm" disabled={busy}
             onClick={() =>
@@ -347,6 +373,20 @@ export default function ItineraryEditorPage() {
           </Panel>
         )}
       </div>
+
+      <RevisionsDialog
+        itineraryId={id}
+        open={revisionsOpen}
+        onClose={() => setRevisionsOpen(false)}
+        onRestored={load}
+      />
+
+      <BedWisePricerDialog
+        open={bedWiseOpen}
+        onClose={() => setBedWiseOpen(false)}
+        initialNights={it.days.length || 5}
+        initialPax={it.totalPax || 4}
+      />
     </div>
   );
 }

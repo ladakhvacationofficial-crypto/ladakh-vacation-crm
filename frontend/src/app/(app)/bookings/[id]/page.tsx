@@ -251,6 +251,106 @@ export default function BookingDetailPage() {
           />
         </div>
       </header>
+
+      {/* Trip Workspace Operational Hub: Itinerary, Fleet, and Permits overview */}
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Card 1: Itinerary & Plan */}
+        <Panel className="p-3.5 bg-ink-900 border-ink-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
+              Itinerary & Plan
+            </span>
+            {booking.itineraryId && (
+              <Link
+                href={`/itineraries/${booking.itineraryId}`}
+                className="text-[11px] text-signal-400 hover:text-signal-300 font-medium"
+              >
+                Open Plan →
+              </Link>
+            )}
+          </div>
+          <p className="font-semibold text-ink-100 text-[13px] mt-1">
+            {booking.packageName ?? 'Custom Ladakh Plan'}
+          </p>
+          <p className="text-[11px] text-ink-500 mt-0.5">
+            {booking.nights} Nights · {booking.adults + booking.children} Travellers
+          </p>
+        </Panel>
+
+        {/* Card 2: Fleet & Driver Dispatch */}
+        <Panel className="p-3.5 bg-ink-900 border-ink-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
+              Vehicle & Driver
+            </span>
+            <Link
+              href="/fleet"
+              className="text-[11px] text-signal-400 hover:text-signal-300 font-medium"
+            >
+              Fleet Desk →
+            </Link>
+          </div>
+          {booking.fleetAssignments?.[0] ? (
+            <div className="mt-1">
+              <p className="font-semibold text-ink-100 text-[13px]">
+                {booking.fleetAssignments[0].vehicle?.plateNumber ?? 'Assigned'}{' '}
+                <span className="text-[11px] font-normal text-ink-400">
+                  ({humanise(booking.fleetAssignments[0].vehicle?.vehicleType ?? 'CAB')})
+                </span>
+              </p>
+              <p className="text-[11px] text-ink-400 mt-0.5">
+                Driver: {booking.fleetAssignments[0].driver?.name ?? 'Unallocated'}{' '}
+                {booking.fleetAssignments[0].driver?.phone && `(${booking.fleetAssignments[0].driver.phone})`}
+              </p>
+            </div>
+          ) : (
+            <div className="mt-1">
+              <p className="text-[13px] text-warn-400 font-medium">Unallocated Transport</p>
+              <p className="text-[11px] text-ink-500 mt-0.5">
+                No vehicle linked yet · Assign in Fleet Desk
+              </p>
+            </div>
+          )}
+        </Panel>
+
+        {/* Card 3: Ladakh Permits (ILP/PAP) */}
+        <Panel className="p-3.5 bg-ink-900 border-ink-800">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
+              Ladakh Permits
+            </span>
+            <Link
+              href="/permits"
+              className="text-[11px] text-signal-400 hover:text-signal-300 font-medium"
+            >
+              Permits Desk →
+            </Link>
+          </div>
+          {booking.permitApplications?.[0] ? (
+            <div className="mt-1">
+              <div className="flex items-center gap-1.5">
+                <span className="font-semibold text-ink-100 text-[13px]">
+                  {booking.permitApplications[0].permitNumber ?? 'Application Filed'}
+                </span>
+                <span className="rounded bg-brand-500/15 px-1 py-0.2 text-[9.5px] font-semibold text-brand-500">
+                  {booking.permitApplications[0].status}
+                </span>
+              </div>
+              <p className="text-[11px] text-ink-400 mt-0.5">
+                {booking.permitApplications[0].travellers?.length ?? booking.adults + booking.children} travellers rostered
+              </p>
+            </div>
+          ) : (
+            <div className="mt-1">
+              <p className="text-[13px] text-warn-400 font-medium">No Permits Logged</p>
+              <p className="text-[11px] text-ink-500 mt-0.5">
+                Inner Line Permits required for Nubra & Pangong
+              </p>
+            </div>
+          )}
+        </Panel>
+      </div>
+
       <EntityDocuments entityType="booking" entityId={id} />
 
       {error && (
