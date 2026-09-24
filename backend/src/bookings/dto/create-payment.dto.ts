@@ -19,4 +19,5 @@ export class CreatePaymentDto {
   @IsOptional() @IsString() @MaxLength(1000) notes?: string;
   /** Records the amount as money going back out to the client. */
   @IsOptional() @IsBoolean() isRefund?: boolean;
+  @IsOptional() @IsString() verificationStatus?: string;
 }

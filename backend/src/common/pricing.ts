@@ -475,3 +475,44 @@ export function computeBedWiseOccupancy(
     },
   };
 }
+
+// ── Multi-Currency Foreign Exchange Engine ──────────────────────────────────
+export type SupportedCurrency = 'INR' | 'USD' | 'EUR' | 'GBP';
+
+export const DEFAULT_FX_RATES: Record<SupportedCurrency, number> = {
+  INR: 1.0,
+  USD: 84.50,
+  EUR: 91.20,
+  GBP: 108.50,
+};
+
+export const CURRENCY_SYMBOLS: Record<SupportedCurrency, string> = {
+  INR: '₹',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+};
+
+export function convertFromInr(
+  inrAmount: number,
+  targetCurrency: SupportedCurrency = 'INR',
+  fxRate?: number,
+): number {
+  if (targetCurrency === 'INR') return inrAmount;
+  const rate = fxRate && fxRate > 0 ? fxRate : (DEFAULT_FX_RATES[targetCurrency] || 1);
+  return Math.round(inrAmount / rate);
+}
+
+export function formatWithCurrency(
+  amount: number,
+  currency: SupportedCurrency = 'INR',
+  fxRate?: number,
+): string {
+  const sym = CURRENCY_SYMBOLS[currency] || '₹';
+  if (currency === 'INR') {
+    return `${sym}${amount.toLocaleString('en-IN')}`;
+  }
+  const converted = convertFromInr(amount, currency, fxRate);
+  return `${sym}${converted.toLocaleString('en-US')}`;
+}
+

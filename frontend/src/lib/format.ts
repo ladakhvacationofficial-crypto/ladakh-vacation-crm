@@ -80,3 +80,37 @@ export const healthBg: Record<Health, string> = {
   warn: 'bg-warn-500',
   loss: 'bg-loss-500',
 };
+
+// ── Multi-Currency Foreign Exchange Helpers ─────────────────────────────────
+export type SupportedCurrency = 'INR' | 'USD' | 'EUR' | 'GBP';
+
+export const DEFAULT_FX_RATES: Record<SupportedCurrency, number> = {
+  INR: 1.0,
+  USD: 84.50,
+  EUR: 91.20,
+  GBP: 108.50,
+};
+
+export const CURRENCY_SYMBOLS: Record<SupportedCurrency, string> = {
+  INR: '₹',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+};
+
+export function moneyWithCurrency(
+  value: number | null | undefined,
+  currency: SupportedCurrency | string = 'INR',
+  fxRate?: number,
+): string {
+  if (value === null || value === undefined) return '—';
+  const curr = (currency as SupportedCurrency) || 'INR';
+  const sym = CURRENCY_SYMBOLS[curr] || '₹';
+  if (curr === 'INR') {
+    return inr.format(value);
+  }
+  const rate = fxRate && fxRate > 0 ? fxRate : (DEFAULT_FX_RATES[curr] || 1);
+  const converted = Math.round(value / rate);
+  return `${sym}${converted.toLocaleString('en-US')}`;
+}
+

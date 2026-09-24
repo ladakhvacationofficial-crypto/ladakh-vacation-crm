@@ -17,6 +17,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreateCostDto } from './dto/create-cost.dto';
 import { UpdateCostDto } from './dto/update-cost.dto';
 import { QueryBookingsDto } from './dto/query-bookings.dto';
+import { HandoverBookingDto } from './dto/handover-booking.dto';
 import { computeBookingFinancials, deriveStatus } from './booking-math';
 import { Actor, canSeeAllLeads } from '../common/access';
 import { toDateOrNull } from '../common/dates';
@@ -294,7 +295,15 @@ export class BookingsService {
       where: { id },
       include: {
         lead: { select: { id: true, name: true, phone: true, email: true } },
-        payments: { orderBy: { receivedAt: 'desc' } },
+        operationsOwner: { select: { id: true, name: true, email: true } },
+        handedOverBy: { select: { id: true, name: true } },
+        payments: {
+          orderBy: { receivedAt: 'desc' },
+          include: {
+            verifiedBy: { select: { id: true, name: true } },
+            recordedBy: { select: { id: true, name: true } },
+          },
+        },
         costs: { orderBy: { createdAt: 'asc' } },
         fleetAssignments: {
           include: {
@@ -342,6 +351,8 @@ export class BookingsService {
       data.travelStartDate = toDateOrNull(dto.travelStartDate);
     if (dto.travelEndDate !== undefined)
       data.travelEndDate = toDateOrNull(dto.travelEndDate);
+    if (dto.currency !== undefined) data.currency = dto.currency;
+    if (dto.fxRate !== undefined) data.fxRate = dto.fxRate;
 
     await this.prisma.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT id FROM "Booking" WHERE id = ${id} FOR UPDATE`;
@@ -422,6 +433,7 @@ export class BookingsService {
         receivedAt: dto.receivedAt ? new Date(dto.receivedAt) : new Date(),
         notes: dto.notes ?? null,
         isRefund: dto.isRefund ?? false,
+        verificationStatus: dto.verificationStatus ?? 'VERIFIED',
         recordedById: userId ?? null,
       },
     });
@@ -1419,6 +1431,121 @@ export class BookingsService {
       departures,
       inTransit,
       valleyDistribution,
+    };
+  }
+
+  async handover(
+    id: string,
+    dto: HandoverBookingDto,
+    actor: Actor,
+  ) {
+    await this.assertBookingAccess(id, actor);
+    const booking = await this.prisma.booking.findUnique({ where: { id } });
+    if (!booking) throw new NotFoundException('Booking not found');
+
+    const opsUser = await this.prisma.user.findUnique({
+      where: { id: dto.operationsOwnerId },
+    });
+    if (!opsUser) throw new NotFoundException('Operations executive not found');
+
+    await this.prisma.booking.update({
+      where: { id },
+      data: {
+        operationsOwnerId: dto.operationsOwnerId,
+        handedOverAt: new Date(),
+        handedOverById: actor.id,
+        handoverNotes: dto.notes?.trim() || null,
+      },
+    });
+
+    await this.prisma.activity.create({
+      data: {
+        leadId: booking.leadId,
+        userId: actor.id,
+        type: ActivityType.SYSTEM,
+        content: `Trip handed over to Operations (${opsUser.name})${dto.notes ? `: "${dto.notes}"` : ''}`,
+      },
+    });
+
+    return this.detail(id);
+  }
+
+  async verifyPayment(
+    paymentId: string,
+    status: 'VERIFIED' | 'REJECTED',
+    actor: Actor,
+  ) {
+    const payment = await this.prisma.bookingPayment.findUnique({
+      where: { id: paymentId },
+    });
+    if (!payment) throw new NotFoundException('Payment not found');
+
+    await this.prisma.bookingPayment.update({
+      where: { id: paymentId },
+      data: {
+        verificationStatus: status,
+        verifiedById: actor.id,
+        verifiedAt: new Date(),
+      },
+    });
+
+    return { success: true, paymentId, status };
+  }
+
+  async getPaymentWorkQueue() {
+    const [unverifiedPayments, upcomingBookings, pendingReservations] = await Promise.all([
+      this.prisma.bookingPayment.findMany({
+        where: { verificationStatus: 'PENDING_VERIFICATION' },
+        include: {
+          booking: {
+            select: {
+              id: true,
+              bookingNumber: true,
+              packageName: true,
+              lead: { select: { id: true, name: true, phone: true } },
+            },
+          },
+          recordedBy: { select: { id: true, name: true } },
+        },
+        orderBy: { receivedAt: 'desc' },
+      }),
+      this.prisma.booking.findMany({
+        where: {
+          status: { in: [BookingStatus.CONFIRMED, BookingStatus.IN_PROGRESS, BookingStatus.PENDING] },
+        },
+        select: {
+          id: true,
+          bookingNumber: true,
+          packageName: true,
+          totalSell: true,
+          totalReceived: true,
+          travelStartDate: true,
+          lead: { select: { id: true, name: true, phone: true } },
+        },
+        orderBy: { travelStartDate: 'asc' },
+        take: 50,
+      }),
+      this.prisma.bookingCost.findMany({
+        where: { confirmationStatus: 'PENDING' },
+        include: {
+          booking: { select: { id: true, bookingNumber: true, packageName: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 50,
+      }),
+    ]);
+
+    const overdueReceivables = upcomingBookings
+      .filter((b) => b.totalSell > b.totalReceived)
+      .map((b) => ({
+        ...b,
+        balanceDue: b.totalSell - b.totalReceived,
+      }));
+
+    return {
+      unverifiedPayments,
+      overdueReceivables,
+      pendingReservations,
     };
   }
 }

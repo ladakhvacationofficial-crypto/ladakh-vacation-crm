@@ -559,6 +559,8 @@ export interface ItineraryDetail {
   };
   options: ItineraryOptionRow[];
   days: ItineraryDayRow[];
+  currency?: string;
+  fxRate?: number;
 }
 
 export interface VendorRow {
@@ -722,6 +724,10 @@ export interface BookingPayment {
   receivedAt: string;
   notes: string | null;
   isRefund: boolean;
+  verificationStatus?: string;
+  verifiedById?: string | null;
+  verifiedBy?: { id: string; name: string } | null;
+  verifiedAt?: string | null;
   recordedBy?: { id: string; name: string } | null;
 }
 
@@ -736,6 +742,51 @@ export interface BookingCost {
   notes: string | null;
   confirmationStatus?: string | null;
   confirmationRef?: string | null;
+}
+
+export interface UnverifiedPaymentItem {
+  id: string;
+  bookingId: string;
+  amount: number;
+  paymentMethod: string;
+  reference: string | null;
+  receivedAt: string;
+  notes: string | null;
+  verificationStatus: string;
+  booking: {
+    id: string;
+    bookingNumber: string;
+    packageName: string | null;
+    lead: { id: string; name: string; phone: string | null };
+  };
+  recordedBy?: { id: string; name: string } | null;
+}
+
+export interface OverdueReceivableItem {
+  id: string;
+  bookingNumber: string;
+  packageName: string | null;
+  totalSell: number;
+  totalReceived: number;
+  balanceDue: number;
+  travelStartDate: string | null;
+  lead: { id: string; name: string; phone: string | null };
+}
+
+export interface PendingReservationItem {
+  id: string;
+  bookingId: string;
+  serviceType: string;
+  description: string;
+  costAmount: number;
+  confirmationStatus: string;
+  booking: { id: string; bookingNumber: string; packageName: string | null };
+}
+
+export interface PaymentWorkQueueResponse {
+  unverifiedPayments: UnverifiedPaymentItem[];
+  overdueReceivables: OverdueReceivableItem[];
+  pendingReservations: PendingReservationItem[];
 }
 
 // ---- attribution ----------------------------------------------------------
@@ -1215,6 +1266,14 @@ export interface BookingDetail {
   financials: BookingFinancials;
   fleetAssignments?: FleetAssignmentRow[];
   permitApplications?: PermitApplicationRow[];
+  operationsOwnerId?: string | null;
+  operationsOwner?: { id: string; name: string; email: string } | null;
+  handedOverAt?: string | null;
+  handedOverById?: string | null;
+  handedOverBy?: { id: string; name: string } | null;
+  handoverNotes?: string | null;
+  currency?: string;
+  fxRate?: number;
 }
 
 export interface CampaignRow {

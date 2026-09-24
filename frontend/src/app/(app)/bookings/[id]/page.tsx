@@ -30,6 +30,9 @@ import {
   History,
   Send,
   MapPin,
+  X,
+  UserCheck,
+  Globe,
 } from 'lucide-react';
 import {
   api,
@@ -48,7 +51,15 @@ import { Chip } from '@/components/ui/badge';
 import { MarginRibbon } from '@/components/margin-ribbon';
 import { RevisionsDialog } from '@/components/itineraries/revisions-dialog';
 import { BedWisePricerDialog } from '@/components/bed-wise-pricer-dialog';
-import { money, percent, shortDate, marginHealth } from '@/lib/format';
+import {
+  money,
+  percent,
+  shortDate,
+  marginHealth,
+  moneyWithCurrency,
+  SupportedCurrency,
+  DEFAULT_FX_RATES,
+} from '@/lib/format';
 import { BOOKING_STATUSES, PAYMENT_MODES, humanise } from '@/lib/constants';
 
 type TabKey =
@@ -77,6 +88,8 @@ export default function BookingDetailPage() {
   // Dialogs
   const [revisionsOpen, setRevisionsOpen] = useState(false);
   const [bedWiseOpen, setBedWiseOpen] = useState(false);
+  const [handoverOpen, setHandoverOpen] = useState(false);
+  const [usersList, setUsersList] = useState<{ id: string; name: string; email: string }[]>([]);
   const [generatingTaxInv, setGeneratingTaxInv] = useState(false);
   const [copiedReminder, setCopiedReminder] = useState(false);
 
@@ -101,6 +114,7 @@ export default function BookingDetailPage() {
   useEffect(() => {
     load();
     api.get<PricingSettings>('/settings/pricing').then(setSettings).catch(() => {});
+    api.get<{ id: string; name: string; email: string }[]>('/users').then(setUsersList).catch(() => {});
   }, [load]);
 
   async function mutate(fn: () => Promise<unknown>) {
@@ -205,6 +219,11 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
             >
               {humanise(booking.status)}
             </span>
+            {booking.currency && booking.currency !== 'INR' && (
+              <span className="rounded-full bg-signal-500/15 border border-signal-500/30 px-2.5 py-0.5 text-[11px] font-semibold text-signal-400">
+                {moneyWithCurrency(booking.totalSell, booking.currency, booking.fxRate)}
+              </span>
+            )}
           </div>
 
           <p className="mt-1 text-[13px] text-ink-400">
@@ -301,6 +320,28 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
             <Car className="size-4" strokeWidth={1.75} />
             Duty Slip
           </Button>
+
+          <div className="w-[110px]">
+            <Select
+              value={booking.currency || 'INR'}
+              disabled={busy}
+              aria-label="Currency"
+              onChange={(e) => {
+                const c = e.target.value as SupportedCurrency;
+                mutate(() =>
+                  api.patch(`/bookings/${id}`, {
+                    currency: c,
+                    fxRate: DEFAULT_FX_RATES[c] || 1.0,
+                  }),
+                );
+              }}
+            >
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </Select>
+          </div>
 
           <div className="w-[150px]">
             <Select
@@ -439,7 +480,7 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
       {tab === 'overview' && (
         <div className="space-y-6">
           {/* Quick Operational Status Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Plan Card */}
             <Panel className="p-4 bg-ink-900 border-ink-800">
               <div className="flex items-center justify-between">
@@ -470,6 +511,49 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
                   <p className="text-[13px] text-ink-300 font-medium">Custom Sold Package</p>
                   <p className="text-[11px] text-ink-500 mt-0.5">
                     {booking.nights} Nights · {booking.adults + booking.children} Pax
+                  </p>
+                </div>
+              )}
+            </Panel>
+
+            {/* Operations Handover Card */}
+            <Panel className="p-4 bg-ink-900 border-ink-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
+                  Operations Handover
+                </span>
+                <button
+                  onClick={() => setHandoverOpen(true)}
+                  className="text-[11px] text-signal-400 hover:text-signal-300 font-medium"
+                >
+                  {booking.handedOverAt ? 'Update →' : 'Sign-off →'}
+                </button>
+              </div>
+              {booking.handedOverAt ? (
+                <div className="mt-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-semibold text-ink-100 text-[13px] truncate">
+                      {booking.operationsOwner?.name ?? 'Ops Desk'}
+                    </span>
+                    <span className="rounded bg-healthy-500/15 border border-healthy-500/30 px-1 py-0.2 text-[9.5px] font-semibold text-healthy-400">
+                      Handed Over
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-ink-400 mt-0.5 truncate">
+                    {booking.handedOverBy ? `By ${booking.handedOverBy.name} · ` : ''}
+                    {shortDate(booking.handedOverAt)}
+                  </p>
+                  {booking.handoverNotes && (
+                    <p className="text-[10.5px] text-ink-500 mt-1 italic truncate" title={booking.handoverNotes}>
+                      &quot;{booking.handoverNotes}&quot;
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="mt-2">
+                  <p className="text-[13px] text-warn-400 font-medium">Pending Handover</p>
+                  <p className="text-[11px] text-ink-500 mt-0.5">
+                    Sales sign-off required for Leh operations dispatch
                   </p>
                 </div>
               )}
@@ -556,7 +640,11 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
             <MoneyCard
               label="Sell Price"
               value={money(booking.totalSell)}
-              sub={`${booking.adults + booking.children} pax · ${booking.nights}N`}
+              sub={
+                booking.currency && booking.currency !== 'INR'
+                  ? `${moneyWithCurrency(booking.totalSell, booking.currency, booking.fxRate)} (@ ₹${booking.fxRate ?? DEFAULT_FX_RATES[booking.currency as SupportedCurrency]}/${booking.currency})`
+                  : `${booking.adults + booking.children} pax · ${booking.nights}N`
+              }
             />
             <MoneyCard
               label="Received"
@@ -1207,6 +1295,9 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
               onDelete={(paymentId) =>
                 mutate(() => api.del(`/bookings/payments/${paymentId}`))
               }
+              onVerify={(paymentId, status) =>
+                mutate(() => api.patch(`/bookings/payments/${paymentId}/verify`, { status }))
+              }
             />
 
             <Panel className="p-5 space-y-4">
@@ -1348,6 +1439,18 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
         initialNights={booking.nights || 5}
         initialPax={booking.adults + booking.children || 2}
       />
+
+      <HandoverDialog
+        isOpen={handoverOpen}
+        onClose={() => setHandoverOpen(false)}
+        booking={booking}
+        users={usersList}
+        onHandover={async (operationsOwnerId, notes) => {
+          await mutate(() =>
+            api.post(`/bookings/${id}/handover`, { operationsOwnerId, notes }),
+          );
+        }}
+      />
     </div>
   );
 }
@@ -1390,11 +1493,13 @@ function PaymentsPanel({
   busy,
   onAdd,
   onDelete,
+  onVerify,
 }: {
   booking: BookingDetail;
   busy: boolean;
   onAdd: (body: Record<string, unknown>) => void;
   onDelete: (paymentId: string) => void;
+  onVerify: (paymentId: string, status: 'VERIFIED' | 'REJECTED') => void;
 }) {
   return (
     <Panel>
@@ -1423,7 +1528,7 @@ function PaymentsPanel({
               className="group flex items-start gap-3 px-5 py-2.5 hover:bg-ink-850/60"
             >
               <div className="min-w-0 flex-1">
-                <p className="text-[13px]">
+                <p className="text-[13px] flex flex-wrap items-center gap-1.5">
                   <span
                     className={`tabular font-medium ${
                       p.isRefund ? 'text-loss-400' : 'text-ink-100'
@@ -1431,22 +1536,67 @@ function PaymentsPanel({
                   >
                     {money(p.amount)}
                   </span>
-                  <span className="ml-2 text-[11px] uppercase tracking-[0.08em] text-ink-500">
+                  <span className="text-[11px] uppercase tracking-[0.08em] text-ink-500">
                     {humanise(p.mode)}
                   </span>
                   {p.isRefund && (
-                    <Chip className="ml-2 border-loss-500/40 text-loss-400">
+                    <Chip className="border-loss-500/40 text-loss-400">
                       Refund
                     </Chip>
+                  )}
+                  {p.verificationStatus === 'VERIFIED' && (
+                    <span className="inline-flex items-center gap-1 rounded bg-healthy-500/15 border border-healthy-500/30 px-1.5 py-0.2 text-[9.5px] font-semibold text-healthy-400">
+                      <CheckCircle2 className="size-2.5" />
+                      Verified
+                    </span>
+                  )}
+                  {p.verificationStatus === 'REJECTED' && (
+                    <span className="inline-flex items-center gap-1 rounded bg-loss-500/15 border border-loss-500/30 px-1.5 py-0.2 text-[9.5px] font-semibold text-loss-400">
+                      <AlertCircle className="size-2.5" />
+                      Rejected
+                    </span>
+                  )}
+                  {(!p.verificationStatus || p.verificationStatus === 'PENDING_VERIFICATION') && (
+                    <span className="inline-flex items-center gap-1 rounded bg-warn-500/15 border border-warn-500/30 px-1.5 py-0.2 text-[9.5px] font-semibold text-warn-400">
+                      <Clock className="size-2.5" />
+                      Pending Audit
+                    </span>
                   )}
                 </p>
                 <p className="mt-0.5 text-[11px] text-ink-500">
                   {shortDate(p.receivedAt)}
                   {p.reference && (
-                    <span className="tabular ml-2">ref {p.reference}</span>
+                    <span className="tabular ml-2 font-mono">ref {p.reference}</span>
+                  )}
+                  {p.verifiedBy && (
+                    <span className="ml-2 text-healthy-400/80">· Verified by {p.verifiedBy.name}</span>
+                  )}
+                  {p.recordedBy && (
+                    <span className="ml-2 text-ink-500">· Logged by {p.recordedBy.name}</span>
                   )}
                   {p.notes && <span className="ml-2 text-ink-600">· {p.notes}</span>}
                 </p>
+
+                {(!p.verificationStatus || p.verificationStatus === 'PENDING_VERIFICATION') && (
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <button
+                      onClick={() => onVerify(p.id, 'VERIFIED')}
+                      disabled={busy}
+                      className="inline-flex items-center gap-1 rounded bg-healthy-500/20 px-2 py-0.5 text-[10.5px] font-medium text-healthy-400 hover:bg-healthy-500/30 transition-colors"
+                    >
+                      <Check className="size-3" />
+                      Verify
+                    </button>
+                    <button
+                      onClick={() => onVerify(p.id, 'REJECTED')}
+                      disabled={busy}
+                      className="inline-flex items-center gap-1 rounded bg-loss-500/20 px-2 py-0.5 text-[10.5px] font-medium text-loss-400 hover:bg-loss-500/30 transition-colors"
+                    >
+                      <X className="size-3" />
+                      Reject
+                    </button>
+                  </div>
+                )}
               </div>
               <button
                 onClick={() => {
@@ -1764,3 +1914,109 @@ function AddCost({
     </div>
   );
 }
+
+function HandoverDialog({
+  isOpen,
+  onClose,
+  booking,
+  users,
+  onHandover,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  booking: BookingDetail;
+  users: { id: string; name: string; email: string }[];
+  onHandover: (operationsOwnerId: string, notes?: string) => Promise<void>;
+}) {
+  const [selectedUserId, setSelectedUserId] = useState(
+    booking.operationsOwnerId || users[0]?.id || '',
+  );
+  const [notes, setNotes] = useState(booking.handoverNotes || '');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (booking.operationsOwnerId) setSelectedUserId(booking.operationsOwnerId);
+    else if (users.length > 0 && !selectedUserId) setSelectedUserId(users[0].id);
+    if (booking.handoverNotes) setNotes(booking.handoverNotes);
+  }, [booking, users]);
+
+  if (!isOpen) return null;
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!selectedUserId) return;
+    setSubmitting(true);
+    try {
+      await onHandover(selectedUserId, notes.trim() || undefined);
+      onClose();
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink-950/80 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md rounded-2xl border border-ink-800 bg-ink-900 p-6 shadow-2xl">
+        <h2 className="text-lg font-semibold text-ink-100 flex items-center gap-2">
+          <Shield className="size-5 text-signal-400" />
+          Operations Handover Sign-off
+        </h2>
+        <p className="text-xs text-ink-400 mt-1">
+          Officially transition this trip file from Sales to the Leh Operations desk.
+        </p>
+
+        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+          <div>
+            <Label className="text-xs text-ink-300">Operations Desk Owner</Label>
+            <Select
+              className="mt-1.5 w-full"
+              value={selectedUserId}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Select an operations manager / coordinator
+              </option>
+              {users.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name} ({u.email})
+                </option>
+              ))}
+            </Select>
+          </div>
+
+          <div>
+            <Label className="text-xs text-ink-300">Handover Notes & Instructions</Label>
+            <textarea
+              className="mt-1.5 w-full rounded-lg border border-ink-700 bg-ink-950 p-2.5 text-sm text-ink-100 placeholder-ink-600 focus:border-signal-500 focus:outline-none"
+              rows={4}
+              placeholder="e.g. Guest arriving on early morning AI-445, VIP senior citizens (requires slow acclimatization), driver Tundup preferred, Pangong camp heaters requested."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+
+          <div className="mt-6 flex justify-end gap-2.5">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              disabled={submitting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={submitting || !selectedUserId}
+            >
+              {submitting ? 'Signing off...' : 'Confirm Handover Sign-off'}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+

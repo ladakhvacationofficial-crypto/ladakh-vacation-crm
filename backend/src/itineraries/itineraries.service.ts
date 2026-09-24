@@ -205,6 +205,8 @@ export class ItinerariesService {
         ...(dto.totalPax !== undefined   ? { totalPax: dto.totalPax } : {}),
         ...(dto.inclusions !== undefined ? { inclusions: dto.inclusions } : {}),
         ...(dto.exclusions !== undefined ? { exclusions: dto.exclusions } : {}),
+        ...(dto.currency !== undefined   ? { currency: dto.currency } : {}),
+        ...(dto.fxRate !== undefined     ? { fxRate: dto.fxRate } : {}),
       },
     });
     // Changing totalPax shifts per-person totals across every tier.

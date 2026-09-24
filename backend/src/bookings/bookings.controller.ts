@@ -21,6 +21,7 @@ import { CreatePaymentDto } from './dto/create-payment.dto';
 import { CreateCostDto } from './dto/create-cost.dto';
 import { UpdateCostDto } from './dto/update-cost.dto';
 import { QueryBookingsDto } from './dto/query-bookings.dto';
+import { HandoverBookingDto } from './dto/handover-booking.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Actor, BOOKING_MODULE_ROLES } from '../common/access';
@@ -95,6 +96,13 @@ export class BookingsController {
     @CurrentUser() actor?: Actor,
   ) {
     return this.bookings.getDailyMovement(date, actor);
+  }
+
+  /** Standalone Payment Work Queue: unverified UPI/bank payments, overdue receivables, pending reservations */
+  @Roles(...FINANCE_ROLES)
+  @Get('payments-queue')
+  getPaymentQueue() {
+    return this.bookings.getPaymentWorkQueue();
   }
 
   @Get(':id')
@@ -255,5 +263,25 @@ export class BookingsController {
   @Delete('costs/:costId')
   removeCost(@Param('costId') costId: string) {
     return this.bookings.removeCost(costId);
+  }
+
+  @Roles(...FINANCE_ROLES)
+  @Patch('payments/:paymentId/verify')
+  verifyPayment(
+    @Param('paymentId') paymentId: string,
+    @Body() dto: { status: 'VERIFIED' | 'REJECTED' },
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.bookings.verifyPayment(paymentId, dto.status, actor);
+  }
+
+  @Roles(Role.SUPER_ADMIN, Role.OWNER, Role.OPERATIONS, Role.SALES_MANAGER, Role.SALES_EXEC)
+  @Post(':id/handover')
+  handover(
+    @Param('id') id: string,
+    @Body() dto: HandoverBookingDto,
+    @CurrentUser() actor: Actor,
+  ) {
+    return this.bookings.handover(id, dto, actor);
   }
 }

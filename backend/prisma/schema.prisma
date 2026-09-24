@@ -94,6 +94,9 @@ model Itinerary {
   inclusions String?
   exclusions String?
 
+  currency   String   @default("INR")
+  fxRate     Float    @default(1.0)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -706,6 +709,9 @@ model User {
   createdBookings    Booking[]        @relation("BookingCreator")
   createdItineraries Itinerary[]      @relation("ItineraryCreator")
   recordedPayments   BookingPayment[] @relation("PaymentRecorder")
+  verifiedPayments   BookingPayment[] @relation("PaymentVerifier")
+  operationsBookings Booking[]        @relation("BookingOperationsOwner")
+  handedOverBookings Booking[]        @relation("BookingHandoverBy")
   activities         Activity[]
   itineraryRevisions ItineraryRevision[]
   fleetAssignments   FleetAssignment[]
@@ -1248,6 +1254,18 @@ model Booking {
   notes           String?
   cancelledReason String?
 
+  // --- operations handover ---
+  operationsOwnerId String?
+  operationsOwner   User?     @relation("BookingOperationsOwner", fields: [operationsOwnerId], references: [id], onDelete: SetNull)
+  handedOverAt      DateTime?
+  handedOverById    String?
+  handedOverBy      User?     @relation("BookingHandoverBy", fields: [handedOverById], references: [id], onDelete: SetNull)
+  handoverNotes     String?
+
+  // --- multi-currency ---
+  currency          String    @default("INR")
+  fxRate            Float     @default(1.0)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -1260,6 +1278,7 @@ model Booking {
   @@index([leadId])
   @@index([status])
   @@index([travelStartDate])
+  @@index([operationsOwnerId])
 }
 
 /// Money IN from the client. Negative amounts represent refunds.
@@ -1275,6 +1294,11 @@ model BookingPayment {
   notes      String?
   isRefund   Boolean     @default(false)
 
+  verificationStatus String    @default("VERIFIED") // PENDING_VERIFICATION, VERIFIED, REJECTED
+  verifiedById       String?
+  verifiedBy         User?     @relation("PaymentVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
+  verifiedAt         DateTime?
+
   recordedById String?
   recordedBy   User?   @relation("PaymentRecorder", fields: [recordedById], references: [id], onDelete: SetNull)
 
@@ -1282,6 +1306,7 @@ model BookingPayment {
 
   @@index([bookingId])
   @@index([receivedAt])
+  @@index([verificationStatus])
 }
 
 /// Money OUT to vendors — what is owed vs what has actually been paid.

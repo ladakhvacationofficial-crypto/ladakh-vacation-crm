@@ -46,7 +46,16 @@ import {
   type ItineraryItemKind,
   type ItineraryOptionRow,
 } from '@/lib/api';
-import { money, percent, marginHealth, healthText } from '@/lib/format';
+import {
+  money,
+  percent,
+  marginHealth,
+  healthText,
+  shortDate,
+  moneyWithCurrency,
+  SupportedCurrency,
+  DEFAULT_FX_RATES,
+} from '@/lib/format';
 import { Panel, PanelBody, PanelHeader, PanelTitle } from '@/components/ui/panel';
 import { Button } from '@/components/ui/button';
 import { DeactivateButton } from '@/components/ui/deactivate-button';
@@ -54,7 +63,6 @@ import { Input, Label } from '@/components/ui/input';
 import { Select, Textarea } from '@/components/ui/select';
 import { Chip } from '@/components/ui/badge';
 import { ITINERARY_ITEM_KINDS, KIND_META, humanise } from '@/lib/constants';
-import { shortDate } from '@/lib/format';
 import { Star } from 'lucide-react';
 import { RatePicker } from '@/components/rate-picker';
 
@@ -186,6 +194,11 @@ export default function ItineraryEditorPage() {
               {it.title}
             </h1>
             <Chip className="tabular">{it.code}</Chip>
+            {it.currency && it.currency !== 'INR' && (
+              <span className="rounded-full bg-brand-500/15 border border-brand-500/30 px-2.5 py-0.5 text-[11px] font-semibold text-brand-400">
+                {it.currency} (@ ₹{it.fxRate ?? (DEFAULT_FX_RATES[it.currency as SupportedCurrency] || 1)})
+              </span>
+            )}
           </div>
           <p className="mt-1 text-[13px] text-ink-400">
             for{' '}
@@ -204,6 +217,28 @@ export default function ItineraryEditorPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          <div className="w-[110px]">
+            <Select
+              value={it.currency || 'INR'}
+              disabled={busy}
+              aria-label="Quote Currency"
+              onChange={(e) => {
+                const c = e.target.value as SupportedCurrency;
+                mutate(() =>
+                  api.patch(`/itineraries/${id}`, {
+                    currency: c,
+                    fxRate: DEFAULT_FX_RATES[c] || 1.0,
+                  }),
+                );
+              }}
+            >
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </Select>
+          </div>
+
           <Button
             variant="secondary"
             size="sm"
@@ -266,6 +301,8 @@ export default function ItineraryEditorPage() {
         options={it.options}
         activeId={activeOptionId}
         busy={busy}
+        currency={it.currency}
+        fxRate={it.fxRate}
         mlAdvice={mlAdvice}
         onApplyMlMargin={(optionId, margin) =>
           mutate(() => api.patch(`/itineraries/options/${optionId}`, { markupPercent: margin }))
@@ -1065,6 +1102,8 @@ function TiersStrip({
   onBook,
   mlAdvice,
   onApplyMlMargin,
+  currency = 'INR',
+  fxRate = 1.0,
 }: {
   options: ItineraryOptionRow[];
   activeId: string | null;
@@ -1078,6 +1117,8 @@ function TiersStrip({
   onMarkRecommended: (id: string) => void;
   onDelete: (id: string) => void;
   onBook: (id: string, name: string, totalSell: number) => void;
+  currency?: string;
+  fxRate?: number;
 }) {
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
@@ -1185,6 +1226,11 @@ function TiersStrip({
                   <p className="tabular mt-1 text-[17px] font-semibold text-ink-100">
                     {money(o.totalSell)}
                   </p>
+                  {currency && currency !== 'INR' && (
+                    <p className="tabular text-[12px] font-semibold text-brand-400">
+                      {moneyWithCurrency(o.totalSell, currency, fxRate)}
+                    </p>
+                  )}
                   <p className="tabular mt-0.5 text-[11px]">
                     <span className={healthText[health]}>
                       {percent(o.marginPercent)}

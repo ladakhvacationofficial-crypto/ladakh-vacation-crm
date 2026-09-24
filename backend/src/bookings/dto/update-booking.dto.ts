@@ -20,4 +20,6 @@ export class UpdateBookingDto {
   @IsOptional() @IsInt() @Min(0) totalSell?: number;
   @IsOptional() @IsString() @MaxLength(4000) notes?: string;
   @IsOptional() @IsString() @MaxLength(500) cancelledReason?: string;
+  @IsOptional() @IsString() @MaxLength(10) currency?: string;
+  @IsOptional() fxRate?: number;
 }
