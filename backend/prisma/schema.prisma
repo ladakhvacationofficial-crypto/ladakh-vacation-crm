@@ -716,6 +716,7 @@ model User {
   itineraryRevisions ItineraryRevision[]
   fleetAssignments   FleetAssignment[]
   permitApplications PermitApplication[]
+  reviewedVendorDrafts VendorDraft[] @relation("VendorDraftReviewer")
 
   /// Set when this login corresponds to a person on payroll.
   employee Employee? @relation("EmployeeUser")
@@ -1087,6 +1088,7 @@ model Vendor {
   itineraryItems ItineraryItem[]
   vehicles       Vehicle[]
   drivers        Driver[]
+  drafts         VendorDraft[]
 
   @@index([type])
   @@index([city])
@@ -1133,6 +1135,57 @@ model VendorRate {
   @@index([season])
   @@index([isActive])
   @@index([validFrom, validTo])
+}
+
+enum ScrapeDraftStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  MERGED
+}
+
+/**
+ * Staged hotel/camp/houseboat inventory extracted from web intelligence sources
+ * (Firecrawl, Jina Reader, scrape.do, Crawl4AI, TinyFish).
+ * Must be reviewed and approved by staff before becoming an active bookable Vendor.
+ * Does NOT store live room-only OTA rates to preserve DMC package profit integrity.
+ */
+model VendorDraft {
+  id                String            @id @default(cuid())
+  sourceProvider    String            // 'firecrawl' | 'jina' | 'scrape_do' | 'tinyfish' | 'crawl4ai'
+  sourceUrl         String
+  name              String
+  city              String?
+  propertyType      VendorType        @default(HOTEL)
+  phone             String?
+  email             String?
+  address           String?
+  starRating        Int?
+  roomCount         Int?
+  checkInTime       String?
+  checkOutTime      String?
+  /// Array of { name, maxOccupancy, extraBedRate?, childRate?, bedType?, mealPlans? }
+  roomCategories    Json              @default("[]")
+  seasonalFrom      DateTime?
+  seasonalTo        DateTime?
+  reportedAmenities String[]          @default([])
+  rawPayload        Json?
+  status            ScrapeDraftStatus @default(PENDING_REVIEW)
+
+  reviewedById      String?
+  reviewedBy        User?             @relation("VendorDraftReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt        DateTime?
+
+  createdVendorId   String?
+  createdVendor     Vendor?           @relation(fields: [createdVendorId], references: [id], onDelete: SetNull)
+
+  notes             String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([city, status])
+  @@index([sourceProvider])
+  @@index([status])
 }
 
 // ============================================================================
@@ -1351,6 +1404,7 @@ enum IntegrationCategory {
   /// Search Console, and later GA4. Separate from ADS because nothing here
   /// spends money; filed under ADS it was listed as an "Ads platform".
   ANALYTICS
+  SCRAPING
 }
 
 enum IntegrationTestStatus {

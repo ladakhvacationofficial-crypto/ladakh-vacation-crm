@@ -32,7 +32,7 @@ import { relativeDate } from '@/lib/format';
  * the catalog of providers not yet added.
  */
 
-type Tab = 'PAYMENTS' | 'AI' | 'ADS' | 'ANALYTICS' | 'SOCIAL';
+type Tab = 'PAYMENTS' | 'AI' | 'ADS' | 'ANALYTICS' | 'SOCIAL' | 'SCRAPING';
 
 const TAB_LABELS: Record<Tab, string> = {
   PAYMENTS: 'Payments',
@@ -40,6 +40,7 @@ const TAB_LABELS: Record<Tab, string> = {
   ADS: 'Ads platforms',
   ANALYTICS: 'Search & analytics',
   SOCIAL: 'Social media',
+  SCRAPING: 'Web scrapers & Intel',
 };
 
 const TAB_CATEGORIES: Record<Tab, IntegrationCategory[]> = {
@@ -48,6 +49,7 @@ const TAB_CATEGORIES: Record<Tab, IntegrationCategory[]> = {
   ADS: ['ADS'],
   ANALYTICS: ['ANALYTICS'],
   SOCIAL: ['SOCIAL'],
+  SCRAPING: ['SCRAPING'],
 };
 
 export default function IntegrationsPage() {
@@ -64,6 +66,8 @@ export default function IntegrationsPage() {
     const rawTab = (params.get('tab') || params.get('category') || '').toUpperCase();
     if (rawTab === 'ANALYTICS' || rawTab === 'SEARCH' || rawTab === 'SEO') {
       setTab('ANALYTICS');
+    } else if (rawTab === 'SCRAPING' || rawTab === 'SCRAPER' || rawTab === 'CRAWLER') {
+      setTab('SCRAPING');
     } else if (rawTab in TAB_LABELS) {
       setTab(rawTab as Tab);
     }
@@ -208,7 +212,7 @@ export default function IntegrationsPage() {
                         {!row.isActive && (
                           <Chip className="border-ink-700 text-ink-500">Inactive</Chip>
                         )}
-                        {row.category === 'AI' && row.priority > 0 && (
+                        {(row.category === 'AI' || row.category === 'SCRAPING') && row.priority > 0 && (
                           <span className="text-[10.5px] text-ink-500">
                             priority {row.priority}
                           </span>

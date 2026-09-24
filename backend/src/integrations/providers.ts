@@ -364,6 +364,69 @@ const social: ProviderSpec[] = [
   },
 ];
 
+// ── Web Scraping & Intelligence ─────────────────────────────────────────────
+const scraping: ProviderSpec[] = [
+  {
+    id: 'firecrawl',
+    label: 'Firecrawl',
+    category: 'SCRAPING',
+    logo: '🔥',
+    docsUrl: 'https://docs.firecrawl.dev/',
+    fields: [
+      { key: 'apiKey', label: 'API Key', type: 'password', required: true, placeholder: 'fc-...' },
+      { key: 'baseUrl', label: 'API Base URL', type: 'text', placeholder: 'https://api.firecrawl.dev' },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'jina',
+    label: 'Jina Reader',
+    category: 'SCRAPING',
+    logo: '⚡',
+    docsUrl: 'https://jina.ai/reader/',
+    fields: [
+      { key: 'apiKey', label: 'API Key (Optional for free 1M tokens/mo)', type: 'password', placeholder: 'jina_...' },
+      { key: 'baseUrl', label: 'Reader Base URL', type: 'text', placeholder: 'https://r.jina.ai' },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'scrape_do',
+    label: 'scrape.do',
+    category: 'SCRAPING',
+    logo: '🌐',
+    docsUrl: 'https://scrape.do/documentation/',
+    fields: [
+      { key: 'token', label: 'API Token', type: 'password', required: true },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'tinyfish',
+    label: 'TinyFish AI',
+    category: 'SCRAPING',
+    logo: '🐟',
+    docsUrl: 'https://tinyfish.ai/',
+    fields: [
+      { key: 'apiKey', label: 'API Key', type: 'password', required: true },
+      { key: 'baseUrl', label: 'Base URL', type: 'text', placeholder: 'https://api.tinyfish.ai' },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'crawl4ai',
+    label: 'Crawl4AI (Self-Hosted / Open-Source)',
+    category: 'SCRAPING',
+    logo: '🕷️',
+    docsUrl: 'https://crawl4ai.com/',
+    fields: [
+      { key: 'endpointUrl', label: 'Server Endpoint URL', type: 'text', required: true, placeholder: 'http://localhost:11235' },
+      { key: 'apiToken', label: 'API Bearer Token (Optional)', type: 'password' },
+    ],
+    hasTest: true,
+  },
+];
+
 export const PROVIDERS: ProviderSpec[] = [
   ...paymentDomestic,
   ...paymentInternational,
@@ -371,6 +434,7 @@ export const PROVIDERS: ProviderSpec[] = [
   ...ads,
   ...analytics,
   ...social,
+  ...scraping,
 ];
 
 export function getProvider(id: string): ProviderSpec | undefined {

@@ -128,7 +128,7 @@ export function IntegrationDialog({
               </p>
             </div>
 
-            {provider.category === 'AI' && (
+            {(provider.category === 'AI' || provider.category === 'SCRAPING') && (
               <div className="space-y-1">
                 <Label htmlFor="i-priority">Failover priority</Label>
                 <Input

@@ -611,6 +611,108 @@ async function probeMicrosoftClarity(c: any): Promise<ProbeResult> {
   return { ok: false, message: `Clarity responded with HTTP ${r.status}. Check your Project ID.` };
 }
 
+// ── Web Scraping & Intelligence ─────────────────────────────────────────────
+
+async function probeFirecrawl(c: any): Promise<ProbeResult> {
+  const apiKey = String(c?.apiKey ?? '').trim();
+  if (!apiKey) return { ok: false, message: 'Missing Firecrawl API Key.' };
+  const base = String(c?.baseUrl ?? 'https://api.firecrawl.dev').trim().replace(/\/+$/, '');
+  const r = await safeFetch(`${base}/v1/team/credit-usage`, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) {
+    try {
+      const data: any = await r.json();
+      const remaining = data?.data?.remaining_credits ?? data?.remaining_credits;
+      const remMsg = remaining !== undefined ? ` (${remaining} credits remaining)` : '';
+      return { ok: true, message: `Firecrawl authenticated successfully${remMsg}.` };
+    } catch {
+      return { ok: true, message: 'Firecrawl API credentials verified.' };
+    }
+  }
+  if (r.status === 401 || r.status === 403) {
+    return { ok: false, message: 'Invalid Firecrawl API Key.' };
+  }
+  if (r.status === 402) {
+    return { ok: false, message: 'Firecrawl account credits exhausted. Upgrade or add free credits.' };
+  }
+  return { ok: false, message: `HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeJina(c: any): Promise<ProbeResult> {
+  const base = String(c?.baseUrl ?? 'https://r.jina.ai').trim().replace(/\/+$/, '');
+  const headers: Record<string, string> = {
+    'Accept': 'text/plain',
+  };
+  if (c?.apiKey) {
+    headers['Authorization'] = `Bearer ${String(c.apiKey).trim()}`;
+  }
+  const r = await safeFetch(`${base}/https://example.com`, {
+    headers,
+  }, 10000);
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) {
+    return { ok: true, message: 'Jina Reader endpoint reachable and markdown extraction operational.' };
+  }
+  return { ok: false, message: `HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeScrapeDo(c: any): Promise<ProbeResult> {
+  const token = String(c?.token ?? '').trim();
+  if (!token) return { ok: false, message: 'Missing scrape.do token.' };
+  const base = String(c?.baseUrl ?? 'https://api.scrape.do').trim().replace(/\/+$/, '');
+  const r = await safeFetch(`${base}/?token=${encodeURIComponent(token)}&url=https://httpbin.org/ip`, {}, 10000);
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) {
+    return { ok: true, message: 'scrape.do token verified. Rotating proxy tunnel active.' };
+  }
+  if (r.status === 401 || r.status === 403) {
+    return { ok: false, message: 'Invalid scrape.do token.' };
+  }
+  if (r.status === 429 || r.status === 402) {
+    return { ok: false, message: 'scrape.do monthly free quota reached.' };
+  }
+  return { ok: false, message: `HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeTinyFish(c: any): Promise<ProbeResult> {
+  const apiKey = String(c?.apiKey ?? '').trim();
+  if (!apiKey) return { ok: false, message: 'Missing TinyFish API Key.' };
+  const base = String(c?.baseUrl ?? 'https://api.tinyfish.ai').trim().replace(/\/+$/, '');
+  const r = await safeFetch(`${base}/v1/health`, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok || r.status === 200 || r.status === 404) {
+    return { ok: true, message: 'TinyFish AI browser agent service reachable.' };
+  }
+  if (r.status === 401 || r.status === 403) {
+    return { ok: false, message: 'Invalid TinyFish API Key.' };
+  }
+  return { ok: false, message: `HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeCrawl4AI(c: any): Promise<ProbeResult> {
+  const endpoint = String(c?.endpointUrl ?? 'http://localhost:11235').trim().replace(/\/+$/, '');
+  const headers: Record<string, string> = {};
+  if (c?.apiToken) {
+    headers['Authorization'] = `Bearer ${String(c.apiToken).trim()}`;
+  }
+  const r = await safeFetch(`${endpoint}/health`, { headers });
+  if (!isResponse(r)) {
+    const rRoot = await safeFetch(`${endpoint}/`, { headers });
+    if (!isResponse(rRoot)) {
+      return { ok: false, message: `Could not connect to Crawl4AI at ${endpoint}: ${r.error}` };
+    }
+    return { ok: true, message: `Crawl4AI self-hosted instance connected at ${endpoint}.` };
+  }
+  if (r.ok) {
+    return { ok: true, message: `Crawl4AI container is healthy and responding at ${endpoint}.` };
+  }
+  return { ok: false, message: `Crawl4AI returned HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
 // ── Registry ────────────────────────────────────────────────────────────────
 
 type Probe = (creds: any) => Promise<ProbeResult>;
@@ -646,6 +748,12 @@ const PROBES: Record<string, Probe> = {
   meta_page: probeMeta,
   whatsapp_cloud: probeWhatsAppCloud,
   brevo: probeBrevo,
+
+  firecrawl: probeFirecrawl,
+  jina: probeJina,
+  scrape_do: probeScrapeDo,
+  tinyfish: probeTinyFish,
+  crawl4ai: probeCrawl4AI,
 };
 
 export function hasProbe(providerId: string): boolean {

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, X, Building2 } from 'lucide-react';
+import { Search, X, Building2, Sparkles } from 'lucide-react';
 import { api, ApiError, type VendorRow, type Paged } from '@/lib/api';
 import { Panel } from '@/components/ui/panel';
 import { Input } from '@/components/ui/input';
@@ -52,7 +52,7 @@ export default function VendorsPage() {
 
   return (
     <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <header className="mb-6 flex items-end justify-between gap-4">
+      <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="display text-[26px] font-semibold tracking-tight text-ink-100">
             Suppliers
@@ -61,7 +61,15 @@ export default function VendorsPage() {
             {meta.total} supplier{meta.total === 1 ? '' : 's'} on the books
           </p>
         </div>
-        <AddVendorDialog onCreated={(id) => router.push(`/vendors/${id}`)} />
+        <div className="flex flex-wrap items-center gap-2">
+          <Link href="/vendors/drafts">
+            <Button variant="secondary" size="sm">
+              <Sparkles className="size-3.5 text-signal-400" strokeWidth={1.75} />
+              Intelligence Drafts
+            </Button>
+          </Link>
+          <AddVendorDialog onCreated={(id) => router.push(`/vendors/${id}`)} />
+        </div>
       </header>
 
       {/* Type tabs — the DMC only cares about hotel-vs-transport-vs-rest 90%

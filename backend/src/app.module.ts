@@ -27,6 +27,7 @@ import { MediaModule } from './media/media.module';
 import { MlModule } from './ml/ml.module';
 import { FleetModule } from './fleet/fleet.module';
 import { PermitsModule } from './permits/permits.module';
+import { ScrapersModule } from './scrapers/scrapers.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
@@ -61,6 +62,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     MlModule,
     FleetModule,
     PermitsModule,
+    ScrapersModule,
   ],
   providers: [
     // Order: rate limit -> authenticate -> authorize.

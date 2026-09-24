@@ -176,6 +176,51 @@ export class IntegrationsService {
     };
   }
 
+  /**
+   * Failover helper for web scrapers & intelligence engines.
+   * Returns the highest-priority active SCRAPING integration's provider + decrypted credentials.
+   */
+  async pickScraper(excludeProvider?: string[]) {
+    const rows = await this.prisma.integration.findMany({
+      where: {
+        category: IntegrationCategory.SCRAPING,
+        isActive: true,
+        ...(excludeProvider?.length
+          ? { provider: { notIn: excludeProvider } }
+          : {}),
+      },
+      orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
+      take: 1,
+    });
+    const pick = rows[0];
+    if (!pick) return null;
+    return {
+      id: pick.id,
+      provider: pick.provider,
+      credentials: JSON.parse(decryptSecret(pick.credentials)) as Record<string, unknown>,
+    };
+  }
+
+  /**
+   * Returns all active scraping integrations ordered by priority for multi-provider swarm / concurrency.
+   */
+  async listActiveScrapers() {
+    const rows = await this.prisma.integration.findMany({
+      where: {
+        category: IntegrationCategory.SCRAPING,
+        isActive: true,
+      },
+      orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
+    });
+    return rows.map((r) => ({
+      id: r.id,
+      provider: r.provider,
+      label: r.label,
+      priority: r.priority,
+      credentials: JSON.parse(decryptSecret(r.credentials)) as Record<string, unknown>,
+    }));
+  }
+
   // ---- helpers ------------------------------------------------------------
 
   private validateCreds(

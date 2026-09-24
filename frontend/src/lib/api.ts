@@ -268,7 +268,48 @@ export type IntegrationCategory =
   | 'AI'
   | 'ADS'
   | 'SOCIAL'
-  | 'ANALYTICS';
+  | 'ANALYTICS'
+  | 'SCRAPING';
+
+export type ScrapeDraftStatus = 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'MERGED';
+
+export interface VendorDraftRoomCategory {
+  name: string;
+  maxOccupancy?: number;
+  bedType?: string;
+  extraBedRate?: number;
+  childRate?: number;
+  mealPlans?: string[];
+  notes?: string;
+}
+
+export interface VendorDraftRow {
+  id: string;
+  sourceProvider: string;
+  sourceUrl: string;
+  name: string;
+  city: string | null;
+  propertyType: 'HOTEL' | 'HOUSEBOAT' | 'CAMP' | 'TRANSPORT' | 'ACTIVITY' | 'OTHER';
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  starRating: number | null;
+  roomCount: number | null;
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  roomCategories: VendorDraftRoomCategory[];
+  seasonalFrom: string | null;
+  seasonalTo: string | null;
+  reportedAmenities: string[];
+  rawPayload?: any;
+  status: ScrapeDraftStatus;
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  createdVendorId: string | null;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export type IntegrationTestStatus = 'UNTESTED' | 'OK' | 'FAILED';
 
