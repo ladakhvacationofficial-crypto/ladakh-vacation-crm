@@ -23,6 +23,7 @@ describe('Vouchers & Movement Operations', () => {
       },
       itinerary: {
         findUnique: jest.fn(),
+        findMany: jest.fn().mockResolvedValue([]),
       },
     };
     mockOfflineConversions = {
@@ -127,7 +128,7 @@ describe('Vouchers & Movement Operations', () => {
   });
 
   describe('getDailyMovement', () => {
-    it('aggregates daily arrivals, departures, pass crossings and valley stays', async () => {
+    it('aggregates daily arrivals, departures, pass crossings and valley stays from real itineraries', async () => {
       mockPrisma.booking.findMany.mockResolvedValue([
         {
           id: 'b-arr',
@@ -145,6 +146,7 @@ describe('Vouchers & Movement Operations', () => {
           id: 'b-transit-nubra',
           bookingNumber: 'LV-B-2026-002',
           packageName: 'Nubra Bound Group',
+          itineraryId: 'iti-nubra',
           travelStartDate: new Date('2027-06-13T08:00:00Z'), // Day 3 on June 15
           travelEndDate: new Date('2027-06-18T10:00:00Z'),
           adults: 3,
@@ -167,6 +169,32 @@ describe('Vouchers & Movement Operations', () => {
         },
       ]);
 
+      mockPrisma.itinerary.findMany.mockResolvedValue([
+        {
+          id: 'iti-nubra',
+          days: [
+            {
+              dayNumber: 3,
+              city: 'Nubra Valley',
+              items: [
+                {
+                  kind: 'TRANSFER',
+                  title: 'Leh → Nubra Valley via Khardung La (18,380 ft)',
+                  location: 'Khardung La',
+                  description: 'Scenic high pass crossing into Nubra Valley',
+                },
+                {
+                  kind: 'STAY',
+                  title: 'Mystic Meadows Camp',
+                  location: 'Hunder, Nubra Valley',
+                  vendor: { id: 'v-camp-nubra', name: 'Mystic Meadows Camp', type: 'CAMP', city: 'Nubra' },
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+
       mockPrisma.vendor.findMany.mockResolvedValue([
         { id: 'v-hotel-leh', name: 'Hotel Singge Palace', type: 'HOTEL', city: 'Leh' },
         { id: 'v-camp-nubra', name: 'Mystic Meadows Camp', type: 'CAMP', city: 'Nubra' },
@@ -185,6 +213,32 @@ describe('Vouchers & Movement Operations', () => {
       expect(res.inTransit[0].sector).toContain('Khardung La');
       expect(res.valleyDistribution.nubra.length).toBe(1);
       expect(res.valleyDistribution.nubra[0].guestName).toBe('Pooja Verma');
+      expect(res.valleyDistribution.nubra[0].currentHotel).toBe('Mystic Meadows Camp');
+    });
+
+    it('accurately reports "Not scheduled" and "Unallocated" for unscheduled bookings rather than inventing locations', async () => {
+      mockPrisma.booking.findMany.mockResolvedValue([
+        {
+          id: 'b-unplanned',
+          bookingNumber: 'LV-B-2026-099',
+          packageName: 'Custom Mystery Tour',
+          travelStartDate: new Date('2027-06-15T08:00:00Z'),
+          travelEndDate: new Date('2027-06-20T10:00:00Z'),
+          adults: 2,
+          children: 0,
+          nights: 5,
+          lead: { id: 'l-99', name: 'Kabir Das', phone: '9876500099', email: 'kabir@test.com' },
+          costs: [],
+        },
+      ]);
+      mockPrisma.itinerary.findMany.mockResolvedValue([]);
+
+      const res = await service.getDailyMovement('2027-06-17', mockActor); // Day 3
+      expect(res.inTransit.length).toBe(0); // Zero hallucinated pass crossings!
+      expect(res.summary.highPassCrossingsToday).toBe(0);
+      expect(res.valleyDistribution.other.length).toBe(1);
+      expect(res.valleyDistribution.other[0].currentHotel).toBe('Not scheduled');
+      expect(res.valleyDistribution.other[0].currentValley).toBe('Unallocated');
     });
   });
 });

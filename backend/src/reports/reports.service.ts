@@ -75,15 +75,17 @@ export class ReportsService {
         where: { assignedToId: { not: null }, status: 'CONFIRMED', ...leadRange },
         _count: { _all: true },
       }),
-      this.prisma.booking.groupBy({
-        by: ['createdById'],
+      this.prisma.booking.findMany({
         where: {
-          createdById: { not: null },
           status: { not: 'CANCELLED' },
           ...bookingRange,
         },
-        _count: { _all: true },
-        _sum: { totalSell: true, totalNet: true },
+        select: {
+          totalSell: true,
+          totalNet: true,
+          createdById: true,
+          lead: { select: { assignedToId: true } },
+        },
       }),
     ]);
 
@@ -93,16 +95,17 @@ export class ReportsService {
     const convertedMap = new Map(
       leadsConverted.map((r: any) => [r.assignedToId, r._count._all]),
     );
-    const bookingMap = new Map(
-      bookings.map((r: any) => [
-        r.createdById,
-        {
-          count: r._count._all,
-          revenue: r._sum.totalSell ?? 0,
-          estCost: r._sum.totalNet ?? 0,
-        },
-      ]),
-    );
+    const bookingMap = new Map<string, { count: number; revenue: number; estCost: number }>();
+    for (const b of bookings) {
+      // Attribute sales revenue to the sales rep who owns the lead; fallback to createdById if unassigned
+      const creditedUserId = b.lead?.assignedToId ?? b.createdById;
+      if (!creditedUserId) continue;
+      const cur = bookingMap.get(creditedUserId) ?? { count: 0, revenue: 0, estCost: 0 };
+      cur.count += 1;
+      cur.revenue += b.totalSell ?? 0;
+      cur.estCost += b.totalNet ?? 0;
+      bookingMap.set(creditedUserId, cur);
+    }
 
     return users
       .map((u: any) => {
