@@ -126,8 +126,8 @@ ${adultExtraBed > 0 ? `• Adult with Extra Bed (/AwEB): ${money(quote.awebQuote
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent title="Bed-Wise Occupancy Pricing Calculator" className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-5">
+      <DialogContent title="Bed-Wise Occupancy Pricing Calculator" className="max-w-2xl">
+        <div className="min-h-0 flex-1 overflow-y-auto p-5">
 
         <div className="space-y-4 py-2">
           {/* Section 1: Trip & Shared Costs */}
@@ -307,7 +307,7 @@ ${adultExtraBed > 0 ? `• Adult with Extra Bed (/AwEB): ${money(quote.awebQuote
           </div>
         </div>
 
-          <div className="mt-5 flex items-center justify-end gap-2 border-t border-ink-800 pt-4">
+          <div className="sticky bottom-0 z-10 -mx-5 -mb-5 mt-5 flex items-center justify-end gap-2 border-t border-ink-800 bg-ink-900 px-5 pb-5 pt-4">
             <Button variant="secondary" onClick={onClose}>
               Close
             </Button>

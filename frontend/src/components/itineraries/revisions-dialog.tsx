@@ -113,8 +113,8 @@ export function RevisionsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent title="Quote Revisions & Historical Snapshots" className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-5">
+      <DialogContent title="Quote Revisions & Historical Snapshots" className="max-w-2xl">
+        <div className="min-h-0 flex-1 overflow-y-auto p-5">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs text-ink-400">Preserved quote milestones and version diffs</span>
             <div className="flex gap-2">
@@ -314,7 +314,7 @@ export function RevisionsDialog({
           </div>
         )}
 
-          <div className="mt-5 flex items-center justify-end gap-2 border-t border-ink-800 pt-4">
+          <div className="sticky bottom-0 z-10 -mx-5 -mb-5 mt-5 flex items-center justify-end gap-2 border-t border-ink-800 bg-ink-900 px-5 pb-5 pt-4">
             <Button variant="secondary" onClick={onClose}>
               Close
             </Button>
