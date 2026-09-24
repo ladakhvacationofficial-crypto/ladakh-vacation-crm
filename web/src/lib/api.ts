@@ -722,6 +722,7 @@ export interface BookingPayment {
   mode: string;
   reference: string | null;
   receivedAt: string;
+  dueDate?: string | null;
   notes: string | null;
   isRefund: boolean;
   verificationStatus?: string;
@@ -738,6 +739,7 @@ export interface BookingCost {
   amountDue: number;
   amountPaid: number;
   paidAt: string | null;
+  dueDate?: string | null;
   reference: string | null;
   notes: string | null;
   confirmationStatus?: string | null;
@@ -751,6 +753,7 @@ export interface UnverifiedPaymentItem {
   paymentMethod: string;
   reference: string | null;
   receivedAt: string;
+  dueDate?: string | null;
   notes: string | null;
   verificationStatus: string;
   booking: {
@@ -770,6 +773,9 @@ export interface OverdueReceivableItem {
   totalReceived: number;
   balanceDue: number;
   travelStartDate: string | null;
+  effectiveDueDate?: string | null;
+  daysUntilDue?: number | null;
+  isDueNext7Days?: boolean;
   lead: { id: string; name: string; phone: string | null };
 }
 
@@ -783,10 +789,33 @@ export interface PendingReservationItem {
   booking: { id: string; bookingNumber: string; packageName: string | null };
 }
 
+export interface SupplierPayableItem {
+  id: string;
+  bookingId: string;
+  bookingNumber: string;
+  packageName: string | null;
+  description: string;
+  vendorId: string | null;
+  amountDue: number;
+  amountPaid: number;
+  balanceDue: number;
+  effectiveDueDate: string | null;
+  daysUntilDue: number | null;
+  isDueNext7Days: boolean;
+  confirmationStatus: string;
+}
+
 export interface PaymentWorkQueueResponse {
   unverifiedPayments: UnverifiedPaymentItem[];
   overdueReceivables: OverdueReceivableItem[];
   pendingReservations: PendingReservationItem[];
+  supplierPayables?: SupplierPayableItem[];
+  dueNext7Days?: {
+    receivablesCount: number;
+    receivablesAmount: number;
+    payablesCount: number;
+    payablesAmount: number;
+  };
 }
 
 // ---- attribution ----------------------------------------------------------

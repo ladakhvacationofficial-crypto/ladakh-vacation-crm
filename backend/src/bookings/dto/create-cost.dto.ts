@@ -16,6 +16,7 @@ export class CreateCostDto {
   @IsInt() @Min(0) amountDue: number;
   @IsOptional() @IsInt() @Min(0) amountPaid?: number;
   @IsOptional() @IsDateString() paidAt?: string;
+  @IsOptional() @IsDateString() dueDate?: string;
   @IsOptional() @IsString() @MaxLength(200) reference?: string;
   @IsOptional() @IsString() @MaxLength(1000) notes?: string;
   @IsOptional() @IsString() confirmationStatus?: string;

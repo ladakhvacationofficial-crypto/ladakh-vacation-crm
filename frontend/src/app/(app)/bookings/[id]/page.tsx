@@ -1565,6 +1565,9 @@ function PaymentsPanel({
                 </p>
                 <p className="mt-0.5 text-[11px] text-ink-500">
                   {shortDate(p.receivedAt)}
+                  {p.dueDate && (
+                    <span className="ml-2 font-medium text-warn-400">· Due: {shortDate(p.dueDate)}</span>
+                  )}
                   {p.reference && (
                     <span className="tabular ml-2 font-mono">ref {p.reference}</span>
                   )}
@@ -1630,6 +1633,7 @@ function AddPayment({
   const [amount, setAmount] = useState('');
   const [mode, setMode] = useState<string>('BANK_TRANSFER');
   const [reference, setReference] = useState('');
+  const [dueDate, setDueDate] = useState('');
   const [isRefund, setIsRefund] = useState(false);
 
   function submit() {
@@ -1639,10 +1643,12 @@ function AddPayment({
       amount: n,
       mode,
       reference: reference.trim() || undefined,
+      dueDate: dueDate || undefined,
       isRefund,
     });
     setAmount('');
     setReference('');
+    setDueDate('');
     setIsRefund(false);
   }
 
@@ -1684,6 +1690,15 @@ function AddPayment({
             onChange={(e) => setReference(e.target.value)}
             placeholder="UPI txn / cheque no."
             onKeyDown={(e) => e.key === 'Enter' && submit()}
+          />
+        </div>
+        <div className="w-[130px] space-y-1">
+          <Label htmlFor="pay-due">Due Date (opt)</Label>
+          <Input
+            id="pay-due"
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
           />
         </div>
         <Button onClick={submit} disabled={disabled || !amount}>
@@ -1784,6 +1799,9 @@ function CostsPanel({
                   </div>
                   <p className="tabular mt-0.5 text-[11px] text-ink-500">
                     {money(c.amountPaid)} paid of {money(c.amountDue)}
+                    {c.dueDate && (
+                      <span className="ml-2 font-medium text-warn-400">· Deadline: {shortDate(c.dueDate)}</span>
+                    )}
                     {c.reference && <span className="ml-2">· ref {c.reference}</span>}
                     {c.confirmationRef && (
                       <span className="ml-2 text-ink-400">· Voucher #{c.confirmationRef}</span>
@@ -1856,6 +1874,7 @@ function AddCost({
   const [description, setDescription] = useState('');
   const [amountDue, setAmountDue] = useState('');
   const [amountPaid, setAmountPaid] = useState('');
+  const [dueDate, setDueDate] = useState('');
 
   function submit() {
     if (!description.trim() || !amountDue) return;
@@ -1863,10 +1882,12 @@ function AddCost({
       description: description.trim(),
       amountDue: Number(amountDue) || 0,
       amountPaid: Number(amountPaid) || 0,
+      dueDate: dueDate || undefined,
     });
     setDescription('');
     setAmountDue('');
     setAmountPaid('');
+    setDueDate('');
   }
 
   return (
@@ -1905,6 +1926,15 @@ function AddCost({
           placeholder="0"
           className="text-right"
           onKeyDown={(e) => e.key === 'Enter' && submit()}
+        />
+      </div>
+      <div className="w-[130px] space-y-1">
+        <Label htmlFor="cost-due-date">Deadline (opt)</Label>
+        <Input
+          id="cost-due-date"
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
         />
       </div>
       <Button onClick={submit} disabled={disabled || !description.trim() || !amountDue}>

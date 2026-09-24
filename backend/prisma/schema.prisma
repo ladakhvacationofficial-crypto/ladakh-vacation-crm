@@ -1293,6 +1293,7 @@ model BookingPayment {
   receivedAt DateTime    @default(now())
   notes      String?
   isRefund   Boolean     @default(false)
+  dueDate    DateTime?
 
   verificationStatus String    @default("VERIFIED") // PENDING_VERIFICATION, VERIFIED, REJECTED
   verifiedById       String?
@@ -1306,6 +1307,7 @@ model BookingPayment {
 
   @@index([bookingId])
   @@index([receivedAt])
+  @@index([dueDate])
   @@index([verificationStatus])
 }
 
@@ -1321,6 +1323,7 @@ model BookingCost {
   amountDue  Int
   amountPaid Int       @default(0)
   paidAt     DateTime?
+  dueDate    DateTime?
   reference  String?
   notes      String?
 
@@ -1332,6 +1335,7 @@ model BookingCost {
 
   @@index([bookingId])
   @@index([vendorId])
+  @@index([dueDate])
 }
 
 // ============================================================================

@@ -16,6 +16,7 @@ export class CreatePaymentDto {
   @IsOptional() @IsEnum(PaymentMode) mode?: PaymentMode;
   @IsOptional() @IsString() @MaxLength(200) reference?: string;
   @IsOptional() @IsDateString() receivedAt?: string;
+  @IsOptional() @IsDateString() dueDate?: string;
   @IsOptional() @IsString() @MaxLength(1000) notes?: string;
   /** Records the amount as money going back out to the client. */
   @IsOptional() @IsBoolean() isRefund?: boolean;

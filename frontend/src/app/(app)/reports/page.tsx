@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { EChartsOption } from 'echarts';
-import { TrendingUp, Users2, Building2, XCircle, Radio } from 'lucide-react';
+import { TrendingUp, Users2, Building2, XCircle, Radio, Download } from 'lucide-react';
 import {
   api,
   ApiError,
@@ -13,12 +13,38 @@ import {
   type SourceRow,
 } from '@/lib/api';
 import { Panel, PanelBody, PanelHeader, PanelTitle } from '@/components/ui/panel';
+import { Button } from '@/components/ui/button';
 import { Input, Label } from '@/components/ui/input';
 import { EChart, chartBase, axisStyle } from '@/components/echart';
 import { Chip } from '@/components/ui/badge';
 import { money, moneyShort, percent } from '@/lib/format';
 import { humanise } from '@/lib/constants';
 import { toApiRange, localDateISO } from '@/lib/date-range';
+
+function downloadCsv(filename: string, headers: string[], rows: (string | number)[][]) {
+  const escapeCsv = (val: string | number) => {
+    const s = String(val ?? '');
+    if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+      return `"${s.replace(/"/g, '""')}"`;
+    }
+    return s;
+  };
+
+  const csvContent = [
+    headers.map(escapeCsv).join(','),
+    ...rows.map((row) => row.map(escapeCsv).join(',')),
+  ].join('\r\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
 
 /**
  * Agency-wide numbers. Range picker at top; every panel below re-fetches on
@@ -130,6 +156,66 @@ export default function ReportsPage() {
     };
   }, [revenue]);
 
+  function exportRevenueCsv() {
+    downloadCsv(
+      `revenue-by-month-${range.from}-to-${range.to}.csv`,
+      ['Month', 'Bookings Count', 'Revenue (INR)'],
+      revenue.map((r) => [r.month, r.bookings, r.revenue]),
+    );
+  }
+
+  function exportStaffCsv() {
+    downloadCsv(
+      `team-scorecard-${range.from}-to-${range.to}.csv`,
+      [
+        'Staff Name',
+        'Role',
+        'Leads Assigned',
+        'Leads Converted',
+        'Conversion %',
+        'Bookings',
+        'Revenue (INR)',
+        'Gross Profit (INR)',
+        'Average Deal Size (INR)',
+      ],
+      staff.map((s) => [
+        s.name,
+        humanise(s.role),
+        s.leadsAssigned,
+        s.leadsConverted,
+        `${s.conversionPercent.toFixed(1)}%`,
+        s.bookings,
+        s.revenue,
+        s.grossProfit,
+        s.averageDeal,
+      ]),
+    );
+  }
+
+  function exportVendorsCsv() {
+    downloadCsv(
+      `vendor-spend-${range.from}-to-${range.to}.csv`,
+      [
+        'Supplier Name',
+        'Supplier Type',
+        'City',
+        'Service Lines',
+        'Amount Due (INR)',
+        'Amount Paid (INR)',
+        'Outstanding Balance (INR)',
+      ],
+      vendors.map((v) => [
+        v.name,
+        humanise(v.type),
+        v.city ?? '—',
+        v.lineCount,
+        v.amountDue,
+        v.amountPaid,
+        v.outstanding,
+      ]),
+    );
+  }
+
   return (
     <div className="mx-auto max-w-[1180px] px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -201,6 +287,18 @@ export default function ReportsPage() {
             <TrendingUp className="size-3.5" strokeWidth={1.75} />
             Revenue by month
           </PanelTitle>
+          {revenue.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-[12px] gap-1 text-ink-300 hover:text-ink-100"
+              onClick={exportRevenueCsv}
+              title="Download Monthly Revenue CSV"
+            >
+              <Download className="size-3.5" />
+              Export CSV
+            </Button>
+          )}
         </PanelHeader>
         <PanelBody>
           {loading ? (
@@ -221,6 +319,18 @@ export default function ReportsPage() {
               <Users2 className="size-3.5" strokeWidth={1.75} />
               Top staff
             </PanelTitle>
+            {staff.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[12px] gap-1 text-ink-300 hover:text-ink-100"
+                onClick={exportStaffCsv}
+                title="Download Team Scorecard CSV"
+              >
+                <Download className="size-3.5" />
+                Export CSV
+              </Button>
+            )}
           </PanelHeader>
           {staff.length === 0 ? (
             <PanelBody className="py-8 text-center text-[12.5px] text-ink-500">
@@ -313,6 +423,18 @@ export default function ReportsPage() {
               <Building2 className="size-3.5" strokeWidth={1.75} />
               Where the money is going
             </PanelTitle>
+            {vendors.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-[12px] gap-1 text-ink-300 hover:text-ink-100"
+                onClick={exportVendorsCsv}
+                title="Download Vendor Spend CSV"
+              >
+                <Download className="size-3.5" />
+                Export CSV
+              </Button>
+            )}
           </PanelHeader>
           {vendors.length === 0 ? (
             <PanelBody className="py-8 text-center text-[12.5px] text-ink-500">

@@ -431,6 +431,7 @@ export class BookingsService {
         mode: dto.mode ?? PaymentMode.BANK_TRANSFER,
         reference: dto.reference ?? null,
         receivedAt: dto.receivedAt ? new Date(dto.receivedAt) : new Date(),
+        dueDate: dto.dueDate ? new Date(dto.dueDate) : null,
         notes: dto.notes ?? null,
         isRefund: dto.isRefund ?? false,
         verificationStatus: dto.verificationStatus ?? 'VERIFIED',
@@ -487,8 +488,11 @@ export class BookingsService {
         amountDue: dto.amountDue,
         amountPaid: dto.amountPaid ?? 0,
         paidAt: dto.paidAt ? new Date(dto.paidAt) : null,
+        dueDate: dto.dueDate ? new Date(dto.dueDate) : null,
         reference: dto.reference ?? null,
         notes: dto.notes ?? null,
+        confirmationStatus: dto.confirmationStatus ?? 'DRAFT',
+        confirmationRef: dto.confirmationRef ?? null,
       },
     });
 
@@ -509,6 +513,8 @@ export class BookingsService {
     const data: Record<string, any> = { ...dto };
     if (dto.paidAt !== undefined)
       data.paidAt = dto.paidAt ? new Date(dto.paidAt) : null;
+    if (dto.dueDate !== undefined)
+      data.dueDate = dto.dueDate ? new Date(dto.dueDate) : null;
 
     await tx.bookingCost.update({ where: { id: costId }, data });
     await this.refresh(cost.bookingId, tx);
@@ -1493,7 +1499,16 @@ export class BookingsService {
   }
 
   async getPaymentWorkQueue() {
-    const [unverifiedPayments, upcomingBookings, pendingReservations] = await Promise.all([
+    const now = new Date();
+    const in7Days = new Date(Date.now() + 7 * 86400000);
+
+    const [
+      unverifiedPayments,
+      upcomingBookings,
+      pendingReservations,
+      scheduledCosts,
+      scheduledInstallments,
+    ] = await Promise.all([
       this.prisma.bookingPayment.findMany({
         where: { verificationStatus: 'PENDING_VERIFICATION' },
         include: {
@@ -1502,6 +1517,7 @@ export class BookingsService {
               id: true,
               bookingNumber: true,
               packageName: true,
+              travelStartDate: true,
               lead: { select: { id: true, name: true, phone: true } },
             },
           },
@@ -1511,7 +1527,13 @@ export class BookingsService {
       }),
       this.prisma.booking.findMany({
         where: {
-          status: { in: [BookingStatus.CONFIRMED, BookingStatus.IN_PROGRESS, BookingStatus.PENDING] },
+          status: {
+            in: [
+              BookingStatus.CONFIRMED,
+              BookingStatus.IN_PROGRESS,
+              BookingStatus.PENDING,
+            ],
+          },
         },
         select: {
           id: true,
@@ -1520,32 +1542,152 @@ export class BookingsService {
           totalSell: true,
           totalReceived: true,
           travelStartDate: true,
+          travelEndDate: true,
           lead: { select: { id: true, name: true, phone: true } },
+          payments: {
+            select: {
+              id: true,
+              amount: true,
+              dueDate: true,
+              receivedAt: true,
+              mode: true,
+            },
+            orderBy: { dueDate: 'asc' },
+          },
         },
         orderBy: { travelStartDate: 'asc' },
-        take: 50,
+        take: 100,
       }),
       this.prisma.bookingCost.findMany({
         where: { confirmationStatus: 'PENDING' },
         include: {
-          booking: { select: { id: true, bookingNumber: true, packageName: true } },
+          booking: {
+            select: {
+              id: true,
+              bookingNumber: true,
+              packageName: true,
+              travelStartDate: true,
+            },
+          },
         },
         orderBy: { createdAt: 'desc' },
+        take: 50,
+      }),
+      this.prisma.bookingCost.findMany({
+        where: {
+          amountDue: { gt: 0 },
+        },
+        include: {
+          booking: {
+            select: {
+              id: true,
+              bookingNumber: true,
+              packageName: true,
+              travelStartDate: true,
+            },
+          },
+        },
+        orderBy: [{ dueDate: 'asc' }, { createdAt: 'desc' }],
+        take: 50,
+      }),
+      this.prisma.bookingPayment.findMany({
+        where: {
+          dueDate: { not: null },
+        },
+        include: {
+          booking: {
+            select: {
+              id: true,
+              bookingNumber: true,
+              packageName: true,
+              totalSell: true,
+              totalReceived: true,
+              lead: { select: { id: true, name: true, phone: true } },
+            },
+          },
+        },
+        orderBy: { dueDate: 'asc' },
         take: 50,
       }),
     ]);
 
     const overdueReceivables = upcomingBookings
       .filter((b) => b.totalSell > b.totalReceived)
-      .map((b) => ({
-        ...b,
-        balanceDue: b.totalSell - b.totalReceived,
-      }));
+      .map((b) => {
+        const balanceDue = b.totalSell - b.totalReceived;
+        const upcomingPayment = b.payments.find(
+          (p) => p.dueDate && new Date(p.dueDate) >= now,
+        );
+        const effectiveDueDate =
+          upcomingPayment?.dueDate ?? b.travelStartDate ?? null;
+        const daysUntilDue = effectiveDueDate
+          ? Math.ceil((new Date(effectiveDueDate).getTime() - now.getTime()) / 86400000)
+          : null;
+        const isDueNext7Days =
+          daysUntilDue !== null && daysUntilDue <= 7;
+
+        return {
+          ...b,
+          balanceDue,
+          effectiveDueDate,
+          daysUntilDue,
+          isDueNext7Days,
+        };
+      });
+
+    const supplierPayables = scheduledCosts
+      .filter((c) => c.amountDue > c.amountPaid)
+      .map((c) => {
+        const balanceDue = c.amountDue - c.amountPaid;
+        const effectiveDueDate = c.dueDate ?? c.booking?.travelStartDate ?? null;
+        const daysUntilDue = effectiveDueDate
+          ? Math.ceil((new Date(effectiveDueDate).getTime() - now.getTime()) / 86400000)
+          : null;
+        const isDueNext7Days =
+          daysUntilDue !== null && daysUntilDue <= 7;
+
+        return {
+          id: c.id,
+          bookingId: c.bookingId,
+          bookingNumber: c.booking.bookingNumber,
+          packageName: c.booking.packageName,
+          description: c.description,
+          vendorId: c.vendorId,
+          amountDue: c.amountDue,
+          amountPaid: c.amountPaid,
+          balanceDue,
+          effectiveDueDate,
+          daysUntilDue,
+          isDueNext7Days,
+          confirmationStatus: c.confirmationStatus,
+        };
+      });
+
+    const dueNext7DaysReceivables = overdueReceivables.filter(
+      (r) => r.isDueNext7Days,
+    );
+    const dueNext7DaysPayables = supplierPayables.filter(
+      (p) => p.isDueNext7Days,
+    );
 
     return {
       unverifiedPayments,
       overdueReceivables,
       pendingReservations,
+      supplierPayables,
+      scheduledInstallments,
+      dueNext7Days: {
+        receivablesCount: dueNext7DaysReceivables.length,
+        receivablesAmount: dueNext7DaysReceivables.reduce(
+          (sum, r) => sum + r.balanceDue,
+          0,
+        ),
+        payablesCount: dueNext7DaysPayables.length,
+        payablesAmount: dueNext7DaysPayables.reduce(
+          (sum, p) => sum + p.balanceDue,
+          0,
+        ),
+      },
     };
   }
 }

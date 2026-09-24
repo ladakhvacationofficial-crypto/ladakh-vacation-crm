@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Building2,
   MessageCircle,
+  CalendarClock,
 } from 'lucide-react';
 import {
   api,
@@ -28,6 +29,7 @@ import {
   type UnverifiedPaymentItem,
   type OverdueReceivableItem,
   type PendingReservationItem,
+  type SupplierPayableItem,
 } from '@/lib/api';
 import { Panel, PanelBody, PanelHeader, PanelTitle } from '@/components/ui/panel';
 import { Button } from '@/components/ui/button';
@@ -39,6 +41,7 @@ type TabKey = 'ledger' | 'queue';
 
 export default function FinancePage() {
   const [tab, setTab] = useState<TabKey>('ledger');
+  const [filterDue7Days, setFilterDue7Days] = useState(false);
   const [stats, setStats] = useState<BookingStats | null>(null);
   const [aging, setAging] = useState<AgingReport | null>(null);
   const [queue, setQueue] = useState<PaymentWorkQueueResponse | null>(null);
@@ -98,11 +101,12 @@ export default function FinancePage() {
   }
 
   function handleCopyReminder(item: OverdueReceivableItem) {
+    const dueInfo = item.effectiveDueDate ? `\nPayment Due Date: ${shortDate(item.effectiveDueDate)}` : '';
     const text = `Namaste ${item.lead.name}! Greetings from Ladakh Vacation. Regarding your upcoming Ladakh tour (${item.packageName ?? item.bookingNumber}), here is your payment summary:
 
 Total Package: ${money(item.totalSell)}
 Amount Received: ${money(item.totalReceived)}
-Balance Due: ${money(item.balanceDue)}
+Balance Due: ${money(item.balanceDue)}${dueInfo}
 
 Kindly process the balance via Bank Transfer / UPI at your earliest convenience. Thank you!`;
     navigator.clipboard.writeText(text);
@@ -113,6 +117,15 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
   const margin = stats?.averageMarginPercent ?? 0;
   const marginHealth = margin >= 15 ? 'healthy' : (stats && stats.bookings > 0 ? 'warn' : 'muted');
   const unverifiedCount = queue?.unverifiedPayments?.length ?? 0;
+  const due7DaysCount =
+    (queue?.dueNext7Days?.receivablesCount ?? 0) +
+    (queue?.dueNext7Days?.payablesCount ?? 0);
+  const displayReceivables = filterDue7Days
+    ? (queue?.overdueReceivables?.filter((r) => r.isDueNext7Days) ?? [])
+    : (queue?.overdueReceivables ?? []);
+  const displayPayables = filterDue7Days
+    ? (queue?.supplierPayables?.filter((p) => p.isDueNext7Days) ?? [])
+    : (queue?.supplierPayables ?? []);
 
   if (error && !stats && !queue) {
     return (
@@ -310,7 +323,7 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
       {tab === 'queue' && (
         <div className="space-y-6">
           {/* Work queue summary banner */}
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Panel className="p-4 bg-ink-900 border-ink-800">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
@@ -328,14 +341,14 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
                     queue?.unverifiedPayments?.reduce((s, p) => s + p.amount, 0) ?? 0,
                   )}
                 </span>{' '}
-                awaiting accountant sign-off
+                awaiting sign-off
               </p>
             </Panel>
 
             <Panel className="p-4 bg-ink-900 border-ink-800">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
-                  Overdue Receivables
+                  Client Receivables
                 </span>
                 <ArrowUpRight className="size-4 text-signal-400" />
               </div>
@@ -356,23 +369,89 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
             <Panel className="p-4 bg-ink-900 border-ink-800">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
-                  Pending Reservations
+                  Supplier Payables
                 </span>
                 <Building2 className="size-4 text-ink-400" />
               </div>
               <p className="mt-2 text-2xl font-semibold text-ink-100 tabular">
-                {queue?.pendingReservations?.length ?? 0}
+                {queue?.supplierPayables?.length ?? 0}
               </p>
               <p className="text-[11.5px] text-ink-400 mt-0.5">
                 Total:{' '}
                 <span className="text-ink-200 font-medium">
                   {money(
-                    queue?.pendingReservations?.reduce((s, r) => s + r.costAmount, 0) ?? 0,
+                    queue?.supplierPayables?.reduce((s, p) => s + p.balanceDue, 0) ?? 0,
                   )}
                 </span>{' '}
-                unconfirmed vendor holds
+                scheduled costs
               </p>
             </Panel>
+
+            <Panel className="p-4 bg-ink-900 border-ink-800">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500">
+                  Due in Next 7 Days
+                </span>
+                <CalendarClock className="size-4 text-warn-400" />
+              </div>
+              <p className="mt-2 text-2xl font-semibold text-warn-300 tabular">
+                {due7DaysCount}
+              </p>
+              <p className="text-[11.5px] text-ink-400 mt-0.5">
+                In: <span className="text-signal-400 font-medium">{money(queue?.dueNext7Days?.receivablesAmount ?? 0)}</span> | Out: <span className="text-warn-400 font-medium">{money(queue?.dueNext7Days?.payablesAmount ?? 0)}</span>
+              </p>
+            </Panel>
+          </div>
+
+          {/* Quick Filter Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-ink-800 bg-ink-900/70 p-3">
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant={filterDue7Days ? 'ghost' : 'secondary'}
+                onClick={() => setFilterDue7Days(false)}
+                className="text-[12px]"
+              >
+                All Work Items ({(queue?.unverifiedPayments?.length ?? 0) + (queue?.overdueReceivables?.length ?? 0) + (queue?.supplierPayables?.length ?? 0)})
+              </Button>
+              <Button
+                size="sm"
+                variant={filterDue7Days ? 'secondary' : 'ghost'}
+                onClick={() => setFilterDue7Days(true)}
+                className={`text-[12px] gap-1.5 ${
+                  filterDue7Days
+                    ? 'bg-warn-500/20 text-warn-300 border-warn-500/40 hover:bg-warn-500/30'
+                    : 'text-warn-400 hover:text-warn-300'
+                }`}
+              >
+                <Clock className="size-3.5" />
+                ⚡ Due in Next 7 Days
+                {due7DaysCount > 0 && (
+                  <span className="rounded-full bg-warn-500/30 px-1.5 py-0.2 text-[10.5px] font-bold text-warn-300">
+                    {due7DaysCount}
+                  </span>
+                )}
+              </Button>
+            </div>
+            {queue?.dueNext7Days && (
+              <div className="flex flex-wrap items-center gap-4 text-[12px] text-ink-300">
+                <span>
+                  7-Day Inflow:{' '}
+                  <strong className="text-signal-400 font-semibold tabular">
+                    {money(queue.dueNext7Days.receivablesAmount)}
+                  </strong>{' '}
+                  ({queue.dueNext7Days.receivablesCount} files)
+                </span>
+                <span className="text-ink-600">|</span>
+                <span>
+                  7-Day Outflow:{' '}
+                  <strong className="text-warn-400 font-semibold tabular">
+                    {money(queue.dueNext7Days.payablesAmount)}
+                  </strong>{' '}
+                  ({queue.dueNext7Days.payablesCount} costs)
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Section 1: Unverified Client Payments (UPI / Bank Wire / Cash) */}
@@ -511,7 +590,7 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
               <div>
                 <PanelTitle className="flex items-center gap-2">
                   <MessageCircle className="size-4 text-signal-400" />
-                  Upcoming Trips with Overdue Balances
+                  Upcoming Trips with Outstanding Balances
                 </PanelTitle>
                 <p className="text-[11.5px] text-ink-400 mt-0.5">
                   Clients with pending balances. Send 1-click WhatsApp payment reminders with dynamic totals.
@@ -520,9 +599,11 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
             </PanelHeader>
 
             <PanelBody className="p-0">
-              {queue?.overdueReceivables?.length === 0 ? (
+              {displayReceivables.length === 0 ? (
                 <div className="py-8 text-center text-ink-400 text-[12.5px]">
-                  No upcoming bookings with outstanding balances.
+                  {filterDue7Days
+                    ? 'No client balances maturing within the next 7 days.'
+                    : 'No upcoming bookings with outstanding balances.'}
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -532,13 +613,14 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
                         <th className="px-4 py-2.5 font-medium">Booking</th>
                         <th className="px-4 py-2.5 font-medium">Guest & Contact</th>
                         <th className="px-4 py-2.5 font-medium">Travel Date</th>
+                        <th className="px-4 py-2.5 font-medium">Payment Due Date</th>
                         <th className="px-4 py-2.5 font-medium">Total Sell</th>
                         <th className="px-4 py-2.5 font-medium">Balance Due</th>
                         <th className="px-4 py-2.5 text-right font-medium">Reminder Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-ink-800/50">
-                      {queue?.overdueReceivables?.slice(0, 15).map((r: OverdueReceivableItem) => (
+                      {displayReceivables.slice(0, 20).map((r: OverdueReceivableItem) => (
                         <tr key={r.id} className="hover:bg-ink-850/40 transition-colors">
                           <td className="px-4 py-3">
                             <Link
@@ -561,6 +643,36 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
                             <span className="tabular text-ink-300">
                               {r.travelStartDate ? shortDate(r.travelStartDate) : 'Not scheduled'}
                             </span>
+                          </td>
+                          <td className="px-4 py-3">
+                            {r.effectiveDueDate ? (
+                              <div>
+                                <p className="tabular text-ink-200 text-[12px] font-medium">
+                                  {shortDate(r.effectiveDueDate)}
+                                </p>
+                                {r.daysUntilDue !== null && r.daysUntilDue !== undefined && (
+                                  <span
+                                    className={`inline-block mt-0.5 rounded px-1.5 py-0.2 text-[10px] font-semibold ${
+                                      r.daysUntilDue < 0
+                                        ? 'bg-loss-500/20 text-loss-400 border border-loss-500/30'
+                                        : r.daysUntilDue === 0
+                                          ? 'bg-warn-500/20 text-warn-400 border border-warn-500/30'
+                                          : r.daysUntilDue <= 7
+                                            ? 'bg-warn-500/15 text-warn-300 border border-warn-500/20'
+                                            : 'bg-ink-800 text-ink-400'
+                                    }`}
+                                  >
+                                    {r.daysUntilDue < 0
+                                      ? `Overdue by ${Math.abs(r.daysUntilDue)}d`
+                                      : r.daysUntilDue === 0
+                                        ? 'Due Today'
+                                        : `Due in ${r.daysUntilDue}d`}
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-ink-500 text-[11.5px] italic">On arrival</span>
+                            )}
                           </td>
                           <td className="px-4 py-3 tabular text-ink-300">{money(r.totalSell)}</td>
                           <td className="px-4 py-3 tabular font-semibold text-warn-400">
@@ -595,7 +707,124 @@ Kindly process the balance via Bank Transfer / UPI at your earliest convenience.
             </PanelBody>
           </Panel>
 
-          {/* Section 3: Pending Supplier Reservations */}
+          {/* Section 3: Scheduled Supplier Payables & Block Deadlines */}
+          <Panel>
+            <PanelHeader>
+              <div>
+                <PanelTitle className="flex items-center gap-2">
+                  <Receipt className="size-4 text-warn-400" />
+                  Scheduled Supplier Payables & Room Block Deadlines
+                </PanelTitle>
+                <p className="text-[11.5px] text-ink-400 mt-0.5">
+                  Supplier payment cut-offs to guarantee room blocks, transport allocations, and permits.
+                </p>
+              </div>
+            </PanelHeader>
+
+            <PanelBody className="p-0">
+              {displayPayables.length === 0 ? (
+                <div className="py-8 text-center text-ink-400 text-[12.5px]">
+                  {filterDue7Days
+                    ? 'No supplier costs due within the next 7 days.'
+                    : 'No outstanding supplier payables recorded.'}
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[700px] text-left text-[12.5px]">
+                    <thead>
+                      <tr className="border-b border-ink-800/80 bg-ink-950/40 text-[10px] uppercase tracking-wider text-ink-500">
+                        <th className="px-4 py-2.5 font-medium">Trip & Booking</th>
+                        <th className="px-4 py-2.5 font-medium">Supplier & Service</th>
+                        <th className="px-4 py-2.5 font-medium">Payment Due Date</th>
+                        <th className="px-4 py-2.5 font-medium">Cost Due</th>
+                        <th className="px-4 py-2.5 font-medium">Balance Payable</th>
+                        <th className="px-4 py-2.5 font-medium">Status</th>
+                        <th className="px-4 py-2.5 text-right font-medium">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-ink-800/50">
+                      {displayPayables.slice(0, 20).map((p: SupplierPayableItem) => (
+                        <tr key={p.id} className="hover:bg-ink-850/40 transition-colors">
+                          <td className="px-4 py-3">
+                            <Link
+                              href={`/bookings/${p.bookingId}`}
+                              className="font-semibold text-signal-400 hover:text-signal-300 flex items-center gap-1.5"
+                            >
+                              {p.bookingNumber}
+                              <ExternalLink className="size-3 text-ink-500" />
+                            </Link>
+                            {p.packageName && (
+                              <p className="text-[11px] text-ink-500 truncate max-w-[180px]">
+                                {p.packageName}
+                              </p>
+                            )}
+                          </td>
+                          <td className="px-4 py-3">
+                            <p className="text-ink-200 font-medium">{p.description}</p>
+                          </td>
+                          <td className="px-4 py-3">
+                            {p.effectiveDueDate ? (
+                              <div>
+                                <p className="tabular text-ink-200 text-[12px] font-medium">
+                                  {shortDate(p.effectiveDueDate)}
+                                </p>
+                                {p.daysUntilDue !== null && p.daysUntilDue !== undefined && (
+                                  <span
+                                    className={`inline-block mt-0.5 rounded px-1.5 py-0.2 text-[10px] font-semibold ${
+                                      p.daysUntilDue < 0
+                                        ? 'bg-loss-500/20 text-loss-400 border border-loss-500/30'
+                                        : p.daysUntilDue === 0
+                                          ? 'bg-warn-500/20 text-warn-400 border border-warn-500/30'
+                                          : p.daysUntilDue <= 7
+                                            ? 'bg-warn-500/15 text-warn-300 border border-warn-500/20'
+                                            : 'bg-ink-800 text-ink-400'
+                                    }`}
+                                  >
+                                    {p.daysUntilDue < 0
+                                      ? `Overdue by ${Math.abs(p.daysUntilDue)}d`
+                                      : p.daysUntilDue === 0
+                                        ? 'Due Today'
+                                        : `Due in ${p.daysUntilDue}d`}
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-ink-500 text-[11.5px] italic">Before travel</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 tabular text-ink-300">{money(p.amountDue)}</td>
+                          <td className="px-4 py-3 tabular font-semibold text-warn-400">
+                            {money(p.balanceDue)}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`rounded px-2 py-0.5 text-[10.5px] font-semibold ${
+                                p.confirmationStatus === 'CONFIRMED'
+                                  ? 'bg-healthy-500/20 text-healthy-400 border border-healthy-500/30'
+                                  : 'bg-warn-500/20 text-warn-400 border border-warn-500/30'
+                              }`}
+                            >
+                              {p.confirmationStatus ?? 'PENDING'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <Link
+                              href={`/bookings/${p.bookingId}?tab=costs`}
+                              className="text-signal-400 hover:text-signal-300 font-medium text-[12px] inline-flex items-center gap-1"
+                            >
+                              Record Cost <ExternalLink className="size-3" />
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </PanelBody>
+          </Panel>
+
+          {/* Section 4: Pending Supplier Confirmations */}
           <Panel>
             <PanelHeader>
               <div>
