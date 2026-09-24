@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -84,6 +85,9 @@ export class VendorsController {
 
   @Get(':id')
   findOne(@Param('id') id: string, @CurrentUser('role') role: Role) {
+    if (id === 'drafts') {
+      throw new NotFoundException('Please use /vendor-drafts or /vendors/drafts for property staging drafts');
+    }
     return this.vendors.findOne(id, role);
   }
 

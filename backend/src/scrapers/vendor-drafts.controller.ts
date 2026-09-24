@@ -19,7 +19,7 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { VENDOR_READ_ACCESS, VENDOR_WRITE_ACCESS } from '../common/access';
 
 @Roles(...VENDOR_READ_ACCESS)
-@Controller('vendors/drafts')
+@Controller(['vendor-drafts', 'vendors/drafts'])
 export class VendorDraftsController {
   constructor(private readonly draftsService: VendorDraftsService) {}
 

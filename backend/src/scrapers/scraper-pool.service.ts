@@ -103,7 +103,7 @@ export class ScraperPoolService {
     urls: string[],
     options?: { city?: string; propertyType?: string; concurrency?: number },
   ): Promise<Array<{ url: string; success: boolean; data?: ExtractedPropertyResult; error?: string }>> {
-    const limit = Math.max(1, Math.min(options?.concurrency ?? 3, 5));
+    const limit = Math.max(1, Math.min(options?.concurrency ?? 2, 5));
     const results: Array<{ url: string; success: boolean; data?: ExtractedPropertyResult; error?: string }> = [];
 
     for (let i = 0; i < urls.length; i += limit) {

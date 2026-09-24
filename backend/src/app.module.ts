@@ -43,6 +43,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     AuthModule,
     UsersModule,
     LeadsModule,
+    ScrapersModule,
     VendorsModule,
     SettingsModule,
     BookingsModule,
@@ -62,7 +63,6 @@ import { RolesGuard } from './common/guards/roles.guard';
     MlModule,
     FleetModule,
     PermitsModule,
-    ScrapersModule,
   ],
   providers: [
     // Order: rate limit -> authenticate -> authorize.

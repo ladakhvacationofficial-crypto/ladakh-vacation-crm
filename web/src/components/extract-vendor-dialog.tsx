@@ -22,7 +22,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
   const [city, setCity] = useState('');
   const [propertyType, setPropertyType] = useState('HOTEL');
   const [provider, setProvider] = useState('');
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(3);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
         failed: number;
         drafts: VendorDraftRow[];
         errors: Array<{ url: string; error: string }>;
-      }>('/vendors/drafts/discover', {
+      }>('/vendor-drafts/discover', {
         query: keywordQuery.trim(),
         city: city || undefined,
         propertyType: propertyType || undefined,
@@ -84,7 +84,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
 
     try {
       const res = await api.post<{ draft: VendorDraftRow; warnings?: string[] }>(
-        '/vendors/drafts/extract',
+        '/vendor-drafts/extract',
         {
           url: url.trim(),
           preferredProvider: provider || undefined,
@@ -131,7 +131,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
         failed: number;
         drafts: VendorDraftRow[];
         errors: Array<{ url: string; error: string }>;
-      }>('/vendors/drafts/batch-extract', {
+      }>('/vendor-drafts/batch-extract', {
         urls,
         city: city || undefined,
         propertyType: propertyType || undefined,

@@ -51,7 +51,7 @@ export default function VendorDraftsPage() {
     if (providerFilter) q.set('sourceProvider', providerFilter);
 
     try {
-      const res = await api.get<VendorDraftRow[]>(`/vendors/drafts?${q}`);
+      const res = await api.get<VendorDraftRow[]>(`/vendor-drafts?${q}`);
       setDrafts(res);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Could not load property drafts.');
@@ -71,7 +71,7 @@ export default function VendorDraftsPage() {
     setBusyActionId(draftId);
     try {
       const res = await api.post<{ draft: VendorDraftRow; vendor: { id: string; name: string } }>(
-        `/vendors/drafts/${draftId}/approve`,
+        `/vendor-drafts/${draftId}/approve`,
         {},
       );
       alert(`Supplier "${res.vendor.name}" created successfully! Opening supplier file...`);
@@ -88,7 +88,7 @@ export default function VendorDraftsPage() {
     if (reason === null) return;
     setBusyActionId(draftId);
     try {
-      await api.post(`/vendors/drafts/${draftId}/reject`, { notes: reason });
+      await api.post(`/vendor-drafts/${draftId}/reject`, { notes: reason });
       load();
     } catch (err: any) {
       alert(err instanceof ApiError ? err.message : 'Failed to reject draft.');
@@ -99,7 +99,7 @@ export default function VendorDraftsPage() {
 
   const handleDelete = async (draftId: string) => {
     try {
-      await api.del(`/vendors/drafts/${draftId}`);
+      await api.del(`/vendor-drafts/${draftId}`);
       load();
     } catch (err: any) {
       alert(err instanceof ApiError ? err.message : 'Failed to delete draft.');
