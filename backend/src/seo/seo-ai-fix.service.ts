@@ -74,6 +74,15 @@ export class SeoAiFixService {
             liveFix = await this.callOpenAiCompatible('https://api.mistral.ai/v1', key, model, dto, pageTitle, keyword);
           } else if (integration.provider === 'deepseek') {
             liveFix = await this.callOpenAiCompatible('https://api.deepseek.com', key, 'deepseek-chat', dto, pageTitle, keyword);
+          } else if (integration.provider === 'nvidia') {
+            const model = creds.model || 'meta/llama-3.3-70b-instruct';
+            liveFix = await this.callOpenAiCompatible('https://integrate.api.nvidia.com/v1', key, model, dto, pageTitle, keyword);
+          } else if (integration.provider === 'cerebras') {
+            const model = creds.model || 'llama3.3-70b';
+            liveFix = await this.callOpenAiCompatible('https://api.cerebras.ai/v1', key, model, dto, pageTitle, keyword);
+          } else if (integration.provider === 'sambanova') {
+            const model = creds.model || 'Meta-Llama-3.3-70B-Instruct';
+            liveFix = await this.callOpenAiCompatible('https://api.sambanova.ai/v1', key, model, dto, pageTitle, keyword);
           } else if (integration.provider === 'openai') {
             liveFix = await this.callOpenAi(key, dto, pageTitle, keyword);
           } else if (integration.provider === 'anthropic') {

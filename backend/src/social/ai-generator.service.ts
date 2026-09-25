@@ -108,6 +108,39 @@ export class AiGeneratorService {
             season,
             dto.customPrompt,
           );
+        } else if (integration.provider === 'nvidia') {
+          const model = creds.model || 'meta/llama-3.3-70b-instruct';
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://integrate.api.nvidia.com/v1',
+            key,
+            model,
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+          );
+        } else if (integration.provider === 'cerebras') {
+          const model = creds.model || 'llama3.3-70b';
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://api.cerebras.ai/v1',
+            key,
+            model,
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+          );
+        } else if (integration.provider === 'sambanova') {
+          const model = creds.model || 'Meta-Llama-3.3-70B-Instruct';
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://api.sambanova.ai/v1',
+            key,
+            model,
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+          );
         } else if (integration.provider === 'openai') {
           liveAiGenerated = await this.callOpenAi(key, dest, pkg, season, dto.customPrompt);
         } else if (integration.provider === 'anthropic') {

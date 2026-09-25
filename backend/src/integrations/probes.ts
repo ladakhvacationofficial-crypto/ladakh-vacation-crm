@@ -161,6 +161,33 @@ async function probeMistral(c: any): Promise<ProbeResult> {
   return { ok: false, message: `HTTP ${r.status}: ${await readTextSafe(r)}` };
 }
 
+async function probeNvidia(c: any): Promise<ProbeResult> {
+  const r = await safeFetch('https://integrate.api.nvidia.com/v1/models', {
+    headers: { Authorization: `Bearer ${c.apiKey}` },
+  });
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) return { ok: true, message: 'NVIDIA NIM key verified (DGX Cloud active).' };
+  return { ok: false, message: `NVIDIA NIM HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeCerebras(c: any): Promise<ProbeResult> {
+  const r = await safeFetch('https://api.cerebras.ai/v1/models', {
+    headers: { Authorization: `Bearer ${c.apiKey}` },
+  });
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) return { ok: true, message: 'Cerebras key verified (1,800 tok/s active).' };
+  return { ok: false, message: `Cerebras HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeSambaNova(c: any): Promise<ProbeResult> {
+  const r = await safeFetch('https://api.sambanova.ai/v1/models', {
+    headers: { Authorization: `Bearer ${c.apiKey}` },
+  });
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) return { ok: true, message: 'SambaNova key verified (SN40L chip active).' };
+  return { ok: false, message: `SambaNova HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
 async function probeCohere(c: any): Promise<ProbeResult> {
   const r = await safeFetch('https://api.cohere.com/v1/models', {
     headers: { Authorization: `Bearer ${c.apiKey}` },
@@ -1113,6 +1140,9 @@ const PROBES: Record<string, Probe> = {
   openrouter: probeOpenRouter,
   deepseek: probeDeepseek,
   mistral: probeMistral,
+  nvidia: probeNvidia,
+  cerebras: probeCerebras,
+  sambanova: probeSambaNova,
   cohere: probeCohere,
   together: probeTogether,
   fireworks: probeFireworks,
