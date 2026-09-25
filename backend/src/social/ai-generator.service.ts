@@ -45,26 +45,84 @@ export class AiGeneratorService {
 
     this.logger.log(`Generating AI social copy for destination: "${dest}", package: "${pkg}"`);
 
-    // Check if an AI integration is configured in database
-    const aiIntegration = await this.prisma.integration.findFirst({
+    // Multi-provider Failover: query all active AI integrations in priority order
+    const activeAiIntegrations = await this.prisma.integration.findMany({
       where: { category: 'AI', isActive: true },
-      orderBy: { priority: 'desc' },
+      orderBy: [{ priority: 'desc' }, { updatedAt: 'desc' }],
     });
 
     let liveAiGenerated: GeneratedVariant[] | null = null;
+    let successfulProvider: string | null = null;
 
-    if (aiIntegration) {
+    for (const integration of activeAiIntegrations) {
       try {
-        const creds = JSON.parse(decryptSecret(aiIntegration.credentials));
-        if (aiIntegration.provider === 'openai' && creds.apiKey) {
-          liveAiGenerated = await this.callOpenAi(creds.apiKey, dest, pkg, season, dto.customPrompt);
-        } else if (aiIntegration.provider === 'anthropic' && creds.apiKey) {
-          liveAiGenerated = await this.callAnthropic(creds.apiKey, dest, pkg, season, dto.customPrompt);
-        } else if (aiIntegration.provider === 'google_gemini' && creds.apiKey) {
-          liveAiGenerated = await this.callGemini(creds.apiKey, dest, pkg, season, dto.customPrompt);
+        const creds = JSON.parse(decryptSecret(integration.credentials));
+        const key = creds.apiKey;
+        if (!key) continue;
+
+        this.logger.log(`Attempting social generation via AI provider: ${integration.provider}`);
+
+        if (integration.provider === 'google_gemini') {
+          liveAiGenerated = await this.callGemini(key, dest, pkg, season, dto.customPrompt, creds.model);
+        } else if (integration.provider === 'groq') {
+          const model = creds.model || 'llama-3.3-70b-versatile';
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://api.groq.com/openai/v1',
+            key,
+            model,
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+          );
+        } else if (integration.provider === 'openrouter') {
+          const model = creds.model || 'meta-llama/llama-3.3-70b-instruct:free';
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://openrouter.ai/api/v1',
+            key,
+            model,
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+            { 'HTTP-Referer': 'https://ladakhvacation.in', 'X-Title': 'Ladakh Vacation CRM' },
+          );
+        } else if (integration.provider === 'mistral') {
+          const model = creds.model || 'mistral-small-latest';
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://api.mistral.ai/v1',
+            key,
+            model,
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+          );
+        } else if (integration.provider === 'deepseek') {
+          liveAiGenerated = await this.callOpenAiCompatible(
+            'https://api.deepseek.com',
+            key,
+            'deepseek-chat',
+            dest,
+            pkg,
+            season,
+            dto.customPrompt,
+          );
+        } else if (integration.provider === 'openai') {
+          liveAiGenerated = await this.callOpenAi(key, dest, pkg, season, dto.customPrompt);
+        } else if (integration.provider === 'anthropic') {
+          liveAiGenerated = await this.callAnthropic(key, dest, pkg, season, dto.customPrompt);
+        }
+
+        if (liveAiGenerated && liveAiGenerated.length > 0) {
+          successfulProvider = integration.provider;
+          this.logger.log(`Social AI copy generated successfully via provider: "${successfulProvider}"`);
+          break; // Succeeded! Stop trying further providers
         }
       } catch (err: any) {
-        this.logger.warn(`Live AI call failed (${aiIntegration.provider}), falling back to built-in generator: ${err.message}`);
+        this.logger.warn(
+          `AI provider "${integration.provider}" failed (${err.message}). Failing over to next configured AI provider...`,
+        );
       }
     }
 
@@ -264,14 +322,8 @@ Return ONLY a valid JSON array — no markdown, no code fences:
     }
   }
 
-  private async callGemini(
-    apiKey: string,
-    dest: string,
-    pkg: string,
-    season: string,
-    custom?: string,
-  ) {
-    const prompt = `You are an elite travel marketing copywriter for Ladakh Vacation, a Leh-based Ladakh tour operator (Leh, Nubra, Pangong, Hanle, the Manali and Srinagar roads).
+  private buildSocialPrompt(dest: string, pkg: string, season: string, custom?: string): string {
+    return `You are an elite travel marketing copywriter for Ladakh Vacation, a Leh-based Ladakh tour operator (Leh, Nubra, Pangong, Hanle, the Manali and Srinagar roads).
 
 Write exactly 3 social media captions for:
 - Destination: "${dest}"
@@ -292,10 +344,64 @@ Return ONLY a valid JSON array — no markdown, no code fences:
   {"tone": "PROMOTIONAL",  "title": "...", "hook": "...", "caption": "...", "cta": "...", "hashtags": ["#...", ...]},
   {"tone": "PUNCHY_REEL",  "title": "...", "hook": "...", "caption": "...", "cta": "...", "hashtags": ["#...", ...]}
 ]`;
+  }
 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  private async callOpenAiCompatible(
+    baseUrl: string,
+    apiKey: string,
+    model: string,
+    dest: string,
+    pkg: string,
+    season: string,
+    custom?: string,
+    extraHeaders?: Record<string, string>,
+  ) {
+    const prompt = this.buildSocialPrompt(dest, pkg, season, custom);
+    const res = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        ...(extraHeaders || {}),
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+      }),
+    });
 
-    const res = await fetch(endpoint, {
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`HTTP ${res.status}: ${errText.slice(0, 150)}`);
+    }
+
+    const data = await res.json();
+    const rawText: string = data.choices?.[0]?.message?.content ?? '';
+    const jsonStr = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+
+    try {
+      const parsed = JSON.parse(jsonStr);
+      return Array.isArray(parsed) ? parsed : parsed.variants || null;
+    } catch {
+      this.logger.warn(`Model ${model} returned non-JSON response`);
+      return null;
+    }
+  }
+
+  private async callGemini(
+    apiKey: string,
+    dest: string,
+    pkg: string,
+    season: string,
+    custom?: string,
+    modelName?: string,
+  ) {
+    const prompt = this.buildSocialPrompt(dest, pkg, season, custom);
+    const model = modelName || 'gemini-2.5-flash';
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${apiKey}`;
+
+    let res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -308,9 +414,25 @@ Return ONLY a valid JSON array — no markdown, no code fences:
       }),
     });
 
+    if (!res.ok && model !== 'gemini-1.5-flash') {
+      const fallbackEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      res = await fetch(fallbackEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2048,
+            responseMimeType: 'application/json',
+          },
+        }),
+      });
+    }
+
     if (!res.ok) {
       const errText = await res.text();
-      throw new Error(`Gemini API HTTP ${res.status}: ${errText}`);
+      throw new Error(`Gemini API HTTP ${res.status}: ${errText.slice(0, 150)}`);
     }
 
     const data = await res.json();
@@ -323,7 +445,7 @@ Return ONLY a valid JSON array — no markdown, no code fences:
       const parsed = JSON.parse(jsonStr);
       return Array.isArray(parsed) ? parsed : null;
     } catch {
-      this.logger.warn('Gemini returned non-JSON response, falling back to template engine');
+      this.logger.warn('Gemini returned non-JSON response');
       return null;
     }
   }

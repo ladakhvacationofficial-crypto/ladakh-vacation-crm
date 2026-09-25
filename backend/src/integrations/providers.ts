@@ -144,9 +144,27 @@ const ai: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'groq', label: 'Groq', category: 'AI',
+    id: 'groq',
+    label: 'Groq (Free Tier / Ultra-Fast LPU)',
+    category: 'AI',
+    logo: '⚡',
     docsUrl: 'https://console.groq.com/keys',
-    fields: [{ key: 'apiKey', label: 'API Key', type: 'password', required: true, placeholder: 'gsk_...' }],
+    fields: [
+      { key: 'apiKey', label: 'API Key', type: 'password', required: true, placeholder: 'gsk_...', help: 'Free API key from console.groq.com. 100% free tier: 30 RPM, 14,400 requests/day on Llama 3.3 70B & Llama 3.1 8B with near-zero latency.' },
+      { key: 'model', label: 'Model Version', type: 'select', options: ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768'], help: 'llama-3.3-70b-versatile is recommended for rich content generation and analysis.' },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'openrouter',
+    label: 'OpenRouter (Free Models Hub)',
+    category: 'AI',
+    logo: '🔀',
+    docsUrl: 'https://openrouter.ai/keys',
+    fields: [
+      { key: 'apiKey', label: 'OpenRouter API Key', type: 'password', required: true, placeholder: 'sk-or-v1-...', help: 'Get a free API key at openrouter.ai/keys. Zero credit card needed to access completely free AI models.' },
+      { key: 'model', label: 'Default Model', type: 'select', options: ['meta-llama/llama-3.3-70b-instruct:free', 'deepseek/deepseek-r1:free', 'google/gemini-2.0-flash-exp:free', 'qwen/qwen-2.5-72b-instruct:free', 'mistralai/mistral-7b-instruct:free'], help: 'All models ending in :free are 100% zero-cost.' },
+    ],
     hasTest: true,
   },
   {
@@ -156,9 +174,14 @@ const ai: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'mistral', label: 'Mistral', category: 'AI',
+    id: 'mistral',
+    label: 'Mistral AI (Free Experimenter Tier)',
+    category: 'AI',
     docsUrl: 'https://console.mistral.ai/api-keys/',
-    fields: [{ key: 'apiKey', label: 'API Key', type: 'password', required: true }],
+    fields: [
+      { key: 'apiKey', label: 'API Key', type: 'password', required: true, help: 'Free API key from console.mistral.ai with free monthly credit quota.' },
+      { key: 'model', label: 'Model Version', type: 'select', options: ['mistral-small-latest', 'open-mistral-7b', 'open-mixtral-8x7b', 'codestral-latest'], help: 'mistral-small-latest is fast and capable.' },
+    ],
     hasTest: true,
   },
   {

@@ -40,28 +40,59 @@ export class SeoAiFixService {
 
     this.logger.log(`Generating SEO AI fix for check "${checkId}" on page "${url}" (keyword: "${keyword}")`);
 
-    // Check if an AI provider is active in the database
+    // Multi-provider Failover: query all active AI integrations in priority order
     let liveFix: SeoFixResult | null = null;
+    let successfulProvider: string | null = null;
+
     try {
-      const aiIntegration = await this.prisma.integration.findFirst({
+      const activeAiIntegrations = await this.prisma.integration.findMany({
         where: { category: 'AI', isActive: true },
-        orderBy: { priority: 'desc' },
+        orderBy: [{ priority: 'desc' }, { updatedAt: 'desc' }],
       });
 
-      if (aiIntegration) {
-        const creds = JSON.parse(decryptSecret(aiIntegration.credentials));
-        if (aiIntegration.provider === 'google_gemini' && creds.apiKey) {
-          liveFix = await this.callGemini(creds.apiKey, dto, pageTitle, keyword);
-        } else if (aiIntegration.provider === 'openai' && creds.apiKey) {
-          liveFix = await this.callOpenAi(creds.apiKey, dto, pageTitle, keyword);
-        } else if (aiIntegration.provider === 'anthropic' && creds.apiKey) {
-          liveFix = await this.callAnthropic(creds.apiKey, dto, pageTitle, keyword);
-        } else if (aiIntegration.provider === 'groq' && creds.apiKey) {
-          liveFix = await this.callGroq(creds.apiKey, dto, pageTitle, keyword);
+      for (const integration of activeAiIntegrations) {
+        try {
+          const creds = JSON.parse(decryptSecret(integration.credentials));
+          const key = creds.apiKey;
+          if (!key) continue;
+
+          this.logger.log(`Attempting SEO AI fix via provider: ${integration.provider}`);
+
+          if (integration.provider === 'google_gemini') {
+            liveFix = await this.callGemini(key, dto, pageTitle, keyword, creds.model);
+          } else if (integration.provider === 'groq') {
+            const model = creds.model || 'llama-3.3-70b-versatile';
+            liveFix = await this.callOpenAiCompatible('https://api.groq.com/openai/v1', key, model, dto, pageTitle, keyword);
+          } else if (integration.provider === 'openrouter') {
+            const model = creds.model || 'meta-llama/llama-3.3-70b-instruct:free';
+            liveFix = await this.callOpenAiCompatible('https://openrouter.ai/api/v1', key, model, dto, pageTitle, keyword, {
+              'HTTP-Referer': 'https://ladakhvacation.in',
+              'X-Title': 'Ladakh Vacation CRM',
+            });
+          } else if (integration.provider === 'mistral') {
+            const model = creds.model || 'mistral-small-latest';
+            liveFix = await this.callOpenAiCompatible('https://api.mistral.ai/v1', key, model, dto, pageTitle, keyword);
+          } else if (integration.provider === 'deepseek') {
+            liveFix = await this.callOpenAiCompatible('https://api.deepseek.com', key, 'deepseek-chat', dto, pageTitle, keyword);
+          } else if (integration.provider === 'openai') {
+            liveFix = await this.callOpenAi(key, dto, pageTitle, keyword);
+          } else if (integration.provider === 'anthropic') {
+            liveFix = await this.callAnthropic(key, dto, pageTitle, keyword);
+          }
+
+          if (liveFix) {
+            successfulProvider = integration.provider;
+            this.logger.log(`SEO AI fix generated successfully using provider: "${successfulProvider}"`);
+            break; // Stop! Successfully produced fix
+          }
+        } catch (providerErr: any) {
+          this.logger.warn(
+            `AI provider "${integration.provider}" failed (${providerErr.message}). Failing over to next AI provider...`,
+          );
         }
       }
     } catch (err: any) {
-      this.logger.warn(`Live AI fix generation failed, using built-in travel SEO engine: ${err.message}`);
+      this.logger.warn(`AI failover loop encountered error: ${err.message}`);
     }
 
     // Fall back to built-in travel SEO synthesis engine
@@ -352,16 +383,51 @@ Every itinerary is a starting point, reshaped around your dates, your group and 
 
   // ── External AI Provider Integrations ────────────────────────────────────
 
+  private async callOpenAiCompatible(
+    baseUrl: string,
+    apiKey: string,
+    model: string,
+    dto: GenerateSeoFixDto,
+    pageTitle: string,
+    keyword: string,
+    extraHeaders?: Record<string, string>,
+  ): Promise<SeoFixResult | null> {
+    const prompt = this.buildAiPrompt(dto, pageTitle, keyword);
+    const res = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        ...(extraHeaders || {}),
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' },
+        temperature: 0.4,
+      }),
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`HTTP ${res.status}: ${errText.slice(0, 150)}`);
+    }
+    const data = await res.json();
+    return this.parseAiResponse(data.choices?.[0]?.message?.content ?? '', dto);
+  }
+
   private async callGemini(
     apiKey: string,
     dto: GenerateSeoFixDto,
     pageTitle: string,
     keyword: string,
+    modelName?: string,
   ): Promise<SeoFixResult | null> {
     const prompt = this.buildAiPrompt(dto, pageTitle, keyword);
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const model = modelName || 'gemini-2.5-flash';
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${apiKey}`;
 
-    const res = await fetch(endpoint, {
+    let res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -373,6 +439,22 @@ Every itinerary is a starting point, reshaped around your dates, your group and 
         },
       }),
     });
+
+    if (!res.ok && model !== 'gemini-1.5-flash') {
+      const fallbackEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      res = await fetch(fallbackEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 2048,
+            responseMimeType: 'application/json',
+          },
+        }),
+      });
+    }
 
     if (!res.ok) throw new Error(`Gemini HTTP ${res.status}: ${await res.text()}`);
     const data = await res.json();

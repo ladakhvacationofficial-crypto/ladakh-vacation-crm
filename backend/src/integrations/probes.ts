@@ -130,8 +130,17 @@ async function probeGroq(c: any): Promise<ProbeResult> {
     headers: { Authorization: `Bearer ${c.apiKey}` },
   });
   if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
-  if (r.ok) return { ok: true, message: 'Groq key verified.' };
+  if (r.ok) return { ok: true, message: 'Groq key verified (free LPU models active).' };
   return { ok: false, message: `HTTP ${r.status}: ${await readTextSafe(r)}` };
+}
+
+async function probeOpenRouter(c: any): Promise<ProbeResult> {
+  const r = await safeFetch('https://openrouter.ai/api/v1/auth/key', {
+    headers: { Authorization: `Bearer ${c.apiKey}` },
+  });
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) return { ok: true, message: 'OpenRouter key verified (free models available).' };
+  return { ok: false, message: `OpenRouter HTTP ${r.status}: ${await readTextSafe(r)}` };
 }
 
 async function probeDeepseek(c: any): Promise<ProbeResult> {
@@ -1101,6 +1110,7 @@ const PROBES: Record<string, Probe> = {
   anthropic: probeAnthropic,
   google_gemini: probeGemini,
   groq: probeGroq,
+  openrouter: probeOpenRouter,
   deepseek: probeDeepseek,
   mistral: probeMistral,
   cohere: probeCohere,
