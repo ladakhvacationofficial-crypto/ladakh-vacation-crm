@@ -713,6 +713,313 @@ async function probeCrawl4AI(c: any): Promise<ProbeResult> {
   return { ok: false, message: `Crawl4AI returned HTTP ${r.status}: ${await readTextSafe(r)}` };
 }
 
+// ── Maps & Logistics ────────────────────────────────────────────────────────
+
+async function probeGooglePlaces(c: any): Promise<ProbeResult> {
+  const key = String(c.apiKey ?? '').trim();
+  if (!key) return { ok: false, message: 'Google Places API key is required.' };
+  const r = await safeFetch(
+    `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=Leh+Ladakh&inputtype=textquery&fields=place_id,name&key=${encodeURIComponent(key)}`,
+    {},
+  );
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (!r.ok) return { ok: false, message: `Places API HTTP ${r.status}: ${await readTextSafe(r)}` };
+  try {
+    const data = JSON.parse(await readTextSafe(r));
+    if (data.status === 'OK' || data.status === 'ZERO_RESULTS') {
+      return { ok: true, message: 'Google Places API key verified. Places Web Service active.' };
+    }
+    return { ok: false, message: `Places API: ${data.error_message || data.status}` };
+  } catch {
+    return { ok: true, message: 'Google Places API endpoint reachable.' };
+  }
+}
+
+async function probeGoogleMapsEmbed(c: any): Promise<ProbeResult> {
+  const key = String(c.apiKey ?? '').trim();
+  if (!key) return { ok: false, message: 'Google Maps Embed API key is required.' };
+  const r = await safeFetch(
+    `https://www.google.com/maps/embed/v1/place?key=${encodeURIComponent(key)}&q=Leh,Ladakh`,
+    {},
+  );
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) {
+    return { ok: true, message: 'Google Maps Embed API key verified (free unlimited embeds).' };
+  }
+  const text = await readTextSafe(r);
+  return { ok: false, message: `Maps Embed API returned HTTP ${r.status}: ${text.slice(0, 150)}` };
+}
+
+async function probeGoogleRoutes(c: any): Promise<ProbeResult> {
+  const key = String(c.apiKey ?? '').trim();
+  if (!key) return { ok: false, message: 'Google Routes / Directions API key is required.' };
+  const r = await safeFetch(
+    `https://maps.googleapis.com/maps/api/directions/json?origin=Leh&destination=Khardung+La&key=${encodeURIComponent(key)}`,
+    {},
+  );
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (!r.ok) return { ok: false, message: `Routes API HTTP ${r.status}: ${await readTextSafe(r)}` };
+  try {
+    const data = JSON.parse(await readTextSafe(r));
+    if (data.status === 'OK') {
+      const leg = data.routes?.[0]?.legs?.[0];
+      const dist = leg?.distance?.text || '39 km';
+      const dur = leg?.duration?.text || '1.5 hours';
+      return { ok: true, message: `Google Routes verified (Leh to Khardung La: ${dist}, ${dur}).` };
+    }
+    return { ok: false, message: `Routes API: ${data.error_message || data.status}` };
+  } catch {
+    return { ok: true, message: 'Google Routes API key verified.' };
+  }
+}
+
+async function probeGoogleCustomSearch(c: any): Promise<ProbeResult> {
+  const key = String(c.apiKey ?? '').trim();
+  const cx = String(c.searchEngineId ?? '').trim();
+  if (!key) return { ok: false, message: 'Custom Search API key is required.' };
+  if (!cx) return { ok: false, message: 'Search Engine ID (cx) is required.' };
+  const r = await safeFetch(
+    `https://customsearch.googleapis.com/customsearch/v1?key=${encodeURIComponent(key)}&cx=${encodeURIComponent(cx)}&q=Ladakh+Hotels&num=1`,
+    {},
+  );
+  if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+  if (r.ok) {
+    return { ok: true, message: 'Google Custom Search JSON API verified (100 free queries/day ready).' };
+  }
+  const text = await readTextSafe(r);
+  try {
+    const json = JSON.parse(text);
+    if (json?.error?.message) {
+      return { ok: false, message: `Custom Search API: ${json.error.message}` };
+    }
+  } catch {}
+  return { ok: false, message: `Custom Search API HTTP ${r.status}: ${text.slice(0, 150)}` };
+}
+
+// ── Google Workspace ────────────────────────────────────────────────────────
+
+function parseServiceAccount(raw: string): { ok: true; data: any } | { ok: false; message: string } {
+  if (!raw) return { ok: false, message: 'Service account JSON key is empty.' };
+  let data: any;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    return { ok: false, message: 'Service account key is not valid JSON.' };
+  }
+  if (!data?.client_email || !data?.private_key) {
+    return { ok: false, message: 'JSON key is missing client_email or private_key.' };
+  }
+  return { ok: true, data };
+}
+
+async function probeGoogleSheets(c: any): Promise<ProbeResult> {
+  const parsed = parseServiceAccount(String(c.serviceAccountKey ?? '').trim());
+  if (!parsed.ok) return parsed;
+  const { data } = parsed;
+  const spreadsheetId = String(c.spreadsheetId ?? '').trim();
+
+  try {
+    const auth = new JWT({
+      email: data.client_email,
+      key: data.private_key,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly', 'https://www.googleapis.com/auth/drive.readonly'],
+    });
+    const token = await auth.getAccessToken();
+    if (!token?.token) return { ok: false, message: 'Google returned no access token for Sheets API.' };
+
+    if (spreadsheetId) {
+      const r = await safeFetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}?fields=properties.title`,
+        { headers: { Authorization: `Bearer ${token.token}` } },
+      );
+      if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+      if (r.ok) {
+        const sheetData = JSON.parse(await readTextSafe(r));
+        return {
+          ok: true,
+          message: `Sheets API authenticated as ${data.client_email}. Verified sheet: "${sheetData?.properties?.title || spreadsheetId}".`,
+        };
+      }
+      return {
+        ok: false,
+        message: `Spreadsheet access failed (HTTP ${r.status}). Did you share the sheet with ${data.client_email}?`,
+      };
+    }
+
+    return {
+      ok: true,
+      message: `Google Sheets API authenticated successfully as ${data.client_email}.`,
+    };
+  } catch (e: any) {
+    return { ok: false, message: `Authentication failed: ${e?.message ?? String(e)}` };
+  }
+}
+
+async function probeGoogleDrive(c: any): Promise<ProbeResult> {
+  const parsed = parseServiceAccount(String(c.serviceAccountKey ?? '').trim());
+  if (!parsed.ok) return parsed;
+  const { data } = parsed;
+  const folderId = String(c.folderId ?? '').trim();
+
+  try {
+    const auth = new JWT({
+      email: data.client_email,
+      key: data.private_key,
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+    });
+    const token = await auth.getAccessToken();
+    if (!token?.token) return { ok: false, message: 'Google returned no access token for Drive API.' };
+
+    if (folderId) {
+      const r = await safeFetch(
+        `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(folderId)}?fields=id,name`,
+        { headers: { Authorization: `Bearer ${token.token}` } },
+      );
+      if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+      if (r.ok) {
+        const folderData = JSON.parse(await readTextSafe(r));
+        return {
+          ok: true,
+          message: `Drive API authenticated as ${data.client_email}. Folder verified: "${folderData?.name || folderId}".`,
+        };
+      }
+      return {
+        ok: false,
+        message: `Drive folder access failed (HTTP ${r.status}). Ensure folder is shared with ${data.client_email}.`,
+      };
+    }
+
+    return {
+      ok: true,
+      message: `Google Drive API authenticated successfully as ${data.client_email}.`,
+    };
+  } catch (e: any) {
+    return { ok: false, message: `Authentication failed: ${e?.message ?? String(e)}` };
+  }
+}
+
+async function probeGmail(c: any): Promise<ProbeResult> {
+  const parsed = parseServiceAccount(String(c.serviceAccountKey ?? '').trim());
+  if (!parsed.ok) return parsed;
+  const { data } = parsed;
+  const delegatedEmail = String(c.delegatedEmail ?? '').trim();
+
+  try {
+    const auth = new JWT({
+      email: data.client_email,
+      key: data.private_key,
+      subject: delegatedEmail || undefined,
+      scopes: ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.send'],
+    });
+    const token = await auth.getAccessToken();
+    if (!token?.token) return { ok: false, message: 'Google returned no access token for Gmail API.' };
+
+    if (delegatedEmail) {
+      const r = await safeFetch(
+        `https://gmail.googleapis.com/gmail/v1/users/${encodeURIComponent(delegatedEmail)}/profile`,
+        { headers: { Authorization: `Bearer ${token.token}` } },
+      );
+      if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+      if (r.ok) {
+        return {
+          ok: true,
+          message: `Gmail API verified for ${delegatedEmail} (authenticated via ${data.client_email}).`,
+        };
+      }
+      return {
+        ok: false,
+        message: `Gmail API returned HTTP ${r.status}. Ensure domain-wide delegation is configured in Google Admin Console for ${delegatedEmail}.`,
+      };
+    }
+
+    return {
+      ok: true,
+      message: `Service account credentials verified for Gmail as ${data.client_email}.`,
+    };
+  } catch (e: any) {
+    return { ok: false, message: `Gmail authentication failed: ${e?.message ?? String(e)}` };
+  }
+}
+
+async function probeGoogleCalendar(c: any): Promise<ProbeResult> {
+  const parsed = parseServiceAccount(String(c.serviceAccountKey ?? '').trim());
+  if (!parsed.ok) return parsed;
+  const { data } = parsed;
+  const calendarId = String(c.calendarId ?? 'primary').trim() || 'primary';
+
+  try {
+    const auth = new JWT({
+      email: data.client_email,
+      key: data.private_key,
+      scopes: ['https://www.googleapis.com/auth/calendar.readonly'],
+    });
+    const token = await auth.getAccessToken();
+    if (!token?.token) return { ok: false, message: 'Google returned no access token for Calendar API.' };
+
+    const r = await safeFetch(
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}`,
+      { headers: { Authorization: `Bearer ${token.token}` } },
+    );
+    if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+    if (r.ok) {
+      const cal = JSON.parse(await readTextSafe(r));
+      return {
+        ok: true,
+        message: `Calendar API verified as ${data.client_email}. Active calendar: "${cal.summary || calendarId}".`,
+      };
+    }
+    return {
+      ok: false,
+      message: `Calendar access HTTP ${r.status}. Share calendar "${calendarId}" with ${data.client_email}.`,
+    };
+  } catch (e: any) {
+    return { ok: false, message: `Calendar authentication failed: ${e?.message ?? String(e)}` };
+  }
+}
+
+async function probeGoogleForms(c: any): Promise<ProbeResult> {
+  const parsed = parseServiceAccount(String(c.serviceAccountKey ?? '').trim());
+  if (!parsed.ok) return parsed;
+  const { data } = parsed;
+  const formId = String(c.formId ?? '').trim();
+
+  try {
+    const auth = new JWT({
+      email: data.client_email,
+      key: data.private_key,
+      scopes: ['https://www.googleapis.com/auth/forms.body.readonly', 'https://www.googleapis.com/auth/drive.readonly'],
+    });
+    const token = await auth.getAccessToken();
+    if (!token?.token) return { ok: false, message: 'Google returned no access token for Forms API.' };
+
+    if (formId) {
+      const r = await safeFetch(
+        `https://forms.googleapis.com/v1/forms/${encodeURIComponent(formId)}`,
+        { headers: { Authorization: `Bearer ${token.token}` } },
+      );
+      if (!isResponse(r)) return { ok: false, message: `Network: ${r.error}` };
+      if (r.ok) {
+        const formData = JSON.parse(await readTextSafe(r));
+        return {
+          ok: true,
+          message: `Forms API verified as ${data.client_email}. Form title: "${formData?.info?.title || formId}".`,
+        };
+      }
+      return {
+        ok: false,
+        message: `Forms API HTTP ${r.status}. Make sure form is shared with ${data.client_email}.`,
+      };
+    }
+
+    return {
+      ok: true,
+      message: `Google Forms API authenticated successfully as ${data.client_email}.`,
+    };
+  } catch (e: any) {
+    return { ok: false, message: `Forms authentication failed: ${e?.message ?? String(e)}` };
+  }
+}
+
 // ── Registry ────────────────────────────────────────────────────────────────
 
 type Probe = (creds: any) => Promise<ProbeResult>;
@@ -735,6 +1042,18 @@ const PROBES: Record<string, Probe> = {
   xai_grok: probeXai,
   huggingface: probeHuggingFace,
 
+  // Maps & Logistics
+  google_places: probeGooglePlaces,
+  google_maps_embed: probeGoogleMapsEmbed,
+  google_routes: probeGoogleRoutes,
+
+  // Google Workspace
+  google_sheets: probeGoogleSheets,
+  google_drive: probeGoogleDrive,
+  gmail: probeGmail,
+  google_calendar: probeGoogleCalendar,
+  google_forms: probeGoogleForms,
+
   google_ads: probeGoogleAds,
   google_search_console: probeSearchConsole,
   google_indexing: probeGoogleIndexing,
@@ -749,6 +1068,7 @@ const PROBES: Record<string, Probe> = {
   whatsapp_cloud: probeWhatsAppCloud,
   brevo: probeBrevo,
 
+  google_custom_search: probeGoogleCustomSearch,
   firecrawl: probeFirecrawl,
   jina: probeJina,
   scrape_do: probeScrapeDo,

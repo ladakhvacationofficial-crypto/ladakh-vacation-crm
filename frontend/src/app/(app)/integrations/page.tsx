@@ -32,24 +32,28 @@ import { relativeDate } from '@/lib/format';
  * the catalog of providers not yet added.
  */
 
-type Tab = 'PAYMENTS' | 'AI' | 'ADS' | 'ANALYTICS' | 'SOCIAL' | 'SCRAPING';
+type Tab = 'PAYMENTS' | 'AI' | 'MAPS' | 'WORKSPACE' | 'SCRAPING' | 'ANALYTICS' | 'SOCIAL' | 'ADS';
 
 const TAB_LABELS: Record<Tab, string> = {
   PAYMENTS: 'Payments',
   AI: 'AI models',
-  ADS: 'Ads platforms',
+  MAPS: 'Maps & Logistics',
+  WORKSPACE: 'Google Workspace',
+  SCRAPING: 'Web scrapers & Intel',
   ANALYTICS: 'Search & analytics',
   SOCIAL: 'Social media',
-  SCRAPING: 'Web scrapers & Intel',
+  ADS: 'Ads platforms',
 };
 
 const TAB_CATEGORIES: Record<Tab, IntegrationCategory[]> = {
   PAYMENTS: ['PAYMENT_DOMESTIC', 'PAYMENT_INTERNATIONAL'],
   AI: ['AI'],
-  ADS: ['ADS'],
+  MAPS: ['MAPS'],
+  WORKSPACE: ['WORKSPACE'],
+  SCRAPING: ['SCRAPING'],
   ANALYTICS: ['ANALYTICS'],
   SOCIAL: ['SOCIAL'],
-  SCRAPING: ['SCRAPING'],
+  ADS: ['ADS'],
 };
 
 export default function IntegrationsPage() {
@@ -68,6 +72,10 @@ export default function IntegrationsPage() {
       setTab('ANALYTICS');
     } else if (rawTab === 'SCRAPING' || rawTab === 'SCRAPER' || rawTab === 'CRAWLER') {
       setTab('SCRAPING');
+    } else if (rawTab === 'MAPS' || rawTab === 'MAP' || rawTab === 'ROUTES' || rawTab === 'PLACES') {
+      setTab('MAPS');
+    } else if (rawTab === 'WORKSPACE' || rawTab === 'SHEETS' || rawTab === 'DRIVE' || rawTab === 'GMAIL') {
+      setTab('WORKSPACE');
     } else if (rawTab in TAB_LABELS) {
       setTab(rawTab as Tab);
     }

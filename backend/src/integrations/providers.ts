@@ -132,9 +132,15 @@ const ai: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'google_gemini', label: 'Google Gemini', category: 'AI',
+    id: 'google_gemini',
+    label: 'Google Gemini (Free Tier / AI Studio)',
+    category: 'AI',
+    logo: '✨',
     docsUrl: 'https://aistudio.google.com/app/apikey',
-    fields: [{ key: 'apiKey', label: 'API Key', type: 'password', required: true }],
+    fields: [
+      { key: 'apiKey', label: 'Gemini API Key', type: 'password', required: true, placeholder: 'AIzaSy...', help: 'Free API key from Google AI Studio. 100% free tier: 15 RPM and 1,000,000 tokens/min with no credit card requirement.' },
+      { key: 'model', label: 'Model Version', type: 'select', options: ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro', 'gemini-1.5-flash'], help: 'Gemini 2.5 Flash is recommended for ultra-fast, zero-cost intelligence parsing.' },
+    ],
     hasTest: true,
   },
   {
@@ -425,12 +431,228 @@ const scraping: ProviderSpec[] = [
     ],
     hasTest: true,
   },
+  {
+    id: 'google_custom_search',
+    label: 'Google Custom Search JSON API (100 free queries/day)',
+    category: 'SCRAPING',
+    logo: '🔎',
+    docsUrl: 'https://developers.google.com/custom-search/v1/overview',
+    fields: [
+      {
+        key: 'apiKey',
+        label: 'Custom Search API Key',
+        type: 'password',
+        required: true,
+        placeholder: 'AIzaSy...',
+        help: 'Free tier provides 100 free search queries every single day for finding hotel websites, competitor tariffs, OTA listings, and Ladakh travel updates.',
+      },
+      {
+        key: 'searchEngineId',
+        label: 'Search Engine ID (cx)',
+        type: 'text',
+        required: true,
+        placeholder: '0175...:abcdef... or a1b2c3d4e5',
+        help: 'The Search Engine ID (cx) from programmablesearchengine.google.com configured to search the web.',
+      },
+    ],
+    hasTest: true,
+  },
+];
+
+// ── Maps, Places & Logistics ────────────────────────────────────────────────
+const maps: ProviderSpec[] = [
+  {
+    id: 'google_places',
+    label: 'Google Places API (New & Classic)',
+    category: 'MAPS',
+    logo: '📍',
+    docsUrl: 'https://developers.google.com/maps/documentation/places/web-service/overview',
+    fields: [
+      {
+        key: 'apiKey',
+        label: 'Google Places API Key',
+        type: 'password',
+        required: true,
+        placeholder: 'AIzaSy...',
+        help: 'API key with Places API enabled in Google Cloud Console. Used for high-res hotel photos, review extraction, GPS coordinates, address verification, and place IDs.',
+      },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'google_maps_embed',
+    label: 'Google Maps Embed API',
+    category: 'MAPS',
+    logo: '🗺️',
+    docsUrl: 'https://developers.google.com/maps/documentation/embed/get-started',
+    fields: [
+      {
+        key: 'apiKey',
+        label: 'Google Maps Embed API Key',
+        type: 'password',
+        required: true,
+        placeholder: 'AIzaSy...',
+        help: '100% Free with unlimited embeds. Used for interactive location maps on Leh/Nubra/Pangong hotel landing pages and customer quote proposals.',
+      },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'google_routes',
+    label: 'Google Routes & Elevation API',
+    category: 'MAPS',
+    logo: '🏔️',
+    docsUrl: 'https://developers.google.com/maps/documentation/routes',
+    fields: [
+      {
+        key: 'apiKey',
+        label: 'Google Routes API Key',
+        type: 'password',
+        required: true,
+        placeholder: 'AIzaSy...',
+        help: 'Directions & Elevation API key for calculating real mountain driving durations, pass altitudes (Khardung La, Chang La), road status routes, and travel distance matrix.',
+      },
+    ],
+    hasTest: true,
+  },
+];
+
+// ── Google Workspace & Productivity ─────────────────────────────────────────
+const workspace: ProviderSpec[] = [
+  {
+    id: 'google_sheets',
+    label: 'Google Sheets API',
+    category: 'WORKSPACE',
+    logo: '📊',
+    docsUrl: 'https://developers.google.com/sheets/api',
+    fields: [
+      {
+        key: 'serviceAccountKey',
+        label: 'Service Account JSON Key',
+        type: 'textarea',
+        required: true,
+        placeholder: '{\n  "type": "service_account",\n  "client_email": "...",\n  "private_key": "..."\n}',
+        help: 'Google Cloud Service Account JSON key. Used for two-way sync of hotel tariff sheets, B2B net rates, taxi union price tables, and offline agent allocations.',
+      },
+      {
+        key: 'spreadsheetId',
+        label: 'Default Spreadsheet ID',
+        type: 'text',
+        placeholder: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+        help: 'Optional: Found in the Google Sheets URL between /d/ and /edit.',
+      },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'google_drive',
+    label: 'Google Drive API',
+    category: 'WORKSPACE',
+    logo: '📁',
+    docsUrl: 'https://developers.google.com/drive/api',
+    fields: [
+      {
+        key: 'serviceAccountKey',
+        label: 'Service Account JSON Key',
+        type: 'textarea',
+        required: true,
+        placeholder: '{\n  "type": "service_account",\n  "client_email": "...",\n  "private_key": "..."\n}',
+        help: 'Service Account JSON key. Used to store and archive tourist Inner Line Permits (ILP), passport copies, signed driver vouchers, and high-res photo assets.',
+      },
+      {
+        key: 'folderId',
+        label: 'Root Permits / Assets Folder ID',
+        type: 'text',
+        placeholder: '1a2b3c4d5e6f7g8h9i0j',
+        help: 'Optional: ID of the Google Drive folder shared with the Service Account client_email as Editor.',
+      },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'gmail',
+    label: 'Gmail API / Workspace Email',
+    category: 'WORKSPACE',
+    logo: '✉️',
+    docsUrl: 'https://developers.google.com/gmail/api',
+    fields: [
+      {
+        key: 'serviceAccountKey',
+        label: 'Service Account JSON Key',
+        type: 'textarea',
+        required: true,
+        placeholder: '{\n  "type": "service_account",\n  "client_email": "...",\n  "private_key": "..."\n}',
+        help: 'Service Account JSON key configured with domain-wide delegation or direct API access.',
+      },
+      {
+        key: 'delegatedEmail',
+        label: 'Sender / Delegated Email',
+        type: 'text',
+        required: true,
+        placeholder: 'info@ladakhvacation.in',
+        help: 'The Google Workspace inbox to send quotes, booking vouchers, and hotel confirmation emails from.',
+      },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'google_calendar',
+    label: 'Google Calendar API',
+    category: 'WORKSPACE',
+    logo: '📅',
+    docsUrl: 'https://developers.google.com/calendar/api',
+    fields: [
+      {
+        key: 'serviceAccountKey',
+        label: 'Service Account JSON Key',
+        type: 'textarea',
+        required: true,
+        placeholder: '{\n  "type": "service_account",\n  "client_email": "...",\n  "private_key": "..."\n}',
+        help: 'Service Account JSON key. Used to create tour departure events, track driver assignments, and notify operations of guest arrivals.',
+      },
+      {
+        key: 'calendarId',
+        label: 'Calendar ID',
+        type: 'text',
+        placeholder: 'primary or ops@ladakhvacation.in',
+        help: 'Calendar ID (defaults to "primary"). Remember to share the calendar with the Service Account email.',
+      },
+    ],
+    hasTest: true,
+  },
+  {
+    id: 'google_forms',
+    label: 'Google Forms API',
+    category: 'WORKSPACE',
+    logo: '📝',
+    docsUrl: 'https://developers.google.com/forms/api',
+    fields: [
+      {
+        key: 'serviceAccountKey',
+        label: 'Service Account JSON Key',
+        type: 'textarea',
+        required: true,
+        placeholder: '{\n  "type": "service_account",\n  "client_email": "...",\n  "private_key": "..."\n}',
+        help: 'Service Account JSON key. Used to automatically pull post-tour guest feedback, hotel ratings, and B2B travel agent inquiry responses into CRM leads.',
+      },
+      {
+        key: 'formId',
+        label: 'Feedback Form ID',
+        type: 'text',
+        placeholder: '1FAIpQLSc...',
+        help: 'Optional: Found in the Google Form edit URL.',
+      },
+    ],
+    hasTest: true,
+  },
 ];
 
 export const PROVIDERS: ProviderSpec[] = [
   ...paymentDomestic,
   ...paymentInternational,
   ...ai,
+  ...maps,
+  ...workspace,
   ...ads,
   ...analytics,
   ...social,

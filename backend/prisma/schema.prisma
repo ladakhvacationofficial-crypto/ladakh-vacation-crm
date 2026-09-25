@@ -1405,6 +1405,8 @@ enum IntegrationCategory {
   /// spends money; filed under ADS it was listed as an "Ads platform".
   ANALYTICS
   SCRAPING
+  MAPS
+  WORKSPACE
 }
 
 enum IntegrationTestStatus {

@@ -1,0 +1,3 @@
+-- AlterEnum
+ALTER TYPE "IntegrationCategory" ADD VALUE IF NOT EXISTS 'MAPS';
+ALTER TYPE "IntegrationCategory" ADD VALUE IF NOT EXISTS 'WORKSPACE';

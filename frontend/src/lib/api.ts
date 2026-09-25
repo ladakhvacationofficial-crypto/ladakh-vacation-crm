@@ -269,7 +269,9 @@ export type IntegrationCategory =
   | 'ADS'
   | 'SOCIAL'
   | 'ANALYTICS'
-  | 'SCRAPING';
+  | 'SCRAPING'
+  | 'MAPS'
+  | 'WORKSPACE';
 
 export type ScrapeDraftStatus = 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'MERGED';
 
