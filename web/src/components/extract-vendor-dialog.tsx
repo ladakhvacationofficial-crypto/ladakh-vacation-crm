@@ -28,6 +28,50 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
 
+  const isLadakhCity = ['Leh', 'Nubra', 'Pangong', 'Kargil', 'Zanskar'].includes(city);
+
+  const inferFromQuery = (q: string) => {
+    const val = q.toLowerCase();
+    let detectedCity = city;
+    let detectedType = propertyType;
+
+    if (/nubra|hunder|hundar|diskit|deskit|turtuk|sumur|panamik|kyagar|tegar/i.test(val)) {
+      detectedCity = 'Nubra';
+    } else if (/pangong|spangmik|lukung|tangtse|merak|man village/i.test(val)) {
+      detectedCity = 'Pangong';
+    } else if (/leh|sheynam|choglamsar|stok|thiksey|saboo|changspa/i.test(val)) {
+      detectedCity = 'Leh';
+    } else if (/srinagar|dal lake|nigeen/i.test(val)) {
+      detectedCity = 'Srinagar';
+    } else if (/zanskar|padum|rangdum/i.test(val)) {
+      detectedCity = 'Zanskar';
+    } else if (/kargil|drass/i.test(val)) {
+      detectedCity = 'Kargil';
+    }
+
+    if (/camp|tent|glamping|resort & camp/i.test(val)) {
+      detectedType = 'CAMP';
+    } else if (/houseboat|shikara/i.test(val)) {
+      detectedType = 'HOUSEBOAT';
+      detectedCity = 'Srinagar';
+    } else if (/hotel|resort|heritage/i.test(val)) {
+      detectedType = 'HOTEL';
+    }
+
+    if (['Leh', 'Nubra', 'Pangong', 'Kargil', 'Zanskar'].includes(detectedCity) && detectedType === 'HOUSEBOAT') {
+      detectedType = 'CAMP';
+    }
+
+    setCity(detectedCity);
+    setPropertyType(detectedType);
+  };
+
+  const applyPreset = (presetQuery: string, presetCity: string, presetType: string) => {
+    setKeywordQuery(presetQuery);
+    setCity(presetCity);
+    setPropertyType(presetType);
+  };
+
   const handleKeywordDiscovery = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!keywordQuery.trim()) return;
@@ -246,18 +290,55 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
           {mode === 'keyword' && (
             <form onSubmit={handleKeywordDiscovery} className="space-y-3">
               <div>
-                <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1">
-                  Destination Discovery Keyword *
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400">
+                    Destination Discovery Keyword *
+                  </label>
+                  <span className="text-[11px] text-ink-500">Auto-infers destination valley & type</span>
+                </div>
                 <Input
                   required
-                  placeholder="e.g. Srinagar houseboats, Nubra luxury camps, Pangong tents, Leh heritage hotels"
+                  placeholder="e.g. Nubra luxury camps, Pangong tents, Leh heritage hotels, Srinagar houseboats"
                   value={keywordQuery}
-                  onChange={(e) => setKeywordQuery(e.target.value)}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setKeywordQuery(val);
+                    inferFromQuery(val);
+                  }}
                 />
-                <p className="mt-1 text-[11px] text-ink-500">
-                  Searches via active free-tier pool (Firecrawl / Jina Search / scrape.do), discovers property sites, and runs the swarm extractor.
-                </p>
+                
+                {/* Quick Presets */}
+                <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] text-ink-500 font-medium">Quick Presets:</span>
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('Nubra luxury camps', 'Nubra', 'CAMP')}
+                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                  >
+                    🏔️ Nubra Camps
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('Pangong lake camps', 'Pangong', 'CAMP')}
+                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                  >
+                    🌊 Pangong Tents
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('Leh heritage hotels', 'Leh', 'HOTEL')}
+                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                  >
+                    🏰 Leh Hotels
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyPreset('Dal Lake luxury houseboats', 'Srinagar', 'HOUSEBOAT')}
+                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                  >
+                    🛶 Srinagar Houseboats
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -265,12 +346,21 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1">
                     Destination City
                   </label>
-                  <Select value={city} onChange={(e) => setCity(e.target.value)}>
+                  <Select
+                    value={city}
+                    onChange={(e) => {
+                      const newCity = e.target.value;
+                      setCity(newCity);
+                      if (['Leh', 'Nubra', 'Pangong', 'Kargil', 'Zanskar'].includes(newCity) && propertyType === 'HOUSEBOAT') {
+                        setPropertyType('CAMP');
+                      }
+                    }}
+                  >
                     <option value="">Auto-detect</option>
-                    <option value="Srinagar">Srinagar</option>
-                    <option value="Leh">Leh</option>
                     <option value="Nubra">Nubra Valley</option>
                     <option value="Pangong">Pangong Lake</option>
+                    <option value="Leh">Leh</option>
+                    <option value="Srinagar">Srinagar</option>
                     <option value="Kargil">Kargil</option>
                     <option value="Zanskar">Zanskar</option>
                     <option value="Gulmarg">Gulmarg</option>
@@ -286,7 +376,9 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <Select value={propertyType} onChange={(e) => setPropertyType(e.target.value)}>
                     <option value="HOTEL">Hotel / Resort</option>
                     <option value="CAMP">Camp / Luxury Tents</option>
-                    <option value="HOUSEBOAT">Houseboat (Dal/Nigeen)</option>
+                    <option value="HOUSEBOAT" disabled={isLadakhCity}>
+                      {isLadakhCity ? 'Houseboat (Srinagar only)' : 'Houseboat (Dal/Nigeen)'}
+                    </option>
                   </Select>
                 </div>
 
@@ -340,12 +432,21 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1">
                     Destination City
                   </label>
-                  <Select value={city} onChange={(e) => setCity(e.target.value)}>
+                  <Select
+                    value={city}
+                    onChange={(e) => {
+                      const newCity = e.target.value;
+                      setCity(newCity);
+                      if (['Leh', 'Nubra', 'Pangong', 'Kargil', 'Zanskar'].includes(newCity) && propertyType === 'HOUSEBOAT') {
+                        setPropertyType('CAMP');
+                      }
+                    }}
+                  >
                     <option value="">Auto-detect</option>
-                    <option value="Srinagar">Srinagar</option>
-                    <option value="Leh">Leh</option>
                     <option value="Nubra">Nubra Valley</option>
                     <option value="Pangong">Pangong Lake</option>
+                    <option value="Leh">Leh</option>
+                    <option value="Srinagar">Srinagar</option>
                     <option value="Kargil">Kargil</option>
                     <option value="Zanskar">Zanskar</option>
                     <option value="Gulmarg">Gulmarg</option>
@@ -361,7 +462,9 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <Select value={propertyType} onChange={(e) => setPropertyType(e.target.value)}>
                     <option value="HOTEL">Hotel / Resort</option>
                     <option value="CAMP">Camp / Luxury Tents</option>
-                    <option value="HOUSEBOAT">Houseboat (Dal/Nigeen)</option>
+                    <option value="HOUSEBOAT" disabled={isLadakhCity}>
+                      {isLadakhCity ? 'Houseboat (Srinagar only)' : 'Houseboat (Dal/Nigeen)'}
+                    </option>
                   </Select>
                 </div>
 
@@ -419,12 +522,21 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1">
                     Destination City Hint
                   </label>
-                  <Select value={city} onChange={(e) => setCity(e.target.value)}>
+                  <Select
+                    value={city}
+                    onChange={(e) => {
+                      const newCity = e.target.value;
+                      setCity(newCity);
+                      if (['Leh', 'Nubra', 'Pangong', 'Kargil', 'Zanskar'].includes(newCity) && propertyType === 'HOUSEBOAT') {
+                        setPropertyType('CAMP');
+                      }
+                    }}
+                  >
                     <option value="">Auto-detect</option>
-                    <option value="Srinagar">Srinagar</option>
-                    <option value="Leh">Leh</option>
                     <option value="Nubra">Nubra Valley</option>
                     <option value="Pangong">Pangong Lake</option>
+                    <option value="Leh">Leh</option>
+                    <option value="Srinagar">Srinagar</option>
                   </Select>
                 </div>
 
@@ -435,7 +547,9 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <Select value={propertyType} onChange={(e) => setPropertyType(e.target.value)}>
                     <option value="HOTEL">Hotel / Resort</option>
                     <option value="CAMP">Camp / Luxury Tents</option>
-                    <option value="HOUSEBOAT">Houseboat</option>
+                    <option value="HOUSEBOAT" disabled={isLadakhCity}>
+                      {isLadakhCity ? 'Houseboat (Srinagar only)' : 'Houseboat'}
+                    </option>
                   </Select>
                 </div>
               </div>

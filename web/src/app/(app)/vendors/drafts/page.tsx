@@ -244,6 +244,16 @@ export default function VendorDraftsPage() {
                       <span className="text-[15px] font-semibold text-ink-100">{draft.name}</span>
                       <Chip className="bg-ink-800 text-ink-300">{draft.propertyType}</Chip>
                       {draft.city && <Chip className="border-ink-700 text-ink-400">{draft.city}</Chip>}
+                      {(draft.rawPayload as any)?.settlementInfo?.settlement && (
+                        <Chip className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                          📍 {(draft.rawPayload as any).settlementInfo.settlement}
+                        </Chip>
+                      )}
+                      {(draft.rawPayload as any)?.settlementInfo?.altitudeMeters && (
+                        <span className="text-[11px] text-ink-500 font-mono">
+                          {(draft.rawPayload as any).settlementInfo.altitudeMeters}m
+                        </span>
+                      )}
                       <Chip className="border-sky-500/30 bg-sky-500/10 text-sky-400">
                         via {draft.sourceProvider}
                       </Chip>

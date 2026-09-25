@@ -330,12 +330,13 @@ export class VendorsService {
     const rates = await this.prisma.vendorRate.findMany({
       where: {
         isActive: true,
+        netRate: { gt: 0 },
         ...this.validOn(on),
         ...(params.season ? { season: params.season } : {}),
         ...(params.variant
           ? { variant: { contains: params.variant, mode: 'insensitive' } }
           : {}),
-        ...(params.maxNet ? { netRate: { lte: params.maxNet } } : {}),
+        ...(params.maxNet ? { netRate: { lte: params.maxNet, gt: 0 } } : {}),
         vendor: {
           isActive: true,
           ...(params.city
@@ -364,6 +365,7 @@ export class VendorsService {
       this.prisma.vendorRate.findFirst({
         where: {
           isActive: true,
+          netRate: { gt: 0 },
           vendor: { type: { in: ['HOTEL', 'CAMP', 'HOUSEBOAT'] }, isActive: true },
           ...(season ? { season } : {}),
         },
@@ -373,6 +375,7 @@ export class VendorsService {
       this.prisma.vendorRate.findFirst({
         where: {
           isActive: true,
+          netRate: { gt: 0 },
           vendor: { type: 'TRANSPORT', isActive: true },
           ...(season ? { season } : {}),
         },

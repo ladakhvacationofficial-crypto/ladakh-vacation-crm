@@ -31,6 +31,10 @@ export interface ExtractedPropertyResult {
   reportedAmenities: string[];
   rawPayload: Record<string, unknown>;
   warnings?: string[];
+  matchedSettlement?: string | null;
+  matchedValley?: string | null;
+  altitudeMeters?: number | null;
+  confidence?: number;
 }
 
 export interface UrlQualificationResult {
@@ -154,8 +158,436 @@ export function isQualifiedPropertyUrl(rawUrl: string): UrlQualificationResult {
     }
   }
 
+  // 5. Tour itineraries, package bookings, car rental, blog articles
+  if (
+    /\/(?:tour|tours|package|packages|itinerary|itineraries|package-tours|travel-guide|sightseeing|places-to-visit|blog|blogs|articles|trips)\//i.test(
+      pathname,
+    ) ||
+    /-(?:tour|tours|package|packages|itinerary|trips)-in-/i.test(pathname)
+  ) {
+    return { qualified: false, reason: `Tour package or blog article URL: ${pathname}` };
+  }
+
   // Direct hotel / camp / houseboat website!
   return { qualified: true, domainType: 'direct_property' };
+}
+
+// ── Ladakh Settlement Gazetteer & Valley Geography ────────────────────────────
+
+export interface SettlementEntry {
+  settlement: string;
+  valley: 'Nubra' | 'Pangong' | 'Leh' | 'Changthang' | 'Zanskar' | 'Kargil' | 'Sham Valley' | 'Srinagar';
+  canonicalCity: string;
+  keywords: string[];
+  defaultPropertyType?: VendorType;
+  altitudeM?: number;
+}
+
+export const LADAKH_SETTLEMENT_GAZETTEER: SettlementEntry[] = [
+  // ── Nubra Valley (North of Khardung La, Shayok & Siachen Rivers) ──
+  {
+    settlement: 'Hunder',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['hunder', 'hundar', 'hunder sand dunes', 'hundur', 'double hump camel'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 3048,
+  },
+  {
+    settlement: 'Diskit',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['diskit', 'deskit', 'diskit monastery', 'diskit gompa'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3144,
+  },
+  {
+    settlement: 'Sumur',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['sumur', 'sumoor', 'samstanling'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 3096,
+  },
+  {
+    settlement: 'Panamik',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['panamik', 'panamick', 'panamik hot springs'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3183,
+  },
+  {
+    settlement: 'Turtuk',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['turtuk', 'tyakshi', 'thang', 'balti village'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 2800,
+  },
+  {
+    settlement: 'Kyagar & Tegar',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['kyagar', 'tegar', 'tiger village'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 3100,
+  },
+  {
+    settlement: 'Tirith & Pinchimik',
+    valley: 'Nubra',
+    canonicalCity: 'Nubra',
+    keywords: ['tirith', 'pinchimik', 'warshi', 'bogdang', 'baqdang'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 3100,
+  },
+
+  // ── Pangong Tso & Changthang North (East of Chang La) ──
+  {
+    settlement: 'Spangmik',
+    valley: 'Pangong',
+    canonicalCity: 'Pangong',
+    keywords: ['spangmik', 'spangmic', 'pangong lake shore', 'pangong tso shore'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 4250,
+  },
+  {
+    settlement: 'Lukung',
+    valley: 'Pangong',
+    canonicalCity: 'Pangong',
+    keywords: ['lukung', 'lukun', 'pangong entrance'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 4250,
+  },
+  {
+    settlement: 'Man Village',
+    valley: 'Pangong',
+    canonicalCity: 'Pangong',
+    keywords: ['man village', 'maan village', 'man pangong'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 4260,
+  },
+  {
+    settlement: 'Merak',
+    valley: 'Pangong',
+    canonicalCity: 'Pangong',
+    keywords: ['merak', 'merak village'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 4270,
+  },
+  {
+    settlement: 'Tangtse & Durbuk',
+    valley: 'Pangong',
+    canonicalCity: 'Pangong',
+    keywords: ['tangtse', 'tangste', 'durbuk', 'darbuk'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3950,
+  },
+  {
+    settlement: 'Chushul & Tsaga',
+    valley: 'Pangong',
+    canonicalCity: 'Pangong',
+    keywords: ['chushul', 'tsaga', 'tsaga la'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 4350,
+  },
+
+  // ── High Changthang (Tso Moriri, Hanle, Chumathang) ──
+  {
+    settlement: 'Hanle',
+    valley: 'Changthang',
+    canonicalCity: 'Leh',
+    keywords: ['hanle', 'anlay', 'hanley', 'dark sky reserve', 'astronomical observatory'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 4500,
+  },
+  {
+    settlement: 'Korzok (Tso Moriri)',
+    valley: 'Changthang',
+    canonicalCity: 'Leh',
+    keywords: ['korzok', 'karzok', 'tso moriri', 'tsomoriri'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 4530,
+  },
+  {
+    settlement: 'Chumathang & Nyoma',
+    valley: 'Changthang',
+    canonicalCity: 'Leh',
+    keywords: ['chumathang', 'nyoma', 'mahe', 'puga'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 4050,
+  },
+
+  // ── Zanskar (Across Pensi La / Shingo La) ──
+  {
+    settlement: 'Padum',
+    valley: 'Zanskar',
+    canonicalCity: 'Zanskar',
+    keywords: ['padum', 'padam', 'zanskar valley', 'karsha', 'zangla', 'stongde', 'sani'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3669,
+  },
+  {
+    settlement: 'Rangdum',
+    valley: 'Zanskar',
+    canonicalCity: 'Zanskar',
+    keywords: ['rangdum', 'rangdum gompa', 'suru zanskar'],
+    defaultPropertyType: VendorType.CAMP,
+    altitudeM: 3657,
+  },
+
+  // ── Kargil & Suru Valley ──
+  {
+    settlement: 'Kargil Town',
+    valley: 'Kargil',
+    canonicalCity: 'Kargil',
+    keywords: ['kargil', 'baroo', 'bimbat', 'suru valley', 'sankoo', 'panikhar', 'mulbekh'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 2676,
+  },
+  {
+    settlement: 'Drass',
+    valley: 'Kargil',
+    canonicalCity: 'Kargil',
+    keywords: ['drass', 'dras', 'drass war memorial'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3280,
+  },
+
+  // ── Sham Valley (Lower Ladakh / Indus West) ──
+  {
+    settlement: 'Sham Valley (Alchi / Likir / Uleytokpo / Lamayuru)',
+    valley: 'Sham Valley',
+    canonicalCity: 'Leh',
+    keywords: ['alchi', 'likir', 'lamayuru', 'uleytokpo', 'uley tokpo', 'tingmosgang', 'nimmu', 'nimo', 'basgo', 'khaltse', 'nurla', 'skurbuchan'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3100,
+  },
+
+  // ── Leh Town & Upper Indus (Acclimatization Hubs) ──
+  {
+    settlement: 'Leh Town & Environs',
+    valley: 'Leh',
+    canonicalCity: 'Leh',
+    keywords: ['leh town', 'sheynam', 'fort road', 'choglamsar', 'saboo', 'shey', 'thiksey', 'stok', 'phyang', 'spituk', 'chushot', 'sankar', 'changspa', 'skara', 'upper karzoo'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 3524,
+  },
+
+  // ── Kashmir Valley (Srinagar, Gulmarg, Pahalgam, Sonamarg) ──
+  {
+    settlement: 'Srinagar (Dal Lake / Nigeen Lake)',
+    valley: 'Srinagar',
+    canonicalCity: 'Srinagar',
+    keywords: ['dal lake', 'nigeen lake', 'boulevard road', 'srinagar', 'shikara', 'houseboat ghat', 'rajbagh', 'lal chowk', 'dalgate'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 1585,
+  },
+  {
+    settlement: 'Gulmarg',
+    valley: 'Srinagar',
+    canonicalCity: 'Srinagar',
+    keywords: ['gulmarg', 'tangmarg'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 2650,
+  },
+  {
+    settlement: 'Pahalgam',
+    valley: 'Srinagar',
+    canonicalCity: 'Srinagar',
+    keywords: ['pahalgam', 'aru valley', 'betaab valley', 'baisaran'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 2130,
+  },
+  {
+    settlement: 'Sonamarg',
+    valley: 'Srinagar',
+    canonicalCity: 'Srinagar',
+    keywords: ['sonamarg', 'sonmarg', 'thajiwas'],
+    defaultPropertyType: VendorType.HOTEL,
+    altitudeM: 2740,
+  },
+];
+
+export function resolveSettlementAndValley(
+  text: string,
+  url: string,
+  title?: string,
+  optionsCity?: string,
+): {
+  settlement: string | null;
+  valley: string | null;
+  canonicalCity: string;
+  confidence: number;
+  altitudeMeters?: number;
+  defaultPropertyType?: VendorType;
+} {
+  const normText = (text || '').toLowerCase();
+  const normUrl = (url || '').toLowerCase();
+  const normTitle = (title || '').toLowerCase();
+
+  // Strip transit / distance references to Leh so "120 km from Leh airport" doesn't falsely vote Leh
+  const sanitizedText = normText.replace(
+    /(?:\d+\s*(?:km|kms|hours?|hrs?)\s*(?:from|to|away from)\s*leh|drive\s*(?:from|to)\s*leh|airport\s*(?:in|at)?\s*leh|leh\s*(?:airport|highway|manali|srinagar)|reach\s*leh|over\s*khardung\s*la\s*from\s*leh)/gi,
+    ' ',
+  );
+
+  let bestEntry: SettlementEntry | null = null;
+  let bestScore = 0;
+
+  for (const entry of LADAKH_SETTLEMENT_GAZETTEER) {
+    let score = 0;
+
+    for (const kw of entry.keywords) {
+      const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const wordRegex = new RegExp(`\\b${escaped}\\b`, 'i');
+
+      // 1. URL match
+      if (normUrl.includes(kw.replace(/\s+/g, '-')) || normUrl.includes(kw.replace(/\s+/g, ''))) {
+        score += 45;
+      }
+
+      // 2. Title / Heading match
+      if (wordRegex.test(normTitle)) {
+        score += 35;
+      }
+
+      // 3. Body text match
+      const textMatches = sanitizedText.match(new RegExp(`\\b${escaped}\\b`, 'gi'));
+      if (textMatches && textMatches.length > 0) {
+        score += Math.min(textMatches.length * 10, 30);
+      }
+    }
+
+    // Direct Valley name bonus
+    if (entry.valley !== 'Leh' && new RegExp(`\\b${entry.valley.toLowerCase()}\\b`, 'i').test(sanitizedText + ' ' + normTitle)) {
+      score += 15;
+    }
+
+    // Match with user's optional city hint
+    if (optionsCity && entry.canonicalCity.toLowerCase() === optionsCity.toLowerCase()) {
+      score += 25;
+    }
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestEntry = entry;
+    }
+  }
+
+  // If a high-confidence outer settlement was detected (Hunder, Spangmik, Turtuk, etc.)
+  if (bestEntry && bestScore >= 20) {
+    const confidence = Math.min(1, Math.round((bestScore / 80) * 100) / 100);
+    return {
+      settlement: bestEntry.settlement,
+      valley: bestEntry.valley,
+      canonicalCity: bestEntry.canonicalCity,
+      confidence: Math.max(0.6, confidence),
+      altitudeMeters: bestEntry.altitudeM,
+      defaultPropertyType: bestEntry.defaultPropertyType,
+    };
+  }
+
+  // Fallbacks:
+  if (optionsCity) {
+    const match = LADAKH_SETTLEMENT_GAZETTEER.find(
+      (e) => e.canonicalCity.toLowerCase() === optionsCity.toLowerCase(),
+    );
+    return {
+      settlement: match?.settlement ?? null,
+      valley: match?.valley ?? optionsCity,
+      canonicalCity: optionsCity,
+      confidence: 0.5,
+      altitudeMeters: match?.altitudeM,
+      defaultPropertyType: match?.defaultPropertyType,
+    };
+  }
+
+  // Check generic presence of Leh vs Srinagar
+  if (/\b(?:srinagar|dal lake|nigeen)\b/i.test(normText + ' ' + normUrl)) {
+    return {
+      settlement: 'Srinagar (Dal Lake / Nigeen Lake)',
+      valley: 'Srinagar',
+      canonicalCity: 'Srinagar',
+      confidence: 0.5,
+      altitudeMeters: 1585,
+    };
+  }
+
+  if (/\b(?:nubra|hunder|diskit)\b/i.test(normText + ' ' + normUrl)) {
+    return {
+      settlement: 'Hunder',
+      valley: 'Nubra',
+      canonicalCity: 'Nubra',
+      confidence: 0.6,
+      altitudeMeters: 3048,
+      defaultPropertyType: VendorType.CAMP,
+    };
+  }
+
+  if (/\b(?:pangong|spangmik)\b/i.test(normText + ' ' + normUrl)) {
+    return {
+      settlement: 'Spangmik',
+      valley: 'Pangong',
+      canonicalCity: 'Pangong',
+      confidence: 0.6,
+      altitudeMeters: 4250,
+      defaultPropertyType: VendorType.CAMP,
+    };
+  }
+
+  // Default to Leh Town
+  return {
+    settlement: 'Leh Town & Environs',
+    valley: 'Leh',
+    canonicalCity: 'Leh',
+    confidence: 0.4,
+    altitudeMeters: 3524,
+    defaultPropertyType: VendorType.HOTEL,
+  };
+}
+
+export function resolvePropertyType(
+  name: string,
+  text: string,
+  url: string,
+  resolvedCity: string,
+  optionsPropertyType?: string,
+): VendorType {
+  const normName = (name || '').toLowerCase();
+  const normUrl = (url || '').toLowerCase();
+  const normText = (text || '').toLowerCase();
+
+  // If user explicitly provided a property type, respect it unless it is HOUSEBOAT in Ladakh
+  if (optionsPropertyType && Object.values(VendorType).includes(optionsPropertyType as VendorType)) {
+    const chosen = optionsPropertyType as VendorType;
+    if (chosen === VendorType.HOUSEBOAT && resolvedCity !== 'Srinagar') {
+      // Prohibited: No houseboats in Ladakh!
+      return /camp|tent|glamping/i.test(normName) ? VendorType.CAMP : VendorType.HOTEL;
+    }
+    return chosen;
+  }
+
+  // 1. Camps & Luxury Tents (checked BEFORE houseboat!)
+  if (
+    /camp|tents|glamping|campsite|resort & camp|luxury tent/i.test(normName) ||
+    /camp|glamping/i.test(normUrl) ||
+    (resolvedCity === 'Pangong' && /tent|camp/i.test(normText)) ||
+    (resolvedCity === 'Nubra' && /sand dunes|luxury camp|tents/i.test(normText) && !/grand hotel/i.test(normName))
+  ) {
+    return VendorType.CAMP;
+  }
+
+  // 2. Houseboats: Strictly restricted to Srinagar and explicitly in name/url
+  if (
+    resolvedCity === 'Srinagar' &&
+    (/houseboat|shikara/i.test(normName) || /houseboat/i.test(normUrl))
+  ) {
+    return VendorType.HOUSEBOAT;
+  }
+
+  // Default
+  return VendorType.HOTEL;
 }
 
 @Injectable()
@@ -295,6 +727,26 @@ export class ScraperPoolService {
     const discoveredUrls: string[] = [];
     const activeScrapers = await this.integrations.listActiveScrapers();
 
+    const isLadakhQuery =
+      /nubra|pangong|leh|zanskar|kargil|ladakh|hunder|diskit|spangmik|sham valley|changthang/i.test(
+        `${query} ${options?.city || ''}`,
+      );
+    const isHouseboatQuery = /houseboat|shikara/i.test(query);
+
+    // Negative operators: exclude houseboats and Kashmir cross-promotions when querying Ladakh
+    const negativeOperators =
+      isLadakhQuery && !isHouseboatQuery
+        ? '-houseboat -houseboats -kashmir -srinagar'
+        : '';
+
+    const propertyTerms = isLadakhQuery
+      ? options?.propertyType === 'CAMP' || /camp/i.test(query)
+        ? 'camp OR resort OR "luxury tents"'
+        : 'hotel OR resort OR camp'
+      : isHouseboatQuery
+      ? 'houseboat OR shikara'
+      : 'hotel OR resort OR camp OR houseboat';
+
     // 1. Try Firecrawl search with negative operators & targeted query
     const firecrawl = activeScrapers.find((s) => s.provider === 'firecrawl');
     if (firecrawl) {
@@ -303,7 +755,7 @@ export class ScraperPoolService {
         const base = String(firecrawl.credentials?.baseUrl ?? 'https://api.firecrawl.dev').trim().replace(/\/+$/, '');
         
         // Primary query targeting direct hospitality properties
-        const primaryTarget = `${query} (resort OR camp OR hotel OR houseboat) "official website" OR "contact" OR "tariff" -site:facebook.com -site:instagram.com -site:youtube.com -site:pinterest.com -site:reddit.com -site:quora.com -site:expedia.com -site:travelocity.com -site:trivago.com -site:trip.com -site:hotels.com -site:cntraveller.in -site:justdial.com -inurl:search -inurl:login`;
+        const primaryTarget = `${query} (${propertyTerms}) "official website" OR "contact" OR "tariff" ${negativeOperators} -site:facebook.com -site:instagram.com -site:youtube.com -site:pinterest.com -site:reddit.com -site:quora.com -site:expedia.com -site:travelocity.com -site:trivago.com -site:trip.com -site:hotels.com -site:cntraveller.in -site:justdial.com -inurl:search -inurl:login -inurl:tours -inurl:packages -inurl:itinerary`.trim();
         
         const res = await fetch(`${base}/v1/search`, {
           method: 'POST',
@@ -316,6 +768,9 @@ export class ScraperPoolService {
           const items = data?.data || data?.results || [];
           for (const item of items) {
             if (item.url) {
+              if (isLadakhQuery && !isHouseboatQuery && /houseboat/i.test(item.url)) {
+                continue;
+              }
               const q = isQualifiedPropertyUrl(item.url);
               if (q.qualified && !discoveredUrls.includes(item.url)) {
                 discoveredUrls.push(item.url);
@@ -327,7 +782,7 @@ export class ScraperPoolService {
 
         // Secondary search if we still need more candidates: check deep review URLs
         if (discoveredUrls.length < limit) {
-          const secondaryTarget = `${query} site:tripadvisor.in/Hotel_Review OR site:makemytrip.com/hotels`;
+          const secondaryTarget = `${query} ${negativeOperators} site:tripadvisor.in/Hotel_Review OR site:makemytrip.com/hotels`.trim();
           const secRes = await fetch(`${base}/v1/search`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -338,6 +793,9 @@ export class ScraperPoolService {
             const items = secData?.data || secData?.results || [];
             for (const item of items) {
               if (item.url) {
+                if (isLadakhQuery && !isHouseboatQuery && /houseboat/i.test(item.url)) {
+                  continue;
+                }
                 const q = isQualifiedPropertyUrl(item.url);
                 if (q.qualified && !discoveredUrls.includes(item.url)) {
                   discoveredUrls.push(item.url);
@@ -360,13 +818,16 @@ export class ScraperPoolService {
         if (jina?.credentials?.apiKey) {
           headers['Authorization'] = `Bearer ${String(jina.credentials.apiKey).trim()}`;
         }
-        const jinaQuery = `${query} hotel camp houseboat contact`;
+        const jinaQuery = `${query} ${propertyTerms} contact ${negativeOperators}`.trim();
         const res = await fetch(`https://s.jina.ai/${encodeURIComponent(jinaQuery)}`, { headers });
         if (res.ok) {
           const markdown = await res.text();
           const matches = markdown.matchAll(/\[(?:[^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g);
           for (const m of matches) {
             const u = m[1];
+            if (isLadakhQuery && !isHouseboatQuery && /houseboat/i.test(u)) {
+              continue;
+            }
             const q = isQualifiedPropertyUrl(u);
             if (q.qualified && !discoveredUrls.includes(u)) {
               discoveredUrls.push(u);
@@ -502,7 +963,7 @@ export class ScraperPoolService {
         formats: ['markdown', 'extract'],
         extract: {
           prompt:
-            'Extract hotel, resort, camp or houseboat details into JSON: name, city, propertyType (HOTEL, CAMP, or HOUSEBOAT), phone, email, address, starRating (number 1-5), roomCount (total rooms), checkInTime (HH:MM), checkOutTime (HH:MM), roomCategories (array of objects with name, maxOccupancy, bedType, extraBedRate, childRate, mealPlans), seasonalFrom (YYYY-MM-DD or null), seasonalTo (YYYY-MM-DD or null), reportedAmenities (array of string tags like Wifi, Heater, Hot Water, etc.).',
+            'Extract single-property operational details into JSON: isSingleProperty (boolean: MUST be false if page describes multiple hotels, tour packages, or blog listicle), refusalReason (if isSingleProperty is false), name, settlement (e.g. Hunder, Diskit, Spangmik, Leh Town, Dal Lake), valley (Nubra, Pangong, Leh, Zanskar, Kargil, Srinagar), city (Leh, Nubra, Pangong, Srinagar, Kargil, Zanskar), propertyType (HOTEL, CAMP, or HOUSEBOAT - NOTE: houseboats exist ONLY in Srinagar; camps in Nubra/Pangong are CAMP), phone, email, address, starRating, roomCount, checkInTime, checkOutTime, roomCategories (array with name, maxOccupancy, bedType, extraBedRate, childRate, mealPlans), seasonalFrom, seasonalTo, reportedAmenities.',
         },
       }),
     });
@@ -515,6 +976,11 @@ export class ScraperPoolService {
     const payload: any = await response.json();
     const extractedData = payload?.data?.extract ?? payload?.extract ?? {};
     const markdown = payload?.data?.markdown ?? payload?.markdown ?? '';
+
+    // If structured extraction identified a multi-property listing or blog, refuse immediately
+    if (extractedData.isSingleProperty === false) {
+      throw new Error(`Refused: ${extractedData.refusalReason || 'Page describes a listicle or directory, not a single bookable property'}`);
+    }
 
     // If structured extraction was empty, parse from markdown; if both empty, failover to next provider
     if (!extractedData.name) {
@@ -691,10 +1157,18 @@ export class ScraperPoolService {
     if (aiIntegration) {
       try {
         const parsed = await this.extractWithAI(aiIntegration, textSample, url);
-        if (parsed && parsed.name) {
-          return this.normalizePropertyResult(parsed, url, provider, rawPayload, options);
+        if (parsed) {
+          if (parsed.isSingleProperty === false) {
+            throw new Error(`Refused: ${parsed.refusalReason || 'Disqualified multi-property listing or blog listicle'}`);
+          }
+          if (parsed.name) {
+            return this.normalizePropertyResult(parsed, url, provider, rawPayload, options);
+          }
         }
       } catch (err: any) {
+        if (err.message && err.message.startsWith('Refused:')) {
+          throw err;
+        }
         this.logger.warn(`AI extraction parsing failed (${err?.message}), falling back to heuristic regex parser`);
       }
     }
@@ -708,38 +1182,57 @@ export class ScraperPoolService {
     text: string,
     url: string,
   ): Promise<any> {
-    const prompt = `You are a hospitality intelligence parser for Ladakh and Kashmir tourism.
-Extract hotel, resort, camp or houseboat operational details from this webpage text.
+    const prompt = `You are a specialized hospitality intelligence parser for Ladakh and Kashmir tourism.
+Examine this webpage content and extract single-property operational details.
 Target URL: "${url}"
+
+CRITICAL QUALIFICATION RULES:
+1. "isSingleProperty": Set to TRUE only if this page describes ONE specific hotel, resort, luxury camp, or houseboat with its own specific rooms and contacts. Set to FALSE if this page is a listicle, directory ("Top 10 Camps in Nubra", "Best Hotels in Leh"), booking portal multi-property results page, tour package itinerary, travel blog, or multi-property portfolio.
+2. "refusalReason": If isSingleProperty is false, explain why (e.g. "Listicle of 10 hotels in Nubra", "Tour package itinerary").
+3. GEOGRAPHY: In Ladakh, properties are located in settlements such as:
+   - Nubra Valley: Hunder, Diskit, Sumur, Panamik, Turtuk, Kyagar, Tegar, Tirith. (Canonical city: "Nubra")
+   - Pangong Lake: Spangmik, Lukung, Man Village, Merak, Tangtse. (Canonical city: "Pangong")
+   - Changthang / Tso Moriri / Hanle: Hanle, Korzok, Chumathang, Nyoma. (Canonical city: "Leh")
+   - Zanskar: Padum, Karsha, Rangdum. (Canonical city: "Zanskar")
+   - Kargil / Suru: Kargil Town, Drass, Sankoo. (Canonical city: "Kargil")
+   - Sham Valley: Alchi, Likir, Lamayuru, Uleytokpo, Tingmosgang, Nimmu. (Canonical city: "Leh")
+   - Leh Valley: Leh Town, Sheynam, Choglamsar, Saboo, Shey, Thiksey, Stok. (Canonical city: "Leh")
+   - Kashmir: Srinagar (Dal Lake, Nigeen Lake), Gulmarg, Pahalgam, Sonamarg. (Canonical city: "Srinagar")
+   Note: Many properties in Nubra or Pangong say "120 km from Leh Airport" or "Drive from Leh". Do NOT classify these as Leh! Classify them by their actual settlement and valley.
+4. HOUSEBOATS: Houseboats ONLY exist in Srinagar (Dal Lake / Nigeen Lake). Under NO circumstances is a property in Nubra, Pangong, Leh, Zanskar, or Kargil a HOUSEBOAT. In Ladakh, tent/glamping accommodations are strictly "CAMP", and brick/mortar buildings are "HOTEL".
 
 Webpage Content:
 ${text}
 
 Return STRICTLY a JSON object with these keys:
 {
+  "isSingleProperty": boolean,
+  "refusalReason": string or null,
   "name": string (Property name),
-  "city": string ("Leh", "Nubra", "Pangong", "Srinagar", "Kargil", "Zanskar", "Gulmarg", "Pahalgam", "Sonamarg"),
+  "settlement": string or null (e.g. "Hunder", "Diskit", "Spangmik", "Leh Town", "Dal Lake"),
+  "valley": string or null ("Nubra", "Pangong", "Leh", "Changthang", "Zanskar", "Kargil", "Sham Valley", "Srinagar"),
+  "city": "Leh" | "Nubra" | "Pangong" | "Srinagar" | "Kargil" | "Zanskar",
   "propertyType": "HOTEL" | "CAMP" | "HOUSEBOAT",
-  "phone": string or null (Indian phone or mobile),
+  "phone": string or null,
   "email": string or null,
   "address": string or null,
   "starRating": number (1-5) or null,
-  "roomCount": number or null (total room capacity),
+  "roomCount": number or null,
   "checkInTime": string ("14:00") or null,
   "checkOutTime": string ("11:00") or null,
   "roomCategories": [
     {
-      "name": string ("Deluxe Room", "Super Deluxe", "Luxury Tent", "Royal Suite"),
-      "maxOccupancy": number (usually 2 or 3),
-      "bedType": string ("King", "Twin", "Double"),
+      "name": string,
+      "maxOccupancy": number,
+      "bedType": string,
       "extraBedRate": number or null,
       "childRate": number or null,
-      "mealPlans": string[] (["EP", "CP", "MAP", "AP"])
+      "mealPlans": string[]
     }
   ],
-  "seasonalFrom": string ("YYYY-MM-DD") or null (for seasonal camps in Nubra/Pangong),
+  "seasonalFrom": string ("YYYY-MM-DD") or null,
   "seasonalTo": string ("YYYY-MM-DD") or null,
-  "reportedAmenities": string[] (tags such as "Wi-Fi", "Oxygen Cylinder", "Electric Blanket", "Central Heating", "Campfire", "Power Backup", "Restaurant")
+  "reportedAmenities": string[]
 }
 Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operating parameters.`;
 
@@ -820,27 +1313,12 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
       name = titleMatch[1].trim().split(/[|\-–]/)[0].trim();
     }
 
-    // 2. City detection
-    let city = options?.city || null;
-    if (!city) {
-      const cities = ['Leh', 'Nubra', 'Pangong', 'Srinagar', 'Kargil', 'Zanskar', 'Gulmarg', 'Pahalgam', 'Sonamarg'];
-      for (const c of cities) {
-        if (new RegExp(`\\b${c}\\b`, 'i').test(text) || new RegExp(`\\b${c}\\b`, 'i').test(url)) {
-          city = c;
-          break;
-        }
-      }
-    }
+    // 2. City & Settlement Resolution via Ladakh Gazetteer
+    const geo = resolveSettlementAndValley(text, url, name, options?.city);
+    const city = geo.canonicalCity;
 
-    // 3. Property Type
-    let propertyType: VendorType = VendorType.HOTEL;
-    if (options?.propertyType && Object.values(VendorType).includes(options.propertyType as VendorType)) {
-      propertyType = options.propertyType as VendorType;
-    } else if (/houseboat/i.test(name) || /houseboat/i.test(text)) {
-      propertyType = VendorType.HOUSEBOAT;
-    } else if (/camp|tents|glamping/i.test(name) || /camp|luxury tent/i.test(text)) {
-      propertyType = VendorType.CAMP;
-    }
+    // 3. Property Type (enforces no houseboats in Ladakh)
+    const propertyType = resolvePropertyType(name, text, url, city, options?.propertyType);
 
     // 4. Contacts
     const phoneMatch = text.match(/(?:\+?91[\-\s]?)?[6-9]\d{9}|(?:01982|0194|01985)[\-\s]?\d{5,6}/);
@@ -920,6 +1398,10 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
       seasonalTo,
       reportedAmenities,
       rawPayload,
+      matchedSettlement: geo.settlement,
+      matchedValley: geo.valley,
+      altitudeMeters: geo.altitudeMeters || null,
+      confidence: geo.confidence,
     };
   }
 
@@ -988,13 +1470,36 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
       starRating = null;
     }
 
-    // 6. Property Type resolution
-    let pType: VendorType = VendorType.HOTEL;
-    const typeStr = String(raw.propertyType || options?.propertyType || '').toUpperCase();
-    if (typeStr === 'CAMP' || /camp|tents|glamping/i.test(cleanName)) pType = VendorType.CAMP;
-    else if (typeStr === 'HOUSEBOAT' || /houseboat/i.test(cleanName)) pType = VendorType.HOUSEBOAT;
+    // 6. City & Settlement Resolution via Ladakh Gazetteer
+    const geo = resolveSettlementAndValley(
+      `${cleanName} ${cleanAddress || ''} ${raw.address || ''} ${raw.city || ''} ${JSON.stringify(rawPayload || {})}`,
+      url,
+      cleanName,
+      options?.city || raw.city,
+    );
 
-    // 7. Room categories resolution
+    let resolvedCity = options?.city || raw.city || geo.canonicalCity;
+    if (resolvedCity && /nubra/i.test(resolvedCity)) resolvedCity = 'Nubra';
+    else if (resolvedCity && /leh/i.test(resolvedCity)) resolvedCity = 'Leh';
+    else if (resolvedCity && /srinagar/i.test(resolvedCity)) resolvedCity = 'Srinagar';
+    else if (resolvedCity && /pangong/i.test(resolvedCity)) resolvedCity = 'Pangong';
+    else if (resolvedCity && /zanskar/i.test(resolvedCity)) resolvedCity = 'Zanskar';
+    else if (resolvedCity && /kargil/i.test(resolvedCity)) resolvedCity = 'Kargil';
+
+    // 7. Property Type resolution (enforces no houseboats in Ladakh)
+    let pType: VendorType = resolvePropertyType(
+      cleanName,
+      `${JSON.stringify(raw)} ${JSON.stringify(rawPayload || {})}`,
+      url,
+      resolvedCity,
+      options?.propertyType || raw.propertyType,
+    );
+
+    if (pType === VendorType.HOUSEBOAT && resolvedCity !== 'Srinagar') {
+      pType = /camp|tent|glamping/i.test(cleanName) ? VendorType.CAMP : VendorType.HOTEL;
+    }
+
+    // 8. Room categories resolution
     const roomCats: ExtractedRoomCategory[] = Array.isArray(raw.roomCategories) && raw.roomCategories.length > 0
       ? raw.roomCategories.map((rc: any) => ({
           name: String(rc.name || 'Standard').trim(),
@@ -1014,7 +1519,7 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
           },
         ];
 
-    // 8. Seasonal windows for camps
+    // 9. Seasonal windows for camps
     let seasonalFrom: Date | null = null;
     let seasonalTo: Date | null = null;
     if (raw.seasonalFrom) {
@@ -1030,13 +1535,6 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
       seasonalFrom = new Date(`${curYear}-05-01T00:00:00.000Z`);
       seasonalTo = new Date(`${curYear}-10-15T00:00:00.000Z`);
     }
-
-    // 9. City resolution
-    let resolvedCity = options?.city || raw.city || null;
-    if (resolvedCity && /nubra/i.test(resolvedCity)) resolvedCity = 'Nubra';
-    else if (resolvedCity && /leh/i.test(resolvedCity)) resolvedCity = 'Leh';
-    else if (resolvedCity && /srinagar/i.test(resolvedCity)) resolvedCity = 'Srinagar';
-    else if (resolvedCity && /pangong/i.test(resolvedCity)) resolvedCity = 'Pangong';
 
     return {
       sourceProvider: provider,
@@ -1056,6 +1554,10 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
       seasonalTo,
       reportedAmenities: Array.isArray(raw.reportedAmenities) ? raw.reportedAmenities.map(String) : [],
       rawPayload,
+      matchedSettlement: raw.settlement || geo.settlement,
+      matchedValley: raw.valley || geo.valley,
+      altitudeMeters: geo.altitudeMeters || null,
+      confidence: geo.confidence,
     };
   }
 

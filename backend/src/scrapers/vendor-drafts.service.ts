@@ -106,6 +106,23 @@ export class VendorDraftsService {
       },
     });
 
+    const settlementLabel = d.matchedSettlement
+      ? `${d.matchedSettlement} (${d.matchedValley || d.city || 'Ladakh'})`
+      : `${d.city || 'Ladakh'}`;
+    const altitudeLabel = d.altitudeMeters ? ` · ${d.altitudeMeters}m` : '';
+    const confLabel = d.confidence ? ` · Confidence: ${Math.round(d.confidence * 100)}%` : '';
+    const autoNote = `Auto-qualified: ${settlementLabel}${altitudeLabel}${confLabel}`;
+
+    const rawPayloadWithSettlement = {
+      ...(typeof d.rawPayload === 'object' && d.rawPayload !== null ? d.rawPayload : {}),
+      settlementInfo: {
+        settlement: d.matchedSettlement ?? null,
+        valley: d.matchedValley ?? null,
+        altitudeMeters: d.altitudeMeters ?? null,
+        confidence: d.confidence ?? null,
+      },
+    };
+
     if (existing) {
       if (existing.status !== ScrapeDraftStatus.PENDING_REVIEW) {
         return existing;
@@ -134,7 +151,8 @@ export class VendorDraftsService {
             d.reportedAmenities && d.reportedAmenities.length > 0
               ? d.reportedAmenities
               : existing.reportedAmenities,
-          rawPayload: (d.rawPayload as any) ?? (existing.rawPayload as any),
+          notes: existing.notes || autoNote,
+          rawPayload: rawPayloadWithSettlement as any,
         },
       });
     }
@@ -157,7 +175,8 @@ export class VendorDraftsService {
         seasonalFrom: d.seasonalFrom,
         seasonalTo: d.seasonalTo,
         reportedAmenities: d.reportedAmenities,
-        rawPayload: (d.rawPayload as any) ?? {},
+        notes: autoNote,
+        rawPayload: rawPayloadWithSettlement as any,
         status: activeVendor ? ScrapeDraftStatus.MERGED : ScrapeDraftStatus.PENDING_REVIEW,
         createdVendorId: activeVendor?.id ?? null,
       },
@@ -309,7 +328,11 @@ export class VendorDraftsService {
         },
       });
 
-      // 2. Create room category rate variants
+      // 2. Create unactivated draft rate variants
+      // IMPORTANT: isActive is explicitly false so placeholder ₹0 rates cannot be picked in quotes.
+      // Ops/purchasing must enter the negotiated B2B net before activation.
+      // Do NOT copy unnegotiated extra-bed or child prices into contract fields.
+      // Do NOT copy operational season into commercial contract validity.
       const roomCats = Array.isArray(draft.roomCategories) ? (draft.roomCategories as any[]) : [];
       for (const cat of roomCats) {
         if (!cat.name) continue;
@@ -317,13 +340,14 @@ export class VendorDraftsService {
           data: {
             vendorId: vendor.id,
             variant: cat.name,
-            maxOccupancy: cat.maxOccupancy ?? 3,
-            extraBedRate: cat.extraBedRate ?? null,
-            childRate: cat.childRate ?? null,
-            netRate: 0, // Placeholder: contract netRate must be entered by ops/purchasing
-            validFrom: draft.seasonalFrom,
-            validTo: draft.seasonalTo,
-            notes: `Auto-populated from ${draft.sourceProvider} bed-wise extraction.`,
+            maxOccupancy: typeof cat.maxOccupancy === 'number' ? cat.maxOccupancy : null,
+            extraBedRate: null,
+            childRate: null,
+            netRate: 0,
+            isActive: false, // Must remain inactive until reservations/purchasing sets verified net!
+            validFrom: null,
+            validTo: null,
+            notes: `Discovered variant from ${draft.sourceProvider} draft. Set verified netRate and toggle active when contracted. (Scraped info: extraBed=${cat.extraBedRate ?? 'N/A'}, childRate=${cat.childRate ?? 'N/A'}).`,
           },
         });
       }
