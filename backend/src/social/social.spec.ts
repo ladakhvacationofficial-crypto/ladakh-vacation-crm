@@ -15,6 +15,7 @@ describe('Social Media Studio', () => {
       const prismaMock = {
         integration: {
           findFirst: jest.fn().mockResolvedValue(null), // fallback to specialized template engine
+          findMany: jest.fn().mockResolvedValue([]),
         },
       };
 
@@ -41,6 +42,7 @@ describe('Social Media Studio', () => {
       const prismaMock = {
         integration: {
           findFirst: jest.fn().mockResolvedValue(null),
+          findMany: jest.fn().mockResolvedValue([]),
         },
       };
 
@@ -52,6 +54,25 @@ describe('Social Media Studio', () => {
       expect(result.suggestedHashtags).toEqual(
         expect.arrayContaining(['#LadakhTourism', '#PangongTso', '#LadakhVacation']),
       );
+    });
+
+    it('generates high-resolution social travel image URL with FLUX prompt', async () => {
+      const prismaMock = {
+        integration: {
+          findFirst: jest.fn().mockResolvedValue(null),
+        },
+      };
+
+      const generator = new AiGeneratorService(prismaMock as any);
+      const result = await generator.generateSocialImage({
+        destination: 'Hanle',
+        style: 'Hanle Night Sky Astro',
+      });
+
+      expect(result.url).toBeDefined();
+      expect(result.url).toContain('pollinations.ai');
+      expect(result.prompt).toContain('Hanle Dark Sky Reserve');
+      expect(result.model).toContain('flux');
     });
   });
 

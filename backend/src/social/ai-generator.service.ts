@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { StorageService } from '../storage/storage.service';
 import { decryptSecret } from '../common/crypto';
 import { ContentTone, SocialPlatform } from '@prisma/client';
 
@@ -29,11 +30,144 @@ export interface GenerationResult {
   bestPostingTimes: { day: string; time: string }[];
 }
 
+export interface GenerateSocialImageDto {
+  destination?: string;
+  style?: string;
+  customPrompt?: string;
+}
+
+export interface GeneratedImageResult {
+  url: string;
+  prompt: string;
+  provider: string;
+  model: string;
+  base64?: string;
+  seed: number;
+}
+
 @Injectable()
 export class AiGeneratorService {
   private readonly logger = new Logger(AiGeneratorService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly storage?: StorageService,
+  ) {}
+
+  /**
+   * Generates a photorealistic travel image for social media using NVIDIA NIM FLUX.1
+   * with seamless fallback to Pollinations FLUX.1.
+   */
+  async generateSocialImage(dto: GenerateSocialImageDto): Promise<GeneratedImageResult> {
+    const dest = (dto.destination || 'Ladakh').toLowerCase();
+    const style = dto.style || 'FLUX.1 Photorealistic 8K';
+    const seed = Math.floor(Math.random() * 1000000);
+
+    let basePrompt = '';
+    if (dest.includes('hanle') || dest.includes('star') || dest.includes('dark sky')) {
+      basePrompt = 'Award-winning night astrophotography of Hanle Dark Sky Reserve in Ladakh, dazzling Milky Way arching across crystal clear Himalayan night sky, astronomical observatory telescope silhouette, Changthang high altitude plateau, pin-sharp stars';
+    } else if (dest.includes('pangong')) {
+      basePrompt = 'Breathtaking ultra-realistic photo of Pangong Tso lake in Ladakh, vibrant gradient shades of deep turquoise and azure water, dramatic Himalayan mountain reflections, Tibetan prayer flags fluttering in foreground, bright sunny day';
+    } else if (dest.includes('nubra') || dest.includes('hunder')) {
+      basePrompt = 'Cinematic aerial drone shot of Hunder white sand dunes in Nubra Valley Ladakh, double-humped Bactrian camels resting in golden hour sunlight, towering snow-draped Karakoram mountain ranges in background';
+    } else if (dest.includes('khardung') || dest.includes('pass') || dest.includes('road')) {
+      basePrompt = 'Stunning wide-angle shot of Khardung La pass in Ladakh at 17,582 ft, colorful prayer flags blowing in wind, snow-covered mountain peaks, expedition 4x4 SUV parked on scenic mountain road, majestic Himalayan vista';
+    } else if (dest.includes('monastery') || dest.includes('thiksey') || dest.includes('diskit') || dest.includes('hemis')) {
+      basePrompt = 'Magnificent Thiksey Monastery perched on rocky hill in Ladakh, whitewashed stupas and red gompa buildings, golden morning sunlight, dramatic blue sky with soft clouds, ancient Tibetan Buddhist architecture';
+    } else if (dest.includes('turtuk')) {
+      basePrompt = 'Idyllic apricot blossom orchards in Turtuk border village Ladakh, traditional stone cottages, majestic Karakoram peaks in background, crystal clear turquoise river, soft ambient daylight';
+    } else {
+      basePrompt = 'Majestic panoramic view of Leh Palace and Shanti Stupa in Leh Ladakh, dramatic snow-dusted Himalayan mountain backdrop, warm golden hour sunlight, fluttering prayer flags, traditional Ladakhi architecture';
+    }
+
+    let styleModifiers = '8k resolution, photorealistic, cinematic lighting, shot on 35mm lens, natural colors, highly detailed';
+    if (style.includes('Drone') || style.includes('Aerial')) {
+      styleModifiers = 'high-altitude cinematic drone view, sweeping panorama, majestic scale, National Geographic travel photography';
+    } else if (style.includes('Golden Hour')) {
+      styleModifiers = 'warm golden hour sun flare, long dramatic shadows, amber and violet mountain glow, cinematic atmosphere';
+    } else if (style.includes('Night') || style.includes('Astro')) {
+      styleModifiers = 'deep space astrophotography, vibrant galactic core, long exposure, crisp mountain silhouette';
+    } else if (style.includes('Culture') || style.includes('Monastery')) {
+      styleModifiers = 'rich cultural heritage, intricate Buddhist architectural details, colorful silk prayer flags, authentic Himalayan atmosphere';
+    }
+
+    const fullPrompt = dto.customPrompt
+      ? `${dto.customPrompt}. ${basePrompt}, ${styleModifiers}`
+      : `${basePrompt}, ${styleModifiers}`;
+
+    this.logger.log(`Generating social image with prompt: "${fullPrompt.slice(0, 100)}..."`);
+
+    // 1. Try NVIDIA NIM FLUX.1 Schnell if active integration exists
+    const nvidiaIntegration = await this.prisma.integration.findFirst({
+      where: { provider: 'nvidia', isActive: true },
+    });
+
+    if (nvidiaIntegration) {
+      try {
+        const creds = JSON.parse(decryptSecret(nvidiaIntegration.credentials));
+        const apiKey = creds.apiKey;
+        if (apiKey) {
+          this.logger.log('Attempting image generation via NVIDIA NIM FLUX.1 Schnell...');
+          const res = await fetch('https://ai.api.nvidia.com/v1/genai/black-forest-labs/flux-1-schnell', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              prompt: fullPrompt,
+              mode: 'base',
+            }),
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            const b64 = data.artifacts?.[0]?.base64;
+            if (b64) {
+              const base64DataUrl = `data:image/jpeg;base64,${b64}`;
+              let storageUrl: string | null = null;
+              if (this.storage?.isConfigured) {
+                try {
+                  const buf = Buffer.from(b64, 'base64');
+                  storageUrl = await this.storage.upload(buf, `flux-${Date.now()}.jpg`, 'social');
+                } catch (storeErr: any) {
+                  this.logger.warn(`Storage upload failed: ${storeErr.message}`);
+                }
+              }
+
+              const fallbackPublicUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?model=flux&width=1080&height=1080&nologo=true&seed=${seed}`;
+
+              return {
+                url: storageUrl || fallbackPublicUrl,
+                base64: base64DataUrl,
+                prompt: fullPrompt,
+                provider: 'nvidia',
+                model: 'black-forest-labs/flux-1-schnell',
+                seed,
+              };
+            }
+          } else {
+            const errText = await res.text();
+            this.logger.warn(`NVIDIA NIM FLUX.1 call failed (${res.status}): ${errText.slice(0, 150)}. Failing over to Pollinations FLUX.1.`);
+          }
+        }
+      } catch (err: any) {
+        this.logger.warn(`NVIDIA NIM image generation error: ${err.message}. Failing over to Pollinations FLUX.1.`);
+      }
+    }
+
+    // 2. High-speed, high-resolution Pollinations FLUX.1 fallback
+    const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?model=flux&width=1080&height=1080&nologo=true&seed=${seed}`;
+
+    return {
+      url: pollinationsUrl,
+      prompt: fullPrompt,
+      provider: 'pollinations',
+      model: 'flux-1-schnell',
+      seed,
+    };
+  }
 
   /**
    * Generates 3 specialized social copy variants with curated hashtags and best posting time recommendations.
@@ -46,10 +180,12 @@ export class AiGeneratorService {
     this.logger.log(`Generating AI social copy for destination: "${dest}", package: "${pkg}"`);
 
     // Multi-provider Failover: query all active AI integrations in priority order
-    const activeAiIntegrations = await this.prisma.integration.findMany({
-      where: { category: 'AI', isActive: true },
-      orderBy: [{ priority: 'desc' }, { updatedAt: 'desc' }],
-    });
+    const activeAiIntegrations = this.prisma.integration?.findMany
+      ? await this.prisma.integration.findMany({
+          where: { category: 'AI', isActive: true },
+          orderBy: [{ priority: 'desc' }, { updatedAt: 'desc' }],
+        })
+      : [];
 
     let liveAiGenerated: GeneratedVariant[] | null = null;
     let successfulProvider: string | null = null;

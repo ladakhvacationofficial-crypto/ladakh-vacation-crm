@@ -43,6 +43,10 @@ export class SocialService {
     return this.aiGenerator.generateSocialCopy(dto);
   }
 
+  async generateImage(dto: any) {
+    return this.aiGenerator.generateSocialImage(dto);
+  }
+
   // ─────────────────────────────── ACCOUNTS ───────────────────────────────────
 
   async listAccounts() {

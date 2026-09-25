@@ -26,11 +26,16 @@ const SOCIAL_ROLES: Role[] = [Role.OWNER, Role.SUPER_ADMIN, Role.MARKETING, Role
 export class SocialController {
   constructor(private readonly socialService: SocialService) {}
 
-  // ─── AI Copy Generator ──────────────────────────────────────────────────────
+  // ─── AI Copy & Image Generator ─────────────────────────────────────────────
 
   @Post('generate')
   async generateCopy(@Body() dto: GenerateCopyDto) {
     return this.socialService.generateCopy(dto);
+  }
+
+  @Post('generate-image')
+  async generateImage(@Body() dto: any) {
+    return this.socialService.generateImage(dto);
   }
 
   // ─── Social Accounts ────────────────────────────────────────────────────────

@@ -63,6 +63,7 @@ export class SocialPublisherService {
       case SocialPlatform.PINTEREST:
         return this.publishToPinterest(post, account);
       case SocialPlatform.LINKEDIN:
+        return this.publishToLinkedIn(post, account);
       case SocialPlatform.X:
       default:
         return this.unavailable(post);
@@ -201,6 +202,72 @@ export class SocialPublisherService {
       return data.id ? { ok: true, externalPostId: data.id } : { ok: false, errorMessage: 'Pinterest returned no pin ID.' };
     } catch (e: any) {
       return { ok: false, errorMessage: e.message || 'Pinterest publishing failed' };
+    }
+  }
+
+  private async publishToLinkedIn(
+    post: SocialPost,
+    account?: SocialAccount | null,
+  ): Promise<PublishResult> {
+    if (!account || !account.isActive || (account.expiresAt && account.expiresAt <= new Date()) || !account.accessToken) {
+      return this.unavailable(post);
+    }
+
+    try {
+      const token = decryptSecret(account.accessToken);
+      let authorUrn = account.externalId || '';
+      if (!authorUrn.startsWith('urn:li:')) {
+        authorUrn = `urn:li:organization:${authorUrn}`;
+      }
+
+      const imageUrl = post.mediaUrls?.[0];
+      const shareContent: any = {
+        shareCommentary: {
+          text: post.caption,
+        },
+        shareMediaCategory: imageUrl ? 'ARTICLE' : 'NONE',
+      };
+
+      if (imageUrl) {
+        shareContent.media = [
+          {
+            status: 'READY',
+            description: { text: post.caption.slice(0, 120) },
+            originalUrl: imageUrl,
+            title: { text: 'Ladakh Vacation' },
+          },
+        ];
+      }
+
+      const res = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-Restli-Protocol-Version': '2.0.0',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          author: authorUrn,
+          lifecycleState: 'PUBLISHED',
+          specificContent: {
+            'com.linkedin.ugc.ShareContent': shareContent,
+          },
+          visibility: {
+            'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
+          },
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        this.logger.error(`LinkedIn API Error: ${errText}`);
+        return { ok: false, errorMessage: `LinkedIn API Error: ${errText}` };
+      }
+
+      const data = await res.json();
+      return data.id ? { ok: true, externalPostId: data.id } : { ok: true, externalPostId: 'linkedin-published' };
+    } catch (e: any) {
+      return { ok: false, errorMessage: e.message || 'LinkedIn publishing failed' };
     }
   }
 
