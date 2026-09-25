@@ -354,9 +354,10 @@ const social: ProviderSpec[] = [
     id: 'linkedin', label: 'LinkedIn Company Page', category: 'SOCIAL',
     docsUrl: 'https://learn.microsoft.com/en-us/linkedin/marketing/',
     fields: [
-      { key: 'accessToken', label: 'Access Token', type: 'password', required: true },
-      { key: 'organizationId', label: 'Organization URN', type: 'text', required: true, placeholder: 'urn:li:organization:...' },
+      { key: 'accessToken', label: 'Access Token', type: 'password', required: true, help: 'Generated from LinkedIn Developer Portal > OAuth 2.0 tools with w_member_social or w_organization_social scope.' },
+      { key: 'organizationId', label: 'Organization URN', type: 'text', required: true, placeholder: 'urn:li:organization:...', help: 'Your company page URN (e.g. urn:li:organization:143918523).' },
     ],
+    hasTest: true,
   },
   {
     id: 'youtube', label: 'YouTube Channel', category: 'SOCIAL',

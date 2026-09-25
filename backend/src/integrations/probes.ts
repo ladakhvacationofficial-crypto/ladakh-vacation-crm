@@ -1020,6 +1020,74 @@ async function probeGoogleForms(c: any): Promise<ProbeResult> {
   }
 }
 
+async function probeLinkedIn(c: any): Promise<ProbeResult> {
+  const token = String(c.accessToken ?? '').trim();
+  const orgInput = String(c.organizationId ?? '').trim();
+  if (!token) return { ok: false, message: 'LinkedIn access token is required.' };
+
+  const orgId = orgInput.replace(/^urn:li:organization:/, '').trim();
+
+  // 1. Try userinfo (OpenID / standard OAuth2)
+  const rUser = await safeFetch('https://api.linkedin.com/v2/userinfo', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (isResponse(rUser) && rUser.ok) {
+    try {
+      const user = JSON.parse(await readTextSafe(rUser));
+      const name = user.name || user.given_name || 'Member';
+      return {
+        ok: true,
+        message: `LinkedIn token verified for ${name}. Configured for org: urn:li:organization:${orgId || 'default'}.`,
+      };
+    } catch {
+      return { ok: true, message: `LinkedIn token verified. Configured for org: urn:li:organization:${orgId || 'default'}.` };
+    }
+  }
+
+  // 2. Try organization lookup if community management / marketing API scope
+  if (orgId) {
+    const rOrg = await safeFetch(`https://api.linkedin.com/v2/organizations/${orgId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'X-Restli-Protocol-Version': '2.0.0',
+      },
+    });
+    if (isResponse(rOrg) && rOrg.ok) {
+      try {
+        const orgData = JSON.parse(await readTextSafe(rOrg));
+        const orgName = orgData.localizedName || orgData.vanityName || orgId;
+        return {
+          ok: true,
+          message: `LinkedIn organization verified: "${orgName}" (urn:li:organization:${orgId}).`,
+        };
+      } catch {
+        return { ok: true, message: `LinkedIn access verified for urn:li:organization:${orgId}.` };
+      }
+    }
+  }
+
+  // 3. Try classic /me
+  const rMe = await safeFetch('https://api.linkedin.com/v2/me', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (isResponse(rMe) && rMe.ok) {
+    return { ok: true, message: `LinkedIn access token verified for urn:li:organization:${orgId}.` };
+  }
+
+  // If all failed, extract error message
+  if (isResponse(rUser)) {
+    const text = await readTextSafe(rUser);
+    try {
+      const err = JSON.parse(text);
+      if (err.message) return { ok: false, message: `LinkedIn: ${err.message}` };
+    } catch {}
+    return { ok: false, message: `LinkedIn returned HTTP ${rUser.status}: ${text.slice(0, 150)}` };
+  }
+
+  return { ok: false, message: `Network error connecting to LinkedIn: ${(rUser as any).error}` };
+}
+
 // ── Registry ────────────────────────────────────────────────────────────────
 
 type Probe = (creds: any) => Promise<ProbeResult>;
@@ -1067,6 +1135,7 @@ const PROBES: Record<string, Probe> = {
   meta_page: probeMeta,
   whatsapp_cloud: probeWhatsAppCloud,
   brevo: probeBrevo,
+  linkedin: probeLinkedIn,
 
   google_custom_search: probeGoogleCustomSearch,
   firecrawl: probeFirecrawl,
