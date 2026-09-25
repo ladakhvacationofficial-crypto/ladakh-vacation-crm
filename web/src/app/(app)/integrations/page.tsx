@@ -157,7 +157,6 @@ export default function IntegrationsPage() {
       <div className="mb-4 -mx-1 flex flex-wrap items-center gap-1 overflow-x-auto px-1">
         {(Object.keys(TAB_LABELS) as Tab[]).map((t) => {
           const on = tab === t;
-          const count = rows.filter((r) => TAB_CATEGORIES[t].includes(r.category)).length;
           return (
             <button
               key={t}
@@ -169,11 +168,6 @@ export default function IntegrationsPage() {
               }
             >
               {TAB_LABELS[t]}
-              {count > 0 && (
-                <span className={`tabular ml-1.5 ${on ? 'text-signal-500' : 'text-ink-500'}`}>
-                  {count}
-                </span>
-              )}
             </button>
           );
         })}
