@@ -33,6 +33,131 @@ export interface ExtractedPropertyResult {
   warnings?: string[];
 }
 
+export interface UrlQualificationResult {
+  qualified: boolean;
+  reason?: string;
+  domainType?: 'direct_property' | 'deep_ota';
+}
+
+/**
+ * High-precision URL qualification engine.
+ * Filters out search portals, social networks, travel blogs, directories,
+ * and OTA aggregate listing/search homepages.
+ * Strictly admits only direct property websites and deep, single-property review pages.
+ */
+export function isQualifiedPropertyUrl(rawUrl: string): UrlQualificationResult {
+  let parsed: URL;
+  try {
+    parsed = new URL(rawUrl);
+  } catch {
+    return { qualified: false, reason: 'Invalid URL format' };
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+  const pathname = parsed.pathname.toLowerCase();
+
+  // 1. Social networks, video portals, forums, search engines
+  const blacklistedDomains = [
+    'facebook.com',
+    'instagram.com',
+    'youtube.com',
+    'youtu.be',
+    'twitter.com',
+    'x.com',
+    'pinterest.com',
+    'reddit.com',
+    'quora.com',
+    'wikipedia.org',
+    'tiktok.com',
+    'linkedin.com',
+    'google.com',
+    'bing.com',
+    'duckduckgo.com',
+    'yahoo.com',
+    'medium.com',
+  ];
+  if (blacklistedDomains.some((d) => hostname === d || hostname.endsWith(`.${d}`))) {
+    return { qualified: false, reason: `Disallowed social/search domain: ${hostname}` };
+  }
+
+  // 2. Generic directory portals or government registries without direct property booking/tariffs
+  const directoryDomains = [
+    'justdial.com',
+    'indiamart.com',
+    'sulekha.com',
+    'nidhi.tourism.gov.in',
+    'ladakh.gov.in',
+    'leh.nic.in',
+  ];
+  if (directoryDomains.some((d) => hostname === d || hostname.endsWith(`.${d}`))) {
+    return { qualified: false, reason: `Generic directory portal: ${hostname}` };
+  }
+
+  // 3. Travel blogs, package tour operators, guide listicles
+  const travelBlogDomains = [
+    'cntraveller.in',
+    'outlookindia.com',
+    'traveldiaryparnashree.com',
+    'tibettravel.org',
+    'mytriphack.com',
+    'banbanjara.com',
+    'sotc.in',
+    'thomascook.in',
+    'thrillophilia.com',
+    'holidify.com',
+    'tourmyindia.com',
+    'tripcrafters.com',
+    'lehladakhtaxis.com',
+    'unwindoutdoor.com',
+    'bruisedpassports.com',
+    'atlasobscura.com',
+    'luxuryescapes.com',
+  ];
+  if (travelBlogDomains.some((d) => hostname === d || hostname.endsWith(`.${d}`))) {
+    return { qualified: false, reason: `Travel blog or package tour portal: ${hostname}` };
+  }
+
+  // 4. OTAs / Aggregators: Allow ONLY deep single-property detail pages
+  const aggregators: Record<string, RegExp> = {
+    'tripadvisor.': /\/hotel_review-g\d+-d\d+/i,
+    'booking.com': /\/hotel\/[a-z]{2}\/[a-z0-9_-]+\.html/i,
+    'makemytrip': /\/hotels\/[a-z0-9_-]+-details-[a-z0-9_-]+\.html/i,
+    'goibibo.com': /\/hotels\/[a-z0-9_-]+-hotel-in-[a-z0-9_-]+-\d+/i,
+    'agoda.com': /\/[a-z0-9_-]+\/hotel\/[a-z0-9_-]+\.html/i,
+    'easemytrip.com': /\/hotels\/[a-z0-9_-]+-\d+\/?$/i,
+  };
+
+  for (const [aggKey, detailPattern] of Object.entries(aggregators)) {
+    if (hostname.includes(aggKey)) {
+      if (detailPattern.test(pathname)) {
+        return { qualified: true, domainType: 'deep_ota' };
+      }
+      return { qualified: false, reason: `Generic aggregator listing/search page on ${hostname}` };
+    }
+  }
+
+  // Other known aggregators with no direct single-property extraction support
+  const rejectedAggregators = [
+    'expedia.',
+    'hotels.com',
+    'travelocity.',
+    'trivago.',
+    'trip.com',
+    'kayak.',
+    'airbnb.',
+    'hostelworld.',
+    'yatra.com',
+  ];
+  for (const agg of rejectedAggregators) {
+    if (hostname.includes(agg)) {
+      return { qualified: false, reason: `Aggregator portal not supported: ${hostname}` };
+    }
+  }
+
+  // Direct hotel / camp / houseboat website!
+  return { qualified: true, domainType: 'direct_property' };
+}
+
 @Injectable()
 export class ScraperPoolService {
   private readonly logger = new Logger(ScraperPoolService.name);
@@ -48,6 +173,11 @@ export class ScraperPoolService {
     url: string,
     options?: { preferredProvider?: string; city?: string; propertyType?: string },
   ): Promise<ExtractedPropertyResult> {
+    const qualCheck = isQualifiedPropertyUrl(url);
+    if (!qualCheck.qualified) {
+      throw new Error(`Disqualified URL: ${qualCheck.reason}`);
+    }
+
     const activeScrapers = await this.integrations.listActiveScrapers();
     const warnings: string[] = [];
 
@@ -67,6 +197,12 @@ export class ScraperPoolService {
         this.logger.log(`Attempting extraction of "${url}" using provider "${scraper.provider}" (priority ${scraper.priority})`);
         const result = await this.executeProviderScrape(scraper.provider, scraper.credentials, url, options);
         if (result && result.name) {
+          // If phone or email is missing on a direct property website, probe subpages
+          if (qualCheck.domainType === 'direct_property' && (!result.phone || !result.email)) {
+            const probed = await this.probeContactInfo(url, result.phone, result.email);
+            if (!result.phone && probed.phone) result.phone = probed.phone;
+            if (!result.email && probed.email) result.email = probed.email;
+          }
           result.warnings = warnings;
           return result;
         }
@@ -82,6 +218,11 @@ export class ScraperPoolService {
       this.logger.log(`Falling back to public Jina Reader for "${url}"`);
       const fallbackResult = await this.scrapeWithJina(url, { baseUrl: 'https://r.jina.ai' }, options);
       if (fallbackResult && fallbackResult.name) {
+        if (qualCheck.domainType === 'direct_property' && (!fallbackResult.phone || !fallbackResult.email)) {
+          const probed = await this.probeContactInfo(url, fallbackResult.phone, fallbackResult.email);
+          if (!fallbackResult.phone && probed.phone) fallbackResult.phone = probed.phone;
+          if (!fallbackResult.email && probed.email) fallbackResult.email = probed.email;
+        }
         fallbackResult.warnings = warnings;
         return fallbackResult;
       }
@@ -92,12 +233,18 @@ export class ScraperPoolService {
     // Final fallback: direct HTTP fetch + heuristic extraction
     this.logger.log(`Attempting direct heuristic fetch for "${url}"`);
     const directResult = await this.scrapeDirectFetch(url, options);
+    if (qualCheck.domainType === 'direct_property' && (!directResult.phone || !directResult.email)) {
+      const probed = await this.probeContactInfo(url, directResult.phone, directResult.email);
+      if (!directResult.phone && probed.phone) directResult.phone = probed.phone;
+      if (!directResult.email && probed.email) directResult.email = probed.email;
+    }
     directResult.warnings = warnings;
     return directResult;
   }
 
   /**
    * Concurrency swarm: extracts multiple URLs concurrently across the scraper pool.
+   * Pre-filters each URL through the qualification engine.
    */
   async batchExtract(
     urls: string[],
@@ -106,8 +253,19 @@ export class ScraperPoolService {
     const limit = Math.max(1, Math.min(options?.concurrency ?? 2, 5));
     const results: Array<{ url: string; success: boolean; data?: ExtractedPropertyResult; error?: string }> = [];
 
-    for (let i = 0; i < urls.length; i += limit) {
-      const chunk = urls.slice(i, i + limit);
+    // Pre-qualify URLs
+    const qualifiedTargets: string[] = [];
+    for (const u of urls) {
+      const q = isQualifiedPropertyUrl(u);
+      if (!q.qualified) {
+        results.push({ url: u, success: false, error: q.reason || 'Unqualified URL' });
+      } else {
+        qualifiedTargets.push(u);
+      }
+    }
+
+    for (let i = 0; i < qualifiedTargets.length; i += limit) {
+      const chunk = qualifiedTargets.slice(i, i + limit);
       const chunkResults = await Promise.allSettled(
         chunk.map((u) => this.extractProperty(u, options)),
       );
@@ -127,7 +285,7 @@ export class ScraperPoolService {
 
   /**
    * Discovers property URLs matching a destination query (e.g. "Srinagar houseboats" or "Nubra luxury camps")
-   * and extracts their specifications using the scraper swarm into VendorDraft.
+   * using precision search operators and domain qualification filters.
    */
   async discoverByKeyword(
     query: string,
@@ -137,23 +295,57 @@ export class ScraperPoolService {
     const discoveredUrls: string[] = [];
     const activeScrapers = await this.integrations.listActiveScrapers();
 
-    // 1. Try Firecrawl search if configured
+    // 1. Try Firecrawl search with negative operators & targeted query
     const firecrawl = activeScrapers.find((s) => s.provider === 'firecrawl');
     if (firecrawl) {
       try {
         const apiKey = String(firecrawl.credentials?.apiKey ?? '').trim();
         const base = String(firecrawl.credentials?.baseUrl ?? 'https://api.firecrawl.dev').trim().replace(/\/+$/, '');
+        
+        // Primary query targeting direct hospitality properties
+        const primaryTarget = `${query} (resort OR camp OR hotel OR houseboat) "official website" OR "contact" OR "tariff" -site:facebook.com -site:instagram.com -site:youtube.com -site:pinterest.com -site:reddit.com -site:quora.com -site:expedia.com -site:travelocity.com -site:trivago.com -site:trip.com -site:hotels.com -site:cntraveller.in -site:justdial.com -inurl:search -inurl:login`;
+        
         const res = await fetch(`${base}/v1/search`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, limit }),
+          body: JSON.stringify({ query: primaryTarget, limit: Math.min(limit * 2, 20) }),
         });
+
         if (res.ok) {
           const data: any = await res.json();
           const items = data?.data || data?.results || [];
-          items.forEach((item: any) => {
-            if (item.url && !discoveredUrls.includes(item.url)) discoveredUrls.push(item.url);
+          for (const item of items) {
+            if (item.url) {
+              const q = isQualifiedPropertyUrl(item.url);
+              if (q.qualified && !discoveredUrls.includes(item.url)) {
+                discoveredUrls.push(item.url);
+                if (discoveredUrls.length >= limit) break;
+              }
+            }
+          }
+        }
+
+        // Secondary search if we still need more candidates: check deep review URLs
+        if (discoveredUrls.length < limit) {
+          const secondaryTarget = `${query} site:tripadvisor.in/Hotel_Review OR site:makemytrip.com/hotels`;
+          const secRes = await fetch(`${base}/v1/search`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: secondaryTarget, limit: 10 }),
           });
+          if (secRes.ok) {
+            const secData: any = await secRes.json();
+            const items = secData?.data || secData?.results || [];
+            for (const item of items) {
+              if (item.url) {
+                const q = isQualifiedPropertyUrl(item.url);
+                if (q.qualified && !discoveredUrls.includes(item.url)) {
+                  discoveredUrls.push(item.url);
+                  if (discoveredUrls.length >= limit) break;
+                }
+              }
+            }
+          }
         }
       } catch (err: any) {
         this.logger.warn(`Firecrawl keyword search error: ${err?.message}`);
@@ -168,13 +360,15 @@ export class ScraperPoolService {
         if (jina?.credentials?.apiKey) {
           headers['Authorization'] = `Bearer ${String(jina.credentials.apiKey).trim()}`;
         }
-        const res = await fetch(`https://s.jina.ai/${encodeURIComponent(query)}`, { headers });
+        const jinaQuery = `${query} hotel camp houseboat contact`;
+        const res = await fetch(`https://s.jina.ai/${encodeURIComponent(jinaQuery)}`, { headers });
         if (res.ok) {
           const markdown = await res.text();
           const matches = markdown.matchAll(/\[(?:[^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g);
           for (const m of matches) {
             const u = m[1];
-            if (!/google\.|bing\.|duckduckgo\.|jina\.ai|wikipedia\.org/i.test(u) && !discoveredUrls.includes(u)) {
+            const q = isQualifiedPropertyUrl(u);
+            if (q.qualified && !discoveredUrls.includes(u)) {
               discoveredUrls.push(u);
               if (discoveredUrls.length >= limit) break;
             }
@@ -185,38 +379,81 @@ export class ScraperPoolService {
       }
     }
 
-    // 3. Fallback: scrape.do search proxy
-    if (discoveredUrls.length < limit) {
-      const scrapeDo = activeScrapers.find((s) => s.provider === 'scrape_do');
-      if (scrapeDo?.credentials?.token) {
+    if (discoveredUrls.length === 0) {
+      throw new Error(`No qualified property websites found for query "${query}". Try searching for specific names or direct URLs.`);
+    }
+
+    this.logger.log(`Discovered ${discoveredUrls.length} qualified properties for query "${query}". Extracting via swarm...`);
+    return this.batchExtract(discoveredUrls.slice(0, limit), options);
+  }
+
+  /**
+   * Probes common contact and tariff subpages on a direct property website to fill missing phone/email.
+   */
+  private async probeContactInfo(
+    url: string,
+    currentPhone?: string | null,
+    currentEmail?: string | null,
+  ): Promise<{ phone: string | null; email: string | null }> {
+    let phone = currentPhone || null;
+    let email = currentEmail || null;
+
+    if (phone && email) return { phone, email };
+
+    try {
+      const parsed = new URL(url);
+      const origin = parsed.origin;
+      const candidates = [
+        `${origin}/contact-us`,
+        `${origin}/contact`,
+        `${origin}/contact-us.html`,
+        `${origin}/contact.html`,
+        `${origin}/tariff`,
+      ];
+
+      for (const target of candidates) {
+        if (target.toLowerCase() === url.toLowerCase()) continue;
         try {
-          const token = String(scrapeDo.credentials.token).trim();
-          const base = String(scrapeDo.credentials.baseUrl ?? 'https://api.scrape.do').trim().replace(/\/+$/, '');
-          const target = `${base}/?token=${encodeURIComponent(token)}&url=${encodeURIComponent(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`)}`;
-          const res = await fetch(target);
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3500);
+          const res = await fetch(target, {
+            signal: controller.signal,
+            headers: {
+              'User-Agent':
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+              Accept: 'text/html,text/plain',
+            },
+          });
+          clearTimeout(timeoutId);
+
           if (res.ok) {
             const html = await res.text();
-            const linkMatches = html.matchAll(/class="result__url"[^>]*href="([^"]+)"/g);
-            for (const lm of linkMatches) {
-              const u = lm[1];
-              if (u.startsWith('http') && !discoveredUrls.includes(u)) {
-                discoveredUrls.push(u);
-                if (discoveredUrls.length >= limit) break;
+            if (!email) {
+              const emailMatches = html.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g);
+              if (emailMatches) {
+                const validEmail = emailMatches.find(
+                  (e) => !/example\.com|domain\.com|wixpress|sentry|bootstrap/i.test(e),
+                );
+                if (validEmail) email = validEmail.trim().toLowerCase();
               }
             }
+            if (!phone) {
+              const phoneMatches = html.match(/(?:\+?91[\-\s]?)?[6-9]\d{9}|(?:01982|0194|01985)[\-\s]?\d{5,6}/g);
+              if (phoneMatches && phoneMatches.length > 0) {
+                phone = phoneMatches[0].trim();
+              }
+            }
+            if (phone && email) break;
           }
-        } catch (err: any) {
-          this.logger.warn(`scrape.do keyword discovery error: ${err?.message}`);
+        } catch {
+          // Probe timeout or network error, silently continue
         }
       }
+    } catch {
+      // Invalid URL
     }
 
-    if (discoveredUrls.length === 0) {
-      throw new Error(`No property listings found for query "${query}". Try providing direct website URLs.`);
-    }
-
-    this.logger.log(`Discovered ${discoveredUrls.length} properties for query "${query}". Extracting via swarm...`);
-    return this.batchExtract(discoveredUrls.slice(0, limit), options);
+    return { phone, email };
   }
 
   // ── Provider Execution Driver ──────────────────────────────────────────────
@@ -285,6 +522,18 @@ export class ScraperPoolService {
         return this.parseContentWithAIOrHeuristics(markdown, url, 'firecrawl', payload, options);
       }
       throw new Error('Firecrawl returned empty extraction and no markdown content');
+    }
+
+    // Complement extractedData with regex parsing from markdown if phone or email is missing
+    if (markdown) {
+      if (!extractedData.phone) {
+        const phoneMatch = markdown.match(/(?:\+?91[\-\s]?)?[6-9]\d{9}|(?:01982|0194|01985)[\-\s]?\d{5,6}/);
+        if (phoneMatch) extractedData.phone = phoneMatch[0].trim();
+      }
+      if (!extractedData.email || extractedData.email === '/') {
+        const emailMatch = markdown.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+        if (emailMatch) extractedData.email = emailMatch[0].trim();
+      }
     }
 
     return this.normalizePropertyResult(extractedData, url, 'firecrawl', payload, options);
@@ -435,7 +684,7 @@ export class ScraperPoolService {
     rawPayload: any,
     options?: { city?: string; propertyType?: string },
   ): Promise<ExtractedPropertyResult> {
-    const textSample = rawText.slice(0, 15000); // 15k chars is plenty for hotel specs
+    const textSample = rawText.slice(0, 15000);
 
     // Try AI extraction first if an active AI integration exists
     const aiIntegration = await this.integrations.pickAI();
@@ -594,7 +843,7 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
     }
 
     // 4. Contacts
-    const phoneMatch = text.match(/(\+91[\-\s]?)?[6-9]\d{9}/) || text.match(/\b0\d{2,4}[-\s]?\d{6,8}\b/);
+    const phoneMatch = text.match(/(?:\+?91[\-\s]?)?[6-9]\d{9}|(?:01982|0194|01985)[\-\s]?\d{5,6}/);
     const phone = phoneMatch ? phoneMatch[0].trim() : null;
 
     const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
@@ -681,29 +930,91 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
     rawPayload: any,
     options?: { city?: string; propertyType?: string },
   ): ExtractedPropertyResult {
+    // 1. Name validation & cleaning
+    let cleanName = String(raw.name || '').trim();
+    cleanName = cleanName
+      .replace(/\s*[-–|•]\s*(?:Official Website|Best Hotel.*|Houseboats in.*|Camps in.*|Luxury.*|Hotels in.*|K2 Journeys|Prices & Reviews|Tripadvisor|MakeMyTrip|Booking\.com).*$/i, '')
+      .trim();
+
+    const JUNK_NAMES = [
+      'search hotels', 'expedia', 'hotel', 'hotels', 'the cannonball', 'hotel abc',
+      'oceanview resort', 'seaside resort', 'luxury glamping', 'resort', 'camp',
+      'hotels in', 'resorts in', 'best hotels in', 'tour packages', 'travel guide',
+    ];
+    if (cleanName.length < 3 || JUNK_NAMES.some((j) => cleanName.toLowerCase() === j)) {
+      throw new Error(`Invalid or generic property name extracted: "${cleanName}"`);
+    }
+
+    // 2. Geolocation and sanity validation
+    const rawAddress = raw.address ? String(raw.address).trim() : null;
+    const cleanAddress = rawAddress && !/^(n\/a|null|undefined)$/i.test(rawAddress) ? rawAddress : null;
+    const fullGeoText = `${cleanName} ${cleanAddress || ''} ${raw.city || ''} ${options?.city || ''}`.toLowerCase();
+
+    const DISQUALIFIED_LOCATIONS = [
+      'california', 'ca 9', 'ca 1', 'florida', 'fl 3', 'nevada', 'nv 8', 'texas',
+      'lake tahoe', 'las vegas', 'kissimmee', 'malibu', 'oceanview', 'bandung',
+      'indonesia', 'brazil', 'france', 'sample city', '123 sample', '123 beach', '123 ocean',
+      'united states', 'usa',
+    ];
+    for (const badLoc of DISQUALIFIED_LOCATIONS) {
+      if (fullGeoText.includes(badLoc)) {
+        throw new Error(`Property geographically disqualified (${badLoc}): "${cleanName}" (${cleanAddress})`);
+      }
+    }
+
+    // 3. Email cleaning
+    let email = raw.email ? String(raw.email).trim().toLowerCase() : null;
+    if (
+      email &&
+      (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) ||
+        /wixpress|sentry|bootstrap|example\.com/i.test(email))
+    ) {
+      email = null;
+    }
+
+    // 4. Phone cleaning
+    let phone = raw.phone ? String(raw.phone).trim() : null;
+    if (phone) {
+      phone = phone.replace(/[^\d+\-\s]/g, '').trim();
+      const digitsOnly = phone.replace(/\D/g, '');
+      if (digitsOnly.length < 7 || digitsOnly.length > 15) {
+        phone = null;
+      }
+    }
+
+    // 5. Star rating validation
+    let starRating: number | null = raw.starRating ? Number(raw.starRating) : null;
+    if (starRating !== null && (isNaN(starRating) || starRating < 1 || starRating > 5)) {
+      starRating = null;
+    }
+
+    // 6. Property Type resolution
     let pType: VendorType = VendorType.HOTEL;
     const typeStr = String(raw.propertyType || options?.propertyType || '').toUpperCase();
-    if (typeStr === 'CAMP') pType = VendorType.CAMP;
-    else if (typeStr === 'HOUSEBOAT') pType = VendorType.HOUSEBOAT;
+    if (typeStr === 'CAMP' || /camp|tents|glamping/i.test(cleanName)) pType = VendorType.CAMP;
+    else if (typeStr === 'HOUSEBOAT' || /houseboat/i.test(cleanName)) pType = VendorType.HOUSEBOAT;
 
-    const roomCats: ExtractedRoomCategory[] = Array.isArray(raw.roomCategories)
+    // 7. Room categories resolution
+    const roomCats: ExtractedRoomCategory[] = Array.isArray(raw.roomCategories) && raw.roomCategories.length > 0
       ? raw.roomCategories.map((rc: any) => ({
-          name: String(rc.name || 'Standard'),
+          name: String(rc.name || 'Standard').trim(),
           maxOccupancy: Number(rc.maxOccupancy) || 3,
-          bedType: rc.bedType ? String(rc.bedType) : undefined,
+          bedType: rc.bedType ? String(rc.bedType).trim() : 'Double / Twin',
           extraBedRate: rc.extraBedRate ? Number(rc.extraBedRate) : undefined,
           childRate: rc.childRate ? Number(rc.childRate) : undefined,
-          mealPlans: Array.isArray(rc.mealPlans) ? rc.mealPlans : ['CP', 'MAP'],
+          mealPlans: Array.isArray(rc.mealPlans) && rc.mealPlans.length > 0 ? rc.mealPlans : ['CP', 'MAP'],
           notes: rc.notes ? String(rc.notes) : undefined,
         }))
       : [
           {
-            name: pType === VendorType.CAMP ? 'Luxury Tent' : 'Deluxe Room',
+            name: pType === VendorType.CAMP ? 'Luxury Tent' : pType === VendorType.HOUSEBOAT ? 'Deluxe Room' : 'Deluxe Room',
             maxOccupancy: 3,
+            bedType: 'Double / Twin',
             mealPlans: ['CP', 'MAP'],
           },
         ];
 
+    // 8. Seasonal windows for camps
     let seasonalFrom: Date | null = null;
     let seasonalTo: Date | null = null;
     if (raw.seasonalFrom) {
@@ -714,17 +1025,29 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
       const d = new Date(raw.seasonalTo);
       if (!isNaN(d.getTime())) seasonalTo = d;
     }
+    if (!seasonalFrom && (pType === VendorType.CAMP || (options?.city && /nubra|pangong/i.test(options.city)))) {
+      const curYear = new Date().getFullYear();
+      seasonalFrom = new Date(`${curYear}-05-01T00:00:00.000Z`);
+      seasonalTo = new Date(`${curYear}-10-15T00:00:00.000Z`);
+    }
+
+    // 9. City resolution
+    let resolvedCity = options?.city || raw.city || null;
+    if (resolvedCity && /nubra/i.test(resolvedCity)) resolvedCity = 'Nubra';
+    else if (resolvedCity && /leh/i.test(resolvedCity)) resolvedCity = 'Leh';
+    else if (resolvedCity && /srinagar/i.test(resolvedCity)) resolvedCity = 'Srinagar';
+    else if (resolvedCity && /pangong/i.test(resolvedCity)) resolvedCity = 'Pangong';
 
     return {
       sourceProvider: provider,
       sourceUrl: url,
-      name: String(raw.name || 'Extracted Property').trim(),
-      city: options?.city || raw.city || null,
+      name: cleanName,
+      city: resolvedCity,
       propertyType: pType,
-      phone: raw.phone ? String(raw.phone).trim() : null,
-      email: raw.email ? String(raw.email).trim() : null,
-      address: raw.address ? String(raw.address).trim() : null,
-      starRating: raw.starRating ? Number(raw.starRating) : null,
+      phone,
+      email,
+      address: cleanAddress,
+      starRating,
       roomCount: raw.roomCount ? Number(raw.roomCount) : null,
       checkInTime: raw.checkInTime ? String(raw.checkInTime).trim() : '14:00',
       checkOutTime: raw.checkOutTime ? String(raw.checkOutTime).trim() : '11:00',

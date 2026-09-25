@@ -194,11 +194,15 @@ export class IntegrationsService {
     });
     const pick = rows[0];
     if (!pick) return null;
-    return {
-      id: pick.id,
-      provider: pick.provider,
-      credentials: JSON.parse(decryptSecret(pick.credentials)) as Record<string, unknown>,
-    };
+    try {
+      return {
+        id: pick.id,
+        provider: pick.provider,
+        credentials: JSON.parse(decryptSecret(pick.credentials)) as Record<string, unknown>,
+      };
+    } catch {
+      return null;
+    }
   }
 
   /**
@@ -212,13 +216,29 @@ export class IntegrationsService {
       },
       orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
     });
-    return rows.map((r) => ({
-      id: r.id,
-      provider: r.provider,
-      label: r.label,
-      priority: r.priority,
-      credentials: JSON.parse(decryptSecret(r.credentials)) as Record<string, unknown>,
-    }));
+    const list: Array<{
+      id: string;
+      provider: string;
+      label: string | null;
+      priority: number;
+      credentials: Record<string, unknown>;
+    }> = [];
+
+    for (const r of rows) {
+      try {
+        const creds = JSON.parse(decryptSecret(r.credentials)) as Record<string, unknown>;
+        list.push({
+          id: r.id,
+          provider: r.provider,
+          label: r.label,
+          priority: r.priority,
+          credentials: creds,
+        });
+      } catch {
+        // Skip rows that fail decryption due to key rotation
+      }
+    }
+    return list;
   }
 
   // ---- helpers ------------------------------------------------------------

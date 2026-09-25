@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, Loader2, Globe, Layers, Search, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Loader2, Globe, Layers, Search, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -211,6 +211,13 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
               <Layers className="size-3.5" strokeWidth={1.75} />
               Batch URL Swarm
             </button>
+          </div>
+
+          <div className="rounded-md border border-ink-800/80 bg-ink-950/70 p-2.5 text-[11.5px] text-ink-300 flex items-start gap-2">
+            <ShieldCheck className="size-4 shrink-0 text-signal-500 mt-0.5" strokeWidth={1.75} />
+            <span>
+              <strong className="text-ink-100">Quality Filter Active:</strong> Targets direct hotel websites & deep reviews in Ladakh/Kashmir. Generic aggregator homepages (Hotels.com, Expedia) and foreign listings are auto-blocked to prevent database pollution.
+            </span>
           </div>
 
           {error && (

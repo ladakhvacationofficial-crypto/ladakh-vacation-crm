@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ScraperPoolService } from './scraper-pool.service';
+import { ScraperPoolService, isQualifiedPropertyUrl } from './scraper-pool.service';
 import { ExtractDraftDto } from './dto/extract-draft.dto';
 import { BatchExtractDto } from './dto/batch-extract.dto';
 import { DiscoverDraftsDto } from './dto/discover-drafts.dto';
@@ -60,14 +60,37 @@ export class VendorDraftsService {
 
   private async upsertDraftFromExtraction(d: any) {
     if (!d || !d.name || d.name.trim().length < 2) return null;
+
+    const trimmedName = d.name.trim();
+
+    // Check if name is generic or portal junk
+    const JUNK_NAMES = [
+      'search hotels', 'expedia', 'hotel', 'hotels', 'the cannonball', 'hotel abc',
+      'oceanview resort', 'seaside resort', 'luxury glamping', 'resort', 'camp',
+      'hotels in', 'resorts in', 'best hotels in', 'tour packages', 'travel guide',
+    ];
+    if (trimmedName.length < 3 || JUNK_NAMES.some((j) => trimmedName.toLowerCase() === j)) {
+      return null;
+    }
+
+    // Geolocation boundary guard: reject foreign or placeholder addresses
+    const fullGeoText = `${trimmedName} ${d.address || ''} ${d.city || ''}`.toLowerCase();
+    const DISQUALIFIED_LOCATIONS = [
+      'california', 'ca 9', 'ca 1', 'florida', 'fl 3', 'nevada', 'nv 8', 'texas',
+      'lake tahoe', 'las vegas', 'kissimmee', 'malibu', 'oceanview', 'bandung',
+      'indonesia', 'brazil', 'sample city', '123 sample', '123 beach', '123 ocean',
+      'united states', 'usa',
+    ];
+    if (DISQUALIFIED_LOCATIONS.some((loc) => fullGeoText.includes(loc))) {
+      return null;
+    }
+
     if (
-      /instagram|facebook|youtube|twitter/i.test(d.name) ||
+      /instagram|facebook|youtube|twitter/i.test(trimmedName) ||
       /instagram\.com|facebook\.com|youtube\.com/i.test(d.sourceUrl)
     ) {
       return null;
     }
-
-    const trimmedName = d.name.trim();
 
     // Check if an active supplier already exists on the books
     const activeVendor = await this.prisma.vendor.findFirst({
@@ -142,6 +165,11 @@ export class VendorDraftsService {
   }
 
   async extractAndSave(dto: ExtractDraftDto, userId?: string) {
+    const qualCheck = isQualifiedPropertyUrl(dto.url);
+    if (!qualCheck.qualified) {
+      throw new BadRequestException(`Unqualified URL: ${qualCheck.reason}`);
+    }
+
     const extracted = await this.scraperPool.extractProperty(dto.url, {
       preferredProvider: dto.preferredProvider,
       city: dto.city,
@@ -150,7 +178,7 @@ export class VendorDraftsService {
 
     const draft = await this.upsertDraftFromExtraction(extracted);
     if (!draft) {
-      throw new BadRequestException('Extracted URL is not a recognized property listing.');
+      throw new BadRequestException('Extracted URL is not a recognized property listing or is outside valid geographic boundaries.');
     }
 
     return {
