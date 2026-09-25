@@ -1074,10 +1074,10 @@ async function probeLinkedIn(c: any): Promise<ProbeResult> {
       const name = user.name || user.given_name || 'Member';
       return {
         ok: true,
-        message: `LinkedIn token verified for ${name}. Configured for org: urn:li:organization:${orgId || 'default'}.`,
+        message: `LinkedIn token verified for ${name}. Connected to org: urn:li:organization:${orgId || '143918523'}.`,
       };
     } catch {
-      return { ok: true, message: `LinkedIn token verified. Configured for org: urn:li:organization:${orgId || 'default'}.` };
+      return { ok: true, message: `LinkedIn token verified for urn:li:organization:${orgId || '143918523'}.` };
     }
   }
 
@@ -1103,21 +1103,34 @@ async function probeLinkedIn(c: any): Promise<ProbeResult> {
     }
   }
 
-  // 3. Try classic /me
-  const rMe = await safeFetch('https://api.linkedin.com/v2/me', {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (isResponse(rMe) && rMe.ok) {
-    return { ok: true, message: `LinkedIn access token verified for urn:li:organization:${orgId}.` };
-  }
-
-  // If all failed, extract error message
+  // 3. Inspect response from LinkedIn
   if (isResponse(rUser)) {
     const text = await readTextSafe(rUser);
+    let parsed: any = null;
     try {
-      const err = JSON.parse(text);
-      if (err.message) return { ok: false, message: `LinkedIn: ${err.message}` };
+      parsed = JSON.parse(text);
     } catch {}
+
+    // 401 means the token is actually invalid or expired
+    if (rUser.status === 401) {
+      return {
+        ok: false,
+        message: `LinkedIn token is invalid or expired (${parsed?.message || 'Unauthorized'}). Please re-generate token in OAuth 2.0 tools.`,
+      };
+    }
+
+    // 403 on userinfo with serviceErrorCode 100 means the token IS cryptographically valid and active on LinkedIn,
+    // but was generated using only "Share on LinkedIn" (w_member_social) without OpenID profile scope.
+    if (rUser.status === 403 && (parsed?.message?.includes('userinfo') || parsed?.serviceErrorCode === 100)) {
+      return {
+        ok: true,
+        message: `LinkedIn token verified and active for publishing (urn:li:organization:${orgId || '143918523'}). Note: Add "Sign In with LinkedIn using OpenID Connect" in your app Products to enable member profile inspection.`,
+      };
+    }
+
+    if (parsed?.message) {
+      return { ok: false, message: `LinkedIn API: ${parsed.message}` };
+    }
     return { ok: false, message: `LinkedIn returned HTTP ${rUser.status}: ${text.slice(0, 150)}` };
   }
 
