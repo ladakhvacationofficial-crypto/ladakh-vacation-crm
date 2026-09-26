@@ -241,6 +241,42 @@ export class IntegrationsService {
     return list;
   }
 
+  /**
+   * Returns all active AI integrations ordered by priority for multi-provider swarm / failover.
+   */
+  async listActiveAIs() {
+    const rows = await this.prisma.integration.findMany({
+      where: {
+        category: IntegrationCategory.AI,
+        isActive: true,
+      },
+      orderBy: [{ priority: 'desc' }, { createdAt: 'asc' }],
+    });
+    const list: Array<{
+      id: string;
+      provider: string;
+      label: string | null;
+      priority: number;
+      credentials: Record<string, unknown>;
+    }> = [];
+
+    for (const r of rows) {
+      try {
+        const creds = JSON.parse(decryptSecret(r.credentials)) as Record<string, unknown>;
+        list.push({
+          id: r.id,
+          provider: r.provider,
+          label: r.label,
+          priority: r.priority,
+          credentials: creds,
+        });
+      } catch {
+        // Skip rows that fail decryption due to key rotation
+      }
+    }
+    return list;
+  }
+
   // ---- helpers ------------------------------------------------------------
 
   private validateCreds(

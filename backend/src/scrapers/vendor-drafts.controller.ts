@@ -83,6 +83,15 @@ export class VendorDraftsController {
   }
 
   @Roles(...VENDOR_WRITE_ACCESS)
+  @Post(':id/reanalyze')
+  reanalyze(
+    @Param('id') id: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.draftsService.reanalyze(id, userId);
+  }
+
+  @Roles(...VENDOR_WRITE_ACCESS)
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.draftsService.delete(id);

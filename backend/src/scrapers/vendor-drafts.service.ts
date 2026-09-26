@@ -392,6 +392,26 @@ export class VendorDraftsService {
     });
   }
 
+  async reanalyze(id: string, userId?: string) {
+    const draft = await this.findById(id);
+    if (!draft.sourceUrl) {
+      throw new BadRequestException('Draft has no source URL to re-analyze');
+    }
+
+    const qualCheck = isQualifiedPropertyUrl(draft.sourceUrl);
+    if (!qualCheck.qualified) {
+      throw new BadRequestException(`Unqualified URL: ${qualCheck.reason}`);
+    }
+
+    const extracted = await this.scraperPool.extractProperty(draft.sourceUrl, {
+      city: draft.city || undefined,
+      propertyType: draft.propertyType || undefined,
+    });
+
+    const updated = await this.upsertDraftFromExtraction(extracted);
+    return updated || draft;
+  }
+
   async delete(id: string) {
     await this.findById(id);
     return this.prisma.vendorDraft.delete({ where: { id } });

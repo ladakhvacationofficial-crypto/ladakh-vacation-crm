@@ -18,6 +18,9 @@ import {
   ShieldCheck,
   Clock,
   Layers,
+  Loader2,
+  AlertCircle,
+  RefreshCw,
 } from 'lucide-react';
 import {
   api,
@@ -28,6 +31,7 @@ import {
 import { Panel, PanelBody, PanelHeader, PanelTitle } from '@/components/ui/panel';
 import { Button } from '@/components/ui/button';
 import { Chip } from '@/components/ui/badge';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { RowActions } from '@/components/ui/row-actions';
 import { ExtractVendorDialog } from '@/components/extract-vendor-dialog';
 import { relativeDate } from '@/lib/format';
@@ -37,10 +41,17 @@ export default function VendorDraftsPage() {
   const [drafts, setDrafts] = useState<VendorDraftRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [successBanner, setSuccessBanner] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('PENDING_REVIEW');
   const [cityFilter, setCityFilter] = useState<string>('');
   const [providerFilter, setProviderFilter] = useState<string>('');
   const [busyActionId, setBusyActionId] = useState<string | null>(null);
+
+  // Custom modal states replacing browser prompt() and confirm()
+  const [rejectTarget, setRejectTarget] = useState<{ draftId: string; draftName: string } | null>(null);
+  const [rejectNotes, setRejectNotes] = useState('');
+
+  const [approveTarget, setApproveTarget] = useState<VendorDraftRow | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -64,34 +75,69 @@ export default function VendorDraftsPage() {
     load();
   }, [load]);
 
-  const handleApprove = async (draftId: string) => {
-    if (!confirm('Approve this drafted property and create an active Supplier on the books?')) {
-      return;
-    }
+  // Modern Approval Flow
+  const handleOpenApprove = (draft: VendorDraftRow) => {
+    setApproveTarget(draft);
+  };
+
+  const submitApprove = async () => {
+    if (!approveTarget) return;
+    const draftId = approveTarget.id;
     setBusyActionId(draftId);
+    setError(null);
     try {
       const res = await api.post<{ draft: VendorDraftRow; vendor: { id: string; name: string } }>(
         `/vendor-drafts/${draftId}/approve`,
         {},
       );
-      alert(`Supplier "${res.vendor.name}" created successfully! Opening supplier file...`);
-      router.push(`/vendors/${res.vendor.id}`);
+      setApproveTarget(null);
+      setSuccessBanner(`Supplier "${res.vendor.name}" created successfully! Opening supplier file...`);
+      setTimeout(() => {
+        router.push(`/vendors/${res.vendor.id}`);
+      }, 1000);
     } catch (err: any) {
-      alert(err instanceof ApiError ? err.message : 'Failed to approve draft.');
-      setBusyActionId(null);
+      setError(err instanceof ApiError ? err.message : 'Failed to approve draft.');
+      setApproveTarget(null);
       load();
+    } finally {
+      setBusyActionId(null);
     }
   };
 
-  const handleReject = async (draftId: string) => {
-    const reason = prompt('Rejection reason or notes (optional):');
-    if (reason === null) return;
+  // Modern Rejection Flow
+  const handleOpenReject = (draftId: string, draftName: string) => {
+    setRejectTarget({ draftId, draftName });
+    setRejectNotes('');
+  };
+
+  const submitReject = async () => {
+    if (!rejectTarget) return;
+    const { draftId } = rejectTarget;
     setBusyActionId(draftId);
+    setError(null);
     try {
-      await api.post(`/vendor-drafts/${draftId}/reject`, { notes: reason });
+      await api.post(`/vendor-drafts/${draftId}/reject`, { notes: rejectNotes || undefined });
+      setRejectTarget(null);
+      setSuccessBanner('Draft marked as rejected.');
       load();
     } catch (err: any) {
-      alert(err instanceof ApiError ? err.message : 'Failed to reject draft.');
+      setError(err instanceof ApiError ? err.message : 'Failed to reject draft.');
+    } finally {
+      setBusyActionId(null);
+    }
+  };
+
+  // AI Re-analysis Flow
+  const handleReanalyze = async (draftId: string) => {
+    setBusyActionId(draftId);
+    setSuccessBanner(null);
+    setError(null);
+    try {
+      const updated = await api.post<VendorDraftRow>(`/vendor-drafts/${draftId}/reanalyze`, {});
+      setSuccessBanner(`✨ Property "${updated.name}" re-analyzed with active AI swarm!`);
+      await load();
+    } catch (err: any) {
+      setError(err instanceof ApiError ? err.message : 'AI Re-analysis failed.');
     } finally {
       setBusyActionId(null);
     }
@@ -102,7 +148,7 @@ export default function VendorDraftsPage() {
       await api.del(`/vendor-drafts/${draftId}`);
       load();
     } catch (err: any) {
-      alert(err instanceof ApiError ? err.message : 'Failed to delete draft.');
+      setError(err instanceof ApiError ? err.message : 'Failed to delete draft.');
     }
   };
 
@@ -124,11 +170,11 @@ export default function VendorDraftsPage() {
             <h1 className="display text-[26px] font-semibold tracking-tight text-ink-100 flex items-center gap-2.5">
               Property Intelligence & Staging Drafts
               <Chip className="bg-signal-500/15 border-signal-500/40 text-signal-400">
-                Swarm Engine
+                AI Swarm Engine
               </Chip>
             </h1>
             <p className="mt-0.5 text-[13px] text-ink-400">
-              Staging review for hotels, houseboats, and seasonal camps discovered via Firecrawl, Jina Reader, scrape.do, Crawl4AI, and TinyFish.
+              Staging review for hotels, houseboats, and seasonal camps discovered via Firecrawl, Jina Reader & AI Swarm (NVIDIA, Gemini, Groq, OpenRouter).
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -138,8 +184,16 @@ export default function VendorDraftsPage() {
       </div>
 
       {error && (
-        <div className="mb-4 rounded-md border border-loss-500/40 bg-loss-500/10 p-3 text-[13px] text-loss-500">
-          {error}
+        <div className="mb-4 rounded-md border border-loss-500/40 bg-loss-500/10 p-3 text-[13px] text-loss-500 flex items-center gap-2">
+          <AlertCircle className="size-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {successBanner && (
+        <div className="mb-4 rounded-md border border-healthy-500/40 bg-healthy-500/10 p-3 text-[13px] text-healthy-400 flex items-center gap-2">
+          <CheckCircle2 className="size-4 shrink-0 text-healthy-400" />
+          <span>{successBanner}</span>
         </div>
       )}
 
@@ -199,7 +253,7 @@ export default function VendorDraftsPage() {
             onChange={(e) => setProviderFilter(e.target.value)}
             className="rounded-md border border-ink-800 bg-ink-950 px-2.5 py-1 text-[12px] text-ink-300 focus:border-signal-500 focus:outline-none"
           >
-            <option value="">All Scrapers</option>
+            <option value="">All Scrapers & AI</option>
             <option value="firecrawl">Firecrawl</option>
             <option value="jina">Jina Reader</option>
             <option value="scrape_do">scrape.do</option>
@@ -232,6 +286,11 @@ export default function VendorDraftsPage() {
             const isApproved = draft.status === 'APPROVED';
             const isRejected = draft.status === 'REJECTED';
             const isBusy = busyActionId === draft.id;
+            const hasAi = draft.sourceProvider?.includes('ai') || Boolean((draft.rawPayload as any)?.settlementInfo?.confidence);
+
+            // Clean checkin/checkout display without "In null / Out null"
+            const hasCheckIn = draft.checkInTime && draft.checkInTime !== 'null';
+            const hasCheckOut = draft.checkOutTime && draft.checkOutTime !== 'null';
 
             return (
               <div
@@ -254,9 +313,17 @@ export default function VendorDraftsPage() {
                           {(draft.rawPayload as any).settlementInfo.altitudeMeters}m
                         </span>
                       )}
+
                       <Chip className="border-sky-500/30 bg-sky-500/10 text-sky-400">
-                        via {draft.sourceProvider}
+                        via {draft.sourceProvider.split('+')[0]}
                       </Chip>
+
+                      {hasAi && (
+                        <Chip className="border-purple-500/30 bg-purple-500/10 text-purple-300 flex items-center gap-1 text-[11px]">
+                          <Sparkles className="size-3 text-purple-400" />
+                          AI Intelligence
+                        </Chip>
+                      )}
 
                       {isPending && (
                         <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-400">
@@ -312,9 +379,10 @@ export default function VendorDraftsPage() {
                           {draft.address}
                         </span>
                       )}
-                      {draft.checkInTime && draft.checkOutTime && (
-                        <span className="text-ink-500">
-                          Hours: In {draft.checkInTime} / Out {draft.checkOutTime}
+                      {(hasCheckIn || hasCheckOut) && (
+                        <span className="text-ink-400 flex items-center gap-1">
+                          <Clock className="size-3 text-ink-500" />
+                          Hours: {hasCheckIn ? `In ${draft.checkInTime}` : ''} {hasCheckOut ? `/ Out ${draft.checkOutTime}` : ''}
                         </span>
                       )}
                     </div>
@@ -377,13 +445,32 @@ export default function VendorDraftsPage() {
 
                   {/* Right side actions */}
                   <div className="flex flex-wrap items-center gap-2 self-start">
+                    {/* Re-analyze with AI button */}
+                    {draft.sourceUrl && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={isBusy}
+                        onClick={() => handleReanalyze(draft.id)}
+                        title="Re-run deep extraction with the AI failover swarm (NVIDIA, Gemini, Groq, OpenRouter)"
+                        className="text-signal-400 hover:text-signal-300 border-signal-500/30"
+                      >
+                        {isBusy ? (
+                          <Loader2 className="size-3.5 animate-spin text-signal-400" />
+                        ) : (
+                          <Sparkles className="size-3.5 text-signal-400" strokeWidth={1.75} />
+                        )}
+                        Re-analyze with AI
+                      </Button>
+                    )}
+
                     {isPending && (
                       <>
                         <Button
                           variant="primary"
                           size="sm"
                           disabled={isBusy}
-                          onClick={() => handleApprove(draft.id)}
+                          onClick={() => handleOpenApprove(draft)}
                         >
                           <ShieldCheck className="size-3.5" strokeWidth={1.75} />
                           Approve & Add to Suppliers
@@ -392,7 +479,7 @@ export default function VendorDraftsPage() {
                           variant="ghost"
                           size="sm"
                           disabled={isBusy}
-                          onClick={() => handleReject(draft.id)}
+                          onClick={() => handleOpenReject(draft.id, draft.name)}
                           className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
                         >
                           Reject
@@ -421,6 +508,96 @@ export default function VendorDraftsPage() {
           })}
         </div>
       )}
+
+      {/* ── Reject Confirmation Dialog (Replaces browser prompt) ── */}
+      <Dialog open={Boolean(rejectTarget)} onOpenChange={(open) => !open && setRejectTarget(null)}>
+        <DialogContent
+          title="Reject Property Draft"
+          description={`Mark "${rejectTarget?.draftName}" as rejected and remove it from active review.`}
+        >
+          <div className="p-5 space-y-4">
+            <div>
+              <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1.5">
+                Rejection Reason or Notes (Optional)
+              </label>
+              <textarea
+                rows={3}
+                value={rejectNotes}
+                onChange={(e) => setRejectNotes(e.target.value)}
+                placeholder="e.g. Incomplete pricing, seasonal closure, or duplicate listing..."
+                className="w-full rounded-md border border-ink-700 bg-ink-950 px-3 py-2 text-xs text-ink-100 placeholder:text-ink-600 focus:border-rose-500 focus:outline-none resize-none"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="secondary" size="sm" onClick={() => setRejectTarget(null)}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={submitReject}
+                disabled={busyActionId === rejectTarget?.draftId}
+                className="bg-rose-600 hover:bg-rose-700 text-white border-transparent"
+              >
+                {busyActionId === rejectTarget?.draftId ? (
+                  <><Loader2 className="size-3.5 animate-spin" /> Rejecting…</>
+                ) : (
+                  'Confirm Rejection'
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Approve Confirmation Dialog (Replaces browser confirm) ── */}
+      <Dialog open={Boolean(approveTarget)} onOpenChange={(open) => !open && setApproveTarget(null)}>
+        <DialogContent
+          title="Approve & Create Active Supplier"
+          description={`Convert "${approveTarget?.name}" into an active supplier on the books.`}
+        >
+          <div className="p-5 space-y-4">
+            <div className="rounded-lg border border-ink-800 bg-ink-950/60 p-3 space-y-2 text-xs">
+              <div className="flex justify-between">
+                <span className="text-ink-500">Property Name:</span>
+                <span className="font-semibold text-ink-100">{approveTarget?.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-ink-500">Location:</span>
+                <span className="text-ink-300">{approveTarget?.city || 'Ladakh'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-ink-500">Property Type:</span>
+                <span className="text-ink-300">{approveTarget?.propertyType}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-ink-500">Room Categories:</span>
+                <span className="text-ink-300">{approveTarget?.roomCategories?.length ?? 0} variants discovered</span>
+              </div>
+            </div>
+            <p className="text-[11.5px] text-ink-400">
+              This will instantiate an active supplier profile with all discovered room specs, phone numbers, and operational dates.
+            </p>
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="secondary" size="sm" onClick={() => setApproveTarget(null)}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={submitApprove}
+                disabled={busyActionId === approveTarget?.id}
+              >
+                {busyActionId === approveTarget?.id ? (
+                  <><Loader2 className="size-3.5 animate-spin" /> Creating Supplier…</>
+                ) : (
+                  <><ShieldCheck className="size-3.5" /> Confirm & Add to Suppliers</>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

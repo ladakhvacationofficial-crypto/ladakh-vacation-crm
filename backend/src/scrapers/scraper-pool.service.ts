@@ -1152,28 +1152,31 @@ export class ScraperPoolService {
   ): Promise<ExtractedPropertyResult> {
     const textSample = rawText.slice(0, 15000);
 
-    // Try AI extraction first if an active AI integration exists
-    const aiIntegration = await this.integrations.pickAI();
-    if (aiIntegration) {
+    // Multi-provider AI extraction failover loop: try all active AI integrations in priority order
+    const activeAIs = await this.integrations.listActiveAIs();
+    for (const aiIntegration of activeAIs) {
       try {
+        this.logger.log(`Attempting AI extraction via provider: ${aiIntegration.provider}`);
         const parsed = await this.extractWithAI(aiIntegration, textSample, url);
         if (parsed) {
           if (parsed.isSingleProperty === false) {
             throw new Error(`Refused: ${parsed.refusalReason || 'Disqualified multi-property listing or blog listicle'}`);
           }
           if (parsed.name) {
-            return this.normalizePropertyResult(parsed, url, provider, rawPayload, options);
+            this.logger.log(`Property successfully parsed by AI provider "${aiIntegration.provider}"`);
+            return this.normalizePropertyResult(parsed, url, `${provider}+ai:${aiIntegration.provider}`, rawPayload, options);
           }
         }
       } catch (err: any) {
         if (err.message && err.message.startsWith('Refused:')) {
           throw err;
         }
-        this.logger.warn(`AI extraction parsing failed (${err?.message}), falling back to heuristic regex parser`);
+        this.logger.warn(`AI provider "${aiIntegration.provider}" extraction failed (${err?.message}), trying next AI provider in failover pool...`);
       }
     }
 
     // Heuristic regex & rule-based parser fallback
+    this.logger.log('No AI provider succeeded or none active; falling back to heuristic regex parser');
     return this.parseWithHeuristics(textSample, url, provider, rawPayload, options);
   }
 
@@ -1236,41 +1239,107 @@ Return STRICTLY a JSON object with these keys:
 }
 Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operating parameters.`;
 
-    const apiKey = String(aiIntegration.credentials?.apiKey ?? '');
+    const apiKey = String(aiIntegration.credentials?.apiKey ?? '').trim();
     if (!apiKey) return null;
 
-    if (aiIntegration.provider === 'openai' || aiIntegration.provider === 'groq' || aiIntegration.provider === 'deepseek') {
-      const endpoint =
-        aiIntegration.provider === 'groq'
-          ? 'https://api.groq.com/openai/v1/chat/completions'
-          : aiIntegration.provider === 'deepseek'
-          ? 'https://api.deepseek.com/chat/completions'
-          : 'https://api.openai.com/v1/chat/completions';
-
-      const model =
-        aiIntegration.provider === 'groq'
-          ? 'llama-3.3-70b-versatile'
-          : aiIntegration.provider === 'deepseek'
-          ? 'deepseek-chat'
-          : 'gpt-4o-mini';
-
+    // 1. Google Gemini
+    if (aiIntegration.provider === 'google_gemini') {
+      const model = String(aiIntegration.credentials?.model ?? 'gemini-2.5-flash');
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${apiKey}`;
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model,
-          messages: [{ role: 'user', content: prompt }],
-          response_format: { type: 'json_object' },
-          temperature: 0.2,
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 2048,
+            responseMimeType: 'application/json',
+          },
         }),
       });
 
-      if (!res.ok) throw new Error(`AI API HTTP ${res.status}`);
+      if (!res.ok) {
+        // Fallback to gemini-1.5-flash if 2.5-flash encounters regional or version issues
+        if (model !== 'gemini-1.5-flash') {
+          const fallbackEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+          const fallbackRes = await fetch(fallbackEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: {
+                temperature: 0.1,
+                maxOutputTokens: 2048,
+                responseMimeType: 'application/json',
+              },
+            }),
+          });
+          if (fallbackRes.ok) {
+            const fbData: any = await fallbackRes.json();
+            const rawText = fbData?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+            const match = rawText.match(/\{[\s\S]*\}/);
+            return match ? JSON.parse(match[0]) : null;
+          }
+        }
+        const errText = await res.text();
+        throw new Error(`Gemini HTTP ${res.status}: ${errText.slice(0, 150)}`);
+      }
+
       const data: any = await res.json();
-      return JSON.parse(data.choices[0].message.content);
+      const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+      const match = rawText.match(/\{[\s\S]*\}/);
+      return match ? JSON.parse(match[0]) : null;
     }
 
+    // 2. OpenAI-compatible endpoints (Groq, NVIDIA, Cerebras, SambaNova, OpenRouter, Mistral, DeepSeek, OpenAI)
+    const openAiEndpoints: Record<string, { url: string; defaultModel: string; headers?: Record<string, string> }> = {
+      groq: { url: 'https://api.groq.com/openai/v1', defaultModel: 'llama-3.3-70b-versatile' },
+      nvidia: { url: 'https://integrate.api.nvidia.com/v1', defaultModel: 'meta/llama-3.3-70b-instruct' },
+      openrouter: {
+        url: 'https://openrouter.ai/api/v1',
+        defaultModel: 'meta-llama/llama-3.3-70b-instruct:free',
+        headers: { 'HTTP-Referer': 'https://ladakhvacation.in', 'X-Title': 'Ladakh Vacation CRM' },
+      },
+      cerebras: { url: 'https://api.cerebras.ai/v1', defaultModel: 'llama3.3-70b' },
+      sambanova: { url: 'https://api.sambanova.ai/v1', defaultModel: 'Meta-Llama-3.3-70B-Instruct' },
+      mistral: { url: 'https://api.mistral.ai/v1', defaultModel: 'mistral-small-latest' },
+      deepseek: { url: 'https://api.deepseek.com', defaultModel: 'deepseek-chat' },
+      openai: { url: 'https://api.openai.com/v1', defaultModel: 'gpt-4o-mini' },
+    };
+
+    if (openAiEndpoints[aiIntegration.provider]) {
+      const cfg = openAiEndpoints[aiIntegration.provider];
+      const model = String(aiIntegration.credentials?.model ?? cfg.defaultModel);
+      const res = await fetch(`${cfg.url.replace(/\/+$/, '')}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          ...(cfg.headers || {}),
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.1,
+          response_format: { type: 'json_object' },
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`${aiIntegration.provider} HTTP ${res.status}: ${errText.slice(0, 150)}`);
+      }
+
+      const data: any = await res.json();
+      const raw = data.choices?.[0]?.message?.content ?? '';
+      const match = raw.match(/\{[\s\S]*\}/);
+      return match ? JSON.parse(match[0]) : null;
+    }
+
+    // 3. Anthropic
     if (aiIntegration.provider === 'anthropic') {
+      const model = String(aiIntegration.credentials?.model ?? 'claude-3-5-haiku-20241022');
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -1279,7 +1348,7 @@ Do NOT include live OTA room prices. Only bed-wise specs, occupancy, and operati
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'claude-3-5-haiku-20241022',
+          model,
           max_tokens: 1500,
           messages: [{ role: 'user', content: prompt }],
         }),
