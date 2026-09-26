@@ -202,7 +202,7 @@ export default function VendorDraftsPage() {
           <div>
             <h1 className="display text-[26px] font-semibold tracking-tight text-ink-100 flex items-center gap-2.5">
               Property Intelligence & Staging Drafts
-              <Chip className="bg-signal-500/15 border-signal-500/40 text-signal-400">
+              <Chip className="bg-signal-50 border border-signal-200 text-signal-700 font-semibold text-[11.5px]">
                 AI Swarm Engine
               </Chip>
             </h1>
@@ -231,24 +231,26 @@ export default function VendorDraftsPage() {
       )}
 
       {/* Quick Seed Master Directory Banner */}
-      <div className="mb-6 rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-4 sm:p-5">
+      <div className="mb-6 rounded-xl border border-amber-300 bg-amber-50/90 p-4 sm:p-5 shadow-xs">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Zap className="size-4 text-amber-400" />
-              <h2 className="text-[14px] font-semibold text-amber-200">
+              <div className="grid size-6 place-items-center rounded bg-amber-600 text-white shadow-xs">
+                <Zap className="size-3.5 fill-white" />
+              </div>
+              <h2 className="text-[15px] font-bold text-ink-100">
                 Instant Destination Seeding (Complete Valley Inventory)
               </h2>
             </div>
-            <p className="text-[12px] text-ink-300 max-w-2xl leading-relaxed">
+            <p className="text-[12.5px] text-ink-400 max-w-2xl leading-relaxed">
               Stage all 73 verified operational properties across Ladakh & Kashmir with room categories (AP, MAP, CP, EP), seasonal validity, and altitude metrics with a single click.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
             <select
               value={quickSeedDest}
               onChange={(e) => setQuickSeedDest(e.target.value)}
-              className="rounded-md border border-amber-500/40 bg-ink-950 px-3 py-1.5 text-[12.5px] text-amber-200 focus:border-amber-400 focus:outline-none"
+              className="rounded-lg border border-ink-700 bg-white px-3 py-2 text-[12.5px] font-medium text-ink-100 shadow-xs hover:border-ink-600 focus:border-signal-500 focus:outline-none"
             >
               <option value="all">🌟 All Destinations (73 Properties)</option>
               <option value="leh">🏰 Leh & Sham Valley (18 Hotels)</option>
@@ -263,7 +265,7 @@ export default function VendorDraftsPage() {
               size="sm"
               disabled={seedingBusy}
               onClick={handleQuickSeed}
-              className="bg-amber-600 hover:bg-amber-500 text-white font-medium"
+              className="bg-amber-700 hover:bg-amber-800 text-white font-semibold shadow-xs h-9 px-4"
             >
               {seedingBusy ? (
                 <>
@@ -272,7 +274,7 @@ export default function VendorDraftsPage() {
                 </>
               ) : (
                 <>
-                  <Zap className="size-3.5" />
+                  <Zap className="size-3.5 fill-white" />
                   Seed Destination
                 </>
               )}
@@ -282,9 +284,9 @@ export default function VendorDraftsPage() {
       </div>
 
       {/* Filter bar */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-y border-ink-800/60 py-3">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-y border-ink-800/80 py-3">
         {/* Status tabs */}
-        <div className="flex flex-wrap items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           {[
             { value: 'PENDING_REVIEW', label: 'Pending Review', badge: pendingCount > 0 ? pendingCount : undefined },
             { value: 'APPROVED', label: 'Approved & Live' },
@@ -298,13 +300,13 @@ export default function VendorDraftsPage() {
                 onClick={() => setStatusFilter(t.value)}
                 className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
                   active
-                    ? 'border border-signal-500 bg-signal-500/15 text-signal-500'
-                    : 'text-ink-400 hover:text-ink-200'
+                    ? 'border border-signal-600 bg-signal-50 text-signal-700 font-semibold shadow-xs'
+                    : 'border border-ink-800 bg-white text-ink-400 hover:text-ink-100 hover:border-ink-700'
                 }`}
               >
                 {t.label}
                 {t.badge !== undefined && (
-                  <span className="rounded-full bg-signal-500/20 px-1.5 py-0.2 text-[10px] text-signal-400">
+                  <span className="rounded-full bg-signal-100 px-1.5 py-0.2 text-[10px] font-bold text-signal-700">
                     {t.badge}
                   </span>
                 )}
@@ -318,7 +320,7 @@ export default function VendorDraftsPage() {
           <select
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="rounded-md border border-ink-800 bg-ink-950 px-2.5 py-1 text-[12px] text-ink-300 focus:border-signal-500 focus:outline-none"
+            className="rounded-lg border border-ink-700 bg-white px-2.5 py-1.5 text-[12px] font-medium text-ink-100 shadow-xs hover:border-ink-600 focus:border-signal-500 focus:outline-none"
           >
             <option value="">All Destinations</option>
             <option value="Srinagar">Srinagar</option>
@@ -335,9 +337,10 @@ export default function VendorDraftsPage() {
           <select
             value={providerFilter}
             onChange={(e) => setProviderFilter(e.target.value)}
-            className="rounded-md border border-ink-800 bg-ink-950 px-2.5 py-1 text-[12px] text-ink-300 focus:border-signal-500 focus:outline-none"
+            className="rounded-lg border border-ink-700 bg-white px-2.5 py-1.5 text-[12px] font-medium text-ink-100 shadow-xs hover:border-ink-600 focus:border-signal-500 focus:outline-none"
           >
-            <option value="">All Scrapers & AI</option>
+            <option value="">All Scrapers & Sources</option>
+            <option value="verified_directory">Verified Master Directory</option>
             <option value="firecrawl">Firecrawl</option>
             <option value="jina">Jina Reader</option>
             <option value="scrape_do">scrape.do</option>
@@ -360,7 +363,7 @@ export default function VendorDraftsPage() {
           <Sparkles className="mx-auto size-8 text-ink-600 mb-2" strokeWidth={1.5} />
           <h3 className="text-[14px] font-semibold text-ink-200">No property drafts found</h3>
           <p className="mt-1 text-[12.5px] text-ink-500 max-w-md mx-auto">
-            Use the "Scrape Property Intelligence" button above to extract hotel specifications, room variants, and seasonal dates from web URLs.
+            Use the "Instant Destination Seeding" bar above or the "Scrape Property Intelligence" button to stage hotels, camps, and houseboats.
           </p>
         </Panel>
       ) : (
@@ -385,44 +388,44 @@ export default function VendorDraftsPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-[15px] font-semibold text-ink-100">{draft.name}</span>
-                      <Chip className="bg-ink-800 text-ink-300">{draft.propertyType}</Chip>
-                      {draft.city && <Chip className="border-ink-700 text-ink-400">{draft.city}</Chip>}
+                      <Chip className="bg-ink-850 text-ink-300 border border-ink-800 font-medium">{draft.propertyType}</Chip>
+                      {draft.city && <Chip className="border-ink-700 bg-white text-ink-300 font-medium">{draft.city}</Chip>}
                       {(draft.rawPayload as any)?.settlementInfo?.settlement && (
-                        <Chip className="border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                        <Chip className="border-emerald-300 bg-emerald-50 text-emerald-800 font-medium">
                           📍 {(draft.rawPayload as any).settlementInfo.settlement}
                         </Chip>
                       )}
                       {(draft.rawPayload as any)?.settlementInfo?.altitudeMeters && (
-                        <span className="text-[11px] text-ink-500 font-mono">
+                        <span className="text-[11px] text-ink-400 font-mono font-semibold">
                           {(draft.rawPayload as any).settlementInfo.altitudeMeters}m
                         </span>
                       )}
 
-                      <Chip className="border-sky-500/30 bg-sky-500/10 text-sky-400">
+                      <Chip className="border-sky-300 bg-sky-50 text-sky-800 font-medium">
                         via {draft.sourceProvider.split('+')[0]}
                       </Chip>
 
                       {hasAi && (
-                        <Chip className="border-purple-500/30 bg-purple-500/10 text-purple-300 flex items-center gap-1 text-[11px]">
-                          <Sparkles className="size-3 text-purple-400" />
+                        <Chip className="border-purple-300 bg-purple-50 text-purple-800 flex items-center gap-1 text-[11px] font-medium">
+                          <Sparkles className="size-3 text-purple-600" />
                           AI Intelligence
                         </Chip>
                       )}
 
                       {isPending && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-400">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-800">
                           <Clock className="size-3" strokeWidth={2} />
                           Pending Staging Review
                         </span>
                       )}
                       {isApproved && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-400">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
                           <CheckCircle2 className="size-3" strokeWidth={2} />
                           Approved & Active
                         </span>
                       )}
                       {isRejected && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[11px] font-medium text-rose-400">
+                        <span className="inline-flex items-center gap-1 rounded-full border border-rose-300 bg-rose-50 px-2 py-0.5 text-[11px] font-semibold text-rose-800">
                           <XCircle className="size-3" strokeWidth={2} />
                           Rejected
                         </span>
@@ -501,7 +504,7 @@ export default function VendorDraftsPage() {
                     {/* Seasonal Dates & Amenities */}
                     <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[12px]">
                       {(draft.seasonalFrom || draft.seasonalTo) && (
-                        <div className="flex items-center gap-1.5 text-signal-400 bg-signal-500/10 px-2.5 py-0.5 rounded border border-signal-500/20 text-[11.5px]">
+                        <div className="flex items-center gap-1.5 text-signal-700 bg-signal-50 px-2.5 py-0.5 rounded border border-signal-200 text-[11.5px] font-medium">
                           <Calendar className="size-3" strokeWidth={2} />
                           Operating Season: {draft.seasonalFrom ? new Date(draft.seasonalFrom).toLocaleDateString() : 'Start'} – {draft.seasonalTo ? new Date(draft.seasonalTo).toLocaleDateString() : 'End'}
                         </div>
@@ -511,7 +514,7 @@ export default function VendorDraftsPage() {
                         <div className="flex flex-wrap items-center gap-1 text-[11px] text-ink-400">
                           <span className="text-ink-500">Reported Amenities:</span>
                           {draft.reportedAmenities.slice(0, 5).map((a, idx) => (
-                            <span key={idx} className="rounded bg-ink-800/80 px-1.5 py-0.5 text-ink-300">
+                            <span key={idx} className="rounded bg-ink-850 px-1.5 py-0.5 text-ink-300 border border-ink-800">
                               {a}
                             </span>
                           ))}
@@ -537,12 +540,12 @@ export default function VendorDraftsPage() {
                         disabled={isBusy}
                         onClick={() => handleReanalyze(draft.id)}
                         title="Re-run deep extraction with the AI failover swarm (NVIDIA, Gemini, Groq, OpenRouter)"
-                        className="text-signal-400 hover:text-signal-300 border-signal-500/30"
+                        className="text-signal-700 hover:text-signal-800 border-signal-200 bg-signal-50/60 hover:bg-signal-50 font-medium"
                       >
                         {isBusy ? (
-                          <Loader2 className="size-3.5 animate-spin text-signal-400" />
+                          <Loader2 className="size-3.5 animate-spin text-signal-700" />
                         ) : (
-                          <Sparkles className="size-3.5 text-signal-400" strokeWidth={1.75} />
+                          <Sparkles className="size-3.5 text-signal-700" strokeWidth={1.75} />
                         )}
                         Re-analyze with AI
                       </Button>
@@ -564,7 +567,7 @@ export default function VendorDraftsPage() {
                           size="sm"
                           disabled={isBusy}
                           onClick={() => handleOpenReject(draft.id, draft.name)}
-                          className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
+                          className="text-rose-700 hover:text-rose-800 hover:bg-rose-50 border border-transparent hover:border-rose-200 font-medium"
                         >
                           Reject
                         </Button>

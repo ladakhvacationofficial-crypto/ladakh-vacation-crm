@@ -264,11 +264,11 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
               onClick={() => setMode('seed')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
                 mode === 'seed'
-                  ? 'bg-amber-500/15 border border-amber-500/60 text-amber-400 font-semibold'
-                  : 'text-ink-400 hover:text-ink-200'
+                  ? 'bg-amber-50 border border-amber-300 text-amber-900 font-bold shadow-xs'
+                  : 'text-ink-400 hover:text-ink-100'
               }`}
             >
-              <Zap className="size-3.5 text-amber-400" strokeWidth={1.75} />
+              <Zap className="size-3.5 text-amber-600 fill-amber-500" strokeWidth={1.75} />
               ⚡ Seed Destination Directory (All Hotels)
             </button>
             <button
@@ -276,8 +276,8 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
               onClick={() => setMode('keyword')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
                 mode === 'keyword'
-                  ? 'bg-signal-500/15 border border-signal-500 text-signal-500'
-                  : 'text-ink-400 hover:text-ink-200'
+                  ? 'bg-signal-50 border border-signal-300 text-signal-700 font-semibold shadow-xs'
+                  : 'text-ink-400 hover:text-ink-100'
               }`}
             >
               <Search className="size-3.5" strokeWidth={1.75} />
@@ -288,8 +288,8 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
               onClick={() => setMode('single')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
                 mode === 'single'
-                  ? 'bg-signal-500/15 border border-signal-500 text-signal-500'
-                  : 'text-ink-400 hover:text-ink-200'
+                  ? 'bg-signal-50 border border-signal-300 text-signal-700 font-semibold shadow-xs'
+                  : 'text-ink-400 hover:text-ink-100'
               }`}
             >
               <Globe className="size-3.5" strokeWidth={1.75} />
@@ -300,8 +300,8 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
               onClick={() => setMode('batch')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
                 mode === 'batch'
-                  ? 'bg-signal-500/15 border border-signal-500 text-signal-500'
-                  : 'text-ink-400 hover:text-ink-200'
+                  ? 'bg-signal-50 border border-signal-300 text-signal-700 font-semibold shadow-xs'
+                  : 'text-ink-400 hover:text-ink-100'
               }`}
             >
               <Layers className="size-3.5" strokeWidth={1.75} />
@@ -309,8 +309,8 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
             </button>
           </div>
 
-          <div className="rounded-md border border-ink-800/80 bg-ink-950/70 p-2.5 text-[11.5px] text-ink-300 flex items-start gap-2">
-            <ShieldCheck className="size-4 shrink-0 text-signal-500 mt-0.5" strokeWidth={1.75} />
+          <div className="rounded-md border border-ink-800 bg-white p-2.5 text-[11.5px] text-ink-300 flex items-start gap-2 shadow-xs">
+            <ShieldCheck className="size-4 shrink-0 text-signal-600 mt-0.5" strokeWidth={1.75} />
             <span>
               <strong className="text-ink-100">Quality Filter Active:</strong> Targets direct hotel websites & deep reviews in Ladakh/Kashmir. Generic aggregator homepages (Hotels.com, Expedia) and foreign listings are auto-blocked to prevent database pollution.
             </span>
@@ -331,7 +331,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
           )}
 
           {warnings.length > 0 && (
-            <div className="rounded-md border border-amber-500/30 bg-amber-500/10 p-3 text-[11.5px] text-amber-300 space-y-1">
+            <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-[11.5px] text-amber-900 space-y-1">
               <div className="font-semibold">Discovery notices:</div>
               {warnings.slice(0, 3).map((w, idx) => (
                 <div key={idx} className="truncate">· {w}</div>
@@ -342,14 +342,16 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
           {/* Mode: Seed Master Directory */}
           {mode === 'seed' && (
             <form onSubmit={handleSeedDestination} className="space-y-4">
-              <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3.5 space-y-2">
+              <div className="rounded-lg border border-amber-200 bg-amber-50/90 p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <Zap className="size-4 text-amber-400" />
-                  <span className="text-[13px] font-semibold text-amber-300">
+                  <div className="grid size-6 place-items-center rounded bg-amber-600 text-white shadow-xs">
+                    <Zap className="size-3.5 fill-white" />
+                  </div>
+                  <span className="text-[14px] font-bold text-ink-100">
                     Comprehensive Destination Inventory (Zero Omission)
                   </span>
                 </div>
-                <p className="text-[12px] text-ink-300 leading-relaxed">
+                <p className="text-[12.5px] text-ink-400 leading-relaxed">
                   Instead of partial or limited web searches, instantly stage <strong>all verified hotels, heritage palaces, luxury camps, and houseboats</strong> for your chosen destination. Every property is fully loaded with accurate room categories (AP, MAP, CP, EP), contact numbers, exact altitudes, and seasonal operational dates.
                 </p>
               </div>
@@ -361,7 +363,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                 <Select
                   value={seedDestination}
                   onChange={(e) => setSeedDestination(e.target.value)}
-                  className="w-full text-[13px]"
+                  className="w-full text-[13px] border-ink-700 bg-white text-ink-100 font-medium shadow-xs"
                 >
                   <option value="all">🌟 All Destinations (All 73 Verified Properties across Ladakh & Kashmir)</option>
                   <option value="leh">🏰 Leh & Sham Valley (18 Hotels & Heritage Palaces — Grand Dragon, Indus Valley, Stok, Saboo...)</option>
@@ -373,8 +375,8 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                 </Select>
               </div>
 
-              <div className="rounded-md border border-ink-800 bg-ink-900/60 p-3 text-[11.5px] text-ink-400 space-y-1">
-                <div className="font-medium text-ink-200">What gets seeded:</div>
+              <div className="rounded-md border border-ink-800 bg-white p-3 text-[12px] text-ink-400 space-y-1 shadow-xs">
+                <div className="font-semibold text-ink-100">What gets seeded:</div>
                 <div>· Complete room inventory (Deluxe, Suites, Luxury Tents, Cottage variants)</div>
                 <div>· Real meal plan tariffs (EP, CP, MAP, AP) & extra bed/child pricing references</div>
                 <div>· Geographic accuracy: Exact settlement, valley classification, and altitude meters</div>
@@ -382,7 +384,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
               </div>
 
               <div className="pt-2 flex justify-end">
-                <Button type="submit" variant="primary" disabled={loading} className="bg-amber-600 hover:bg-amber-500 text-white">
+                <Button type="submit" variant="primary" disabled={loading} className="bg-amber-700 hover:bg-amber-800 text-white font-semibold shadow-xs">
                   {loading ? (
                     <>
                       <Loader2 className="size-4 animate-spin" strokeWidth={1.75} />
@@ -390,7 +392,7 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                     </>
                   ) : (
                     <>
-                      <Zap className="size-4" strokeWidth={1.75} />
+                      <Zap className="size-4 fill-white" strokeWidth={1.75} />
                       Seed All {seedDestination === 'all' ? '73 Properties' : 'Destination Properties'}
                     </>
                   )}
@@ -425,28 +427,28 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <button
                     type="button"
                     onClick={() => applyPreset('Nubra luxury camps', 'Nubra', 'CAMP')}
-                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                    className="rounded-full border border-ink-700 bg-white px-2.5 py-0.5 text-[11px] font-medium text-ink-300 hover:border-signal-500 hover:text-signal-600 hover:bg-signal-50/50 transition-colors shadow-xs"
                   >
                     🏔️ Nubra Camps
                   </button>
                   <button
                     type="button"
                     onClick={() => applyPreset('Pangong lake camps', 'Pangong', 'CAMP')}
-                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                    className="rounded-full border border-ink-700 bg-white px-2.5 py-0.5 text-[11px] font-medium text-ink-300 hover:border-signal-500 hover:text-signal-600 hover:bg-signal-50/50 transition-colors shadow-xs"
                   >
                     🌊 Pangong Tents
                   </button>
                   <button
                     type="button"
                     onClick={() => applyPreset('Leh heritage hotels', 'Leh', 'HOTEL')}
-                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                    className="rounded-full border border-ink-700 bg-white px-2.5 py-0.5 text-[11px] font-medium text-ink-300 hover:border-signal-500 hover:text-signal-600 hover:bg-signal-50/50 transition-colors shadow-xs"
                   >
                     🏰 Leh Hotels
                   </button>
                   <button
                     type="button"
                     onClick={() => applyPreset('Dal Lake luxury houseboats', 'Srinagar', 'HOUSEBOAT')}
-                    className="rounded-full border border-ink-800 bg-ink-900 px-2.5 py-0.5 text-[11px] text-ink-300 hover:border-signal-500 hover:text-signal-400 transition-colors"
+                    className="rounded-full border border-ink-700 bg-white px-2.5 py-0.5 text-[11px] font-medium text-ink-300 hover:border-signal-500 hover:text-signal-600 hover:bg-signal-50/50 transition-colors shadow-xs"
                   >
                     🛶 Srinagar Houseboats
                   </button>
