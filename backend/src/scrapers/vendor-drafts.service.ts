@@ -10,6 +10,10 @@ import { BatchExtractDto } from './dto/batch-extract.dto';
 import { DiscoverDraftsDto } from './dto/discover-drafts.dto';
 import { UpdateDraftDto } from './dto/update-draft.dto';
 import { ScrapeDraftStatus, VendorType } from '@prisma/client';
+import {
+  getPropertiesByDestination,
+  DirectoryProperty,
+} from './destination-directory';
 
 @Injectable()
 export class VendorDraftsService {
@@ -264,6 +268,118 @@ export class VendorDraftsService {
       drafts: createdDrafts,
       errors,
     };
+  }
+
+  /**
+   * Seeds verified operational properties for a destination or valley from MASTER_DESTINATION_HOTELS.
+   * Directly stages complete properties into VendorDraft with all real rooms, contacts, altitude, settlement, and meal plans.
+   */
+  async seedDestination(destination: string, userId?: string) {
+    const properties = getPropertiesByDestination(destination);
+    if (!properties || properties.length === 0) {
+      throw new NotFoundException(`No verified directory properties found for destination "${destination}"`);
+    }
+
+    const createdDrafts: any[] = [];
+
+    for (const prop of properties) {
+      const draft = await this.upsertDirectoryProperty(prop, userId);
+      if (draft) {
+        createdDrafts.push(draft);
+      }
+    }
+
+    return {
+      destination: destination || 'all',
+      totalAvailable: properties.length,
+      seeded: createdDrafts.length,
+      drafts: createdDrafts,
+    };
+  }
+
+  private async upsertDirectoryProperty(prop: DirectoryProperty, userId?: string) {
+    const trimmedName = prop.name.trim();
+
+    // Check if an active supplier already exists on the books
+    const activeVendor = await this.prisma.vendor.findFirst({
+      where: { name: { equals: trimmedName, mode: 'insensitive' } },
+    });
+
+    const existing = await this.prisma.vendorDraft.findFirst({
+      where: {
+        OR: [
+          { sourceUrl: prop.sourceUrl },
+          { name: { equals: trimmedName, mode: 'insensitive' } },
+        ],
+      },
+    });
+
+    const rawPayloadWithSettlement = {
+      settlementInfo: {
+        settlement: prop.settlement,
+        valley: prop.valley,
+        altitudeMeters: prop.altitudeMeters,
+        confidence: 1.0,
+      },
+      source: 'verified_destination_directory',
+    };
+
+    const autoNote = `Verified Master Directory: ${prop.settlement} (${prop.valley} Valley) · ${prop.altitudeMeters}m altitude`;
+    const seasonalFrom = prop.seasonalFrom ? new Date(`${prop.seasonalFrom}T00:00:00.000Z`) : null;
+    const seasonalTo = prop.seasonalTo ? new Date(`${prop.seasonalTo}T00:00:00.000Z`) : null;
+
+    if (existing) {
+      if (existing.status !== ScrapeDraftStatus.PENDING_REVIEW) {
+        return existing;
+      }
+      return this.prisma.vendorDraft.update({
+        where: { id: existing.id },
+        data: {
+          sourceProvider: 'verified_directory',
+          sourceUrl: prop.sourceUrl || existing.sourceUrl,
+          city: prop.city || existing.city,
+          propertyType: prop.propertyType || existing.propertyType,
+          phone: prop.phone || existing.phone,
+          email: prop.email || existing.email,
+          address: prop.address || existing.address,
+          starRating: prop.starRating ?? existing.starRating,
+          roomCount: prop.roomCount ?? existing.roomCount,
+          checkInTime: prop.checkInTime || existing.checkInTime,
+          checkOutTime: prop.checkOutTime || existing.checkOutTime,
+          roomCategories: prop.roomCategories as any,
+          seasonalFrom: seasonalFrom ?? existing.seasonalFrom,
+          seasonalTo: seasonalTo ?? existing.seasonalTo,
+          reportedAmenities: prop.reportedAmenities.length > 0 ? prop.reportedAmenities : existing.reportedAmenities,
+          notes: existing.notes || autoNote,
+          rawPayload: rawPayloadWithSettlement as any,
+        },
+      });
+    }
+
+    return this.prisma.vendorDraft.create({
+      data: {
+        sourceProvider: 'verified_directory',
+        sourceUrl: prop.sourceUrl,
+        name: trimmedName,
+        city: prop.city,
+        propertyType: prop.propertyType,
+        phone: prop.phone,
+        email: prop.email,
+        address: prop.address,
+        starRating: prop.starRating,
+        roomCount: prop.roomCount,
+        checkInTime: prop.checkInTime,
+        checkOutTime: prop.checkOutTime,
+        roomCategories: prop.roomCategories as any,
+        seasonalFrom,
+        seasonalTo,
+        reportedAmenities: prop.reportedAmenities,
+        notes: autoNote,
+        rawPayload: rawPayloadWithSettlement as any,
+        status: activeVendor ? ScrapeDraftStatus.MERGED : ScrapeDraftStatus.PENDING_REVIEW,
+        createdVendorId: activeVendor?.id ?? null,
+      },
+    });
   }
 
   async update(id: string, dto: UpdateDraftDto, userId?: string) {

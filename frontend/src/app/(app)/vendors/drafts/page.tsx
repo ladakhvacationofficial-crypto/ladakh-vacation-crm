@@ -21,6 +21,7 @@ import {
   Loader2,
   AlertCircle,
   RefreshCw,
+  Zap,
 } from 'lucide-react';
 import {
   api,
@@ -46,6 +47,8 @@ export default function VendorDraftsPage() {
   const [cityFilter, setCityFilter] = useState<string>('');
   const [providerFilter, setProviderFilter] = useState<string>('');
   const [busyActionId, setBusyActionId] = useState<string | null>(null);
+  const [quickSeedDest, setQuickSeedDest] = useState('all');
+  const [seedingBusy, setSeedingBusy] = useState(false);
 
   // Custom modal states replacing browser prompt() and confirm()
   const [rejectTarget, setRejectTarget] = useState<{ draftId: string; draftName: string } | null>(null);
@@ -152,6 +155,36 @@ export default function VendorDraftsPage() {
     }
   };
 
+  const handleQuickSeed = async () => {
+    setSeedingBusy(true);
+    setError(null);
+    setSuccessBanner(null);
+    try {
+      const res = await api.post<{
+        destination: string;
+        totalAvailable: number;
+        seeded: number;
+        drafts: VendorDraftRow[];
+      }>('/vendor-drafts/seed-destination', {
+        destination: quickSeedDest,
+      });
+
+      const destLabel =
+        quickSeedDest === 'all'
+          ? 'All Destinations (Ladakh & Kashmir)'
+          : quickSeedDest.toUpperCase();
+
+      setSuccessBanner(
+        `⚡ Successfully staged all ${res.seeded} verified operational properties for ${destLabel} into staging review!`,
+      );
+      await load();
+    } catch (err: any) {
+      setError(err instanceof ApiError ? err.message : 'Failed to seed destination directory.');
+    } finally {
+      setSeedingBusy(false);
+    }
+  };
+
   const pendingCount = drafts.filter((d) => d.status === 'PENDING_REVIEW').length;
 
   return (
@@ -196,6 +229,57 @@ export default function VendorDraftsPage() {
           <span>{successBanner}</span>
         </div>
       )}
+
+      {/* Quick Seed Master Directory Banner */}
+      <div className="mb-6 rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-4 sm:p-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Zap className="size-4 text-amber-400" />
+              <h2 className="text-[14px] font-semibold text-amber-200">
+                Instant Destination Seeding (Complete Valley Inventory)
+              </h2>
+            </div>
+            <p className="text-[12px] text-ink-300 max-w-2xl leading-relaxed">
+              Stage all 73 verified operational properties across Ladakh & Kashmir with room categories (AP, MAP, CP, EP), seasonal validity, and altitude metrics with a single click.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <select
+              value={quickSeedDest}
+              onChange={(e) => setQuickSeedDest(e.target.value)}
+              className="rounded-md border border-amber-500/40 bg-ink-950 px-3 py-1.5 text-[12.5px] text-amber-200 focus:border-amber-400 focus:outline-none"
+            >
+              <option value="all">🌟 All Destinations (73 Properties)</option>
+              <option value="leh">🏰 Leh & Sham Valley (18 Hotels)</option>
+              <option value="nubra">🏔️ Nubra Valley (15 Camps)</option>
+              <option value="pangong">🌊 Pangong Lake (12 Tents)</option>
+              <option value="hanle">🔭 Hanle & Changthang (8 Stays)</option>
+              <option value="zanskar">⛰️ Zanskar & Kargil (8 Resorts)</option>
+              <option value="srinagar">🛶 Srinagar & Kashmir (12 Houseboats/Hotels)</option>
+            </select>
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={seedingBusy}
+              onClick={handleQuickSeed}
+              className="bg-amber-600 hover:bg-amber-500 text-white font-medium"
+            >
+              {seedingBusy ? (
+                <>
+                  <Loader2 className="size-3.5 animate-spin" />
+                  Seeding...
+                </>
+              ) : (
+                <>
+                  <Zap className="size-3.5" />
+                  Seed Destination
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Filter bar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-y border-ink-800/60 py-3">

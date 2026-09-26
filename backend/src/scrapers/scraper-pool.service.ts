@@ -60,6 +60,40 @@ export function isQualifiedPropertyUrl(rawUrl: string): UrlQualificationResult {
   const hostname = parsed.hostname.toLowerCase();
   const pathname = parsed.pathname.toLowerCase();
 
+  // 0. Static assets, media files, image CDNs, tracking URLs
+  if (
+    /\.(png|jpe?g|gif|webp|svg|ico|pdf|css|js|woff2?|mp4|mov|avi|zip|tar|gz)(?:[?#]|$)/i.test(parsed.pathname) ||
+    /\.(png|jpe?g|gif|webp|svg|ico|pdf)(?:[?#]|$)/i.test(rawUrl)
+  ) {
+    return { qualified: false, reason: `Static asset or media file URL: ${pathname}` };
+  }
+
+  const cdnAndTrackerPatterns = [
+    'fbcdn.net',
+    'akamaihd.net',
+    'cloudfront.net',
+    'googleusercontent.com',
+    'tacdn.com',
+    'cloudinary.com',
+    'imgix.net',
+    'twimg.com',
+    'licdn.com',
+    'ojrq.net',
+    'omguk.com',
+    'doubleclick.net',
+    'adnxs.com',
+    'adroll.com',
+    'criteo.com',
+    'awstrack.me',
+    'trustpilot.com',
+    'tripadvisor.mediacdn.',
+    'ytimg.com',
+    'ggpht.com',
+  ];
+  if (cdnAndTrackerPatterns.some((pattern) => hostname.includes(pattern))) {
+    return { qualified: false, reason: `CDN, media host, or tracking redirector: ${hostname}` };
+  }
+
   // 1. Social networks, video portals, forums, search engines
   const blacklistedDomains = [
     'facebook.com',
@@ -822,9 +856,11 @@ export class ScraperPoolService {
         const res = await fetch(`https://s.jina.ai/${encodeURIComponent(jinaQuery)}`, { headers });
         if (res.ok) {
           const markdown = await res.text();
-          const matches = markdown.matchAll(/\[(?:[^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g);
+          // Match markdown links [text](url) while strictly ignoring image embeds ![alt](url)
+          const matches = markdown.matchAll(/(?<!!)\[(?:[^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g);
           for (const m of matches) {
             const u = m[1];
+            if (!u || discoveredUrls.includes(u)) continue;
             if (isLadakhQuery && !isHouseboatQuery && /houseboat/i.test(u)) {
               continue;
             }

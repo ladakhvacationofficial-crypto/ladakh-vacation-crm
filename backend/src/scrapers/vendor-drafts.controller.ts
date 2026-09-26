@@ -57,6 +57,15 @@ export class VendorDraftsController {
   }
 
   @Roles(...VENDOR_WRITE_ACCESS)
+  @Post('seed-destination')
+  seedDestination(
+    @Body('destination') destination: string,
+    @CurrentUser('id') userId: string,
+  ) {
+    return this.draftsService.seedDestination(destination, userId);
+  }
+
+  @Roles(...VENDOR_WRITE_ACCESS)
   @Patch(':id')
   update(
     @Param('id') id: string,

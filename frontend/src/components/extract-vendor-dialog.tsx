@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, Loader2, Globe, Layers, Search, AlertCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Sparkles, Loader2, Globe, Layers, Search, AlertCircle, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,14 +15,15 @@ interface ExtractVendorDialogProps {
 
 export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialogProps) {
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState<'keyword' | 'single' | 'batch'>('keyword');
+  const [mode, setMode] = useState<'seed' | 'keyword' | 'single' | 'batch'>('seed');
+  const [seedDestination, setSeedDestination] = useState('all');
   const [keywordQuery, setKeywordQuery] = useState('');
   const [url, setUrl] = useState('');
   const [batchUrls, setBatchUrls] = useState('');
   const [city, setCity] = useState('');
   const [propertyType, setPropertyType] = useState('HOTEL');
   const [provider, setProvider] = useState('');
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(20);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -70,6 +71,45 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
     setKeywordQuery(presetQuery);
     setCity(presetCity);
     setPropertyType(presetType);
+  };
+
+  const handleSeedDestination = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccessMsg(null);
+    setWarnings([]);
+
+    try {
+      const res = await api.post<{
+        destination: string;
+        totalAvailable: number;
+        seeded: number;
+        drafts: VendorDraftRow[];
+      }>('/vendor-drafts/seed-destination', {
+        destination: seedDestination,
+      });
+
+      const destLabel =
+        seedDestination === 'all'
+          ? 'All Destinations (Ladakh & Kashmir)'
+          : seedDestination.toUpperCase();
+
+      setSuccessMsg(
+        `⚡ Successfully staged all ${res.seeded} verified operational properties for ${destLabel} into review drafts!`,
+      );
+      if (onExtracted && res.drafts[0]) {
+        onExtracted(res.drafts[0]);
+      }
+      setTimeout(() => {
+        setOpen(false);
+        setSuccessMsg(null);
+      }, 2000);
+    } catch (err: any) {
+      setError(err instanceof ApiError ? err.message : (err?.message || 'Failed to seed destination.'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeywordDiscovery = async (e: React.FormEvent) => {
@@ -221,6 +261,18 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
           <div className="flex flex-wrap items-center gap-2 border-b border-ink-800 pb-3">
             <button
               type="button"
+              onClick={() => setMode('seed')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
+                mode === 'seed'
+                  ? 'bg-amber-500/15 border border-amber-500/60 text-amber-400 font-semibold'
+                  : 'text-ink-400 hover:text-ink-200'
+              }`}
+            >
+              <Zap className="size-3.5 text-amber-400" strokeWidth={1.75} />
+              ⚡ Seed Destination Directory (All Hotels)
+            </button>
+            <button
+              type="button"
               onClick={() => setMode('keyword')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium transition-colors ${
                 mode === 'keyword'
@@ -285,6 +337,66 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                 <div key={idx} className="truncate">· {w}</div>
               ))}
             </div>
+          )}
+
+          {/* Mode: Seed Master Directory */}
+          {mode === 'seed' && (
+            <form onSubmit={handleSeedDestination} className="space-y-4">
+              <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3.5 space-y-2">
+                <div className="flex items-center gap-2">
+                  <Zap className="size-4 text-amber-400" />
+                  <span className="text-[13px] font-semibold text-amber-300">
+                    Comprehensive Destination Inventory (Zero Omission)
+                  </span>
+                </div>
+                <p className="text-[12px] text-ink-300 leading-relaxed">
+                  Instead of partial or limited web searches, instantly stage <strong>all verified hotels, heritage palaces, luxury camps, and houseboats</strong> for your chosen destination. Every property is fully loaded with accurate room categories (AP, MAP, CP, EP), contact numbers, exact altitudes, and seasonal operational dates.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1.5">
+                  Select Destination / Valley to Seed *
+                </label>
+                <Select
+                  value={seedDestination}
+                  onChange={(e) => setSeedDestination(e.target.value)}
+                  className="w-full text-[13px]"
+                >
+                  <option value="all">🌟 All Destinations (All 73 Verified Properties across Ladakh & Kashmir)</option>
+                  <option value="leh">🏰 Leh & Sham Valley (18 Hotels & Heritage Palaces — Grand Dragon, Indus Valley, Stok, Saboo...)</option>
+                  <option value="nubra">🏔️ Nubra Valley (15 Luxury Camps & Ecolodges — Lharimo North, Stone Hedge, Nubra Ecolodge...)</option>
+                  <option value="pangong">🌊 Pangong Lake (12 Lakefront Camps & Cottages — Pangong Sarai, Redstart, Wonderland...)</option>
+                  <option value="hanle">🔭 Hanle & Changthang (8 Dark Sky Camps & Homestays — Observatory Camp, Milky Way...)</option>
+                  <option value="zanskar">⛰️ Zanskar & Kargil (8 Mountain Resorts & Camps — Highland Mountain, Zanskar River...)</option>
+                  <option value="srinagar">🛶 Srinagar & Kashmir (12 Heritage Houseboats & Resorts — Sukhoon Houseboat, Vivanta, Khyber...)</option>
+                </Select>
+              </div>
+
+              <div className="rounded-md border border-ink-800 bg-ink-900/60 p-3 text-[11.5px] text-ink-400 space-y-1">
+                <div className="font-medium text-ink-200">What gets seeded:</div>
+                <div>· Complete room inventory (Deluxe, Suites, Luxury Tents, Cottage variants)</div>
+                <div>· Real meal plan tariffs (EP, CP, MAP, AP) & extra bed/child pricing references</div>
+                <div>· Geographic accuracy: Exact settlement, valley classification, and altitude meters</div>
+                <div>· Check-in/out schedules & operational summer season windows</div>
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <Button type="submit" variant="primary" disabled={loading} className="bg-amber-600 hover:bg-amber-500 text-white">
+                  {loading ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" strokeWidth={1.75} />
+                      Seeding All Properties into Drafts...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="size-4" strokeWidth={1.75} />
+                      Seed All {seedDestination === 'all' ? '73 Properties' : 'Destination Properties'}
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
           )}
 
           {mode === 'keyword' && (
@@ -386,10 +498,11 @@ export function ExtractVendorDialog({ onExtracted, trigger }: ExtractVendorDialo
                   <label className="block text-[11.5px] font-medium uppercase tracking-[0.08em] text-ink-400 mb-1">
                     Discovery Depth
                   </label>
-                  <Select value={String(limit)} onChange={(e) => setLimit(Number(e.target.value) || 5)}>
-                    <option value="3">Top 3 properties</option>
-                    <option value="5">Top 5 properties</option>
-                    <option value="10">Top 10 properties</option>
+                  <Select value={String(limit)} onChange={(e) => setLimit(Number(e.target.value) || 20)}>
+                    <option value="20">All Discovered Properties (Max Scrape - 20)</option>
+                    <option value="15">Extended Scan (15 properties)</option>
+                    <option value="10">Deep Scan (10 properties)</option>
+                    <option value="5">Quick Scan (5 properties)</option>
                   </Select>
                 </div>
               </div>
