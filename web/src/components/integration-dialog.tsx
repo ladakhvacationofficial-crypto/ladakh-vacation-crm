@@ -5,8 +5,11 @@ import { ExternalLink } from 'lucide-react';
 import {
   api,
   ApiError,
+  WEB_PROPERTY_HOSTS,
+  WEB_PROPERTY_LABELS,
   type IntegrationRow,
   type ProviderCatalogEntry,
+  type WebProperty,
 } from '@/lib/api';
 import {
   Dialog,
@@ -38,6 +41,7 @@ export function IntegrationDialog({
   const [open, setOpen] = useState(false);
   const [label, setLabel] = useState('');
   const [priority, setPriority] = useState('0');
+  const [webProperty, setWebProperty] = useState<WebProperty | ''>('');
   const [values, setValues] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +50,7 @@ export function IntegrationDialog({
     if (!open) return;
     setLabel(editing?.label ?? '');
     setPriority(String(editing?.priority ?? 0));
+    setWebProperty(editing?.webProperty ?? '');
     setValues(() => {
       const v: Record<string, string> = {};
       for (const f of provider.fields) v[f.key] = '';
@@ -63,10 +68,14 @@ export function IntegrationDialog({
       for (const [k, v] of Object.entries(values)) {
         if (v !== '') credentials[k] = v;
       }
+      if (provider.siteScoped && !webProperty) {
+        throw new ApiError('Choose which website this credential measures.', 400);
+      }
       const body = {
         provider: provider.id,
         label: label.trim() || undefined,
         priority: Number(priority) || 0,
+        webProperty: provider.siteScoped ? webProperty : undefined,
         credentials,
       };
       if (editing) {
@@ -127,6 +136,31 @@ export function IntegrationDialog({
                 Shown in the integrations list. Optional — defaults to the provider name.
               </p>
             </div>
+
+            {provider.siteScoped && (
+              <div className="space-y-1">
+                <Label htmlFor="i-property">
+                  Measures which website<span className="text-warn-500"> *</span>
+                </Label>
+                <Select
+                  id="i-property"
+                  value={webProperty}
+                  onChange={(e) => setWebProperty(e.target.value as WebProperty | '')}
+                >
+                  <option value="">Choose…</option>
+                  {(Object.keys(WEB_PROPERTY_LABELS) as WebProperty[]).map((w) => (
+                    <option key={w} value={w}>
+                      {WEB_PROPERTY_LABELS[w]} ({WEB_PROPERTY_HOSTS[w]})
+                    </option>
+                  ))}
+                </Select>
+                <p className="text-[11px] text-ink-500">
+                  The landers and the website need their own project on this provider.
+                  Pooling them averages paid ad traffic with organic browsing and makes
+                  both sets of numbers unreadable.
+                </p>
+              </div>
+            )}
 
             {(provider.category === 'AI' || provider.category === 'SCRAPING') && (
               <div className="space-y-1">

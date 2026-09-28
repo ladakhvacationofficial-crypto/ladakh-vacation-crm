@@ -1423,6 +1423,20 @@ enum IntegrationTestStatus {
  * shape is defined by the provider registry. `priority` is used by the AI
  * failover helper: higher = tried first.
  */
+/// Which web property an analytics or ads credential measures.
+///
+/// go.ladakhvacation.in and ladakhvacation.in need separate projects on every
+/// analytics vendor: one is paid traffic on noindex pages with a single goal,
+/// the other is organic browse behaviour. Pooled into one project, sessions,
+/// engagement and every dashboard average becomes a blend of two unlike
+/// audiences. CRM exists so a credential can be explicitly marked as staff-only
+/// and never wired into a visitor-facing page.
+enum WebProperty {
+  LANDERS
+  WEBSITE
+  CRM
+}
+
 model Integration {
   id String @id @default(cuid())
 
@@ -1438,6 +1452,11 @@ model Integration {
   isActive Boolean @default(true)
   /// Higher = tried first when the failover helper picks an integration.
   priority Int     @default(0)
+
+  /// Which site this credential measures. Required for site-scoped providers
+  /// (see `siteScoped` in providers.ts), null for everything else: a payment
+  /// gateway or an LLM key does not belong to a web property.
+  webProperty WebProperty?
 
   lastTestedAt    DateTime?
   lastTestStatus  IntegrationTestStatus @default(UNTESTED)

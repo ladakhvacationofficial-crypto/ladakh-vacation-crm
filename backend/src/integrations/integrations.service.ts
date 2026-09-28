@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { IntegrationCategory, IntegrationTestStatus } from '@prisma/client';
+import { IntegrationCategory, IntegrationTestStatus, WebProperty } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpsertIntegrationDto } from './dto/upsert-integration.dto';
 import { decryptSecret, encryptSecret } from '../common/crypto';
@@ -42,6 +42,13 @@ export class IntegrationsService {
     const spec = getProvider(dto.provider);
     if (!spec) throw new BadRequestException(`Unknown provider: ${dto.provider}`);
     this.validateCreds(spec.fields, dto.credentials);
+    // A tracking credential with no site attached is worse than none: nobody
+    // can tell later whether the numbers describe the landers or the website.
+    if (spec.siteScoped && !dto.webProperty) {
+      throw new BadRequestException(
+        `${spec.label} measures one website. Choose which property this credential belongs to.`,
+      );
+    }
 
     let encrypted: string;
     try {
@@ -58,6 +65,7 @@ export class IntegrationsService {
         credentials: encrypted,
         isActive: dto.isActive ?? true,
         priority: dto.priority ?? 0,
+        webProperty: spec.siteScoped ? (dto.webProperty ?? null) : null,
       },
     });
     return this.publicShape(row);
@@ -73,6 +81,9 @@ export class IntegrationsService {
     if (dto.label !== undefined) data.label = dto.label ?? spec.label;
     if (dto.isActive !== undefined) data.isActive = dto.isActive;
     if (dto.priority !== undefined) data.priority = dto.priority;
+    if (dto.webProperty !== undefined) {
+      data.webProperty = spec.siteScoped ? dto.webProperty : null;
+    }
     if (dto.credentials !== undefined) {
       // Merge with existing so a partial edit doesn't lose fields the UI
       // deliberately omitted (blank password inputs on edit).
@@ -297,6 +308,7 @@ export class IntegrationsService {
     label: string | null;
     isActive: boolean;
     priority: number;
+    webProperty: WebProperty | null;
     lastTestedAt: Date | null;
     lastTestStatus: IntegrationTestStatus;
     lastTestMessage: string | null;
@@ -322,6 +334,7 @@ export class IntegrationsService {
       label: row.label,
       isActive: row.isActive,
       priority: row.priority,
+      webProperty: row.webProperty,
       keysOnFile,
       lastTestedAt: row.lastTestedAt,
       lastTestStatus: row.lastTestStatus,

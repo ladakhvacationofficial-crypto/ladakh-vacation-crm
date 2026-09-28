@@ -32,6 +32,13 @@ export interface ProviderSpec {
   fields: FieldSpec[];
   /** True when a real test-connection probe exists. Otherwise UI shows "not implemented". */
   hasTest?: boolean;
+  /**
+   * True when one credential measures one website, so the landers and the main
+   * site each need their own row. The dialog then demands a web property and
+   * the list groups by it. False for anything account-wide: a payment gateway,
+   * an LLM key, a scraping proxy, a Business Profile listing.
+   */
+  siteScoped?: boolean;
 }
 
 // ── Payments — Domestic ─────────────────────────────────────────────────────
@@ -333,7 +340,7 @@ const ads: ProviderSpec[] = [
 // ── Search & analytics ───────────────────────────────────────────────────
 const analytics: ProviderSpec[] = [
   {
-    id: 'google_search_console', label: 'Google Search Console', category: 'ANALYTICS',
+    id: 'google_search_console', label: 'Google Search Console', category: 'ANALYTICS', siteScoped: true,
     docsUrl: 'https://support.google.com/webmasters/answer/7687615',
     fields: [
       { key: 'authMethod', label: 'Auth method', type: 'select', required: true, options: ['service_account', 'oauth'], help: 'service_account is simplest: no consent screen and no token to expire. oauth needs the OAuth consent screen published to Production, or Google expires the refresh token after 7 days.' },
@@ -346,7 +353,7 @@ const analytics: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'google_indexing', label: 'Google Indexing API', category: 'ANALYTICS',
+    id: 'google_indexing', label: 'Google Indexing API', category: 'ANALYTICS', siteScoped: true,
     docsUrl: 'https://developers.google.com/search/apis/indexing-api/v3/prereqs',
     fields: [
       { key: 'serviceAccountKey', label: 'Service Account JSON Key', type: 'textarea', required: true, placeholder: '{\n  "type": "service_account",\n  "client_email": "...",\n  "private_key": "..."\n}', help: 'Paste your Google Cloud Service Account key. Add its client_email as an Owner in Search Console to allow submitting URLs.' },
@@ -354,7 +361,7 @@ const analytics: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'google_pagespeed', label: 'Google PageSpeed Insights', category: 'ANALYTICS',
+    id: 'google_pagespeed', label: 'Google PageSpeed Insights', category: 'ANALYTICS', siteScoped: true,
     docsUrl: 'https://developers.google.com/speed/docs/insights/v5/get-started',
     fields: [
       { key: 'apiKey', label: 'PageSpeed API Key', type: 'password', required: true, placeholder: 'AIzaSy...', help: 'Free API key from Google Cloud Console to bypass anonymous rate limits (HTTP 429) during site audits.' },
@@ -362,7 +369,7 @@ const analytics: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'indexnow', label: 'IndexNow (Bing, Yandex, Seznam)', category: 'ANALYTICS',
+    id: 'indexnow', label: 'IndexNow (Bing, Yandex, Seznam)', category: 'ANALYTICS', siteScoped: true,
     docsUrl: 'https://www.indexnow.org/documentation',
     fields: [
       { key: 'host', label: 'Host Domain', type: 'text', required: true, placeholder: 'ladakhvacation.in', help: 'Your website domain name without protocol (e.g. ladakhvacation.in).' },
@@ -391,7 +398,7 @@ const analytics: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'google_analytics_4', label: 'Google Analytics 4 (GA4)', category: 'ANALYTICS',
+    id: 'google_analytics_4', label: 'Google Analytics 4 (GA4)', category: 'ANALYTICS', siteScoped: true,
     docsUrl: 'https://developers.google.com/analytics/devguides/reporting/data/v1',
     fields: [
       { key: 'propertyId', label: 'GA4 Property ID', type: 'text', required: true, placeholder: '123456789', help: '100% Free official API. Found in GA4 Admin > Property Settings > Property Details (numeric ID).' },
@@ -401,7 +408,7 @@ const analytics: ProviderSpec[] = [
     hasTest: true,
   },
   {
-    id: 'microsoft_clarity', label: 'Microsoft Clarity', category: 'ANALYTICS',
+    id: 'microsoft_clarity', label: 'Microsoft Clarity', category: 'ANALYTICS', siteScoped: true,
     docsUrl: 'https://learn.microsoft.com/en-us/clarity/',
     fields: [
       { key: 'projectId', label: 'Clarity Project ID', type: 'text', required: true, placeholder: 'abcdef1234', help: '100% Free Forever with unlimited heatmaps and recordings. Found in clarity.microsoft.com project settings.' },
@@ -776,5 +783,6 @@ export function publicProviderCatalog() {
     docsUrl: p.docsUrl,
     fields: p.fields,
     hasTest: p.hasTest ?? false,
+    siteScoped: p.siteScoped ?? false,
   }));
 }

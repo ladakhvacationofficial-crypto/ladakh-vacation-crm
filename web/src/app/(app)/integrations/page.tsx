@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import {
   Plug,
   Plus,
@@ -14,8 +14,11 @@ import {
 import {
   api,
   ApiError,
+  WEB_PROPERTY_HOSTS,
+  WEB_PROPERTY_LABELS,
   type IntegrationCategory,
   type IntegrationRow,
+  type WebProperty,
   type IntegrationTestResponse,
   type ProviderCatalogEntry,
 } from '@/lib/api';
@@ -31,6 +34,9 @@ import { relativeDate } from '@/lib/format';
  * ads, search and analytics, social. Each tab lists configured rows and offers
  * the catalog of providers not yet added.
  */
+
+/** Landers first, then the website: the order the money flows. */
+const PROPERTY_ORDER: (WebProperty | 'NONE')[] = ['LANDERS', 'WEBSITE', 'CRM', 'NONE'];
 
 type Tab = 'PAYMENTS' | 'AI' | 'MAPS' | 'WORKSPACE' | 'SCRAPING' | 'ANALYTICS' | 'SOCIAL' | 'ADS';
 
@@ -132,7 +138,16 @@ export default function IntegrationsPage() {
   }
 
   const activeCats = TAB_CATEGORIES[tab];
-  const rowsForTab = rows.filter((r) => activeCats.includes(r.category));
+  // Site-scoped rows sort together so the Analytics tab reads as two lists:
+  // what is measured on the landers, and what is measured on the website. A
+  // provider configured for one and missing on the other is then obvious.
+  const rowsForTab = rows
+    .filter((r) => activeCats.includes(r.category))
+    .sort(
+      (a, b) =>
+        PROPERTY_ORDER.indexOf(a.webProperty ?? 'NONE') -
+        PROPERTY_ORDER.indexOf(b.webProperty ?? 'NONE'),
+    );
   const catalogForTab = catalog.filter((c) => activeCats.includes(c.category));
   const providerById = new Map(catalog.map((c) => [c.id, c]));
 
@@ -197,11 +212,25 @@ export default function IntegrationsPage() {
             </p>
           ) : (
             <ul className="divide-y divide-ink-800/50">
-              {rowsForTab.map((row) => {
+              {rowsForTab.map((row, i) => {
                 const p = providerById.get(row.provider);
+                const prev = i > 0 ? rowsForTab[i - 1] : null;
+                const newGroup =
+                  row.webProperty !== null &&
+                  (prev === null || prev.webProperty !== row.webProperty);
                 return (
+                  <Fragment key={row.id}>
+                    {newGroup && (
+                      <li className="flex items-baseline gap-2 bg-ink-850/60 px-5 py-1.5">
+                        <span className="text-[10.5px] font-semibold uppercase tracking-[0.09em] text-ink-400">
+                          {WEB_PROPERTY_LABELS[row.webProperty!]}
+                        </span>
+                        <span className="text-[10.5px] text-ink-500">
+                          {WEB_PROPERTY_HOSTS[row.webProperty!]}
+                        </span>
+                      </li>
+                    )}
                   <li
-                    key={row.id}
                     className="grid grid-cols-[1fr_auto] items-start gap-3 px-5 py-3 sm:items-center"
                   >
                     <div className="min-w-0">
@@ -280,6 +309,7 @@ export default function IntegrationsPage() {
                       />
                     </div>
                   </li>
+                  </Fragment>
                 );
               })}
             </ul>

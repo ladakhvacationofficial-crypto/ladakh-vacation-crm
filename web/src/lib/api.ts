@@ -325,6 +325,25 @@ export interface ProviderField {
   options?: string[];
 }
 
+/**
+ * Which website a tracking credential measures. The landers and the main site
+ * are different audiences doing different things, so they get separate
+ * projects on every analytics vendor rather than one pooled dashboard.
+ */
+export type WebProperty = 'LANDERS' | 'WEBSITE' | 'CRM';
+
+export const WEB_PROPERTY_LABELS: Record<WebProperty, string> = {
+  LANDERS: 'Landing pages',
+  WEBSITE: 'Main website',
+  CRM: 'Staff CRM',
+};
+
+export const WEB_PROPERTY_HOSTS: Record<WebProperty, string> = {
+  LANDERS: 'go.ladakhvacation.in',
+  WEBSITE: 'ladakhvacation.in',
+  CRM: 'staff app, not visitor facing',
+};
+
 export interface ProviderCatalogEntry {
   id: string;
   label: string;
@@ -332,6 +351,8 @@ export interface ProviderCatalogEntry {
   docsUrl?: string;
   fields: ProviderField[];
   hasTest: boolean;
+  /** One credential measures one site, so this provider needs a property. */
+  siteScoped: boolean;
 }
 
 export interface IntegrationRow {
@@ -341,6 +362,7 @@ export interface IntegrationRow {
   label: string | null;
   isActive: boolean;
   priority: number;
+  webProperty: WebProperty | null;
   keysOnFile: string[];
   lastTestedAt: string | null;
   lastTestStatus: IntegrationTestStatus;
