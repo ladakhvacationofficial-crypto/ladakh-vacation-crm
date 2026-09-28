@@ -16,6 +16,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "set-login": "ts-node prisma/set-login.ts",
+    "seed:rates": "ts-node prisma/seed-rates.ts",
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
