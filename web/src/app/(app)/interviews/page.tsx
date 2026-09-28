@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Briefcase, Plus, X } from 'lucide-react';
+import { Briefcase, Plus, X, Bot, Copy, Check, Sparkles } from 'lucide-react';
 import { api, ApiError, type InterviewRow } from '@/lib/api';
 import { Panel, PanelBody, PanelHeader, PanelTitle } from '@/components/ui/panel';
 import { Button } from '@/components/ui/button';
@@ -28,6 +28,7 @@ export default function InterviewsPage() {
   const [outcome, setOutcome] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -163,18 +164,45 @@ export default function InterviewsPage() {
                     {shortDate(iv.scheduledAt)}
                   </td>
                   <td className="px-2 py-3">
-                    <RowActions
-                      label={`Delete ${iv.candidateName}`}
-                      confirmMessage={`Delete this interview record for ${iv.candidateName}? This cannot be undone.`}
-                      onDelete={async () => {
-                        try {
-                          await api.del(`/interviews/${iv.id}`);
-                          load();
-                        } catch (err) {
-                          alert(err instanceof ApiError ? err.message : 'Could not delete that interview.');
-                        }
-                      }}
-                    />
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (typeof window === 'undefined') return;
+                          const url = `${window.location.origin}/interview/session/${iv.id}`;
+                          navigator.clipboard.writeText(url);
+                          setCopiedId(iv.id);
+                          setTimeout(() => setCopiedId(null), 2000);
+                        }}
+                        title="Copy candidate AI interview link"
+                        className="rounded p-1 text-ink-400 hover:bg-ink-800 hover:text-gold-400"
+                      >
+                        {copiedId === iv.id ? (
+                          <Check className="size-4 text-healthy-400" />
+                        ) : (
+                          <Copy className="size-4" />
+                        )}
+                      </button>
+                      <Link
+                        href={`/interviews/${iv.id}`}
+                        title="Open AI interview scorecard"
+                        className="rounded p-1 text-ink-400 hover:bg-ink-800 hover:text-gold-400"
+                      >
+                        <Bot className="size-4" />
+                      </Link>
+                      <RowActions
+                        label={`Delete ${iv.candidateName}`}
+                        confirmMessage={`Delete this interview record for ${iv.candidateName}? This cannot be undone.`}
+                        onDelete={async () => {
+                          try {
+                            await api.del(`/interviews/${iv.id}`);
+                            load();
+                          } catch (err) {
+                            alert(err instanceof ApiError ? err.message : 'Could not delete that interview.');
+                          }
+                        }}
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -226,6 +254,8 @@ function ScheduleInterviewDialog({
       if (interviewerName.trim()) body.interviewerName = interviewerName.trim();
 
       const res = await api.post<{ id: string }>('/interviews', body);
+      // Pre-generate easy-English questions in background
+      api.post(`/interviews/${res.id}/ai/start`, {}).catch(() => {});
       setOpen(false);
       reset();
       onCreated(res.id);

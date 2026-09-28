@@ -23,6 +23,7 @@ import { UpdateInterviewDto } from './dto/update-interview.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { SalarySlipDocument } from './templates/salary-slip';
 import { InterviewSheetDocument } from './templates/interview-sheet';
+import { InterviewAiService } from './interview-ai.service';
 
 /**
  * HR data is sensitive by default — salary components, home address,
@@ -35,7 +36,10 @@ const HR_ROLES: Role[] = [Role.SUPER_ADMIN, Role.OWNER];
 @Roles(...HR_ROLES)
 @Controller()
 export class HrController {
-  constructor(private readonly hr: HrService) {}
+  constructor(
+    private readonly hr: HrService,
+    private readonly aiService: InterviewAiService,
+  ) {}
 
   // ---- Employees ---------------------------------------------------------
 
@@ -190,4 +194,48 @@ export class HrController {
     );
     res.send(buf);
   }
+
+  // ---- AI Interview Live Session & Evaluation -----------------------------
+
+  @Post('interviews/:id/ai/start')
+  startAiInterview(@Param('id') id: string) {
+    return this.aiService.startAiSession(id);
+  }
+
+  @Post('interviews/:id/ai/answer')
+  submitAiAnswer(
+    @Param('id') id: string,
+    @Body() body: { questionIndex: number; answer: string },
+  ) {
+    return this.aiService.submitAnswer(id, body.questionIndex, body.answer);
+  }
+
+  @Post('interviews/:id/ai/evaluate')
+  async evaluateInterview(@Param('id') id: string) {
+    const iv = await this.hr.findInterview(id);
+    const questions = (iv.questionnaire as any) ?? [];
+    const evaluation = await this.aiService.evaluateInterview(iv.role, iv.candidateName, questions);
+    return this.hr.updateInterview(id, {
+      overallRating: evaluation.overallRating,
+      strengths: evaluation.strengths,
+      concerns: evaluation.concerns,
+      outcome: evaluation.outcome,
+      outcomeNote: evaluation.outcomeNote,
+    } as any);
+  }
+
+  @Post('interviews/:id/ai/reset')
+  async resetAiInterview(@Param('id') id: string) {
+    const iv = await this.hr.findInterview(id);
+    const freshQuestions = await this.aiService.generateQuestions(iv.role, iv.candidateName);
+    return this.hr.updateInterview(id, {
+      questionnaire: freshQuestions as any,
+      overallRating: null,
+      strengths: null,
+      concerns: null,
+      outcome: 'PENDING' as any,
+      outcomeNote: null,
+    } as any);
+  }
 }
+

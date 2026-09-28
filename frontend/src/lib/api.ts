@@ -74,7 +74,12 @@ async function request<T>(
 
   if (res.status === 401) {
     tokenStore.clear();
-    if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+    if (
+      typeof window !== 'undefined' &&
+      !window.location.pathname.startsWith('/login') &&
+      !window.location.pathname.startsWith('/interview') &&
+      !window.location.pathname.startsWith('/view')
+    ) {
       window.location.href = '/login';
     }
     throw new ApiError('Your session has expired. Sign in again.', 401);
@@ -1045,11 +1050,56 @@ export interface InterviewRow {
   outcome: string;
 }
 
+export interface InterviewQuestionItem {
+  question: string;
+  category?: string;
+  whyWeAsk?: string;
+  answer?: string;
+  rating?: number;
+  feedback?: string;
+}
+
 export interface InterviewDetail extends InterviewRow {
-  questionnaire: { question: string; answer?: string; rating?: number }[];
+  questionnaire: InterviewQuestionItem[];
   strengths: string | null;
   concerns: string | null;
   outcomeNote: string | null;
+}
+
+export interface InterviewAiSession {
+  interviewId: string;
+  candidateName: string;
+  candidatePhone: string;
+  role: string;
+  scheduledAt: string;
+  durationMinutes: number | null;
+  questions: InterviewQuestionItem[];
+  currentQuestionIndex: number;
+  answeredCount: number;
+  totalQuestions: number;
+  isCompleted: boolean;
+  overallRating: number | null;
+  outcome: string;
+  strengths: string | null;
+  concerns: string | null;
+  outcomeNote: string | null;
+}
+
+export interface AiAnswerResponse {
+  success: boolean;
+  feedback: string;
+  nextIndex: number | null;
+  nextQuestion: string | null;
+  isCompleted: boolean;
+  evaluation?: {
+    overallRating: number;
+    percentageScore: number;
+    communicationLevel: string;
+    strengths: string;
+    concerns: string;
+    outcome: string;
+    outcomeNote: string;
+  };
 }
 
 // ---- SEO -------------------------------------------------------------------

@@ -12,10 +12,12 @@
  * leak the public chrome again.
  */
 export const CRM_ROUTE_SEGMENTS = [
-  // authentication, which lives outside the (app) group
+  // authentication and standalone portals outside (app)
   'login',
   'forgot-password',
   'reset-password',
+  'view',
+  'interview',
   // the staff app
   'attribution',
   'b2b-partners',
