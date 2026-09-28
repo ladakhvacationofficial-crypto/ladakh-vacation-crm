@@ -73,6 +73,23 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
+    label: 'Operations',
+    items: [
+      { href: '/bookings/movement', label: 'Daily Movement', icon: Map,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','OPERATIONS'] },
+      { href: '/fleet',             label: 'Fleet & Cabs',   icon: Car,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','OPERATIONS'] },
+      { href: '/permits',           label: 'Ladakh Permits', icon: FileCheck,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','OPERATIONS'] },
+      { href: '/vendors',           label: 'Suppliers',      icon: Building2,
+        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','ACCOUNTS','OPERATIONS'] },
+      { href: '/people',            label: 'People',         icon: UserCog,
+        roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
+      { href: '/interviews',        label: 'Interviews',     icon: Users,
+        roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
+    ],
+  },
+  {
     label: 'Growth',
     items: [
       { href: '/marketing',        label: 'Marketing',     icon: Megaphone,
@@ -96,23 +113,6 @@ const NAV_GROUPS: NavGroup[] = [
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','ACCOUNTS'] },
       { href: '/reports',  label: 'Reports',  icon: BarChart3,
         roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','ACCOUNTS','MARKETING','OPERATIONS'] },
-    ],
-  },
-  {
-    label: 'Operations',
-    items: [
-      { href: '/bookings/movement', label: 'Daily Movement', icon: Map,
-        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','OPERATIONS'] },
-      { href: '/fleet',             label: 'Fleet & Cabs',   icon: Car,
-        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','OPERATIONS'] },
-      { href: '/permits',           label: 'Ladakh Permits', icon: FileCheck,
-        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','OPERATIONS'] },
-      { href: '/vendors',           label: 'Suppliers',      icon: Building2,
-        roles: ['OWNER','SUPER_ADMIN','SALES_MANAGER','SALES_EXEC','ACCOUNTS','OPERATIONS'] },
-      { href: '/people',            label: 'People',         icon: UserCog,
-        roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
-      { href: '/interviews',        label: 'Interviews',     icon: Users,
-        roles: ['OWNER','SUPER_ADMIN','ACCOUNTS'] },
     ],
   },
   {
